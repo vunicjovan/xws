@@ -1,8 +1,9 @@
 package com.uns.ftn.agent.domain;
 /***********************************************************************
  * Module:  Photo.java
- * Author:  Vunic
+ * Author:  Dusan Petkovic
  * Purpose: Defines the Class Photo
+ * Created at MAY 2020
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

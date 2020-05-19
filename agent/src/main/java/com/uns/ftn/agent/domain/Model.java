@@ -1,8 +1,9 @@
 package com.uns.ftn.agent.domain;
 /***********************************************************************
  * Module:  Model.java
- * Author:  Vunic
+ * Author:  Dusan Petkovic
  * Purpose: Defines the Class Model
+ * Created at MAY 2020
  ***********************************************************************/
 
 import lombok.Data;
@@ -20,7 +21,9 @@ public class Model {
 
    @Column(name = "name", nullable = false)
    private String name;
-   private Set<Vehicle> vehicle;
+
+   @ManyToOne
+   @JoinColumn(name = "brand_id", nullable = false)
    private Brand brand;
 
 }

@@ -1,8 +1,9 @@
 package com.uns.ftn.agent.domain;
 /***********************************************************************
  * Module:  Brand.java
- * Author:  Vunic
+ * Author:  Dusan Petkovic
  * Purpose: Defines the Class Brand
+ * Created at MAY 2020
  ***********************************************************************/
 
 import lombok.Data;
@@ -20,7 +21,4 @@ public class Brand {
 
    @Column(name = "name", nullable = false)
    private String name;
-   
-   private Set<Model> models;
-
 }
