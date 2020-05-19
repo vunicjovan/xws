@@ -26,11 +26,16 @@ public class Vehicle {
 
    @Column(name = "android", nullable = false)
    private Boolean hasAndroid = false;
-   
+
+   @OneToOne(mappedBy = "vehicle")
    private Advertisement advertisement;
+
    private FuelType fuelType;
+
    private GearboxType gearboxType;
+
    private VehicleClass vehicleClass;
+
    private Model model;
 
 }

@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class RentingInterval
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -23,7 +24,9 @@ public class RentingInterval {
 
    @Column(name = "end", nullable = false)
    private Date endDate;
-   
+
+   @JsonIgnore
+   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
    private Advertisement advertisement;
 
 }
