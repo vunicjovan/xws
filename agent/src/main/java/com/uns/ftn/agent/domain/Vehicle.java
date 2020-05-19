@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class Vehicle
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,12 +31,20 @@ public class Vehicle {
    @OneToOne(mappedBy = "vehicle")
    private Advertisement advertisement;
 
+   @JsonIgnore
+   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    private FuelType fuelType;
 
+   @JsonIgnore
+   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    private GearboxType gearboxType;
 
+   @JsonIgnore
+   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    private VehicleClass vehicleClass;
 
+   @JsonIgnore
+   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    private Model model;
 
 }
