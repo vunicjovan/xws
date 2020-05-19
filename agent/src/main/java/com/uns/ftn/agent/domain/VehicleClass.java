@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class VehicleClass
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,6 +19,10 @@ public class VehicleClass {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "name", nullable = false)
+   @Column(name = "class_name", nullable = false)
    private String name;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "vehicle_class", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 }

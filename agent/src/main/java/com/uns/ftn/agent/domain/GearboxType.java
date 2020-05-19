@@ -6,6 +6,7 @@ package com.uns.ftn.agent.domain;
  * Create at MAY 2020
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,11 @@ public class GearboxType {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "name", nullable = false)
+   @Column(name = "gbtype_name", nullable = false)
    private String name;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "gearbox_type", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 
 }

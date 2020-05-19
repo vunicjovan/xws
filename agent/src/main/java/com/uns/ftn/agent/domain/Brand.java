@@ -6,6 +6,7 @@ package com.uns.ftn.agent.domain;
  * Created at MAY 2020
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +20,10 @@ public class Brand {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "name", nullable = false)
+   @Column(name = "brand_name", nullable = false)
    private String name;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private Set<Model> models = new HashSet<Model>();
 }
