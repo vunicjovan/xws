@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "rentingInterval")
 @Data
 public class RentingInterval {
 
@@ -19,10 +20,10 @@ public class RentingInterval {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "start", nullable = false)
+   @Column(name = "startDate", nullable = false)
    private Date startDate;
 
-   @Column(name = "end", nullable = false)
+   @Column(name = "endDate", nullable = false)
    private Date endDate;
 
    @JsonIgnore
