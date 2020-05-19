@@ -20,7 +20,4 @@ public class VehicleClass {
 
    @Column(name = "name", nullable = false)
    private String name;
-   
-   private Set<Vehicle> vehicle;
-
 }

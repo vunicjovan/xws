@@ -1,11 +1,13 @@
 package com.uns.ftn.agent.domain;
 /***********************************************************************
  * Module:  GearboxType.java
- * Author:  Vunic
+ * Author:  Dusan Petkovic
  * Purpose: Defines the Class GearboxType
+ * Create at MAY 2020
  ***********************************************************************/
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.*;
@@ -20,6 +22,5 @@ public class GearboxType {
 
    @Column(name = "name", nullable = false)
    private String name;
-   private Set<Vehicle> vehicle;
 
 }
