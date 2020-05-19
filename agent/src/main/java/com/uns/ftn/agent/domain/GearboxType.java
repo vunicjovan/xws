@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "gearboxType")
 @Data
 public class GearboxType {
 
@@ -21,11 +22,11 @@ public class GearboxType {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "gbtype_name", nullable = false)
+   @Column(name = "name", nullable = false)
    private String name;
 
    @JsonIgnore
-   @OneToMany(mappedBy = "gearbox_type", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "gearboxType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "fuelType")
 @Data
 public class FuelType {
 
@@ -20,10 +21,10 @@ public class FuelType {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "ftype_name", nullable = false)
+   @Column(name = "name", nullable = false)
    private String name;
 
    @JsonIgnore
-   @OneToMany(mappedBy = "fuel_type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "fuelType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 }

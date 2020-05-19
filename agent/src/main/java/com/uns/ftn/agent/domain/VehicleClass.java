@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name = "vehicleClass")
 @Data
 public class VehicleClass {
 
@@ -19,10 +20,10 @@ public class VehicleClass {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "class_name", nullable = false)
+   @Column(name = "name", nullable = false)
    private String name;
 
    @JsonIgnore
-   @OneToMany(mappedBy = "vehicle_class", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "vehicleClass", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 }

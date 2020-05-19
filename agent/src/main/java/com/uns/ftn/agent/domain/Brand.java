@@ -20,7 +20,7 @@ public class Brand {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "brand_name", nullable = false)
+   @Column(name = "name", nullable = false)
    private String name;
 
    @JsonIgnore
