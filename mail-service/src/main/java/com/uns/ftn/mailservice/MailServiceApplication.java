@@ -14,7 +14,7 @@ public class MailServiceApplication {
 
 	@RequestMapping("/health")
 	public String home() {
-		return "Hello world";
+		return "Mail Service alive.";
 	}
 
 	public static void main(String[] args) {
