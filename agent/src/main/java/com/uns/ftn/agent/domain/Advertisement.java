@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class Advertisement
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,13 +30,21 @@ public class Advertisement {
 
    @Column(name = "rating", nullable = false)
    private double rating = 0;
-   
-   private Set<RentingRequest> rentingRequests;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<RentingInterval> rentingIntervals;
+
+   @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+   @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
    private Vehicle vehicle;
-   private Set<Cart> carts;
+
+   @JsonIgnore
+   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
    private Agent owner;
-   private Set<Comment> comments;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Photo> photos;
 
 }

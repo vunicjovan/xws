@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class Agent
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,9 +19,8 @@ public class Agent {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
+   @JsonIgnore
+   @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Advertisement> advertisements;
-   private User user;
-   private Set<Debt> debts;
-   private Company company;
 
 }

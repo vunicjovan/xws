@@ -6,6 +6,7 @@ package com.uns.ftn.agent.domain;
  * Created at MAY 2020
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,11 +21,11 @@ public class Photo {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "image_path", nullable = false)
+   @Column(name = "path", nullable = false)
    private String path;
 
-   @ManyToOne
-   @JoinColumn(name = "advertisment_id", nullable = false)
+   @JsonIgnore
+   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
    private Advertisement advertisement;
 
 }
