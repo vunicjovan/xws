@@ -5,6 +5,7 @@ package com.uns.ftn.agent.domain;
  * Purpose: Defines the Class Photo
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,8 +20,11 @@ public class Photo {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "image", nullable = false)
-   private Image image;
+   @Column(name = "path", nullable = false)
+   private String path;
+
+   @JsonIgnore
+   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
    private Advertisement advertisement;
 
 }
