@@ -8,5 +8,7 @@ import lombok.Data;
 public class CartItem {
 
     private Long id;
+    private Long cartId;
     private Long advertismentId;
+
 }
