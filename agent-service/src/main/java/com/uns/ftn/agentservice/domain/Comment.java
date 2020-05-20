@@ -4,15 +4,34 @@ package com.uns.ftn.agentservice.domain; /**************************************
  * Purpose: Defines the Class Comment
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.*;
+
 @Data
+@AllArgsConstructor
+@Entity
 public class Comment {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
+
+   @Column(name = "title", nullable = false)
    private String title;
+
+   @Column(name = "content", nullable = false)
    private String content;
-   private String author;
+
+   @Column(name = "allowed")
    private Boolean allowed = false;
 
-   private Long simpleUserId;
+   @Column(name = "userId")
+   private Long userId;
+
+   @JsonIgnore
+   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Advertisement advertisement;
 }
