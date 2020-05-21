@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar accountservice-1.0.0.jar
+java -jar account-service-0.0.1-SNAPSHOT.jar

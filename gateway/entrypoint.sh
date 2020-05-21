@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar zuul-1.0.0.jar
+java -jar gateway-0.0.1-SNAPSHOT.jar
