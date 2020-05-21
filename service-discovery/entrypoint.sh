@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar eureka-1.0.0.jar
+java -jar service-discovery-0.0.1-SNAPSHOT.jar
