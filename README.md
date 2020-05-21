@@ -3,10 +3,10 @@
 Rent a Car application with microservices architecture.
 
 * Contributors
-  * Jovan Vunic
-  * Boris Opacic
-  * Dejan Radulovic
-  * Dusan Petkovic
+  * Jovan Vunić
+  * Boris Opačić
+  * Dejan Radulović
+  * Dušan Petković
 
 ## Rent a Car application architecture
 
@@ -34,7 +34,7 @@ Client application:
 
 * The services have REST API
 
-### Business logic designe
+### Business logic design
 
 Following schemas represent model for business logic
 
