@@ -1,0 +1,1 @@
+insert into company (state, city, street, business_number) values ('s', 's', 's', 's')

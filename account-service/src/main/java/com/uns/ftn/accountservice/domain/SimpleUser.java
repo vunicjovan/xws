@@ -2,7 +2,6 @@ package com.uns.ftn.accountservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 import javax.persistence.*;
 
@@ -27,5 +26,9 @@ public class SimpleUser {
 
     @OneToOne
     private User user;
+
+    public SimpleUser(User user) {
+        this.user = user;
+    }
 
 }
