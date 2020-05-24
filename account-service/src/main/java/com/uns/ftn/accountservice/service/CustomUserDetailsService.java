@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-        List<Role> roleList = user.getRoles();
+        Set<Role> roleList = user.getRoles();
 
         if (roleList != null) {
             for (Role role: user.getRoles()) {

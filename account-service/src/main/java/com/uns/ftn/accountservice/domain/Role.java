@@ -1,15 +1,16 @@
 package com.uns.ftn.accountservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,12 +23,14 @@ public class Role {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-    private List<Permission> permissions;
+    private Set<Permission> permissions;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
-    private List<User> user;
+    private Set<User> user;
 
 }

@@ -1,11 +1,12 @@
 package com.uns.ftn.accountservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "simpleUser")
