@@ -1,10 +1,12 @@
 package com.uns.ftn.accountservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,7 +37,7 @@ public class User {
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private java.util.Set<Role> roles;
+    private List<Role> roles;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

@@ -63,7 +63,12 @@ public class UserService {
 
         return userDTO;
     }
-
+  
+    public User getByMail(String mail) {
+        User user = userRepository.findByEmail(mail);
+        return user;
+    }
+  
     /*
     * Checks if there is mismatch against given regex in any of String attributes of User, which are received from
     * client through DTO. It also checks if attributes are existing.
@@ -109,5 +114,4 @@ public class UserService {
         userDTO.setPassword(Encode.forHtml(userDTO.getPassword()));
         userDTO.setRepeatPassword(Encode.forHtml(userDTO.getRepeatPassword()));
     }
-
 }
