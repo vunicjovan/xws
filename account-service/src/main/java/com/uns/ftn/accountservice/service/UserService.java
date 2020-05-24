@@ -51,4 +51,9 @@ public class UserService {
 
         return userDTO;
     }
+
+    public User getByMail(String mail) {
+        User user = userRepository.findByEmail(mail);
+        return user;
+    }
 }

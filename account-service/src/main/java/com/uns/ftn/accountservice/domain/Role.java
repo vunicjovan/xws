@@ -1,12 +1,17 @@
 package com.uns.ftn.accountservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Role {
 
@@ -20,9 +25,9 @@ public class Role {
     @ManyToMany
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-    private java.util.Set<Permission> permissions;
+    private List<Permission> permissions;
 
     @ManyToMany(mappedBy = "roles")
-    private java.util.Set<User> user;
+    private List<User> user;
 
 }
