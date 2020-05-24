@@ -8,6 +8,7 @@ import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.repository.AgentRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class UserService {
         if (!validateUser(userDTO, pattern)) {
             return null;
         }
+
+        sanitizeUserData(userDTO);
 
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             return null;
@@ -94,6 +97,17 @@ public class UserService {
         }
 
         return true;
+    }
+
+    /*
+    * Helper method for forbidden character sanitization in terms of user data.
+    */
+    private void sanitizeUserData(UserDTO userDTO) {
+        userDTO.setFirstName(Encode.forHtml(userDTO.getFirstName()));
+        userDTO.setLastName(Encode.forHtml(userDTO.getLastName()));
+        userDTO.setEmail(Encode.forHtml(userDTO.getEmail()));
+        userDTO.setPassword(Encode.forHtml(userDTO.getPassword()));
+        userDTO.setRepeatPassword(Encode.forHtml(userDTO.getRepeatPassword()));
     }
 
 }
