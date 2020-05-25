@@ -12,6 +12,7 @@
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-material": "^1.0.0-beta-13",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.1.6",
     "vuelidate": "^0.7.5"
   },

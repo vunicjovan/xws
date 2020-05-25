@@ -10,8 +10,9 @@ insert into users (first_name, last_name, email, password, enabled) values ('Not
 insert into users (first_name, last_name, email, password, enabled) values ('Not', 'Me', 'kakadu@kaka.com', 'kakadu', true)
 
 -- Roles
-insert into role (name) values ('USER')
-insert into role (name) values ('NOT_USER')
+insert into role (name) values ('SIMPLE_USER')
+insert into role (name) values ('AGENT')
+insert into role (name) values ('ADMIN')
 
 -- Permissions
 insert into permission (name) values ('add')

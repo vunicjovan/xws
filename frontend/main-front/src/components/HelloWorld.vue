@@ -1,7 +1,11 @@
 <template>
-  <transition name="fade">
-    <span v-if="show" class="md-layout md-alignment-top-center md-headline">Welcome to RentaSoul service</span>
-  </transition>
+  <div>
+    <transition name="fade">
+      <span v-if="show" class="md-layout md-alignment-top-center md-headline">Welcome to RentaSoul service</span>
+    </transition>
+      <md-button v-on:click="s()" class="md-primary">Delete</md-button>
+      <md-button v-on:click="a()" class="md-primary">Create</md-button>
+  </div>
 </template>
 
 <script>
@@ -21,6 +25,27 @@ export default {
   methods: {
     fadeMe: function() {
       this.show = !this.show
+    },
+
+    s: function() {
+      alert(localStorage.getItem('auth'))
+      this.axios.delete("http://localhost:8089/account/1")
+                      .then(() => {
+                          alert('Deleted')
+                      })
+                      .catch(() => {
+                          alert('failed!');
+                      })
+    },
+
+    a: function() {
+      this.axios.put("http://localhost:8089/account/1")
+                      .then(() => {
+                          alert('Created')
+                      })
+                      .catch(() => {
+                          alert('failed!');
+                      })
     }
   }
 }

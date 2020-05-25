@@ -46,5 +46,6 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.roles = new HashSet<>();
     }
 }
