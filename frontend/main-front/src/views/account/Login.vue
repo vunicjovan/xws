@@ -84,7 +84,7 @@ export default {
                 this.sending = false
             }, 1500)
 
-            this.axios.post("http://localhost:8089/account/login", this.form)
+            this.axios.post("https://localhost:8089/account/login", this.form)
                       .then(response => {
                           if (response.data != null) {
                               localStorage.setItem('auth', 'Bearer ' + response.data.jwt);
