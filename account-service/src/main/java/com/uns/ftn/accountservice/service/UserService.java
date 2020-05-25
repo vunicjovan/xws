@@ -75,7 +75,9 @@ public class UserService {
     * Returns TRUE if given DTO is valid, else returns FALSE.
     */
     private Boolean validateUser(UserDTO userDTO, Pattern pattern) {
-        if (userDTO.getFirstName().trim().equals("") || userDTO.getFirstName() == null ||
+        if (userDTO.getFirstName().length() < 3 || userDTO.getLastName().length() < 3 ||
+            userDTO.getPassword().length() < 8 || userDTO.getRepeatPassword().length() < 8 ||
+            userDTO.getFirstName().trim().equals("") || userDTO.getFirstName() == null ||
             userDTO.getLastName().trim().equals("") || userDTO.getLastName() == null ||
             userDTO.getEmail().trim().equals("") || userDTO.getEmail() == null ||
             userDTO.getPassword().trim().equals("") || userDTO.getPassword() == null ||
@@ -97,7 +99,8 @@ public class UserService {
     */
     private Boolean validateLoginData(String email, String password, Pattern pattern) {
         if (email.trim().equals("") || email == null || (email.trim().split("@").length <= 1) ||
-            password.trim().equals("") || password == null || !pattern.matcher(password.trim()).matches()) {
+            password.trim().equals("") || password == null || !pattern.matcher(password.trim()).matches() ||
+            password.length() < 8) {
             return false;
         }
 
