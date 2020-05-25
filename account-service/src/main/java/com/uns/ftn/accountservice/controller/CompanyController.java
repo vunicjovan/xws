@@ -1,15 +1,25 @@
 package com.uns.ftn.accountservice.controller;
 
+import com.uns.ftn.accountservice.dto.CompanyDTO;
+import com.uns.ftn.accountservice.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/company")
 public class CompanyController {
 
+    @Autowired
+    private CompanyService companyService;
+
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
-        return null;
+        ArrayList<CompanyDTO> companyDTOArrayList = companyService.getAll();
+        return new ResponseEntity<>(companyDTOArrayList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
