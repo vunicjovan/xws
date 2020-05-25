@@ -1,12 +1,17 @@
 package com.uns.ftn.accountservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Permission {
 
@@ -17,7 +22,8 @@ public class Permission {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
-    private java.util.Set<Role> role;
+    private Set<Role> role;
 
 }
