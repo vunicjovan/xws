@@ -1,15 +1,15 @@
 package com.uns.ftn.accountservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -35,16 +35,17 @@ public class User {
     @Column(name = "enabled")
     private Boolean enabled = false;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.roles = new ArrayList<>();
+        this.roles = new HashSet<>();
     }
 }
