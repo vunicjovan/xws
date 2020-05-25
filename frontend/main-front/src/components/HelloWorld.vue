@@ -29,7 +29,7 @@ export default {
 
     s: function() {
       alert(localStorage.getItem('auth'))
-      this.axios.delete("http://localhost:8089/account/1")
+      this.axios.delete("https://localhost:8089/account/1")
                       .then(() => {
                           alert('Deleted')
                       })
@@ -39,7 +39,7 @@ export default {
     },
 
     a: function() {
-      this.axios.put("http://localhost:8089/account/1")
+      this.axios.put("https://localhost:8089/account/1")
                       .then(() => {
                           alert('Created')
                       })

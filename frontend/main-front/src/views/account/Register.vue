@@ -106,7 +106,7 @@ export default {
     mounted: function () {
         this.fadeMe();
 
-        this.axios.get("http://localhost:8089/account/company/")
+        this.axios.get("https://localhost:8089/account/company/")
                       .then((response) => {
                           this.companies = response.data;
                       })
@@ -127,7 +127,7 @@ export default {
                 this.sending = false
                 this.clearForm()
             }, 1500)
-            this.axios.post("http://localhost:8089/account/register", this.form)
+            this.axios.post("https://localhost:8089/account/register", this.form)
                       .then(() => {
                           this.$router.push('/login');
                       })
