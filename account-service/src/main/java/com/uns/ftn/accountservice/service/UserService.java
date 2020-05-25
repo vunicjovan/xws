@@ -1,5 +1,6 @@
 package com.uns.ftn.accountservice.service;
 
+import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.domain.Agent;
 import com.uns.ftn.accountservice.domain.Company;
 import com.uns.ftn.accountservice.domain.SimpleUser;
@@ -75,17 +76,16 @@ public class UserService {
     * Returns TRUE if given DTO is valid, else returns FALSE.
     */
     private Boolean validateUser(UserDTO userDTO, Pattern pattern) {
-        if (userDTO.getFirstName().length() < 3 || userDTO.getLastName().length() < 3 ||
-            userDTO.getPassword().length() < 8 || userDTO.getRepeatPassword().length() < 8 ||
-            userDTO.getFirstName().trim().equals("") || userDTO.getFirstName() == null ||
-            userDTO.getLastName().trim().equals("") || userDTO.getLastName() == null ||
-            userDTO.getEmail().trim().equals("") || userDTO.getEmail() == null ||
-            userDTO.getPassword().trim().equals("") || userDTO.getPassword() == null ||
-            userDTO.getRepeatPassword().trim().equals("") || userDTO.getRepeatPassword() == null ||
-            !userDTO.getRepeatPassword().equals(userDTO.getPassword()) ||
+        if (userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null ||
+            userDTO.getPassword() == null || userDTO.getRepeatPassword() == null ||
+            userDTO.getFirstName().trim().equals("") || userDTO.getLastName().trim().equals("") ||
+            userDTO.getEmail().trim().equals("") || userDTO.getPassword().trim().equals("") ||
+            userDTO.getRepeatPassword().trim().equals("") || userDTO.getFirstName().length() < 3 ||
+            userDTO.getLastName().length() < 3 || userDTO.getPassword().length() < 8 ||
+            userDTO.getRepeatPassword().length() < 8 || !userDTO.getRepeatPassword().equals(userDTO.getPassword()) ||
+            (userDTO.getEmail().trim().split("@").length <= 1) ||
             !pattern.matcher(userDTO.getFirstName().trim()).matches() ||
             !pattern.matcher(userDTO.getLastName().trim()).matches() ||
-            (userDTO.getEmail().trim().split("@").length <= 1) ||
             !pattern.matcher(userDTO.getPassword().trim()).matches() ||
             !pattern.matcher(userDTO.getRepeatPassword().trim()).matches()) {
             return false;
@@ -98,9 +98,9 @@ public class UserService {
     * Returns TRUE if email and password are valid String values, else returns FALSE.
     */
     private Boolean validateLoginData(String email, String password, Pattern pattern) {
-        if (email.trim().equals("") || email == null || (email.trim().split("@").length <= 1) ||
-            password.trim().equals("") || password == null || !pattern.matcher(password.trim()).matches() ||
-            password.length() < 8) {
+        if (email == null || password == null || email.trim().equals("") || password.trim().equals("") ||
+            (email.trim().split("@").length <= 1) || password.length() < 8 ||
+            !pattern.matcher(password.trim()).matches()) {
             return false;
         }
 
@@ -116,5 +116,13 @@ public class UserService {
         userDTO.setEmail(Encode.forHtml(userDTO.getEmail()));
         userDTO.setPassword(Encode.forHtml(userDTO.getPassword()));
         userDTO.setRepeatPassword(Encode.forHtml(userDTO.getRepeatPassword()));
+    }
+
+    /*
+     * Helper method for forbidden character sanitization in terms of authentication data.
+     */
+    private void sanitizeAuthData(AuthenticationRequest arq) {
+        arq.setEmail(Encode.forHtml(arq.getEmail()));
+        arq.setPassword(Encode.forHtml(arq.getPassword()));
     }
 }
