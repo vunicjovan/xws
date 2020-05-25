@@ -1,18 +1,16 @@
 package com.uns.ftn.accountservice.service;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
-import com.uns.ftn.accountservice.domain.Agent;
-import com.uns.ftn.accountservice.domain.Company;
-import com.uns.ftn.accountservice.domain.SimpleUser;
-import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.repository.AgentRepository;
+import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.regex.Pattern;
 
 @Service
@@ -30,6 +28,12 @@ public class UserService {
     @Autowired
     private SimpleUserRepository simpleUserRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserDTO registerUser(UserDTO userDTO) {
 
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
@@ -45,22 +49,25 @@ public class UserService {
             return null;
         }
 
-        User user = new User(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPassword());
+        User user = new User(userDTO.getFirstName(),userDTO.getLastName(), userDTO.getEmail(),
+                                                                        passwordEncoder.encode(userDTO.getPassword()));
 
         if (userDTO.getIsAgent()) {
             Company company = companyService.getOneByBusinessNumber(userDTO.getCompanyBusinessNumber());
             if (company == null) {
                 return null;
             } else {
+                user.getRoles().add(roleRepository.findByName("AGENT"));
+                userRepository.save(user);
                 Agent agent = new Agent(user, company);
                 agentRepository.save(agent);
             }
         } else {
+            user.getRoles().add(roleRepository.findByName("SIMPLE_USER"));
+            userRepository.save(user);
             SimpleUser simpleUser = new SimpleUser(user);
             simpleUserRepository.save(simpleUser);
         }
-
-        userRepository.save(user);
 
         return userDTO;
     }

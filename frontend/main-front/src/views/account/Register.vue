@@ -43,12 +43,12 @@
                             </md-field>
                         </div>
                         <div class="md-layout-item md-small-size-100">
-                            <md-field :class="getValidationClass('passwordRepeat')">
+                            <md-field :class="getValidationClass('repeatPassword')">
                                 <label for="first-name">Repeat Password</label>
-                                <md-input type="password" name="password" id="password-repeat" v-model="form.passwordRepeat" :disabled="sending" />
-                                <span class="md-error" v-if="!$v.form.passwordRepeat.required">Password is required</span>
-                                <span class="md-error" v-else-if="!$v.form.passwordRepeat.alpha">Invalid password format</span>
-                                <span class="md-error" v-else-if="!$v.form.passwordRepeat.minLength">Password requires at least 8 characters</span>
+                                <md-input type="password" name="password" id="password-repeat" v-model="form.repeatPassword" :disabled="sending" />
+                                <span class="md-error" v-if="!$v.form.repeatPassword.required">Password is required</span>
+                                <span class="md-error" v-else-if="!$v.form.repeatPassword.alpha">Invalid password format</span>
+                                <span class="md-error" v-else-if="!$v.form.repeatPassword.minLength">Password requires at least 8 characters</span>
                             </md-field>
                         </div>
                         <div class="md-layout-item md-small-size-100">
@@ -57,7 +57,7 @@
                         <md-field v-if="form.isAgent">
                             <label for="company">Company</label>
                             <md-select name="company" id="company" v-model="form.companyBusinessNumber" md-dense>
-                                <md-option v-for="company in companies" :key="company.businessNumber">{{ company.businessNumber }}</md-option>
+                                <md-option v-for="company in companies" :key="company.businessNumber" :value="company.businessNumber">{{ company.businessNumber }}</md-option>
                             </md-select>
                         </md-field>
                     </md-card-content>
@@ -93,7 +93,7 @@ export default {
                 lastName: undefined,
                 email: undefined,
                 password: undefined,
-                passwordRepeat: undefined,
+                repeatPassword: undefined,
                 isAgent: false,
                 companyBusinessNumber: undefined
             },
@@ -106,7 +106,7 @@ export default {
     mounted: function () {
         this.fadeMe();
 
-        this.axios.post("http://localhost:8089/account/company/")
+        this.axios.get("https://localhost:8089/account/company/")
                       .then((response) => {
                           this.companies = response.data;
                       })
@@ -127,13 +127,13 @@ export default {
                 this.sending = false
                 this.clearForm()
             }, 1500)
-            /*this.axios.post("http://localhost:8089/account/register", this.form)
+            this.axios.post("https://localhost:8089/account/register", this.form)
                       .then(() => {
                           this.$router.push('/login');
                       })
                       .catch(() => {
                           alert('Registration has failed!');
-                      })*/
+                      })
         },
         getValidationClass (fieldName) {
             const field = this.$v.form[fieldName]
@@ -157,7 +157,7 @@ export default {
             this.form.lastName = undefined;
             this.form.email = undefined;
             this.form.password = undefined;
-            this.form.passwordRepeat = undefined;
+            this.form.repeatPassword = undefined;
             this.form.isAgent = false;
         },
     },
@@ -182,7 +182,7 @@ export default {
             sqli,
             minLength: minLength(8)
         },
-        passwordRepeat: {
+        repeatPassword: {
             required,
             sqli,
             minLength: minLength(8)

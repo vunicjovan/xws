@@ -68,7 +68,13 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userService.registerUser(userDTO), HttpStatus.CREATED);
+        userDTO = userService.registerUser(userDTO);
+
+        if (userDTO != null) {
+            return new ResponseEntity<>(userService.registerUser(userDTO), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAuthority('create')")

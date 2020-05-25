@@ -47,31 +47,21 @@ public class AuthenticationFilter extends ZuulFilter {
 
         String token = request.getHeader("Authorization");
 
-        if (token == null) {
+        if (token == null || !token.startsWith("Bearer ")) {
             return null;
-        };
+        }
 
         try {
-            List<String> authorities = authClient.verify(token);
+            List<String> authorities = authClient.verify(token.substring(7));
 
             String username = authorities.remove(authorities.size() - 1);
 
             StringBuilder permissions = new StringBuilder();
 
-            for (int i = 0; i < authorities.size(); i++) {
-                permissions.append(authorities.get(i));
+            for (String authority : authorities) {
+                permissions.append(authority);
                 permissions.append("|");
             }
-
-            /*
-            for (int i = 0; i < authorities.size(); i++) {
-                if (i == authorities.size() - 1) {
-                    permissions.append(authorities.get(i));
-                } else {
-                    permissions.append(authorities.get(i));
-                    permissions.append("|");
-                }
-            }*/
 
             ctx.addZuulRequestHeader("username", username);
             ctx.addZuulRequestHeader("permissions", permissions.toString());
