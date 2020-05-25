@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!logged">
         <transition name="fade">
             <form v-if="show" novalidate class="md-layout md-alignment-top-center" @submit.prevent="validateUser">
                 <md-card class="md-layout-item md-size-30 md-small-size-100">
@@ -47,6 +47,7 @@ import {
 import { helpers } from 'vuelidate/lib/validators'
 const sqli = helpers.regex('alpha', /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\!\\?\\#\s?]+)$/)
 
+import { EventBus } from '../../event-bus.js'
 
 export default {
     name: "Login",
@@ -60,11 +61,15 @@ export default {
             userLogged: false,
             sending: false,
             lastUser: null,
-            show: false
+            show: false,
+            logged: undefined,
         }
     },
     mounted: function() {
         this.fadeMe();
+
+        if (localStorage.getItem("auth")) this.logged = true;
+        else this.logged = false;
     },
     methods: {
         fadeMe: function() {
@@ -78,7 +83,19 @@ export default {
                 this.userLogged = true
                 this.sending = false
             }, 1500)
-            //alert(this.form.email + ' ' + this.form.password)
+
+            this.axios.post("http://localhost:8089/account/login", this.form)
+                      .then(response => {
+                          if (response.data != null) {
+                              localStorage.setItem('auth', 'Bearer ' + response.data.jwt);
+                          }
+                          EventBus.$emit("logged", true);
+                          this.$router.push('/');
+                      })
+                      .catch(() => {
+                          alert('Login has failed!');
+                      })
+            
         },
         getValidationClass (fieldName) {
             const field = this.$v.form[fieldName]

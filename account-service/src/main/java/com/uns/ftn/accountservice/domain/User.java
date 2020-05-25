@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -44,5 +45,6 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.roles = new ArrayList<>();
     }
 }
