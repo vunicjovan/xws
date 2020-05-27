@@ -39,6 +39,7 @@ public class GatewayApplication {
 		builder.withMaxConnectionsPerHost(10);
 		args.setEurekaJerseyClient(builder.build());
 		return args;
+	}
 
   @Bean
 	public WebMvcConfigurer corsConfigurer() {
