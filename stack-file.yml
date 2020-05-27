@@ -1,0 +1,269 @@
+version: '3.7'
+services:
+
+  db:
+    image: postgres
+    networks:
+      - xws_host
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  eureka-serviceregistry:
+    image: xws_eureka-serviceregistry
+    networks:
+      - xws_host
+    ports:
+      - "8761:8761"
+    depends_on:
+      - db
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  account-service:
+    image: xws_account-service
+    networks:
+      - xws_host
+    ports:
+      - "8080:8080"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  agent-service:
+    image: xws_agent-service
+    networks:
+      - xws_host
+    ports:
+      - "8081:8081"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  android-service:
+    image: xws_android-service
+    networks:
+      - xws_host
+    ports:
+      - "8082:8082"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  catalog-service:
+    image: xws_catalog-service
+    networks:
+      - xws_host
+    ports:
+      - "8083:8083"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  mail-service:
+    image: xws_mail-service
+    networks:
+      - xws_host
+    ports:
+      - "8084:8084"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  message-service:
+    image: xws_message-service
+    networks:
+      - xws_host
+    ports:
+      - "8085:8085"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  renting-service:
+    image: xws_renting-service
+    networks:
+      - xws_host
+    ports:
+      - "8086:8086"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  view-service:
+    image: xws_view-service
+    networks:
+      - xws_host
+    ports:
+      - "8087:8087"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  search-service:
+    image: xws_search-service
+    networks:
+      - xws_host
+    ports:
+      - "8088:8088"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mocanpass
+    depends_on:
+      - db
+      - eureka-serviceregistry
+    deploy:
+      replicas: 0
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  zuul:
+    image: xws_zuul
+    networks:
+      - xws_host
+    ports:
+      - "8089:8089"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    depends_on:
+      - db
+      - eureka-serviceregistry
+      - account-service
+      - agent-service
+      - android-service
+      - catalog-service
+      - mail-service
+      - message-service
+      - renting-service
+      - search-service
+      - view-service
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+networks:
+  xws_host:
+    name: xws_host
