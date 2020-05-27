@@ -3,9 +3,10 @@ services:
 
   db:
     image: postgres
+    build: ./database
     restart: always
     ports:
-      - "5432:5432"
+      - "5431:5432"
     environment:
       - POSTGRES_DB=service-db
       - POSTGRES_DOMAIN=db
@@ -31,8 +32,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=account-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=account_schema
       
     tty: true
     depends_on:
@@ -49,8 +50,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=agent-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=agent_schema
     tty: true
     depends_on:
       - db
@@ -77,8 +78,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=catalog-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=catalog_schema
     tty: true
     depends_on:
       - db
@@ -121,8 +122,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=renting-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=renting_schema
     tty: true
     depends_on:
       - db
@@ -138,8 +139,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=agent-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=agent_schema
     tty: true
     depends_on:
       - db
@@ -155,8 +156,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
-      - POSTGRES_SCHEMA=agent-schema
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=agent_schema
     tty: true
     depends_on:
       - db
