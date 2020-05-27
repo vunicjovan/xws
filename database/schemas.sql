@@ -1,4 +1,4 @@
-CREATE SCHEMA account-schema AUTHORIZATION postgres;
-CREATE SCHEMA agent-schema AUTHORIZATION postgres;
-CREATE SCHEMA catalog-schema AUTHORIZATION postgres;
-CREATE SCHEMA renting-schema AUTHORIZATION postgres;
+CREATE SCHEMA account_schema AUTHORIZATION postgres;
+CREATE SCHEMA agent_schema AUTHORIZATION postgres;
+CREATE SCHEMA catalog_schema AUTHORIZATION postgres;
+CREATE SCHEMA renting_schema AUTHORIZATION postgres;
