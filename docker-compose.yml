@@ -11,7 +11,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
 
   eureka-serviceregistry:
     build: ./service-discovery
@@ -31,7 +31,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -47,7 +47,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -74,7 +74,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -101,7 +101,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -117,7 +117,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -133,7 +133,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
@@ -149,7 +149,7 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_PASSWORD=root
     tty: true
     depends_on:
       - db
