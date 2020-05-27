@@ -31,7 +31,9 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=account-schema
+      
     tty: true
     depends_on:
       - db
@@ -47,22 +49,23 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=agent-schema
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
 
-  android-service:
-    build: ./android-service
-    ports:
-      - "8082:8082"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - db
-      - eureka-serviceregistry
+#  android-service:
+#    build: ./android-service
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - db
+#      - eureka-serviceregistry
 
   catalog-service:
     build: ./catalog-service
@@ -74,38 +77,39 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=catalog-schema
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
 
-  mail-service:
-    build: ./mail-service
-    ports:
-      - "8084:8084"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-    tty: true
-    depends_on:
-      - db
-      - eureka-serviceregistry
+#  mail-service:
+#    build: ./mail-service
+#    ports:
+#      - "8084:8084"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#    tty: true
+#    depends_on:
+#      - db
+#      - eureka-serviceregistry
 
-  message-service:
-    build: ./message-service
-    ports:
-      - "8085:8085"
-    environment:
-      - REGISTRY_HOST=eureka-serviceregistry
-      - POSTGRES_DB=service-db
-      - POSTGRES_DOMAIN=db
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-    tty: true
-    depends_on:
-      - db
-      - eureka-serviceregistry
+#  message-service:
+#    build: ./message-service
+#    ports:
+#      - "8085:8085"
+#    environment:
+#      - REGISTRY_HOST=eureka-serviceregistry
+#      - POSTGRES_DB=service-db
+#      - POSTGRES_DOMAIN=db
+#      - POSTGRES_PORT=5432
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=mocanpass
+#    tty: true
+#    depends_on:
+#      - db
+#      - eureka-serviceregistry
 
   renting-service:
     build: ./renting-service
@@ -117,7 +121,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=renting-schema
     tty: true
     depends_on:
       - db
@@ -133,7 +138,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=agent-schema
     tty: true
     depends_on:
       - db
@@ -149,7 +155,8 @@ services:
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=mocanpass
+      - POSTGRES_SCHEMA=agent-schema
     tty: true
     depends_on:
       - db
@@ -167,10 +174,10 @@ services:
       - eureka-serviceregistry
       - account-service
       - agent-service
-      - android-service
+      #- android-service
       - catalog-service
-      - mail-service
-      - message-service
+      #- mail-service
+      #- message-service
       - renting-service
       - search-service
       - view-service
