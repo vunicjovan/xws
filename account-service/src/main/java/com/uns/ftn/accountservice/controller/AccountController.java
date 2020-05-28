@@ -23,19 +23,22 @@ import java.util.List;
 @RestController
 public class AccountController {
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private JWTUtil jwtUtil;
 
-
+    @Autowired
+    public AccountController(UserService userService, CustomUserDetailsService customUserDetailsService,
+                             AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+        this.userService = userService;
+        this.userDetailsService = customUserDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+    }
 
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
@@ -57,7 +60,7 @@ public class AccountController {
         }
         catch (BadCredentialsException | UsernameNotFoundException e)
         {
-            throw new Exception("Wrong email address or password");
+            return new ResponseEntity<>("Wrong email or password",HttpStatus.BAD_REQUEST);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
@@ -66,12 +69,12 @@ public class AccountController {
         return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
-        userDTO = userService.registerUser(userDTO);
+        UserDTO response = userService.registerUser(userDTO);
 
-        if (userDTO != null) {
-            return new ResponseEntity<>(userService.registerUser(userDTO), HttpStatus.CREATED);
+        if (response != null) {
+            return new ResponseEntity<UserDTO>(response, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

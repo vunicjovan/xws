@@ -1,37 +1,44 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import axios from 'axios'
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import axios from "axios";
 import VueResource from "vue-resource";
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default-dark.css'
+import VueMaterial from "vue-material";
+import "vue-material/dist/vue-material.min.css";
+import "vue-material/dist/theme/default-dark.css";
+import store from "./store";
 
-Vue.use(VueMaterial)
-
-Vue.prototype.axios = axios
-Vue.config.productionTip = false
+Vue.use(VueMaterial);
 
 Vue.use(VueResource);
 
-axios.interceptors.request.use((config) => {
-	const authToken = localStorage.getItem('auth')
-	if (authToken)
-		config.headers['Authorization'] = authToken;
-	return config;
-}, (error) => {
-	Promise.reject(error)
-	return error;
-});
+axios.defaults.baseURL = "http://localhost:8089";
 
-axios.interceptors.response.use((response) => {
+axios.interceptors.request.use(
+	(config) => {
+		const authToken = localStorage.getItem("auth");
+		if (authToken) config.headers["Authorization"] = authToken;
+		return config;
+	},
+	(error) => {
+		Promise.reject(error);
+		return error;
+	}
+);
 
-	return response;
-}, (error) => {
-	return Promise.reject(error.message);
-});
+axios.interceptors.response.use(
+	(response) => {
+		return response;
+	},
+	(error) => {
+		return Promise.reject(error.message);
+	}
+);
+
+Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+	router,
+	store,
+	render: (h) => h(App),
+}).$mount("#app");
