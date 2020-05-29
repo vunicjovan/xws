@@ -3,10 +3,10 @@
 Rent a Car application with microservices architecture.
 
 * Contributors
-  * Jovan Vunić
-  * Boris Opačić
-  * Dejan Radulović
-  * Dušan Petković
+  * [Jovan Vunić](https://github.com/vunicjovan)
+  * [Boris Opačić](https://github.com/borisop)
+  * [Dejan Radulović](https://github.com/radulovicd)
+  * [Dušan Petković](https://github.com/petkalitis)
 
 ## Rent a Car application architecture
 
