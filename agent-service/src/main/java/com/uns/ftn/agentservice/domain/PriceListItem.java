@@ -1,8 +1,7 @@
 package com.uns.ftn.agentservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,8 +11,10 @@ import javax.persistence.*;
  * Purpose: Defines the Class PriceListItem
  ***********************************************************************/
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "priceListItem")
 public class PriceListItem {
