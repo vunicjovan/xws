@@ -1,13 +1,42 @@
 package com.uns.ftn.catalogservice.controller;
 
+import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
+import com.uns.ftn.catalogservice.service.ResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ResourceController {
+
+    @Autowired
+    private ResourceService resourceService;
+
+    @PostMapping("/brand")
+    public ResponseEntity<?> addBrand() {
+        return null;
+    }
+
+    @PostMapping("/fuelType")
+    public ResponseEntity<?> addFuelType(@RequestBody FuelTypeDTO fuelTypeDTO) {
+        return new ResponseEntity<>(resourceService.addFuelType(fuelTypeDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/gearboxType")
+    public ResponseEntity<?> addGearboxType() {
+        return null;
+    }
+
+    @PostMapping("/model")
+    public ResponseEntity<?> addModel() {
+        return null;
+    }
+
+    @PostMapping("/vehicleClass")
+    public ResponseEntity<?> addVehicleClass() {
+        return null;
+    }
 
     @PutMapping("/brand/{id}")
     public ResponseEntity<?> updateBrand(@PathVariable("id") Long id) {
@@ -15,8 +44,8 @@ public class ResourceController {
     }
 
     @PutMapping("/fuelType/{id}")
-    public ResponseEntity<?> updateFuelType(@PathVariable("id") Long id) {
-        return null;
+    public ResponseEntity<?> updateFuelType(@PathVariable("id") Long id, @RequestBody FuelTypeDTO fuelTypeDTO) {
+        return new ResponseEntity<>(resourceService.updateFuelType(id, fuelTypeDTO), HttpStatus.OK);
     }
 
     @PutMapping("/gearboxType/{id}")
@@ -41,7 +70,7 @@ public class ResourceController {
 
     @DeleteMapping("/fuelType/{id}")
     public ResponseEntity<?> deleteFuelType(@PathVariable("id") Long id) {
-        return null;
+        return new ResponseEntity<>(resourceService.deleteFuelType(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/gearboxType/{id}")

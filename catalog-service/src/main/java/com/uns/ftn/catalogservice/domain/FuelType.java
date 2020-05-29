@@ -1,6 +1,6 @@
 package com.uns.ftn.catalogservice.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,8 +11,11 @@ import javax.persistence.*;
  ***********************************************************************/
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "fuelType")
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class FuelType {
 
     @Id
@@ -20,7 +23,12 @@ public class FuelType {
     @Column(name = "fuelTypeId")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
+    @NonNull
+    @EqualsAndHashCode.Include
     private String name;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }
