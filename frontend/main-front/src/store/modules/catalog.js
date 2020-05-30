@@ -5,6 +5,7 @@ const state = {
 	gearboxTypes: [],
 	models: [],
 	vehicleClasses: [],
+	brands: [],
 };
 
 const getters = {
@@ -12,6 +13,7 @@ const getters = {
 	getGearboxTypes: (state) => state.gearboxTypes,
 	getModels: (state) => state.models,
 	getVehicleClasses: (state) => state.vehicleClasses,
+	getBrands: (state) => state.brands,
 };
 
 const actions = {
@@ -30,6 +32,7 @@ const mutations = {
 	setGearboxTypes: (state, types) => (state.gearboxTypes = types),
 	setModels: (state, models) => (state.models = models),
 	setVehicleClasses: (state, classes) => (state.vehicleClasses = classes),
+	setBrands: (state, brands) => (state.brands = brands),
 };
 
 export default {

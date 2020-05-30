@@ -10,10 +10,24 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
+	created() {
+		if (localStorage.getItem("auth")) {
+			this.$store.dispatch("setLogged", true);
+			this.$store
+				.dispatch("logged")
+				.then(() => {})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+	},
 	components: {
 		Toolbar: () => import("./components/navigation/Toolbar.vue"),
 	},
+	methods: mapActions(["setLogged", "logged"]),
 };
 </script>
 

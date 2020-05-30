@@ -1,8 +1,11 @@
 package com.uns.ftn.accountservice.controller;
 
+import com.netflix.ribbon.proxy.annotation.Http;
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
+import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.UserDTO;
+import com.uns.ftn.accountservice.dto.UserResponseDTO;
 import com.uns.ftn.accountservice.service.CustomUserDetailsService;
 import com.uns.ftn.accountservice.service.JWTUtil;
 import com.uns.ftn.accountservice.service.UserService;
@@ -48,6 +51,17 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         return null;
+    }
+
+    @GetMapping("/logged")
+    public ResponseEntity<?> getLogged(@RequestHeader("username") String username) {
+        User user = userService.getByMail(username);
+
+        if(user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new UserResponseDTO(user), HttpStatus.OK);
     }
 
     @PostMapping("/login")

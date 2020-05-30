@@ -2,10 +2,12 @@ import accountApi from "@/api/Account";
 
 const state = {
 	logged: false,
+	loggedUser: Object,
 };
 
 const getters = {
 	isLogged: (state) => state.logged,
+	getUser: (state) => state.loggedUser,
 };
 
 const actions = {
@@ -39,15 +41,29 @@ const actions = {
 	logout({ commit }) {
 		localStorage.removeItem("auth");
 		commit("setLogged", false);
+		commit("setLoggedUser", null);
 	},
 
 	setLogged({ commit }, condition) {
 		commit("setLogged", condition);
 	},
+
+	logged({ commit }) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.logged()
+				.then((user) => {
+					commit("setLoggedUser", user);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
 	setLogged: (state, condition) => (state.logged = condition),
+	setLoggedUser: (state, user) => (state.loggedUser = user),
 };
 
 export default {
