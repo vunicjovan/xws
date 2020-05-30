@@ -1,5 +1,7 @@
 package com.uns.ftn.catalogservice.controller;
 
+import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.service.GearboxTypeService;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class ResourceController {
 
     @Autowired
+    private GearboxTypeService gbtService;
+  
+    @Autowired
     private ResourceService resourceService;
 
+    @PostMapping(value = "/gearboxType", consumes = "application/json")
+    public ResponseEntity<?> addGearboxType(@RequestBody GearboxTypeDTO gbtDTO) {
+        return gbtService.newGearboxType(gbtDTO);
+    }
+    
     @PostMapping("/brand")
     public ResponseEntity<?> addBrand() {
         return null;
@@ -21,11 +31,6 @@ public class ResourceController {
     @PostMapping("/fuelType")
     public ResponseEntity<?> addFuelType(@RequestBody FuelTypeDTO fuelTypeDTO) {
         return new ResponseEntity<>(resourceService.addFuelType(fuelTypeDTO), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/gearboxType")
-    public ResponseEntity<?> addGearboxType() {
-        return null;
     }
 
     @PostMapping("/model")
@@ -48,9 +53,9 @@ public class ResourceController {
         return new ResponseEntity<>(resourceService.updateFuelType(id, fuelTypeDTO), HttpStatus.OK);
     }
 
-    @PutMapping("/gearboxType/{id}")
-    public ResponseEntity<?> updateGearboxType(@PathVariable("id") Long id) {
-        return null;
+    @PutMapping(value = "/gearboxType/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateGearboxType(@PathVariable("id") Long id, @RequestBody GearboxTypeDTO gbtDTO) {
+        return gbtService.updateGearboxType(gbtDTO, id);
     }
 
     @PutMapping("/model/{id}")
@@ -75,7 +80,7 @@ public class ResourceController {
 
     @DeleteMapping("/gearboxType/{id}")
     public ResponseEntity<?> deleteGearboxType(@PathVariable("id") Long id) {
-        return null;
+        return gbtService.deleteGearboxType(id);
     }
 
     @DeleteMapping("/model/{id}")
