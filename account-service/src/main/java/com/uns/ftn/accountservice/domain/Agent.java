@@ -18,12 +18,8 @@ public class Agent {
     @OneToOne
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Company company;
-
-    public Agent(User user, Company company) {
+    public Agent(User user) {
         this.user = user;
-        this.company = company;
     }
 
 }
