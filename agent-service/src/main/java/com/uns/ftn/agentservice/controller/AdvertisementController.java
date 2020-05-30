@@ -1,11 +1,19 @@
 package com.uns.ftn.agentservice.controller;
 
+import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.service.AdvertisementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ad")
 public class AdvertisementController {
+
+    @Autowired
+    private AdvertisementService adService;
 
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
@@ -32,9 +40,9 @@ public class AdvertisementController {
         return null;
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> create() {
-        return null;
+    @PostMapping(value = "/", consumes = "application/json")
+    public ResponseEntity<?> create(@RequestBody AdvertisementDTO adDTO) {
+        return adService.postNewAd(adDTO);
     }
 
     @PostMapping("/{id}/comment")

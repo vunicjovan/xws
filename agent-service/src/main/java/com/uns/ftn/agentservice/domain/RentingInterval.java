@@ -1,18 +1,20 @@
-package com.uns.ftn.agentservice.domain; /***********************************************************************
+package com.uns.ftn.agentservice.domain;
+/***********************************************************************
  * Module:  RentingInterval.java
  * Author:  Vunic
  * Purpose: Defines the Class RentingInterval
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "rentingInterval")
 public class RentingInterval {

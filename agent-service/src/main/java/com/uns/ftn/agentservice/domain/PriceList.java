@@ -1,17 +1,19 @@
-package com.uns.ftn.agentservice.domain; /***********************************************************************
+package com.uns.ftn.agentservice.domain;
+/***********************************************************************
  * Module:  PriceList.java
  * Author:  Vunic
  * Purpose: Defines the Class PriceList
  ***********************************************************************/
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "priceList")
 public class PriceList {
