@@ -28,7 +28,7 @@ public class AdvertisementService {
     private PhotoRepository photoRepo;
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\\\!\\\\?\\\\#\\\\.\\\\,\\\\;\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\\\.\\\\,\\\\;\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         // data validation
