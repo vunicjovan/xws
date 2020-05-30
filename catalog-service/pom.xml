@@ -73,7 +73,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- OWASP encoder for HTML sanitization -->
+    <!-- OWASP encoder for HTML sanitization -->
 		<dependency>
 			<groupId>org.owasp.encoder</groupId>
 			<artifactId>encoder</artifactId>
