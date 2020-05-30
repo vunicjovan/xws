@@ -1,17 +1,19 @@
-package com.uns.ftn.agentservice.domain; /***********************************************************************
+package com.uns.ftn.agentservice.domain;
+/***********************************************************************
  * Module:  Photo.java
  * Author:  Vunic
  * Purpose: Defines the Class Photo
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class Photo {
 

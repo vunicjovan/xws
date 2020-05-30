@@ -36,7 +36,7 @@ public class UserService {
 
     public UserDTO registerUser(UserDTO userDTO) {
 
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         if (!validateUser(userDTO, pattern)) {

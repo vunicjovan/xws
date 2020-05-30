@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!logged">
+	<div v-if="!isLogged">
 		<transition name="fade">
 			<form v-if="show" novalidate class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateUser">
 				<md-card class="md-layout-item md-size-30 md-small-size-100">
@@ -43,7 +43,7 @@ import { required, minLength, email } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
 const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\!\\?\\#\s?]+)$/);
 
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
 	name: "Login",
@@ -58,17 +58,14 @@ export default {
 			sending: false,
 			lastUser: null,
 			show: false,
-			logged: undefined,
 		};
 	},
 	mounted: function() {
 		this.fadeMe();
-
-		if (localStorage.getItem("auth")) this.logged = true;
-		else this.logged = false;
 	},
+	computed: mapGetters(["isLogged"]),
 	methods: {
-		...mapActions(["login"]),
+		...mapActions(["login", "logged"]),
 		fadeMe: function() {
 			this.show = !this.show;
 		},
@@ -83,7 +80,12 @@ export default {
 
 			this.$store
 				.dispatch("login", this.form)
-				.then(() => this.$router.push("/"))
+				.then(() => {
+					this.$store
+						.dispatch("logged")
+						.then(() => this.$router.push("/"))
+						.catch((error) => console.log(error));
+				})
 				.catch((error) => console.log(error));
 		},
 		getValidationClass(fieldName) {

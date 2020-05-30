@@ -1,17 +1,19 @@
-package com.uns.ftn.agentservice.domain; /***********************************************************************
+package com.uns.ftn.agentservice.domain;
+/***********************************************************************
  * Module:  Vehicle.java
  * Author:  Vunic
  * Purpose: Defines the Class Vehicle
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class Vehicle {
 
@@ -39,7 +41,7 @@ public class Vehicle {
     private Long gearboxTypeId;
 
     @Column(name = "vehicleClassId", nullable = false)
-    private Long vehicleClass;
+    private Long vehicleClassId;
 
     @Column(name = "modelId", nullable = false)
     private Long modelId;

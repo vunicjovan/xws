@@ -21,16 +21,11 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
 	name: "Toolbar",
-	created() {
-		if (localStorage.getItem("auth")) {
-			this.$store.dispatch("setLogged", true);
-		}
-	},
 	computed: {
 		...mapGetters(["isLogged"]),
 	},
 	methods: {
-		...mapActions(["setLogged", "logout"]),
+		...mapActions(["logout"]),
 		logout() {
 			this.$store.dispatch("logout");
 		},

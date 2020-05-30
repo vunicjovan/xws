@@ -16,4 +16,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	logged() {
+		return axios.get("/account/logged/").then((response) => {
+			return response.data;
+		});
+	},
 };
