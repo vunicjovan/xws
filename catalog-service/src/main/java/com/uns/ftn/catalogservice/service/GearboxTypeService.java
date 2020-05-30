@@ -1,18 +1,23 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.uns.ftn.catalogservice.domain.FuelType;
 import com.uns.ftn.catalogservice.domain.GearboxType;
+import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.exceptions.BadRequestException;
+import com.uns.ftn.catalogservice.exceptions.NotFoundException;
 import com.uns.ftn.catalogservice.repository.GearboxTypeRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class GearboxTypeService {
@@ -25,11 +30,22 @@ public class GearboxTypeService {
     }
 
     public GearboxType findOne(Long id) {
-        return gearboxRepo.findById(id).orElseGet(null);
+        return gearboxRepo.findById(id).orElseThrow(() -> new NotFoundException("Requested gearbox type does not exist."));
     }
 
     public List<GearboxType> findAll() {
         return gearboxRepo.findAll();
+    }
+
+    public GearboxType findByName(String name) {
+        return gearboxRepo.findByName(name);
+    }
+
+    public Set<GearboxTypeDTO> getAllGearboxTypes() {
+        List<GearboxType> gearboxTypeList = gearboxRepo.findAllByDeleted(false);
+
+        return gearboxTypeList.stream().sorted(Comparator.comparing(GearboxType::getName))
+                .map(gearboxType -> new GearboxTypeDTO(gearboxType.getId(), gearboxType.getName())).collect(Collectors.toSet());
     }
 
     /*
@@ -38,8 +54,7 @@ public class GearboxTypeService {
     public ResponseEntity<?> newGearboxType(GearboxTypeDTO gbtDTO) {
         // data validation
         if (!validatePostingData(gbtDTO)) {
-            return new ResponseEntity<>("Invalid format of gearbox type name. Please try again with valid input.",
-                    HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Invalid format of gearbox type name. Please try again with valid input.");
         }
 
         // data sanitization
@@ -51,9 +66,8 @@ public class GearboxTypeService {
         try {
             gbt = save(gbt);
         }
-        catch (Exception e) {
-            return new ResponseEntity<>("Gearbox type with requested name already exists.",
-                    HttpStatus.BAD_REQUEST);
+        catch(Exception e) {
+            throw new BadRequestException("Gearbox type with requested name already exists.");
         }
 
         return new ResponseEntity<>(new GearboxTypeDTO(gbt), HttpStatus.CREATED);
@@ -65,14 +79,9 @@ public class GearboxTypeService {
     public ResponseEntity<?> updateGearboxType(GearboxTypeDTO gbtDTO, Long id) {
         GearboxType gbt = findOne(id);
 
-        if (gbt == null) {
-            return new ResponseEntity<>("Requested gearbox type does not exist.", HttpStatus.NOT_FOUND);
-        }
-
         // data validation
         if (!validatePostingData(gbtDTO)) {
-            return new ResponseEntity<>("Invalid format of gearbox type name. Please try again with valid input.",
-                    HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Invalid format of gearbox type name. Please try again with valid input.");
         }
 
         // data sanitization
@@ -81,7 +90,7 @@ public class GearboxTypeService {
         gbt.setName(gbtDTO.getName());
         gbt = save(gbt);
 
-        return new ResponseEntity<>(new GearboxTypeDTO(gbt), HttpStatus.CREATED);
+        return new ResponseEntity<>(new GearboxTypeDTO(gbt), HttpStatus.OK);
     }
 
     /*
@@ -89,10 +98,6 @@ public class GearboxTypeService {
     */
     public ResponseEntity<?> deleteGearboxType(Long id) {
         GearboxType gbt = findOne(id);
-        if (gbt == null) {
-            return new ResponseEntity<>("Requested gearbox type does not exist.", HttpStatus.NOT_FOUND);
-        }
-
         gbt.setDeleted(true);
         gbt = save(gbt);
 
