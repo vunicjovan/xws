@@ -1,13 +1,21 @@
 package com.uns.ftn.catalogservice.controller;
 
+import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.service.GearboxTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ResourceController {
+
+    @Autowired
+    private GearboxTypeService gbtService;
+
+    @PostMapping(value = "/gearboxType", consumes = "application/json")
+    public ResponseEntity<?> addGearboxType(@RequestBody GearboxTypeDTO gbtDTO) {
+        return gbtService.newGearboxType(gbtDTO);
+    }
 
     @PutMapping("/brand/{id}")
     public ResponseEntity<?> updateBrand(@PathVariable("id") Long id) {
@@ -19,9 +27,9 @@ public class ResourceController {
         return null;
     }
 
-    @PutMapping("/gearboxType/{id}")
-    public ResponseEntity<?> updateGearboxType(@PathVariable("id") Long id) {
-        return null;
+    @PutMapping(value = "/gearboxType/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateGearboxType(@PathVariable("id") Long id, @RequestBody GearboxTypeDTO gbtDTO) {
+        return gbtService.updateGearboxType(gbtDTO, id);
     }
 
     @PutMapping("/model/{id}")
@@ -46,7 +54,7 @@ public class ResourceController {
 
     @DeleteMapping("/gearboxType/{id}")
     public ResponseEntity<?> deleteGearboxType(@PathVariable("id") Long id) {
-        return null;
+        return gbtService.deleteGearboxType(id);
     }
 
     @DeleteMapping("/model/{id}")

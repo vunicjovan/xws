@@ -1,14 +1,18 @@
-package com.uns.ftn.catalogservice.domain; /***********************************************************************
+package com.uns.ftn.catalogservice.domain;
+/***********************************************************************
  * Module:  GearboxType.java
  * Author:  Vunic
  * Purpose: Defines the Class GearboxType
  ***********************************************************************/
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "gearboxType")
 public class GearboxType {
@@ -18,7 +22,10 @@ public class GearboxType {
     @Column(name = "gearboxTypeId")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
 
 }
