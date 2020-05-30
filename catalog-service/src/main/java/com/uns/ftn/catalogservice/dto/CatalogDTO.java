@@ -13,5 +13,5 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CatalogDTO {
-    private Set<FuelTypeDTO> fuelTypeDTOSet = new HashSet<>();
+    private Set<FuelTypeDTO> fuelTypes = new HashSet<>();
 }

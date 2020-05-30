@@ -16,7 +16,7 @@ public class CatalogService {
     public CatalogDTO getCatalog() {
         CatalogDTO catalogDTO = new CatalogDTO();
         Set<FuelTypeDTO> fuelTypeDTOSet = resourceService.getAllFuelTypes();
-        catalogDTO.setFuelTypeDTOSet(fuelTypeDTOSet);
+        catalogDTO.setFuelTypes(fuelTypeDTOSet);
         return catalogDTO;
     }
 
