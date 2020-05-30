@@ -80,6 +80,10 @@
 								<span class="md-error" v-if="!$v.form.description.required">Description is required</span>
 								<span class="md-error" v-else-if="!$v.form.description.sqli">Description is not in proper format</span>
 							</md-field>
+							<md-field>
+								<label>Photos</label>
+								<md-file accept="image/*" ref="file" multiple @change="handleFileChange" />
+							</md-field>
 						</div>
 					</md-card-content>
 					<md-card-actions>
@@ -107,6 +111,7 @@ export default {
 			show: false,
 			brandId: undefined,
 			hasKilometersLimit: false,
+			photos: [],
 			form: {
 				vehicle: {
 					modeld: undefined,
@@ -117,7 +122,6 @@ export default {
 					childSeatNumber: undefined,
 					hasAndroid: false,
 				},
-				photos: [],
 				price: undefined,
 				kilometersPerDayLimit: undefined,
 				collisionDamageWaiver: false,
@@ -132,12 +136,11 @@ export default {
 	},
 	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes", "getUser"]),
 	methods: {
-		...mapActions(["addAdvertisment"]),
+		...mapActions(["addAdvertisment", "addPhotots"]),
 		clearForm() {
 			this.$v.$reset();
 			this.brandId = undefined;
 			this.hasKilometersLimit = false;
-			this.form.photos = [];
 			this.form.price = undefined;
 			this.form.kilometersPerDayLimit = undefined;
 			this.form.collisionDamageWaiver = false;
@@ -171,8 +174,30 @@ export default {
 
 			this.$store
 				.dispatch("addAdvertisment", this.form)
-				.then(() => {})
+				.then((ad) => {
+					let formData = new FormData();
+					let id = ad.id;
+					for (var i = 0; i < this.photos.length; i++) {
+						let file = this.photos[i];
+
+						formData.append("files", file);
+					}
+
+					let payload = {
+						id: id,
+						photos: formData,
+					};
+
+					this.$store
+						.dispatch("addPhotots", payload)
+						.then(() => console.log("SUCCESS!"))
+						.catch((error) => console.log(error));
+				})
 				.catch((error) => console.log(error));
+		},
+
+		handleFileChange() {
+			this.photos = this.$refs.file.$refs.inputFile.files;
 		},
 
 		validateAd() {

@@ -65,7 +65,7 @@ public class AdvertisementService {
         adRepo.save(ad);
         vehicleRepo.save(vehicle);
 
-        return new ResponseEntity<>(adDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
     }
 
     /*
