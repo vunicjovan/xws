@@ -1,14 +1,19 @@
 package com.uns.ftn.accountservice.service;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
+import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.UserDTO;
+import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.repository.AgentRepository;
 import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.regex.Pattern;
@@ -18,9 +23,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private AgentRepository agentRepository;
@@ -34,34 +36,38 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+
     public UserDTO registerUser(UserDTO userDTO) {
 
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         if (!validateUser(userDTO, pattern)) {
-            return null;
+            throw new BadRequestException("Given data is not well formed!");
         }
 
         sanitizeUserData(userDTO);
 
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            return null;
+            throw new BadRequestException("User with given email already exists!");
         }
 
         User user = new User(userDTO.getFirstName(),userDTO.getLastName(), userDTO.getEmail(),
                                                                         passwordEncoder.encode(userDTO.getPassword()));
 
         if (userDTO.getIsAgent()) {
-            Company company = companyService.getOneByBusinessNumber(userDTO.getCompanyBusinessNumber());
-            if (company == null) {
-                return null;
-            } else {
-                user.getRoles().add(roleRepository.findByName("AGENT"));
-                userRepository.save(user);
-                Agent agent = new Agent(user, company);
-                agentRepository.save(agent);
-            }
+            user.getRoles().add(roleRepository.findByName("AGENT"));
+            userRepository.save(user);
+            Agent agent = new Agent(user);
+            agentRepository.save(agent);
         } else {
             user.getRoles().add(roleRepository.findByName("SIMPLE_USER"));
             userRepository.save(user);
@@ -70,6 +76,32 @@ public class UserService {
         }
 
         return userDTO;
+    }
+
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
+        Pattern pattern = Pattern.compile(regex);
+
+        if (!validateLoginData(authenticationRequest.getEmail(), authenticationRequest.getPassword(), pattern)) {
+            throw new BadRequestException("Email or password are not in correct format!");
+        }
+
+        sanitizeAuthData(authenticationRequest);
+
+        try
+        {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+        }
+        catch (Exception e)
+        {
+            throw new BadRequestException("Wrong email or password");
+        }
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return new AuthenticationResponse(jwt);
     }
   
     public User getByMail(String mail) {

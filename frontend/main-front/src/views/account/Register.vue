@@ -54,12 +54,6 @@
 						<div class="md-layout-item md-small-size-100">
 							<md-checkbox v-model="form.isAgent">Register as agent</md-checkbox>
 						</div>
-						<md-field v-if="form.isAgent">
-							<label for="company">Company</label>
-							<md-select name="company" id="company" v-model="form.companyBusinessNumber" md-dense>
-								<md-option v-for="company in companies" :key="company.businessNumber" :value="company.businessNumber">{{ company.businessNumber }}</md-option>
-							</md-select>
-						</md-field>
 					</md-card-content>
 					<md-card-actions>
 						<md-button type="submit" class="md-primary" :disabled="sending">Register</md-button>
@@ -93,7 +87,6 @@ export default {
 				password: undefined,
 				repeatPassword: undefined,
 				isAgent: false,
-				companyBusinessNumber: undefined,
 			},
 			userSaved: false,
 			sending: false,
@@ -103,15 +96,6 @@ export default {
 	},
 	mounted: function() {
 		this.fadeMe();
-
-		axios
-			.get("http://localhost:8089/account/company/")
-			.then((response) => {
-				this.companies = response.data;
-			})
-			.catch(() => {
-				alert("Couldn't get registered companies!");
-			});
 	},
 	methods: {
 		...mapActions(["register"]),

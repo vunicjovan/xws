@@ -2,8 +2,6 @@
 
 -- noinspection SqlNoDataSourceInspectionForFile
 
-insert into company (state, city, street, business_number) values ('s', 's', 's', 's')
-
 -- Users
 insert into users (first_name, last_name, email, password, enabled) values ('Me', 'Aka', 'AkaMe', 'www', true)
 insert into users (first_name, last_name, email, password, enabled) values ('Not', 'Me', 'NotMe', 'sss', true)
