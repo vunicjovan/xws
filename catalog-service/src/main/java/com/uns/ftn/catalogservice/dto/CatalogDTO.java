@@ -14,4 +14,5 @@ import java.util.Set;
 @AllArgsConstructor
 public class CatalogDTO {
     private Set<FuelTypeDTO> fuelTypes = new HashSet<>();
+    private Set<GearboxTypeDTO> gearboxTypes = new HashSet<>();
 }
