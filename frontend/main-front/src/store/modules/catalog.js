@@ -21,13 +21,15 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.getCatalog()
-				.then((catalog) => {
-					commit("setFuelTypes", catalog.fuelTypes);
+				.then((catalog) => { 
+					commit("setFuelTypes", catalog.fuelTypes),
+					commit("setGearboxTypes", catalog.gearboxTypes)
 				})
 				.catch((error) => reject(error));
 		});
 	},
 
+	// FUEL_TYPE ACTIONS
 	deleteFuelType({ commit }, id) {
 		return new Promise((resolve, reject) => {
 			catalogApi
@@ -60,6 +62,35 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	// GEARBOX_TYPE ACTIONS
+	deleteGearboxType({ commit }, id) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.deleteGearboxType(id)
+				.then((gearboxType) => { commit("deleteGearboxType", id) })
+				.catch((error) => reject(error));
+		});
+	},
+
+	addGearboxType({ commit }, gearboxType) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.addGearboxType(gearboxType)
+				.then((gearboxType) => { commit("addGearboxType", gearboxType) })
+				.catch((error) => reject(error));
+		});
+	},
+
+	updateGearboxType({ commit }, gearboxType) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.updateGearboxType(gearboxType)
+				.then((gearboxType) => { commit("updateGearboxType", gearboxType) })
+				.catch((error) => reject(error));
+		});
+	},
+
 };
 
 const mutations = {
@@ -67,6 +98,7 @@ const mutations = {
 	setGearboxTypes: (state, types) => (state.gearboxTypes = types),
 	setModels: (state, models) => (state.models = models),
 	setVehicleClasses: (state, classes) => (state.vehicleClasses = classes),
+	// FUEL_TYPE MUTATIONS
 	deleteFuelType: (state, id) => {
 		state.fuelTypes = state.fuelTypes.filter((fuelType) => fuelType.id != id);
 	},
@@ -77,6 +109,18 @@ const mutations = {
 				element.name = fuelType.name;
 			}
 		});
+	},
+	// GEARBOX_TYPE MUTATIONS
+	deleteGearboxType: (state, id) => {
+		state.gearboxTypes = state.gearboxTypes.filter((gearboxType) => gearboxType.id != id);
+	},
+	addGearboxType: (state, gearboxType) => ( state.gearboxTypes.push(gearboxType) ),
+	updateGearboxType: (state, gearboxType) => {
+		state.gearboxTypes.forEach(element => {
+			if (element.id == gearboxType.id) {
+				element.name = gearboxType.name;
+			}
+		})
 	},
 	setBrands: (state, brands) => (state.brands = brands),
 };

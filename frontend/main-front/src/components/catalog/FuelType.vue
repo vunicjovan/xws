@@ -5,7 +5,7 @@
             :md-active.sync="active"
             v-model="form.name"
             md-title="New fuel type"
-            md-input-placeholder="Fuel type name.."
+            md-input-placeholder="Fuel type name..."
             md-confirm-text="Add"
             @md-confirm="addFuelType(form)" />
 
@@ -13,12 +13,12 @@
             :md-active.sync="editMode"
             v-model="form.name"
             md-title="Edit fuel type"
-            md-input-placeholder="Fuel type name.."
+            md-input-placeholder="Fuel type name..."
             md-confirm-text="Update"
             @md-cancel="cancelUpdate()"
             @md-confirm="updateFuelType(form)" />
 
-    <md-table v-model="fuelTypes" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="md-layout-item md-size-40 md-small-size-100">
+    <md-table v-model="fuelTypes" md-sort="name" md-sort-order="asc" md-card class="md-layout-item md-size-80 md-small-size-150">
 
       <md-table-toolbar>
         <h1 class="md-title md-toolbar-section-start">Fuel Type</h1>
@@ -27,20 +27,20 @@
         </div>
       </md-table-toolbar>
 
-        <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-          <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
-          <md-table-cell md-label="Remove">
-              <md-button @click="deleteFuelType(item.id)" class="md-icon-button">
-                <md-icon class="fas fa-trash"/>
-              </md-button>
-          </md-table-cell>
-          <md-table-cell md-label="Edit">
-              <md-button @click="prepareForUpdate(item)" class="md-icon-button">
-                <md-icon class="fas fa-pen"/>
-              </md-button>
-          </md-table-cell>
-        </md-table-row>
+      <md-table-row v-if="fuelTypes.length !== 0" slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+        <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Remove">
+            <md-button @click="deleteFuelType(item.id)" class="md-icon-button">
+              <md-icon class="fas fa-trash"/>
+            </md-button>
+        </md-table-cell>
+        <md-table-cell md-label="Edit">
+            <md-button @click="prepareForUpdate(item)" class="md-icon-button">
+              <md-icon class="fas fa-pen"/>
+            </md-button>
+        </md-table-cell>
+      </md-table-row>
 
     </md-table>
   </div>
@@ -92,5 +92,7 @@ export default {
 </script>
 
 <style>
-
+  .md-dialog .md-dialog-container {
+    transform: none;
+  }
 </style>
