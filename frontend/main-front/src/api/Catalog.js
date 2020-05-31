@@ -7,6 +7,7 @@ export default {
 		});
 	},
 
+	// FUEL_TYPE METHODS
 	async deleteFuelType(id) {
 		const response = await axios.delete(`/catalog/fuelType/${id}`);
 		return response.data;
@@ -19,6 +20,22 @@ export default {
 
 	async updateFuelType(fuelType) {
 		const response = await axios.put(`/catalog/fuelType/${fuelType.id}`, fuelType);
+		return response.data;
+	},
+
+	// GEARBOX_TYPE METHODS
+	async deleteGearboxType(id) {
+		const response = await axios.delete(`/catalog/gearboxType/${id}`);
+		return response.data;
+	},
+
+	async addGearboxType(gearboxType) {
+		const response = await axios.post(`/catalog/gearboxType/`, gearboxType);
+		return response.data;
+	},
+
+	async updateGearboxType(gearboxType) {
+		const response = await axios.put(`/catalog/gearboxType/${gearboxType.id}`, gearboxType);
 		return response.data;
 	}
 };
