@@ -4,7 +4,7 @@
 			<form v-if="show" class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 				<md-card class="md-layout-item md-size-30 md-small-size-100">
 					<md-card-header>
-						<div class="title">Advertisment</div>
+						<div class="title">Advertisement</div>
 					</md-card-header>
 					<md-card-content>
 						<div class="md-layout-item md-small-size-100">
@@ -46,7 +46,7 @@
 								<span class="md-error" v-if="!$v.form.vehicle.fuelTypeId.required">Fuel Type is required</span>
 							</md-field>
 							<md-field :class="{ 'md-invalid': $v.form.vehicle.kilometersTraveled.$error }">
-								<label for="kilometersTraveled">Kilometers Treveled</label>
+								<label for="kilometersTraveled">Kilometers Traveled</label>
 								<md-input v-model="form.vehicle.kilometersTraveled" type="number" />
 								<span class="md-error" v-if="!$v.form.vehicle.kilometersTraveled.required">Kilometers Trebeled is required</span>
 								<span class="md-error" v-else-if="!$v.form.vehicle.kilometersTraveled.integer">Fuel Type must be integer</span>
@@ -60,7 +60,7 @@
 							<div>
 								<md-checkbox v-model="form.vehicle.hasAndroid" class="md-primary">Has Android</md-checkbox>
 								<md-checkbox v-model="form.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
-								<md-checkbox v-model="hasKilometersLimit" class="md-primary">Have Kilometers per day limit</md-checkbox>
+								<md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
 							</div>
 							<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form.kilometersPerDayLimit.$error }">
 								<label for="kilometersPerDayLimit">Limit</label>

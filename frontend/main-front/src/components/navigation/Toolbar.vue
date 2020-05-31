@@ -8,6 +8,7 @@
 				</span>
 			</router-link>
 			<div style="flex: 1;"></div>
+			<md-button to="/post-ad">Post advertisement</md-button>
 			<md-button to="/catalog">Catalog</md-button>
 			<md-button v-if="!isLogged" @click.native="$router.push('/login')">Login</md-button>
 			<md-button v-if="!isLogged" @click.native="$router.push('/register')">Register</md-button>
