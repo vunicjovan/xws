@@ -24,8 +24,6 @@ public class AdvertisementService {
     @Autowired
     private VehicleRepository vehicleRepo;
 
-    @Autowired
-    private PhotoRepository photoRepo;
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\\\.\\\\,\\\\;\\s?]+)$";
@@ -48,7 +46,6 @@ public class AdvertisementService {
         ad.setCollisionDamageWaiver(adDTO.getCollisionDamageWaiver());
         ad.setDescription(adDTO.getDescription());
         ad.setOwnerId(adDTO.getOwnerId());
-        ad.setPhotos(adDTO.getPhotos());
 
         // setting vehicle properties
         Vehicle vehicle = new Vehicle();
@@ -68,7 +65,7 @@ public class AdvertisementService {
         adRepo.save(ad);
         vehicleRepo.save(vehicle);
 
-        return new ResponseEntity<>(adDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
     }
 
     /*
@@ -83,6 +80,10 @@ public class AdvertisementService {
         }
 
         return true;
+    }
+
+    public Advertisement findById(Long id) {
+        return adRepo.getOne(id);
     }
 
 }
