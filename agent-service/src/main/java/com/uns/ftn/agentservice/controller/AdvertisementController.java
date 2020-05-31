@@ -1,5 +1,7 @@
 package com.uns.ftn.agentservice.controller;
 
+import com.netflix.discovery.converters.Auto;
+import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ad")
 public class AdvertisementController {
 
-    @Autowired
     private AdvertisementService adService;
+
+    @Autowired
+    public AdvertisementController(AdvertisementService adService) {
+        this.adService = adService;
+    }
 
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
