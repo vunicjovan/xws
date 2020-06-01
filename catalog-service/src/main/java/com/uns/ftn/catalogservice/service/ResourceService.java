@@ -1,5 +1,7 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.catalogservice.components.QueueProducer;
 import com.uns.ftn.catalogservice.domain.FuelType;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.exceptions.BadRequestException;
@@ -21,6 +23,9 @@ public class ResourceService {
     @Autowired
     private FuelTypeRepository fuelTypeRepository;
 
+    @Autowired
+    QueueProducer queueProducer;
+
     public Set<FuelTypeDTO> getAllFuelTypes() {
         List<FuelType> fuelTypeList = fuelTypeRepository.findAllByDeleted(false);
 
@@ -37,6 +42,12 @@ public class ResourceService {
             fuelType = fuelTypeRepository.save(new FuelType(fuelTypeDTO.getName()));
         } catch (Exception e) {
             throw new BadRequestException("Fuel type with that name already exists!");
+        }
+
+        try {
+            queueProducer.produceFuelType(new FuelTypeDTO(fuelType));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
 
         return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
