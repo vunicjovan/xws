@@ -4,7 +4,9 @@ const state = {
 	advertisments: [],
 };
 
-const getters = {};
+const getters = {
+	//getAdvertisments: (state) => state.advertisments,
+};
 
 const actions = {
 	addAdvertisment({ commit }, advertisment) {

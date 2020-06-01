@@ -48,7 +48,7 @@
 							<md-field :class="{ 'md-invalid': $v.form.vehicle.kilometersTraveled.$error }">
 								<label for="kilometersTraveled">Kilometers Traveled</label>
 								<md-input v-model="form.vehicle.kilometersTraveled" type="number" />
-								<span class="md-error" v-if="!$v.form.vehicle.kilometersTraveled.required">Kilometers Trebeled is required</span>
+								<span class="md-error" v-if="!$v.form.vehicle.kilometersTraveled.required">Kilometers Traveled is required</span>
 								<span class="md-error" v-else-if="!$v.form.vehicle.kilometersTraveled.integer">Fuel Type must be integer</span>
 							</md-field>
 							<md-field :class="{ 'md-invalid': $v.form.vehicle.childSeatNumber.$error }">
@@ -132,11 +132,16 @@ export default {
 		};
 	},
 	mounted() {
+		this.$store
+			.dispatch("getCatalog")
+			.then(() => {})
+			.catch((error) => console.log(error));
+		//this.getCatalog();
 		this.showMe();
 	},
 	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes", "getUser"]),
 	methods: {
-		...mapActions(["addAdvertisment", "addPhotots"]),
+		...mapActions(["addAdvertisment", "addPhotots", "getCatalog"]),
 		clearForm() {
 			this.$v.$reset();
 			this.brandId = undefined;
@@ -156,6 +161,7 @@ export default {
 		},
 
 		showMe() {
+			this.getCatalog();
 			this.show = !this.show;
 		},
 
