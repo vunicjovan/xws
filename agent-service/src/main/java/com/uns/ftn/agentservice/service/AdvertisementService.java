@@ -1,5 +1,7 @@
 package com.uns.ftn.agentservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Vehicle;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
@@ -23,6 +25,9 @@ public class AdvertisementService {
 
     @Autowired
     private VehicleRepository vehicleRepo;
+
+    @Autowired
+    private QueueProducer queueProducer;
 
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
@@ -64,6 +69,13 @@ public class AdvertisementService {
         // database injection: Photo, Vehicle, Advertisement
         adRepo.save(ad);
         vehicleRepo.save(vehicle);
+
+        try {
+            ad.setVehicle(vehicle);
+            queueProducer.produce(new AdvertisementDTO(ad));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
     }

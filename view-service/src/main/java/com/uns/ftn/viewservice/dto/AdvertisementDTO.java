@@ -1,12 +1,10 @@
-package com.uns.ftn.agentservice.dto;
+package com.uns.ftn.viewservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.uns.ftn.agentservice.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -38,16 +36,5 @@ public class AdvertisementDTO implements Serializable {
 
     @JsonProperty("rating")
     private double rating = 0;
-
-    public AdvertisementDTO(Advertisement ad) {
-        this.id = ad.getId();
-        this.price = ad.getPrice();
-        this.kilometersPerDayLimit = ad.getKilometersPerDayLimit();
-        this.collisionDamageWaiver = ad.getCollisionDamageWaiver();
-        this.description = ad.getDescription();
-        this.vehicle = new VehicleDTO(ad.getVehicle());
-        this.ownerId = ad.getOwnerId();
-        this.rating = ad.getRating();
-    }
 
 }

@@ -2,6 +2,7 @@ package com.uns.ftn.agentservice;
 
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClientImpl;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -17,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableEurekaClient
 @RestController
+@EnableRabbit
 public class AgentServiceApplication {
 
 	@RequestMapping("/health")
