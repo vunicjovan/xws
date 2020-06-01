@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import Login from "../views/account/Login.vue";
 import Register from "../views/account/Register.vue";
 import Catalog from "../views/Catalog.vue";
+import AdvertismentForm from "../components/forms/AdvertismentForm.vue";
+import DetailedView from "../views/advertisement/DetailedView.vue";
 
 Vue.use(VueRouter);
 
@@ -27,6 +29,16 @@ const routes = [
 		path: "/catalog",
 		name: "Catalog",
 		component: Catalog
+	},
+	{
+		path: "/post-ad",
+		name: "AdvertismentForm",
+		component: AdvertismentForm
+	},
+	{
+		path: "/single-ad",
+		name: "DetailedView",
+		component: DetailedView
 	}
 ];
 

@@ -18,4 +18,6 @@ export default {
 			return response.data;
 		});
 	},
+
+	// should include getAdvertisements() and getAdvertisement()
 };
