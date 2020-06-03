@@ -23,4 +23,7 @@ public class Brand {
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Model> models;
 
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
 }

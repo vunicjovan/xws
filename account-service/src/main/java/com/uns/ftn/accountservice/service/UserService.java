@@ -5,6 +5,7 @@ import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
+import com.uns.ftn.accountservice.exceptions.NotFoundException;
 import com.uns.ftn.accountservice.repository.AgentRepository;
 import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
@@ -107,6 +108,13 @@ public class UserService {
     public User getByMail(String mail) {
         User user = userRepository.findByEmail(mail);
         return user;
+    }
+
+    public String getAdvertisementOwner(Long id) {
+        User user = userRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Owner whit given id does not exist!"));
+
+        return user.getFirstName() + " " + user.getLastName();
     }
   
     /*

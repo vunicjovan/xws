@@ -25,23 +25,25 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 @Configuration
 public class RabbitMQConfiguration implements RabbitListenerConfigurer {
 
-
-    private static final String LISTENER_METHOD = "receiveMessage";
-
     @Value("${fanout.exchange}")
     private String fanoutExchangeName;
 
     @Value("${queue.name}")
     private String queueName;
 
+    @Autowired
+    public ConnectionFactory connectionFactory;
+
     @Bean
     Queue queue() {
         return new Queue(queueName);
     }
+
     @Bean
     FanoutExchange exchange() {
         return new FanoutExchange(fanoutExchangeName);
     }
+
     @Bean
     Binding binding(Queue queue, FanoutExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange);
@@ -75,9 +77,6 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     public void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
     }
-
-    @Autowired
-    public ConnectionFactory connectionFactory;
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {

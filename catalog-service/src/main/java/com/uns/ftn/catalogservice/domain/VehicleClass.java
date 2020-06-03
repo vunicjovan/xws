@@ -20,7 +20,10 @@ public class VehicleClass {
     @Column(name = "vehicleClassId")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
 
 }

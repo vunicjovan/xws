@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-public class ResourceService {
+public class FuelTypeService {
 
     @Autowired
     private FuelTypeRepository fuelTypeRepository;
@@ -42,6 +42,7 @@ public class ResourceService {
         fuelTypeDTO.setName(validateAndSanitize(fuelTypeDTO.getName()));
 
         FuelType fuelType;
+
         try {
             fuelType = fuelTypeRepository.save(new FuelType(fuelTypeDTO.getName()));
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class ResourceService {
             e.printStackTrace();
         }
 
-        return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
+        return new FuelTypeDTO(fuelType.getId(), fuelType.getName(), fuelType.getDeleted());
     }
 
     public FuelTypeDTO updateFuelType(Long id, FuelTypeDTO fuelTypeDTO) {
@@ -71,6 +72,12 @@ public class ResourceService {
             throw new BadRequestException("Fuel type with that name already exists!");
         }
 
+        try {
+            queueProducer.produceFuelType(new FuelTypeDTO(fuelType));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
     }
 
@@ -80,6 +87,13 @@ public class ResourceService {
 
         fuelType.setDeleted(true);
         fuelType = fuelTypeRepository.save(fuelType);
+
+        try {
+            queueProducer.produceFuelType(new FuelTypeDTO(fuelType));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
     }
 

@@ -11,6 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FuelTypeDTO {
+
     private Long id;
     private String name;
+    private Boolean deleted;
+
 }

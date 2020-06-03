@@ -27,4 +27,6 @@ public class Model {
     @JsonIgnore
     private Brand brand;
 
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
 }
