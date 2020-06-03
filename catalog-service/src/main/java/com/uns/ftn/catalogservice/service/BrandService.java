@@ -48,7 +48,7 @@ public class BrandService {
         List<Brand> brandList = brandRepository.findAllByDeleted(false);
 
         return brandList.stream().sorted(Comparator.comparing(Brand::getName))
-                .map(brand -> new BrandDTO(brand.getId(), brand.getName(), brand.getDeleted(), brand.getModels()))
+                .map(brand -> new BrandDTO(brand.getId(), brand.getName(), brand.getDeleted()))
                 .collect(Collectors.toSet());
     }
 

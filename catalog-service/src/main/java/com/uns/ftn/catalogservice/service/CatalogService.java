@@ -1,11 +1,7 @@
 package com.uns.ftn.catalogservice.service;
 
-import com.uns.ftn.catalogservice.dto.BrandDTO;
+import com.uns.ftn.catalogservice.dto.*;
 import com.uns.ftn.catalogservice.domain.VehicleClass;
-import com.uns.ftn.catalogservice.dto.CatalogDTO;
-import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
-import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
-import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +20,12 @@ public class CatalogService {
     private BrandService brandService;
 
     private VehicleClassService vehicleClassService;
+    private ModelService modelService;
 
     @Autowired
-    public CatalogService(VehicleClassService vehicleClassService) {
+    public CatalogService(VehicleClassService vehicleClassService, ModelService modelService) {
         this.vehicleClassService = vehicleClassService;
+        this.modelService = modelService;
     }
 
     public CatalogDTO getCatalog() {
@@ -35,11 +33,13 @@ public class CatalogService {
         Set<FuelTypeDTO> fuelTypeDTOSet = resourceService.getAllFuelTypes();
         Set<GearboxTypeDTO> gearboxTypeDTOSet = gearboxService.getAllGearboxTypes();
         Set<BrandDTO> brandDTOSet = brandService.getAllBrands();
+        Set<ModelDTO> modelDTOSet = modelService.getAllModels();
         Set<VehicleClassDTO> vehicleClassDTOSet = vehicleClassService.getAllVehicleClasses();
         
         catalogDTO.setFuelTypes(fuelTypeDTOSet);
         catalogDTO.setGearboxTypes(gearboxTypeDTOSet);
         catalogDTO.setBrands(brandDTOSet);
+        catalogDTO.setModels(modelDTOSet);
         catalogDTO.setVehicleClasses(vehicleClassDTOSet);
 
         return catalogDTO;

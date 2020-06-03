@@ -16,12 +16,10 @@ public class BrandDTO {
     private Long id;
     private String name;
     private Boolean deleted;
-    private Set<Model> models = new HashSet<>();
 
     public BrandDTO(Brand brand) {
         this.id = brand.getId();
         this.name = brand.getName();
         this.deleted = brand.getDeleted();
-        this.models = brand.getModels();
     }
 }
