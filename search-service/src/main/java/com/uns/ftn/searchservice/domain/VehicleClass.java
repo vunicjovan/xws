@@ -1,4 +1,4 @@
-package com.uns.ftn.catalogservice.domain;
+package com.uns.ftn.searchservice.domain;
 
 import lombok.Data;
 
@@ -20,10 +20,7 @@ public class VehicleClass {
     @Column(name = "vehicleClassId")
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name")
     private String name;
-
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
 
 }

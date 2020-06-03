@@ -15,3 +15,16 @@ insert into gearbox_type (name, deleted) values ('Semi-Automatic', false);
 insert into gearbox_type (name, deleted) values ('Continously Variable', false);
 insert into gearbox_type (name, deleted) values ('Dual Clutch', false);
 insert into gearbox_type (name, deleted) values ('Direct Shift', false);
+
+-- Vehicle Classes
+insert into vehicle_class (name, deleted) values ('Micro Car', false);
+insert into vehicle_class (name, deleted) values ('City Car', false);
+insert into vehicle_class (name, deleted) values ('Minivan', false);
+insert into vehicle_class (name, deleted) values ('Small Family', false);
+insert into vehicle_class (name, deleted) values ('Large Family', false);
+insert into vehicle_class (name, deleted) values ('Executive', false);
+insert into vehicle_class (name, deleted) values ('Luxury Saloon', false);
+insert into vehicle_class (name, deleted) values ('Sports Car', false);
+insert into vehicle_class (name, deleted) values ('SUV', false);
+insert into vehicle_class (name, deleted) values ('Old Timer', false);
+
