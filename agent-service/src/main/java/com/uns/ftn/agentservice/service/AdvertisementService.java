@@ -55,6 +55,7 @@ public class AdvertisementService {
         // setting vehicle properties
         Vehicle vehicle = new Vehicle();
         vehicle.setChildSeatNumber(adDTO.getVehicle().getChildSeatNumber());
+        vehicle.setKilometersTraveled(adDTO.getVehicle().getKilometersTraveled());
         vehicle.setHasAndroid(adDTO.getVehicle().getHasAndroid());
         vehicle.setFuelTypeId(adDTO.getVehicle().getFuelTypeId());
         vehicle.setGearboxTypeId(adDTO.getVehicle().getGearboxTypeId());

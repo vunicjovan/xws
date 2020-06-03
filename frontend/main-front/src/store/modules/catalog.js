@@ -24,7 +24,8 @@ const actions = {
 				.then((catalog) => { 
 					commit("setFuelTypes", catalog.fuelTypes),
 					commit("setGearboxTypes", catalog.gearboxTypes),
-					commit("setBrands", catalog.brands)
+					commit("setBrands", catalog.brands),
+          commit("setVehicleClasses", catalog.vehicleClasses);
 				})
 				.catch((error) => reject(error));
 		});
@@ -69,7 +70,9 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.deleteGearboxType(id)
-				.then((gearboxType) => { commit("deleteGearboxType", id) })
+				.then((gearboxType) => {
+					commit("deleteGearboxType", id);
+				})
 				.catch((error) => reject(error));
 		});
 	},
@@ -78,7 +81,9 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.addGearboxType(gearboxType)
-				.then((gearboxType) => { commit("addGearboxType", gearboxType) })
+				.then((gearboxType) => {
+					commit("addGearboxType", gearboxType);
+				})
 				.catch((error) => reject(error));
 		});
 	},
@@ -87,7 +92,9 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateGearboxType(gearboxType)
-				.then((gearboxType) => { commit("updateGearboxType", gearboxType) })
+				.then((gearboxType) => {
+					commit("updateGearboxType", gearboxType);
+				})
 				.catch((error) => reject(error));
 		});
 	},
@@ -120,6 +127,40 @@ const actions = {
 		})
 	},
 
+	// VEHICLE_CLASS ACTIONS
+	deleteVehicleClass({ commit }, id) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.deleteVehicleClass(id)
+				.then(() => {
+					commit("deleteVehicleClass", id);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	},
+	addVehicleClass({ commit }, vehicleClass) {
+		return new Promise((resovle, reject) => {
+			catalogApi
+				.addVehicleClass(vehicleClass)
+				.then((data) => {
+					commit("addVehicleClass", data);
+					resovle(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
+	updateVehicleClass({ commit }, vehicleClass) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.updateVehicleClass(vehicleClass)
+				.then((data) => {
+					commit("updateVehicleClass", data);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
@@ -127,6 +168,7 @@ const mutations = {
 	setGearboxTypes: (state, types) => (state.gearboxTypes = types),
 	setModels: (state, models) => (state.models = models),
 	setVehicleClasses: (state, classes) => (state.vehicleClasses = classes),
+	setBrands: (state, brands) => (state.brands = brands),
 	// FUEL_TYPE MUTATIONS
 	deleteFuelType: (state, id) => {
 		state.fuelTypes = state.fuelTypes.filter((fuelType) => fuelType.id != id);
@@ -143,14 +185,24 @@ const mutations = {
 	deleteGearboxType: (state, id) => {
 		state.gearboxTypes = state.gearboxTypes.filter((gearboxType) => gearboxType.id != id);
 	},
-	addGearboxType: (state, gearboxType) => ( state.gearboxTypes.push(gearboxType) ),
+	addGearboxType: (state, gearboxType) => state.gearboxTypes.push(gearboxType),
 	updateGearboxType: (state, gearboxType) => {
-		state.gearboxTypes.forEach(element => {
+		state.gearboxTypes.forEach((element) => {
 			if (element.id == gearboxType.id) {
 				element.name = gearboxType.name;
 			}
-		})
+		});
 	},
+	// VEHICLE_CLASS MUTATIONS
+	deleteVehicleClass: (state, id) => {
+		state.vehicleClasses = state.vehicleClasses.filter((vehicleClass) => vehicleClass.id != id);
+	},
+	addVehicleClass: (state, vehicleClass) => state.vehicleClasses.push(vehicleClass),
+	updateVehicleClass: (state, vehicleClass) => {
+		const index = state.vehicleClasses.findIndex((vClass) => vClass.id === vehicleClass.id);
+		state.vehicleClasses.splice(index, 1, vehicleClass);
+	},
+
 	// BRAND MUTATIONS
 	setBrands: (state, brands) => (state.brands = brands),
 	addBrand: (state, brand) => (state.brands.push(brand)),
@@ -164,6 +216,7 @@ const mutations = {
 	deleteBrand: (state, id) => {
 		state.brands = state.brands.filter((brand) => brand.id != id);
 	},
+
 };
 
 export default {

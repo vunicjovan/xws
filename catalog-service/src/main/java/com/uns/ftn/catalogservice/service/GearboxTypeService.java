@@ -1,5 +1,6 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.uns.ftn.catalogservice.components.QueueProducer;
 import com.uns.ftn.catalogservice.domain.FuelType;
 import com.uns.ftn.catalogservice.domain.GearboxType;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
@@ -24,6 +25,9 @@ public class GearboxTypeService {
 
     @Autowired
     private GearboxTypeRepository gearboxRepo;
+
+    @Autowired
+    private QueueProducer queueProducer;
 
     public GearboxType save(GearboxType gbt) {
         return gearboxRepo.save(gbt);
@@ -65,6 +69,7 @@ public class GearboxTypeService {
 
         try {
             gbt = save(gbt);
+            queueProducer.produceGearboxType(new GearboxTypeDTO(gbt.getId(), gbt.getName(), gbt.getDeleted()));
         }
         catch(Exception e) {
             throw new BadRequestException("Gearbox type with requested name already exists.");
