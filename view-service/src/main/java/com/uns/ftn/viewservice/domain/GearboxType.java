@@ -3,6 +3,7 @@ package com.uns.ftn.viewservice.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +21,8 @@ public class GearboxType {
 
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
+
+    @OneToMany(mappedBy = "gearboxType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Vehicle> vehicles;
 
 }

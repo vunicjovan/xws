@@ -3,6 +3,7 @@ package com.uns.ftn.viewservice.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -23,5 +24,8 @@ public class FuelType {
 
     @Column(name = "deleted")
     private Boolean deleted = false;
+
+    @OneToMany(mappedBy = "fuelType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Vehicle> vehicles;
 
 }

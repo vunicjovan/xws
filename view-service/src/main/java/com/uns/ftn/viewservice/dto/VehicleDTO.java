@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class VehicleDTO implements Serializable {
 
     private Long id;
-    private double kilometersTraveled;
+    private int kilometersTraveled;
     private int childSeatNumber;
     private Boolean hasAndroid = false;
     private Long fuelTypeId;
