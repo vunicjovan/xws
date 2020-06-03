@@ -36,6 +36,11 @@ public class AccountController {
         return null;
     }
 
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<?> getAdvertisementOwner(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.getAdvertisementOwner(id), HttpStatus.OK);
+    }
+
     @GetMapping("/logged")
     public ResponseEntity<?> getLogged(@RequestHeader("username") String username) {
         User user = userService.getByMail(username);
@@ -48,7 +53,7 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
         return new ResponseEntity<>(userService.login(authenticationRequest), HttpStatus.ACCEPTED);
     }
 

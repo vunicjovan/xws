@@ -1,6 +1,5 @@
 package com.uns.ftn.catalogservice.dto;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.uns.ftn.catalogservice.domain.VehicleClass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

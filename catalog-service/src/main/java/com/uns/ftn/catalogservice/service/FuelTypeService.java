@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-public class ResourceService {
+public class FuelTypeService {
 
     @Autowired
     private FuelTypeRepository fuelTypeRepository;
@@ -83,6 +83,13 @@ public class ResourceService {
 
         fuelType.setDeleted(true);
         fuelType = fuelTypeRepository.save(fuelType);
+
+        try {
+            queueProducer.produceFuelType(new FuelTypeDTO(fuelType));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
     }
 

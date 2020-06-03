@@ -14,7 +14,7 @@ public class ResourceController {
     private GearboxTypeService gbtService;
   
     @Autowired
-    private ResourceService resourceService;
+    private FuelTypeService fuelTypeService;
 
     @Autowired
     private BrandService brandService;
@@ -40,7 +40,7 @@ public class ResourceController {
 
     @PostMapping("/fuelType")
     public ResponseEntity<?> addFuelType(@RequestBody FuelTypeDTO fuelTypeDTO) {
-        return new ResponseEntity<>(resourceService.addFuelType(fuelTypeDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(fuelTypeService.addFuelType(fuelTypeDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("brand/{brandId}/model")
@@ -60,7 +60,7 @@ public class ResourceController {
 
     @PutMapping("/fuelType/{id}")
     public ResponseEntity<?> updateFuelType(@PathVariable("id") Long id, @RequestBody FuelTypeDTO fuelTypeDTO) {
-        return new ResponseEntity<>(resourceService.updateFuelType(id, fuelTypeDTO), HttpStatus.OK);
+        return new ResponseEntity<>(fuelTypeService.updateFuelType(id, fuelTypeDTO), HttpStatus.OK);
     }
 
     @PutMapping(value = "/gearboxType/{id}", consumes = "application/json")
@@ -87,7 +87,7 @@ public class ResourceController {
 
     @DeleteMapping("/fuelType/{id}")
     public ResponseEntity<?> deleteFuelType(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(resourceService.deleteFuelType(id), HttpStatus.OK);
+        return new ResponseEntity<>(fuelTypeService.deleteFuelType(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/gearboxType/{id}")

@@ -14,7 +14,7 @@ public class AdvertisementDTO implements Serializable {
 
     private Long id;
     private double price;
-    private double kilometersPerDayLimit = -1;
+    private int kilometersPerDayLimit = -1;
     private Boolean collisionDamageWaiver = false;
     private String description;
     private VehicleDTO vehicle;

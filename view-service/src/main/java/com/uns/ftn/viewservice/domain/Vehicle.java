@@ -19,7 +19,7 @@ public class Vehicle {
     private Long id;
 
     @Column(name = "kilometersTraveled")
-    private double kilometersTraveled;
+    private int kilometersTraveled;
 
     @Column(name = "childSeatNumber")
     private int childSeatNumber;
@@ -31,15 +31,15 @@ public class Vehicle {
     @OneToOne
     private Advertisement advertisement;
 
-    @Column(name = "fuelTypeId", nullable = false)
-    private Long fuelTypeId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private FuelType fuelType;
 
-    @Column(name = "gearboxTypeId", nullable = false)
-    private Long gearboxTypeId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private GearboxType gearboxType;
 
-    @Column(name = "vehicleClassId", nullable = false)
-    private Long vehicleClassId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private VehicleClass vehicleClass;
 
-    @Column(name = "modelId", nullable = false)
-    private Long modelId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Model model;
 }

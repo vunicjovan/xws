@@ -1,5 +1,6 @@
 package com.uns.ftn.viewservice.service;
 
+import com.uns.ftn.viewservice.client.AccountClient;
 import com.uns.ftn.viewservice.domain.*;
 import com.uns.ftn.viewservice.dto.DetailedAdvertisementDTO;
 import com.uns.ftn.viewservice.dto.SimpleAdvertisementDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ViewService {
@@ -20,27 +22,21 @@ public class ViewService {
     private AdvertisementRepository advertisementRepository;
 
     @Autowired
-    private ModelRepository modelRepository;
+    private AccountClient accountClient;
 
     public Set<SimpleAdvertisementDTO> getAllAdvertisements() {
         List<Advertisement> advertisements = advertisementRepository.findAll();
         Set<SimpleAdvertisementDTO> simpleAdvertisementDTOSet = new HashSet<>();
 
-        for (Advertisement advertisement : advertisements) {
-            Vehicle vehicle = advertisement.getVehicle();
-            Model model = modelRepository.findById(vehicle.getModelId()).orElse(null);
-            Set<Photo> photos = advertisement.getPhotos();
-            Set<String> photoPaths = new HashSet<>();
-            photos.forEach(photo -> photoPaths.add(photo.getPath()));
-            simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
-                    advertisement.getId(),
-                    advertisement.getPrice(),
-                    advertisement.getPlace(),
-                    model.getBrand().getName(),
-                    model.getName(),
-                    photoPaths
-            ));
-        }
+        advertisements.forEach(advertisement -> simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
+                advertisement.getId(),
+                advertisement.getPrice(),
+                advertisement.getPlace(),
+                advertisement.getVehicle().getModel().getBrand().getName(),
+                advertisement.getVehicle().getModel().getName(),
+                advertisement.getPhotos()
+                        .stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+        )));
 
         return simpleAdvertisementDTOSet;
     }
@@ -49,11 +45,35 @@ public class ViewService {
         Advertisement advertisement = advertisementRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Advertisement with that id does not exist!"));
 
-        Model model = modelRepository.findById(advertisement.getVehicle().getModelId()).orElse(null);
-        Set<Photo> photos = advertisement.getPhotos();
-        Set<String> photoPaths = new HashSet<>();
-        photos.forEach(photo -> photoPaths.add(photo.getPath()));
-        return null;
+        String owner;
+
+        try {
+            owner = accountClient.getOwnerName(advertisement.getOwnerId());
+        } catch (Exception e) {
+            throw new NotFoundException("Advertisement owner does not exist!");
+        }
+
+        DetailedAdvertisementDTO detailedAdvertisementDTO = new DetailedAdvertisementDTO(
+                advertisement.getId(),
+                advertisement.getVehicle().getModel().getBrand().getName(),
+                advertisement.getVehicle().getModel().getName(),
+                advertisement.getVehicle().getVehicleClass().getName(),
+                advertisement.getVehicle().getGearboxType().getName(),
+                advertisement.getVehicle().getFuelType().getName(),
+                owner,
+                advertisement.getPlace(),
+                advertisement.getPrice(),
+                advertisement.getVehicle().getKilometersTraveled(),
+                advertisement.getCollisionDamageWaiver(),
+                advertisement.getKilometersPerDayLimit(),
+                advertisement.getVehicle().getChildSeatNumber(),
+                advertisement.getVehicle().getHasAndroid(),
+                advertisement.getDescription(),
+                null
+                //advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+        );
+
+        return detailedAdvertisementDTO;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.uns.ftn.viewservice.domain;
 
 import lombok.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 public class Brand {
 
     @Id
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false)

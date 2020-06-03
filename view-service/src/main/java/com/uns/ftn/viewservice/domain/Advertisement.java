@@ -25,7 +25,7 @@ public class Advertisement {
     private double price;
 
     @Column(name = "kilometersPerDayLimit")
-    private double kilometersPerDayLimit = -1;
+    private int kilometersPerDayLimit = -1;
 
     @Column(name = "collisionDamageWaiver")
     private Boolean collisionDamageWaiver = false;

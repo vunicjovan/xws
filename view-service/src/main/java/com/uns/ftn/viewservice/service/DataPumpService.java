@@ -44,6 +44,7 @@ public class DataPumpService {
             vehicle = new Vehicle();
             vehicle.setId(advertisementDTO.getVehicle().getId());
         }
+        
         advertisement.setPrice(advertisementDTO.getPrice());
         advertisement.setKilometersPerDayLimit(advertisementDTO.getKilometersPerDayLimit());
         advertisement.setCollisionDamageWaiver(advertisementDTO.getCollisionDamageWaiver());
@@ -53,10 +54,10 @@ public class DataPumpService {
         vehicle.setKilometersTraveled(advertisementDTO.getVehicle().getKilometersTraveled());
         vehicle.setChildSeatNumber(advertisementDTO.getVehicle().getChildSeatNumber());
         vehicle.setHasAndroid(advertisementDTO.getVehicle().getHasAndroid());
-        vehicle.setFuelTypeId(advertisementDTO.getVehicle().getFuelTypeId());
-        vehicle.setGearboxTypeId(advertisementDTO.getVehicle().getGearboxTypeId());
-        vehicle.setVehicleClassId(advertisementDTO.getVehicle().getVehicleClassId());
-        vehicle.setModelId(advertisementDTO.getVehicle().getModelId());
+        vehicle.setFuelType(findFuelTypeById(advertisementDTO.getVehicle().getFuelTypeId()));
+        vehicle.setGearboxType(findGearboxTypeById(advertisementDTO.getVehicle().getGearboxTypeId()));
+        vehicle.setVehicleClass(findVehicleClassById(advertisementDTO.getVehicle().getVehicleClassId()));
+        vehicle.setModel(findModelById(advertisementDTO.getVehicle().getModelId()));
 
         vehicle.setAdvertisement(advertisement);
 
@@ -65,7 +66,7 @@ public class DataPumpService {
     }
 
     public void fuelTypeHandler(FuelTypeDTO fuelTypeDTO) {
-        FuelType fuelType = fuelTypeRepository.findById(fuelTypeDTO.getId()).orElse(null);
+        FuelType fuelType = findFuelTypeById(fuelTypeDTO.getId());
 
         if (fuelType == null) {
             fuelType = new FuelType();
@@ -79,7 +80,7 @@ public class DataPumpService {
     }
 
     public void gearboxTypeHandler(GearboxTypeDTO gearboxTypeDTO) {
-        GearboxType gearboxType = gearboxTypeRepository.findById(gearboxTypeDTO.getId()).orElse(null);
+        GearboxType gearboxType = findGearboxTypeById(gearboxTypeDTO.getId());
 
         if (gearboxType == null) {
             gearboxType = new GearboxType();
@@ -93,7 +94,7 @@ public class DataPumpService {
     }
 
     public void vehicleClassHandler(VehicleClassDTO vehicleClassDTO) {
-        VehicleClass vehicleClass = vehicleClassRepository.findById(vehicleClassDTO.getId()).orElse(null);
+        VehicleClass vehicleClass = findVehicleClassById(vehicleClassDTO.getId());
 
         if (vehicleClass == null) {
             vehicleClass = new VehicleClass();
@@ -107,7 +108,7 @@ public class DataPumpService {
     }
 
     public void brandHandler(BrandDTO brandDTO) {
-        Brand brand = brandRepository.findById(brandDTO.getId()).orElse(null);
+        Brand brand = findBrandById(brandDTO.getId());
 
         if (brand == null) {
             brand = new Brand();
@@ -121,8 +122,8 @@ public class DataPumpService {
     }
 
     public void modelHandler(ModelDTO modelDTO) {
-        Model model = modelRepository.findById(modelDTO.getId()).orElse(null);
-        Brand brand = brandRepository.findById(modelDTO.getId()).orElse(null);
+        Model model = findModelById(modelDTO.getId());
+        Brand brand = findBrandById(modelDTO.getBrand().getId());
 
         if (model == null) {
             model = new Model();
@@ -134,6 +135,26 @@ public class DataPumpService {
         model.setBrand(brand);
 
         modelRepository.save(model);
+    }
+
+    private FuelType findFuelTypeById(Long id) {
+        return fuelTypeRepository.findById(id).orElse(null);
+    }
+
+    private GearboxType findGearboxTypeById(Long id) {
+        return gearboxTypeRepository.findById(id).orElse(null);
+    }
+
+    private VehicleClass findVehicleClassById(Long id) {
+        return vehicleClassRepository.findById(id).orElse(null);
+    }
+
+    private Model findModelById(Long id) {
+        return modelRepository.findById(id).orElse(null);
+    }
+
+    private Brand findBrandById(Long id) {
+        return brandRepository.findById(id).orElse(null);
     }
 
 }
