@@ -2,10 +2,12 @@ import advertismentApi from "@/api/Advertisment.js";
 
 const state = {
 	advertisments: [],
+	advertisement: null
 };
 
 const getters = {
 	//getAdvertisments: (state) => state.advertisments,
+	//getAdvertisement: (state) => state.advertisement
 };
 
 const actions = {
@@ -28,9 +30,35 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+	
+	getAllAdvertisements({commit}) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.getAllAdvertisements()
+				.then((advertisements) => {
+					commit("setAdvertisements", advertisements)
+				})
+				.catch((error) => reject(error));
+		})
+	},
+
+	getDetailedAdvertisement({commit}, id) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.getAllAdvertisements(id)
+				.then((advertisement) => {
+					commit("setAdvertisement", advertisement)
+				})
+				.catch((error) => reject(error));
+		})
+	}
+	
 };
 
-const mutations = {};
+const mutations = {
+	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
+	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement)
+};
 
 export default {
 	state,

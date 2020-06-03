@@ -38,6 +38,7 @@ public class ResourceService {
         fuelTypeDTO.setName(validateAndSanitize(fuelTypeDTO.getName()));
 
         FuelType fuelType;
+
         try {
             fuelType = fuelTypeRepository.save(new FuelType(fuelTypeDTO.getName()));
         } catch (Exception e) {
@@ -65,6 +66,12 @@ public class ResourceService {
             fuelType = fuelTypeRepository.save(fuelType);
         } catch (Exception e) {
             throw new BadRequestException("Fuel type with that name already exists!");
+        }
+
+        try {
+            queueProducer.produceFuelType(new FuelTypeDTO(fuelType));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
 
         return new FuelTypeDTO(fuelType.getId(), fuelType.getName());

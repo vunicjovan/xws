@@ -19,5 +19,15 @@ export default {
 		});
 	},
 
-	// should include getAdvertisements() and getAdvertisement()
+	getAllAdvertisements() {
+		return axios.post(`/view/`).then((response) => {
+			return response.data
+		})
+	},
+
+	getDetailedAdvertisement(id) {
+		return axios.post(`/view/${id}`).then((response) => {
+			return response.data
+		})
+	},
 };

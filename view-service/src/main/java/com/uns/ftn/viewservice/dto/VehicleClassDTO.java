@@ -1,16 +1,13 @@
 package com.uns.ftn.viewservice.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
-public class FuelTypeDTO {
+@NoArgsConstructor
+public class VehicleClassDTO {
 
     private Long id;
     private String name;
