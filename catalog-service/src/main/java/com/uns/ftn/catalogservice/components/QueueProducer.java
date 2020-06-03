@@ -1,6 +1,7 @@
 package com.uns.ftn.catalogservice.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.catalogservice.dto.BrandDTO;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
 import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
@@ -26,6 +27,10 @@ public class QueueProducer {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(fuelTypeDTO);
     }
+
+    public void produceBrand(BrandDTO brandDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(brandDTO);
 
     public void produceGearboxType(GearboxTypeDTO gearboxTypeDTO) throws  JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);

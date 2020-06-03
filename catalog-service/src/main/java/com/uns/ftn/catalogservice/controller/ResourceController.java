@@ -1,6 +1,8 @@
 package com.uns.ftn.catalogservice.controller;
 
+import com.uns.ftn.catalogservice.dto.BrandDTO;
 import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.service.BrandService;
 import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
 import com.uns.ftn.catalogservice.service.GearboxTypeService;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
@@ -20,6 +22,9 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
+    @Autowired
+    private BrandService brandService;
+
     private VehicleClassService vehicleClassService;
 
     @Autowired
@@ -32,9 +37,9 @@ public class ResourceController {
         return gbtService.newGearboxType(gbtDTO);
     }
     
-    @PostMapping("/brand")
-    public ResponseEntity<?> addBrand() {
-        return null;
+    @PostMapping(value = "/brand", consumes = "application/json")
+    public ResponseEntity<?> addBrand(@RequestBody BrandDTO brandDTO) {
+        return brandService.newBrand(brandDTO);
     }
 
     @PostMapping("/fuelType")
@@ -52,9 +57,9 @@ public class ResourceController {
          return vehicleClassService.newVehicleClass(vehicleClassDTO);
     }
 
-    @PutMapping("/brand/{id}")
-    public ResponseEntity<?> updateBrand(@PathVariable("id") Long id) {
-        return null;
+    @PutMapping(value = "/brand/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateBrand(@PathVariable("id") Long id, @RequestBody BrandDTO brandDTO) {
+        return brandService.updateBrand(id, brandDTO);
     }
 
     @PutMapping("/fuelType/{id}")
@@ -80,7 +85,7 @@ public class ResourceController {
 
     @DeleteMapping("/brand/{id}")
     public ResponseEntity<?> deleteBrand(@PathVariable("id") Long id) {
-        return null;
+        return brandService.deleteBrand(id);
     }
 
     @DeleteMapping("/fuelType/{id}")

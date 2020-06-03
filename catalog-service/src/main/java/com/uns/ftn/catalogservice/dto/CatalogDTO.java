@@ -15,5 +15,6 @@ import java.util.Set;
 public class CatalogDTO {
     private Set<FuelTypeDTO> fuelTypes = new HashSet<>();
     private Set<GearboxTypeDTO> gearboxTypes = new HashSet<>();
+    private Set<BrandDTO> brands = new HashSet<>();
     private Set<VehicleClassDTO> vehicleClasses = new HashSet<>();
 }
