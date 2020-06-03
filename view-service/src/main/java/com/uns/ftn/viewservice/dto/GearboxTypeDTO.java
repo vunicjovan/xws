@@ -1,16 +1,14 @@
 package com.uns.ftn.viewservice.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class FuelTypeDTO {
+public class GearboxTypeDTO {
 
     private Long id;
     private String name;
