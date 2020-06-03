@@ -1,8 +1,10 @@
 package com.uns.ftn.catalogservice.service;
 
-import com.uns.ftn.catalogservice.dto.CatalogDTO;
-import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
-import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.domain.FuelType;
+import com.uns.ftn.catalogservice.domain.GearboxType;
+import com.uns.ftn.catalogservice.domain.Model;
+import com.uns.ftn.catalogservice.domain.VehicleClass;
+import com.uns.ftn.catalogservice.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +15,20 @@ import java.util.Set;
 @Service
 public class CatalogService {
 
-    @Autowired
     private FuelTypeService fuelTypeService;
-
-    @Autowired
     private GearboxTypeService gearboxService;
-
-    @Autowired
     private BrandService brandService;
-
     private VehicleClassService vehicleClassService;
     private ModelService modelService;
 
     @Autowired
-    public CatalogService(VehicleClassService vehicleClassService, ModelService modelService) {
+    public CatalogService(VehicleClassService vehicleClassService, ModelService modelService,
+                          FuelTypeService fuelTypeService, GearboxTypeService gearboxService, BrandService brandService) {
         this.vehicleClassService = vehicleClassService;
         this.modelService = modelService;
+        this.fuelTypeService = fuelTypeService;
+        this.gearboxService = gearboxService;
+        this.brandService = brandService;
     }
 
     public CatalogDTO getCatalog() {
@@ -53,10 +53,10 @@ public class CatalogService {
         CheckResponseDTO crd = new CheckResponseDTO();
 
         try {
+            Model md = modelService.findOne(Long.parseLong(parts[0]));
+            FuelType ft = fuelTypeService.findOne(Long.parseLong(parts[1]));
             GearboxType gbt = gearboxService.findOne(Long.parseLong(parts[2]));
-            FuelType ft = resourceService.findOne(Long.parseLong(parts[1]));
-            // findOne() for vehicle class
-            // findOne() for vehicle model
+            VehicleClass vc = vehicleClassService.findOne(Long.parseLong(parts[3]));
             crd.setAvailable(true);
             crd.setMessage("All good.");
         }

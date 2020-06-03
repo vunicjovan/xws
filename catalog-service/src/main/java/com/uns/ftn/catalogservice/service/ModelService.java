@@ -34,7 +34,7 @@ public class ModelService {
 
     public Model findOne(Long id) {
         return modelRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Requested vehicle class does not exist."));
+                new NotFoundException("Requested vehicle model does not exist."));
     }
 
     public List<Model> findAll() {
