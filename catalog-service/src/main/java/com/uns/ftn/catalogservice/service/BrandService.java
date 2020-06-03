@@ -47,8 +47,9 @@ public class BrandService {
     public Set<BrandDTO> getAllBrands() {
         List<Brand> brandList = brandRepository.findAllByDeleted(false);
 
-        return brandList.stream().sorted(Comparator.comparing(Brand::getName)).
-                map(brand -> new BrandDTO(brand.getId(), brand.getName(), brand.getModels())).collect(Collectors.toSet());
+        return brandList.stream().sorted(Comparator.comparing(Brand::getName))
+                .map(brand -> new BrandDTO(brand.getId(), brand.getName(), brand.getDeleted(), brand.getModels()))
+                .collect(Collectors.toSet());
     }
 
     public ResponseEntity<?> newBrand(BrandDTO brandDTO) {
