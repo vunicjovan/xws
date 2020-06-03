@@ -8,6 +8,7 @@
 				</span>
 			</router-link>
 			<div style="flex: 1;"></div>
+			<searchDialog/>
 			<md-button to="/post-ad">Post advertisement</md-button>
 			<md-button to="/catalog">Catalog</md-button>
 			<md-button v-if="!isLogged" @click.native="$router.push('/login')">Login</md-button>
@@ -20,6 +21,7 @@
 <script>
 //import { EventBus } from "../../event-bus.js";
 import { mapGetters, mapActions } from "vuex";
+
 export default {
 	name: "Toolbar",
 	computed: {
@@ -31,6 +33,9 @@ export default {
 			this.$store.dispatch("logout");
 		},
 	},
+	components: {
+		searchDialog: () => import("../search/Search.vue")
+	}
 };
 </script>
 
