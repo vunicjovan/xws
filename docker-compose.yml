@@ -22,6 +22,12 @@ services:
     depends_on:
       - db
 
+  axon-server:
+    image: axoniq/axonserver:4.3.2
+    ports:
+      - 8024:8024
+      - 8124:8124
+
   account-service:
     build: ./account-service
     ports:
@@ -39,6 +45,7 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
+      #- axon-server
 
   agent-service:
     build: ./agent-service
@@ -46,6 +53,7 @@ services:
       - "8081:8081"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
+      #- AXON_HOST=axon-server
       - POSTGRES_DB=service-db
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
@@ -56,6 +64,7 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
+      #- axon-server
 
 #  android-service:
 #    build: ./android-service
@@ -74,6 +83,7 @@ services:
       - "8083:8083"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
+      #- AXON_HOST=axon-server
       - POSTGRES_DB=service-db
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
@@ -84,6 +94,7 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
+      #- axon-server
 
 #  mail-service:
 #    build: ./mail-service
@@ -173,6 +184,7 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
+      - axon-server
       - account-service
       - agent-service
       #- android-service

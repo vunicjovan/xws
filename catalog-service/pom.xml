@@ -83,6 +83,31 @@
 			<artifactId>encoder</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		<!-- Axon -->
+<!--		<dependency>-->
+<!--			<groupId>org.axonframework</groupId>-->
+<!--			<artifactId>axon-spring-boot-starter</artifactId>-->
+<!--			<version>4.3.2</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>com.google.guava</groupId>-->
+<!--			<artifactId>guava</artifactId>-->
+<!--			<version>23.6-jre</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>javax.inject</groupId>-->
+<!--			<artifactId>javax.inject</artifactId>-->
+<!--			<version>1</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>com.uns.ftn</groupId>-->
+<!--			<artifactId>Core-API</artifactId>-->
+<!--			<version>1.0</version>-->
+<!--		</dependency>-->
+		<!--#####-->
 	</dependencies>
 
 	<dependencyManagement>

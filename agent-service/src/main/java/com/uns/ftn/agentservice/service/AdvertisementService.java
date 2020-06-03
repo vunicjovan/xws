@@ -1,12 +1,13 @@
 package com.uns.ftn.agentservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.agentservice.client.CatalogClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Vehicle;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.dto.CheckResponseDTO;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
-import com.uns.ftn.agentservice.repository.PhotoRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AdvertisementService {
     @Autowired
     private QueueProducer queueProducer;
 
+    @Autowired
+    private CatalogClient catalogClient;
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\\\.\\\\,\\\\;\\s?]+)$";
@@ -43,6 +46,13 @@ public class AdvertisementService {
         adDTO.setDescription(Encode.forHtml(adDTO.getDescription()));
 
         // check if gearbox, fuel, class and model exist ---> catalog-service
+        String checker = adDTO.getVehicle().getModelId() + "-" + adDTO.getVehicle().getFuelTypeId() + "-" +
+                        adDTO.getVehicle().getGearboxTypeId() + "-" + adDTO.getVehicle().getVehicleClassId();
+
+        CheckResponseDTO crd = catalogClient.checkIfResourcesExist(checker);
+        if (!crd.getMessage().equals("All good.")) {
+            return new ResponseEntity<>(crd.getMessage(), HttpStatus.NOT_FOUND);
+        }
 
         // setting advertisement properties
         Advertisement ad = new Advertisement();
@@ -61,9 +71,6 @@ public class AdvertisementService {
         vehicle.setVehicleClassId(adDTO.getVehicle().getVehicleClassId());
         vehicle.setModelId(adDTO.getVehicle().getModelId());
 
-        // creating vehicle photos
-
-        //ad.setVehicle(vehicle);
         vehicle.setAdvertisement(ad);
 
         // database injection: Photo, Vehicle, Advertisement
