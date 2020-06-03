@@ -3,8 +3,8 @@
 		<md-dialog-prompt
 			:md-active.sync="active"
 			v-model="form.name"
-			md-title="New gearbox type"
-			md-input-placeholder="Gearbox type name..."
+			md-title="New vehicle class"
+			md-input-placeholder="Vehicle class name..."
 			md-confirm-text="Add"
 			@md-confirm="submitVehicleClass(form)"
 		/>
@@ -12,8 +12,8 @@
 		<md-dialog-prompt
 			:md-active.sync="editMode"
 			v-model="form.name"
-			md-title="Edit gearbox type"
-			md-input-placeholder="Gearbox type name..."
+			md-title="Edit vehicle class"
+			md-input-placeholder="Vehicle class name..."
 			md-confirm-text="Update"
 			@md-cancel="cancelUpdate()"
 			@md-confirm="updateVC(form)"
