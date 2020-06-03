@@ -54,6 +54,35 @@ export default {
 		return response.data;
 	},
 
+	// MODEL METHODS
+
+	async addModel(brandId, model) {
+		try {
+			const response = await axios.post(`/catalog/brand/${brandId}/model/`, model);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
+	async updateModel(brandId, model) {
+		try {
+			const response = await axios.put(`/catalog/brand/${brandId}/model/${model.id}/`, model);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
+	async deleteModel(brandId, modelId) {
+		try {
+			const response = await axios.delete(`/catalog/brand/${brandId}/model/${modelId}/`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
 	// VEHICLE_CLASS METHODS
 	async deleteVehicleClass(id) {
 		try {
@@ -81,5 +110,4 @@ export default {
 			throw Error(error);
 		}
 	},
-
 };

@@ -22,10 +22,11 @@ const actions = {
 			catalogApi
 				.getCatalog()
 				.then((catalog) => {
-					commit("setFuelTypes", catalog.fuelTypes),
-						commit("setGearboxTypes", catalog.gearboxTypes),
-						commit("setBrands", catalog.brands),
-						commit("setVehicleClasses", catalog.vehicleClasses);
+					commit("setFuelTypes", catalog.fuelTypes);
+					commit("setGearboxTypes", catalog.gearboxTypes);
+					commit("setBrands", catalog.brands);
+					commit("setModels", catalog.models);
+					commit("setVehicleClasses", catalog.vehicleClasses);
 				})
 				.catch((error) => reject(error));
 		});
@@ -133,6 +134,41 @@ const actions = {
 		});
 	},
 
+	// MODEL ACTIONS
+	addModel({ commit }, payload) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.addModel(payload.brandId, payload.model)
+				.then((data) => {
+					commit("addModel", data);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
+	updateModel({ commit }, payload) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.updateModel(payload.brandId, payload.model)
+				.then((data) => {
+					commit("updateModel", data);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
+
+	deleteModel({ commit }, payload) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.deleteModel(payload.brandId, payload.modelId)
+				.then((data) => {
+					commit("deleteModel", payload.modelId);
+				})
+				.catch((error) => reject(error));
+		});
+	},
+
 	// VEHICLE_CLASS ACTIONS
 	deleteVehicleClass({ commit }, id) {
 		return new Promise((resolve, reject) => {
@@ -206,7 +242,9 @@ const mutations = {
 	addVehicleClass: (state, vehicleClass) => state.vehicleClasses.push(vehicleClass),
 	updateVehicleClass: (state, vehicleClass) => {
 		const index = state.vehicleClasses.findIndex((vClass) => vClass.id === vehicleClass.id);
-		state.vehicleClasses.splice(index, 1, vehicleClass);
+		if (index !== -1) {
+			state.vehicleClasses.splice(index, 1, vehicleClass);
+		}
 	},
 
 	// BRAND MUTATIONS
@@ -220,6 +258,18 @@ const mutations = {
 	},
 	deleteBrand: (state, id) => {
 		state.brands = state.brands.filter((brand) => brand.id != id);
+	},
+
+	// MODEL MUTATIONS
+	addModel: (state, model) => state.models.push(model),
+	updateModel: (state, model) => {
+		const index = state.models.findIndex((mod) => mod.id === model.id);
+		if (index !== -1) {
+			state.models.splice(index, 1, model);
+		}
+	},
+	deleteModel: (state, id) => {
+		state.models = state.models.filter((model) => model.id != id);
 	},
 };
 
