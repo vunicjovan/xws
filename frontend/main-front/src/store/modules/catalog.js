@@ -23,7 +23,8 @@ const actions = {
 				.getCatalog()
 				.then((catalog) => { 
 					commit("setFuelTypes", catalog.fuelTypes),
-					commit("setGearboxTypes", catalog.gearboxTypes)
+					commit("setGearboxTypes", catalog.gearboxTypes),
+					commit("setBrands", catalog.brands)
 				})
 				.catch((error) => reject(error));
 		});
@@ -91,6 +92,34 @@ const actions = {
 		});
 	},
 
+	//BRAND ACTIONS
+	addBrand( { commit }, brand) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.addBrand(brand)
+				.then((brand) => { commit("addBrand", brand) })
+				.catch((error) => reject(error));
+		})
+	},
+
+	updateBrand( { commit }, brand) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.updateBrand(brand)
+				.then((brand) => { commit("updateBrand", brand) })
+				.catch((error) => reject(error));
+		})
+	},
+
+	deleteBrand( { commit }, id) {
+		return new Promise((resolve, reject) => {
+			catalogApi
+				.deleteBrand(id)
+				.then((brand) => { commit("deleteBrand", id) })
+				.catch((error) => reject(error));
+		})
+	},
+
 };
 
 const mutations = {
@@ -122,7 +151,19 @@ const mutations = {
 			}
 		})
 	},
+	// BRAND MUTATIONS
 	setBrands: (state, brands) => (state.brands = brands),
+	addBrand: (state, brand) => (state.brands.push(brand)),
+	updateBrand: (state, brand) => {
+		state.brands.forEach(element => {
+			if (element.id == brand.id) {
+				element.name = brand.name;
+			}
+		})
+	},
+	deleteBrand: (state, id) => {
+		state.brands = state.brands.filter((brand) => brand.id != id);
+	},
 };
 
 export default {

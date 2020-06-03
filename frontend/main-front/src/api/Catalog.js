@@ -37,5 +37,21 @@ export default {
 	async updateGearboxType(gearboxType) {
 		const response = await axios.put(`/catalog/gearboxType/${gearboxType.id}`, gearboxType);
 		return response.data;
+	},
+
+	// BRAND METHODS
+	async addBrand(brand) {
+		const response = await axios.post(`/catalog/brand/`, brand);
+		return response.data;
+	},
+
+	async updateBrand(brand) {
+		const response = await axios.put(`/catalog/brand/${brand.id}`, brand);
+		return response.data;
+	},
+
+	async deleteBrand(id) {
+		const response = await axios.delete(`/catalog/brand/${id}`);
+		return response.data;
 	}
 };

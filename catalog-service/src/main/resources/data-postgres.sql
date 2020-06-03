@@ -15,3 +15,14 @@ insert into gearbox_type (name, deleted) values ('Semi-Automatic', false);
 insert into gearbox_type (name, deleted) values ('Continously Variable', false);
 insert into gearbox_type (name, deleted) values ('Dual Clutch', false);
 insert into gearbox_type (name, deleted) values ('Direct Shift', false);
+
+-- Vehicle Brands
+insert into brand (deleted, name) values (false, 'BMW');
+insert into brand (deleted, name) values (false, 'Audi');
+insert into brand (deleted, name) values (false, 'Mercedes Benz');
+insert into brand (deleted, name) values (false, 'Mazda');
+insert into brand (deleted, name) values (false, 'Toyota');
+insert into brand (deleted, name) values (false, 'Honda');
+insert into brand (deleted, name) values (false, 'Fiat');
+insert into brand (deleted, name) values (false, 'Ford');
+insert into brand (deleted, name) values (false, 'Volkswagen');
