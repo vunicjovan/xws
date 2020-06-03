@@ -19,7 +19,7 @@
 			@md-confirm="updateVC(form)"
 		/>
 
-		<md-table v-model="vehicleClasses" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="md-layout-item md-size-80 md-small-size-150">
+		<md-table v-model="vehicleClasses" md-sort="name" md-sort-order="asc" md-card class="md-layout-item md-size-80 md-small-size-150">
 			<md-table-toolbar>
 				<h1 class="md-title md-toolbar-section-start">Vehicle Class</h1>
 				<div class="md-toolbar-section-end">

@@ -1,13 +1,7 @@
 package com.uns.ftn.catalogservice.controller;
 
-import com.uns.ftn.catalogservice.dto.BrandDTO;
-import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
-import com.uns.ftn.catalogservice.service.BrandService;
-import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
-import com.uns.ftn.catalogservice.service.GearboxTypeService;
-import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
-import com.uns.ftn.catalogservice.service.ResourceService;
-import com.uns.ftn.catalogservice.service.VehicleClassService;
+import com.uns.ftn.catalogservice.dto.*;
+import com.uns.ftn.catalogservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +20,12 @@ public class ResourceController {
     private BrandService brandService;
 
     private VehicleClassService vehicleClassService;
+    private ModelService modelService;
 
     @Autowired
-    public ResourceController(VehicleClassService vehicleClassService) {
+    public ResourceController(VehicleClassService vehicleClassService, ModelService modelService) {
         this.vehicleClassService = vehicleClassService;
+        this. modelService = modelService;
     }
 
     @PostMapping(value = "/gearboxType", consumes = "application/json")
@@ -47,9 +43,9 @@ public class ResourceController {
         return new ResponseEntity<>(resourceService.addFuelType(fuelTypeDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/model")
-    public ResponseEntity<?> addModel() {
-        return null;
+    @PostMapping("brand/{brandId}/model")
+    public ResponseEntity<?> addModel(@PathVariable("brandId") Long id, @RequestBody ModelDTO modelDTO) {
+        return modelService.newModel(id, modelDTO);
     }
 
     @PostMapping("/vehicleClass")
@@ -72,9 +68,10 @@ public class ResourceController {
         return gbtService.updateGearboxType(gbtDTO, id);
     }
 
-    @PutMapping("/model/{id}")
-    public ResponseEntity<?> updateModel(@PathVariable("id") Long id) {
-        return null;
+    @PutMapping("brand/{brandId}/model/{id}")
+    public ResponseEntity<?> updateModel(@PathVariable("id") Long id, @PathVariable("brandId") Long brandId,
+                                         @RequestBody ModelDTO modelDTO) {
+        return modelService.updateModel(id, brandId, modelDTO);
     }
 
     @PutMapping("/vehicleClass/{id}")
@@ -98,9 +95,9 @@ public class ResourceController {
         return gbtService.deleteGearboxType(id);
     }
 
-    @DeleteMapping("/model/{id}")
-    public ResponseEntity<?> deleteModel(@PathVariable("id") Long id) {
-        return null;
+    @DeleteMapping("brand/{brandId}/model/{id}")
+    public ResponseEntity<?> deleteModel(@PathVariable("id") Long id, @PathVariable("brandId") Long brandId) {
+        return modelService.deleteModel(id, brandId);
     }
 
     @DeleteMapping("/vehicleClass/{id}")

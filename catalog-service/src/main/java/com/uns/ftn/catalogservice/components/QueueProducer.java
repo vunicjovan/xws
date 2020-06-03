@@ -31,6 +31,7 @@ public class QueueProducer {
     public void produceBrand(BrandDTO brandDTO) throws JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(brandDTO);
+    }
 
     public void produceGearboxType(GearboxTypeDTO gearboxTypeDTO) throws  JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);

@@ -3,7 +3,7 @@ import searchApi from "@/api/Search.js";
 
 const state = {
 	advertisments: [],
-	advertisement: null
+	advertisement: null,
 };
 
 const getters = {
@@ -31,46 +31,55 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
-	
-	getAllAdvertisements({commit}) {
+
+	getAllAdvertisements({ commit }) {
 		return new Promise((resolve, reject) => {
 			advertismentApi
 				.getAllAdvertisements()
 				.then((advertisements) => {
-					commit("setAdvertisements", advertisements)
+					commit("setAdvertisements", advertisements);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 
 	simpleSearch({ commit }, params) {
 		return new Promise((resolve, reject) => {
-			searchApi.getSimpleSearchResults(params)
+			searchApi
+				.getSimpleSearchResults(params)
 				.then((response) => {
-					commit("setAdvertisements", response)
+					commit("setAdvertisements", response);
 				})
 				.catch((error) => reject(error));
-		})
+		});
 	},
-    
-	getDetailedAdvertisement({commit}, id) {
+
+	getDetailedAdvertisement({ commit }, id) {
 		return new Promise((resolve, reject) => {
 			advertismentApi
 				.getAllAdvertisements(id)
 				.then((advertisement) => {
-					commit("setAdvertisement", advertisement)
-        
-	advancedSearch({ commit }, params) {
-		return new Promise((resolve, reject) => {
-			searchApi.getAdvancedSearchResults(params)
-				.then((response) => {
-					commit("setAdvertisements", response)
+					commit("setAdvertisement", advertisement);
 				})
 				.catch((error) => reject(error));
-		})
-	}
-	
+		});
+	},
+
+	advancedSearch({ commit }, params) {
+		return new Promise((resolve, reject) => {
+			searchApi
+				.getAdvancedSearchResults(params)
+				.then((response) => {
+					commit("setAdvertisements", response);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
 	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
-	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement)
+	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement),
 };
 
 export default {
