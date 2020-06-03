@@ -1,10 +1,9 @@
 import axios from "axios";
 
 export default {
-	getCatalog() {
-		return axios.get("/catalog/").then((response) => {
-			return response.data;
-		});
+	async getCatalog() {
+		const response = await axios.get("/catalog/");
+		return response.data;
 	},
 
 	// FUEL_TYPE METHODS
@@ -37,5 +36,33 @@ export default {
 	async updateGearboxType(gearboxType) {
 		const response = await axios.put(`/catalog/gearboxType/${gearboxType.id}`, gearboxType);
 		return response.data;
-	}
+	},
+
+	// VEHICLE_CLASS METHODS
+	async deleteVehicleClass(id) {
+		try {
+			const response = await axios.delete(`/catalog/vehicleClass/${id}`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
+	async addVehicleClass(vehicleClass) {
+		try {
+			const response = await axios.post("/catalog/vehicleClass/", vehicleClass);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
+	async updateVehicleClass(vehicleClass) {
+		try {
+			const response = await axios.put(`/catalog/vehicleClass/${vehicleClass.id}`, vehicleClass);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

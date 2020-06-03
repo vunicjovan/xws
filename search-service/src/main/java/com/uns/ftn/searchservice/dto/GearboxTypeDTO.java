@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class FuelTypeDTO {
+public class GearboxTypeDTO {
     private Long id;
     private String name;
     private Boolean deleted = false;
