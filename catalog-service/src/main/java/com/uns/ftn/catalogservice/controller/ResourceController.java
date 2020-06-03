@@ -1,9 +1,13 @@
 package com.uns.ftn.catalogservice.controller;
 
+import com.uns.ftn.catalogservice.dto.BrandDTO;
 import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
+import com.uns.ftn.catalogservice.service.BrandService;
+import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
 import com.uns.ftn.catalogservice.service.GearboxTypeService;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.service.ResourceService;
+import com.uns.ftn.catalogservice.service.VehicleClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +22,24 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
+    @Autowired
+    private BrandService brandService;
+
+    private VehicleClassService vehicleClassService;
+
+    @Autowired
+    public ResourceController(VehicleClassService vehicleClassService) {
+        this.vehicleClassService = vehicleClassService;
+    }
+
     @PostMapping(value = "/gearboxType", consumes = "application/json")
     public ResponseEntity<?> addGearboxType(@RequestBody GearboxTypeDTO gbtDTO) {
         return gbtService.newGearboxType(gbtDTO);
     }
     
-    @PostMapping("/brand")
-    public ResponseEntity<?> addBrand() {
-        return null;
+    @PostMapping(value = "/brand", consumes = "application/json")
+    public ResponseEntity<?> addBrand(@RequestBody BrandDTO brandDTO) {
+        return brandService.newBrand(brandDTO);
     }
 
     @PostMapping("/fuelType")
@@ -39,13 +53,13 @@ public class ResourceController {
     }
 
     @PostMapping("/vehicleClass")
-    public ResponseEntity<?> addVehicleClass() {
-        return null;
+    public ResponseEntity<?> addVehicleClass(@RequestBody VehicleClassDTO vehicleClassDTO) {
+         return vehicleClassService.newVehicleClass(vehicleClassDTO);
     }
 
-    @PutMapping("/brand/{id}")
-    public ResponseEntity<?> updateBrand(@PathVariable("id") Long id) {
-        return null;
+    @PutMapping(value = "/brand/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateBrand(@PathVariable("id") Long id, @RequestBody BrandDTO brandDTO) {
+        return brandService.updateBrand(id, brandDTO);
     }
 
     @PutMapping("/fuelType/{id}")
@@ -64,13 +78,14 @@ public class ResourceController {
     }
 
     @PutMapping("/vehicleClass/{id}")
-    public ResponseEntity<?> updateVehicleClass(@PathVariable("id") Long id) {
-        return null;
+    public ResponseEntity<?> updateVehicleClass(@PathVariable("id") Long id,
+                                                @RequestBody VehicleClassDTO vehicleClassDTO) {
+        return vehicleClassService.updateVehicleClass(vehicleClassDTO);
     }
 
     @DeleteMapping("/brand/{id}")
     public ResponseEntity<?> deleteBrand(@PathVariable("id") Long id) {
-        return null;
+        return brandService.deleteBrand(id);
     }
 
     @DeleteMapping("/fuelType/{id}")
@@ -90,7 +105,7 @@ public class ResourceController {
 
     @DeleteMapping("/vehicleClass/{id}")
     public ResponseEntity<?> deleteVehicleClass(@PathVariable("id") Long id) {
-        return null;
+        return vehicleClassService.deleteVehicleClass(id);
     }
 
 }

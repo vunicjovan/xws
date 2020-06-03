@@ -1,4 +1,5 @@
 import advertismentApi from "@/api/Advertisment.js";
+import searchApi from "@/api/Search.js";
 
 const state = {
 	advertisments: [],
@@ -37,17 +38,29 @@ const actions = {
 				.getAllAdvertisements()
 				.then((advertisements) => {
 					commit("setAdvertisements", advertisements)
+
+	simpleSearch({ commit }, params) {
+		return new Promise((resolve, reject) => {
+			searchApi.getSimpleSearchResults(params)
+				.then((response) => {
+					commit("setAdvertisements", response)
 				})
 				.catch((error) => reject(error));
 		})
 	},
-
+    
 	getDetailedAdvertisement({commit}, id) {
 		return new Promise((resolve, reject) => {
 			advertismentApi
 				.getAllAdvertisements(id)
 				.then((advertisement) => {
 					commit("setAdvertisement", advertisement)
+        
+	advancedSearch({ commit }, params) {
+		return new Promise((resolve, reject) => {
+			searchApi.getAdvancedSearchResults(params)
+				.then((response) => {
+					commit("setAdvertisements", response)
 				})
 				.catch((error) => reject(error));
 		})

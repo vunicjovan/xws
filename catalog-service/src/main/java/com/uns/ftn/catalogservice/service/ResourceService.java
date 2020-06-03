@@ -51,7 +51,7 @@ public class ResourceService {
             e.printStackTrace();
         }
 
-        return new FuelTypeDTO(fuelType.getId(), fuelType.getName());
+        return new FuelTypeDTO(fuelType.getId(), fuelType.getName(), fuelType.getDeleted());
     }
 
     public FuelTypeDTO updateFuelType(Long id, FuelTypeDTO fuelTypeDTO) {
