@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
-        <div v-if="show" class="md-layout md-gutter md-alignment-center-center nana">
-            <md-card class="md-layout-item md-size-40" v-for="ad in ads" v-bind:key="ad.id">
+        <div v-if="show" class="md-layout md-gutter md-alignment-center">
+            <md-card class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-40 md-small-size-50 md-xsmall-size-90" v-for="ad in ads" v-bind:key="ad.id">
                 <md-card-header>
                     <md-card-header-text>
                         <div>
@@ -89,6 +89,14 @@ export default {
 </script>
 
 <style>
+    /* .custom-card {
+        min-width: 300px;
+        max-width: 500px;
+        min-height: 200px;
+        max-height: 250px;
+        display: block;
+    } */
+
     .md-card {
         margin: 2.5%;
         display: inline-block;
