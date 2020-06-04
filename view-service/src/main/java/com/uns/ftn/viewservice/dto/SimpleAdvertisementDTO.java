@@ -13,7 +13,7 @@ public class SimpleAdvertisementDTO {
 
     private Long id;
     private double price;
-    private String place;
+    private String location;
     private String brand;
     private String model;
     private Set<String> photo;

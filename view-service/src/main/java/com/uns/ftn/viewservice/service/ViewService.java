@@ -31,11 +31,12 @@ public class ViewService {
         advertisements.forEach(advertisement -> simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
                 advertisement.getId(),
                 advertisement.getPrice(),
-                advertisement.getPlace(),
+                advertisement.getLocation(),
                 advertisement.getVehicle().getModel().getBrand().getName(),
                 advertisement.getVehicle().getModel().getName(),
-                advertisement.getPhotos()
-                        .stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                null
+                //advertisement.getPhotos()
+                //        .stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
         )));
 
         return simpleAdvertisementDTOSet;
@@ -50,6 +51,7 @@ public class ViewService {
         try {
             owner = accountClient.getOwnerName(advertisement.getOwnerId());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new NotFoundException("Advertisement owner does not exist!");
         }
 
@@ -61,7 +63,7 @@ public class ViewService {
                 advertisement.getVehicle().getGearboxType().getName(),
                 advertisement.getVehicle().getFuelType().getName(),
                 owner,
-                advertisement.getPlace(),
+                advertisement.getLocation(),
                 advertisement.getPrice(),
                 advertisement.getVehicle().getKilometersTraveled(),
                 advertisement.getCollisionDamageWaiver(),

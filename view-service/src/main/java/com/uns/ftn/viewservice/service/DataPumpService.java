@@ -50,6 +50,7 @@ public class DataPumpService {
         advertisement.setCollisionDamageWaiver(advertisementDTO.getCollisionDamageWaiver());
         advertisement.setDescription(advertisementDTO.getDescription());
         advertisement.setOwnerId(advertisementDTO.getOwnerId());
+        advertisement.setLocation(advertisementDTO.getLocation());
 
         vehicle.setKilometersTraveled(advertisementDTO.getVehicle().getKilometersTraveled());
         vehicle.setChildSeatNumber(advertisementDTO.getVehicle().getChildSeatNumber());

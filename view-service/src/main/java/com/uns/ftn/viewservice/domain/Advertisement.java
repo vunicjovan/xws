@@ -18,8 +18,8 @@ public class Advertisement {
     @Id
     private Long id;
 
-    @Column(name = "place")
-    private String place;
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "price", nullable = false)
     private double price;

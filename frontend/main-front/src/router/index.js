@@ -36,7 +36,7 @@ const routes = [
 		component: AdvertismentForm
 	},
 	{
-		path: "/single-ad",
+		path: "/single-ad/:id",
 		name: "DetailedView",
 		component: DetailedView
 	}
