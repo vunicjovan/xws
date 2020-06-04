@@ -1,11 +1,10 @@
 package com.uns.ftn.searchservice.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uns.ftn.searchservice.domain.GearboxType;
-import com.uns.ftn.searchservice.dto.AdvertisementDTO;
-import com.uns.ftn.searchservice.dto.FuelTypeDTO;
-import com.uns.ftn.searchservice.dto.GearboxTypeDTO;
+import com.uns.ftn.searchservice.dto.*;
 import com.uns.ftn.searchservice.repository.AdvertisementRepository;
 import com.uns.ftn.searchservice.service.AdvertisementService;
 import com.uns.ftn.searchservice.service.CatalogService;
@@ -24,7 +23,8 @@ public class QueueConsumer {
     private CatalogService catalogService;
 
     @Autowired
-    public QueueConsumer(AdvertisementService advertisementService, CatalogService catalogService) {
+    public QueueConsumer(AdvertisementService advertisementService,
+                         CatalogService catalogService) {
         this.advertisementService = advertisementService;
         this.catalogService = catalogService;
     }
@@ -55,6 +55,27 @@ public class QueueConsumer {
             try {
                 GearboxTypeDTO gearboxTypeDTO = new ObjectMapper().readValue(messageBody, GearboxTypeDTO.class);
                 catalogService.updateGearboxType(gearboxTypeDTO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else if (typeId.contains("BrandDTO")) {
+            try {
+                BrandDTO brandDTO = new ObjectMapper().readValue(messageBody, BrandDTO.class);
+                catalogService.updateBrand(brandDTO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else if (typeId.contains("ModelDTO")) {
+            try {
+                ModelDTO modelDTO = new ObjectMapper().readValue(messageBody, ModelDTO.class);
+                catalogService.updateModel(modelDTO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else if (typeId.contains("VehicleClassDTO")) {
+            try {
+                VehicleClassDTO vehicleClassDTO = new ObjectMapper().readValue(messageBody, VehicleClassDTO.class);
+                catalogService.updateVehicleClass(vehicleClassDTO);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

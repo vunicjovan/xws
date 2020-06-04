@@ -5,6 +5,7 @@ import com.uns.ftn.searchservice.dto.AdvertisementDTO;
 import com.uns.ftn.searchservice.repository.AdvertisementRepository;
 import com.uns.ftn.searchservice.repository.PhotoRepository;
 import com.uns.ftn.searchservice.repository.VehicleRepository;
+import org.apache.commons.configuration.resolver.CatalogResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,19 @@ import java.util.HashSet;
 public class AdvertisementService {
 
  private AdvertisementRepository advertisementRepository;
-
  private VehicleRepository vehicleRepository;
-
  private PhotoRepository photoRepository;
+ private CatalogService catalogService;
 
  @Autowired
- public AdvertisementService(AdvertisementRepository advertisementRepository, VehicleRepository vehicleRepository,
-                             PhotoRepository photoRepository) {
+ public AdvertisementService(AdvertisementRepository advertisementRepository,
+                             VehicleRepository vehicleRepository,
+                             PhotoRepository photoRepository,
+                             CatalogService catalogService) {
      this.advertisementRepository = advertisementRepository;
      this.vehicleRepository = vehicleRepository;
      this.photoRepository = photoRepository;
+     this.catalogService = catalogService;
  }
 
  public void updateAdvertisement (AdvertisementDTO advertisementDTO) {
@@ -34,11 +37,11 @@ public class AdvertisementService {
      vehicle.setId(advertisementDTO.getVehicle().getId());
      vehicle.setChildSeatNumber(advertisementDTO.getVehicle().getChildSeatNumber());
      vehicle.setKilometersTraveled(advertisementDTO.getVehicle().getKilometersTraveled());
-     vehicle.setFuelTypeId(advertisementDTO.getVehicle().getFuelTypeId());
-     vehicle.setGearboxTypeId(advertisementDTO.getVehicle().getGearboxTypeId());
+     vehicle.setFuelType(catalogService.findOneFuelType(advertisementDTO.getVehicle().getFuelTypeId()));
+     vehicle.setGearboxType(catalogService.findOneGearboxType(advertisementDTO.getVehicle().getGearboxTypeId()));
      vehicle.setHasAndroid(advertisementDTO.getVehicle().getHasAndroid());
-     vehicle.setModelId(advertisementDTO.getVehicle().getModelId());
-     vehicle.setVehicleClassId(advertisementDTO.getVehicle().getVehicleClassId());
+     vehicle.setModel(catalogService.findOneModel(advertisementDTO.getVehicle().getModelId()));
+     vehicle.setVehicleClass(catalogService.findOneVehicleClass(advertisementDTO.getVehicle().getVehicleClassId()));
      vehicleRepository.save(vehicle);
 
      advertisement.setId(advertisementDTO.getId());
@@ -51,6 +54,7 @@ public class AdvertisementService {
      advertisement.setPhotos(new HashSet<Photo>());
      advertisement.setRentingIntervals(new HashSet<RentingInterval>());
      advertisement.setRating(advertisementDTO.getRating());
+     advertisement.setLocation(advertisementDTO.getLocation());
      advertisementRepository.save(advertisement);
  }
 

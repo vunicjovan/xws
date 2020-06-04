@@ -22,7 +22,9 @@ public class AdvertisementDTO implements Serializable {
     private double price;
 
     @JsonProperty("kilometersPerDayLimit")
-    private double kilometersPerDayLimit = -1;
+    private int kilometersPerDayLimit = -1;
+
+    private String location;
 
     @JsonProperty("collisionDamageWaiver")
     private Boolean collisionDamageWaiver = false;
@@ -44,6 +46,7 @@ public class AdvertisementDTO implements Serializable {
         this.price = ad.getPrice();
         this.kilometersPerDayLimit = ad.getKilometersPerDayLimit();
         this.collisionDamageWaiver = ad.getCollisionDamageWaiver();
+        this.location = ad.getLocation();
         this.description = ad.getDescription();
         this.vehicle = new VehicleDTO(ad.getVehicle());
         this.ownerId = ad.getOwnerId();

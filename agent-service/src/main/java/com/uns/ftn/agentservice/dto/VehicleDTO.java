@@ -22,7 +22,7 @@ public class VehicleDTO implements Serializable {
     private Long id;
 
     @JsonProperty("kilometersTraveled")
-    private double kilometersTraveled;
+    private int kilometersTraveled;
 
     @JsonProperty("childSeatNumber")
     private int childSeatNumber;
