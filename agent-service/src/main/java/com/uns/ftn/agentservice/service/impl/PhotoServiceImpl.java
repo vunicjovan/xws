@@ -2,8 +2,10 @@ package com.uns.ftn.agentservice.service.impl;
 
 import com.netflix.discovery.converters.Auto;
 import com.sun.org.apache.xpath.internal.operations.Mult;
+import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Photo;
+import com.uns.ftn.agentservice.dto.PhotoDTO;
 import com.uns.ftn.agentservice.repository.PhotoRepository;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
@@ -20,17 +22,22 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Queue;
 
 @Service
 public class PhotoServiceImpl implements PhotoService {
 
     PhotoRepository photoRepository;
     AdvertisementService advertisementService;
+    QueueProducer queueProducer;
 
     @Autowired
-    public PhotoServiceImpl(PhotoRepository photoRepository, AdvertisementService advertisementService) {
+    public PhotoServiceImpl(PhotoRepository photoRepository,
+                            AdvertisementService advertisementService,
+                            QueueProducer queueProducer) {
         this.photoRepository = photoRepository;
         this.advertisementService = advertisementService;
+        this.queueProducer = queueProducer;
     }
 
     @Override
@@ -46,6 +53,7 @@ public class PhotoServiceImpl implements PhotoService {
             photo.setPath(file.getOriginalFilename());
             photo.setAdvertisement(advertisement);
             photoRepository.save(photo);
+            queueProducer.producePhoto(new PhotoDTO(photo));
         }
     }
 
