@@ -18,6 +18,11 @@ public class CatalogController {
         return new ResponseEntity<>(catalogService.getCatalog(), HttpStatus.OK);
     }
 
+    @GetMapping("/resourceCheck/{resources}")
+    public ResponseEntity<?> checkIfResourcesExist(@PathVariable String resources) {
+        return catalogService.checkResources(resources);
+    }
+
     @PostMapping("/")
     public ResponseEntity<?> createCatalog() {
         return null;

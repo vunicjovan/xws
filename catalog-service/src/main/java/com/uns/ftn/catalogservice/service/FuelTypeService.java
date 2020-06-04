@@ -26,6 +26,10 @@ public class FuelTypeService {
     @Autowired
     QueueProducer queueProducer;
 
+    public FuelType findOne(Long id) {
+        return fuelTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("Requested fuel type does not exist."));
+    }
+
     public Set<FuelTypeDTO> getAllFuelTypes() {
         List<FuelType> fuelTypeList = fuelTypeRepository.findAllByDeleted(false);
 
