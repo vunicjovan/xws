@@ -30,6 +30,8 @@ public class DataPumpService {
     @Autowired
     private BrandRepository brandRepository;
 
+    @Autowired
+    private PhotoRepository photoRepository;
 
     public void advertisementHandler(AdvertisementDTO advertisementDTO) {
         Advertisement advertisement = advertisementRepository.findById(advertisementDTO.getId()).orElse(null);
@@ -138,6 +140,25 @@ public class DataPumpService {
         modelRepository.save(model);
     }
 
+    public void photoHandler(PhotoDTO photoDTO) {
+        Photo photo = findPhotoById(photoDTO.getId());
+        Advertisement ad = findAdvertisementById(photoDTO.getAdvertisement().getId());
+
+        if (ad == null) {
+            return;
+        }
+
+        if (photo == null) {
+            photo = new Photo();
+            photo.setId(photoDTO.getId());
+        }
+
+        photo.setPath(photoDTO.getPath());
+        photo.setAdvertisement(ad);
+
+        photoRepository.save(photo);
+    }
+
     private FuelType findFuelTypeById(Long id) {
         return fuelTypeRepository.findById(id).orElse(null);
     }
@@ -157,5 +178,9 @@ public class DataPumpService {
     private Brand findBrandById(Long id) {
         return brandRepository.findById(id).orElse(null);
     }
+
+    private Photo findPhotoById(Long id) { return photoRepository.findById(id).orElse(null); }
+
+    private Advertisement findAdvertisementById(Long id) { return advertisementRepository.findById(id).orElse(null); }
 
 }

@@ -1,5 +1,6 @@
 package com.uns.ftn.viewservice.dto;
 
+import com.uns.ftn.viewservice.domain.Advertisement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,16 @@ public class AdvertisementDTO implements Serializable {
     private VehicleDTO vehicle;
     private Long ownerId;
     private double rating = 0;
+
+    public AdvertisementDTO(Advertisement ad) {
+        this.id = ad.getId();
+        this.price = ad.getPrice();
+        this.kilometersPerDayLimit = ad.getKilometersPerDayLimit();
+        this.collisionDamageWaiver = ad.getCollisionDamageWaiver();
+        this.location = ad.getLocation();
+        this.description = ad.getDescription();
+        this.ownerId = ad.getOwnerId();
+        this.rating = ad.getRating();
+    }
 
 }

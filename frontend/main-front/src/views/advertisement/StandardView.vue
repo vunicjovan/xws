@@ -12,8 +12,7 @@
                     </md-card-header-text>
 
                     <md-card-media class="md-layout-item md-size-55">
-                        <img src="../../assets/audi.jpg" alt="Vehicle image">
-                        <!-- <img :src="ad.photo[0]" alt="Vehicle image"> -->
+                        <img :src="getPhotoURL(ad.id, ad.photo[0])" alt="Vehicle image">
                     </md-card-media>
                 </md-card-header>
 
@@ -39,10 +38,13 @@ export default {
         this.show = !this.show;
     },
     computed: {
-		...mapGetters(["getAdvertisements"])
+        ...mapGetters(["getAdvertisements"]),
     },
     methods: {
         ...mapActions(["getAllAdvertisements"]),
+        getPhotoURL(advertisementId, photoName) {
+            return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
+        }
     }
 }
 </script>
