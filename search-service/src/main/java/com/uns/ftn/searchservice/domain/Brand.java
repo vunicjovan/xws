@@ -14,7 +14,6 @@ import java.util.Set;
 public class Brand {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -22,5 +21,8 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Model> models;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

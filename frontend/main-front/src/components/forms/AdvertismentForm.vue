@@ -62,6 +62,10 @@
 								<md-checkbox v-model="form.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
 								<md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
 							</div>
+							<md-field>
+								<label for="location">Location</label>
+								<md-input v-model="form.location"></md-input>
+							</md-field>
 							<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form.kilometersPerDayLimit.$error }">
 								<label for="kilometersPerDayLimit">Limit</label>
 								<md-input v-model="form.kilometersPerDayLimit" type="number" />
@@ -102,6 +106,7 @@ import { required, integer, decimal } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
 
 const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)([a-zA-Z0-9\\!\\?\\#\s?]+)$/);
+const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {
 	name: "AdvertismentForm",
@@ -125,6 +130,7 @@ export default {
 				price: undefined,
 				kilometersPerDayLimit: undefined,
 				collisionDamageWaiver: false,
+				location: undefined,
 				description: undefined,
 				ownerId: undefined,
 			},
@@ -158,6 +164,7 @@ export default {
 			this.form.vehicle.kilometersTraveled = undefined;
 			this.form.vehicle.childSeatNumber = undefined;
 			this.form.vehicle.hasAndroid = false;
+			this.form.location = undefined;
 		},
 
 		showMe() {
@@ -240,6 +247,10 @@ export default {
 					required,
 					integer,
 				},
+			},
+			location: {
+				requierd,
+				lrx,
 			},
 			price: {
 				required,

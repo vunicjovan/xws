@@ -23,7 +23,6 @@ import java.util.Date;
 public class RentingInterval {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "startDate", nullable = false)

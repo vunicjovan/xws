@@ -16,11 +16,13 @@ import javax.persistence.*;
 public class VehicleClass {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vehicleClassId")
     private Long id;
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

@@ -16,7 +16,6 @@ import javax.persistence.*;
 public class Model {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "modelId")
     private Long id;
 
@@ -26,5 +25,8 @@ public class Model {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Brand brand;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

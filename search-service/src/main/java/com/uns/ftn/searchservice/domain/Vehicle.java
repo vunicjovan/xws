@@ -32,16 +32,16 @@ public class Vehicle {
     @Column(name = "hasAndroid")
     private Boolean hasAndroid = false;
 
-    @Column(name = "fuelTypeId", nullable = false)
-    private Long fuelTypeId;
+    @OneToOne
+    private FuelType fuelType;
 
-    @Column(name = "gearboxTypeId", nullable = false)
-    private Long gearboxTypeId;
+    @OneToOne
+    private GearboxType gearboxType;
 
-    @Column(name = "vehicleClassId", nullable = false)
-    private Long vehicleClassId;
+    @OneToOne
+    private VehicleClass vehicleClass;
 
-    @Column(name = "modelId", nullable = false)
-    private Long modelId;
+    @OneToOne
+    private Model model;
 
 }
