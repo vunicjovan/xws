@@ -13,6 +13,7 @@ import java.util.Set;
 public class AdvertisementDTO implements Serializable {
 
     private Long id;
+    private String location;
     private double price;
     private int kilometersPerDayLimit = -1;
     private Boolean collisionDamageWaiver = false;

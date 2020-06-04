@@ -20,14 +20,14 @@ export default {
 	},
 
 	getAllAdvertisements() {
-		return axios.post(`/view/`).then((response) => {
-			return response.data
+		return axios.get(`/view/`).then((response) => {
+			return response.data;
 		})
 	},
 
 	getDetailedAdvertisement(id) {
-		return axios.post(`/view/${id}`).then((response) => {
-			return response.data
+		return axios.get(`/view/${id}`).then((response) => {
+			return response.data;
 		})
 	},
 };

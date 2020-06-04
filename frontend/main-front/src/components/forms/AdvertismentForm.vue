@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isLogged">
+	<div v-if="isLogged">
 		<transition name="fade">
 			<form v-if="show" class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 				<md-card class="md-layout-item md-size-30 md-small-size-100">
@@ -107,7 +107,7 @@ import { validationMixin } from "vuelidate";
 import { required, integer, decimal } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
 
-const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)([a-zA-Z0-9\\!\\?\\#\s?]+)$/);
+const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\!\\?\\#\\.\\,\\;\s?]+)$/);
 const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {

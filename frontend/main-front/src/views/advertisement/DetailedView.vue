@@ -1,43 +1,44 @@
 <template>
     <transition name="fade">
-        <div v-if="show" class="md-layout md-alignment-center-center">
+        <div v-if="show && getAdvertisement !== null" class="md-layout md-alignment-center-center">
             <md-card>
                 <md-card-media>
                     <hooper :centerMode="true" :itemsToShow="1" :infiniteScroll="true" :progress="true" :autoPlay="true" :playSpeed="2000">
-                        <slide v-for="photo in this.ad.photos" :key="photo">
+                        <!-- <slide v-for="photo in getAdvertisement.photos" :key="photo">
                             <img class="images img1" :src="photo" alt="Vehicle image">
-                        </slide>
+                        </slide> -->
+                        <hooper-navigation slot="hooper-addons"></hooper-navigation>
                         <hooper-pagination slot="hooper-addons"></hooper-pagination>
                     </hooper>
                 </md-card-media>
 
                 <md-card-header>
-                    <div class="md-title"><b>{{ this.ad.brand }} {{ this.ad.model }}</b> ({{ this.ad.class }}) - Owned by <b>{{ this.ad.owner }}</b></div>
-                    <div class="md-subhead"><b>Location:</b> {{ this.ad.place }}</div>
-                    <div class="md-subhead"><b>Price:</b> {{ this.ad.price }} EU</div>
-                    <div class="md-subhead"><b>Fuel:</b> {{ this.ad.fuel }}</div>
-                    <div class="md-subhead"><b>Gearbox:</b> {{ this.ad.gearbox }}</div>
+                    <div class="md-title"><b>{{ getAdvertisement.brand }} {{ getAdvertisement.model }}</b> ({{ getAdvertisement.vehicleClass }}) - Owned by <b>{{ getAdvertisement.owner }}</b></div>
+                    <div class="md-subhead"><b>Location:</b> {{ getAdvertisement.location }}</div>
+                    <div class="md-subhead"><b>Price:</b> {{ getAdvertisement.price }} EU</div>
+                    <div class="md-subhead"><b>Fuel:</b> {{ getAdvertisement.fuel }}</div>
+                    <div class="md-subhead"><b>Gearbox:</b> {{ getAdvertisement.gearbox }}</div>
                 </md-card-header>
 
                 <md-card-content>
                     <div>
                         <b>Advanced details:</b><br>
-                        <i>This vehicle has traveled {{ this.ad.km_traveled }} kilometers.
-                        It has a daily kilometer limit of {{ this.ad.daily_limit }} kilometers
-                        for crossing. Number of children seats in this vehicle is 
-                        {{ this.ad.childseat_number }}</i>.
-                        <i v-if="this.ad.android">It has android support.</i>
-                        <i v-else-if="!this.ad.android">It doesn't have android support.</i>
-                        <i v-if="this.ad.cdw"> This vehicle has Collision Damage Waiver policy.</i>
-                        <i v-else-if="!this.ad.cdw">This vehicle doesn't have Collision Damage Waiver 
+                        <i>This vehicle has traveled {{ getAdvertisement.kmTraveled }} kilometers. </i>
+                        <i v-if="getAdvertisement.dailyLimit !== -1">It has a daily kilometer limit of {{ getAdvertisement.dailyLimit }} kilometers for crossing. </i>
+                        <i v-else>It does not have a daily kilometer limit. </i>
+                        <i>Number of children seats in this vehicle is {{ getAdvertisement.childSeatNumber }}. </i>
+                        <i v-if="getAdvertisement.android">It has android support.</i>
+                        <i v-else-if="!getAdvertisement.android">It doesn't have android support.</i>
+                        <i v-if="getAdvertisement.cdw"> This vehicle has Collision Damage Waiver policy.</i>
+                        <i v-else-if="!getAdvertisement.cdw">This vehicle doesn't have Collision Damage Waiver 
                         policy.</i>
                     </div>
                     <br>
-                    <div><b>Owner's description:</b><br>{{ this.ad.description}}</div>
+                    <div><b>Owner's description:</b><br>{{ getAdvertisement.description}}</div>
                 </md-card-content>
 
                 <md-card-actions>
-                    <md-button class="md-raised md-accent nana">Add to cart</md-button>
+                    <md-button class="md-raised md-accent">Add to cart</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -45,56 +46,38 @@
 </template>
 
 <script>
-import { Hooper, Slide, Pagination as HooperPagination } from 'hooper';
+import { Hooper, Slide, Pagination as HooperPagination, Navigation as HooperNavigation } from 'hooper';
 import 'hooper/dist/hooper.css';
 
+import { mapGetters, mapAction, mapActions } from "vuex";
 export default {
     name: "DetailedView",
     components: {
         Hooper,
-        Slide,
-        HooperPagination
+        // Slide,
+        HooperPagination,
+        HooperNavigation
     },
     data: function() {
         return {
-            ad: {
-                "id": 1,
-                "brand": "BMW",
-                "model": "X8",
-                "class": "Sports Car",
-                "gearbox": "Dual Clutch",
-                "fuel": "Bio Diesel",
-                "owner": "John Doe",
-                "place": "Neverland",
-                "price": 1500,
-                "km_traveled": 2355.56,
-                "cdw": false,
-                "daily_limit": 35.5,
-                "childseat_number": 2,
-                "android": true,
-                "description": "This is an awesome car, you gotta love it. Maybe you think you deserve better, but does better deserve you?",
-                "photos": [
-                    "https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80",
-                    "https://images.pexels.com/photos/241316/pexels-photo-241316.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                    "https://media.zigcdn.com/media/model/2019/Sep/maruti-swift_360x240.jpg"
-                ]
-            },
+            ad: null,
             show: false
         };
     },
     mounted: function() {
+        this.$store.dispatch("getDetailedAdvertisement", this.$route.params.id);
         this.show = !this.show;
+    },
+    computed: {
+		...mapGetters(["getAdvertisement"])
+    },
+    methods: {
+        ...mapActions(["getDetailedAdvertisement"]),
     }
 }
 </script>
 
 <style>
-    .nana {
-        align-items: center;
-		justify-content: center;
-		padding: 5%;
-    }
-
     .md-card {
         width: 70%;
         margin: 5%;

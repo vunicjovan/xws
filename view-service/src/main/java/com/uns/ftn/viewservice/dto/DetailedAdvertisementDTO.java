@@ -18,7 +18,7 @@ public class DetailedAdvertisementDTO {
     private String gearbox;
     private String fuel;
     private String owner;
-    private String place;
+    private String location;
     private double price;
     private int kmTraveled;
     private boolean cdw;

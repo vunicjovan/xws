@@ -2,13 +2,13 @@ import advertismentApi from "@/api/Advertisment.js";
 import searchApi from "@/api/Search.js";
 
 const state = {
-	advertisments: [],
+	advertisements: [],
 	advertisement: null,
 };
 
 const getters = {
-	//getAdvertisments: (state) => state.advertisments,
-	//getAdvertisement: (state) => state.advertisement
+	getAdvertisements: (state) => state.advertisements,
+	getAdvertisement: (state) => state.advertisement
 };
 
 const actions = {
@@ -38,6 +38,7 @@ const actions = {
 				.getAllAdvertisements()
 				.then((advertisements) => {
 					commit("setAdvertisements", advertisements);
+					resolve();
 				})
 				.catch((error) => reject(error));
 		});
@@ -57,9 +58,10 @@ const actions = {
 	getDetailedAdvertisement({ commit }, id) {
 		return new Promise((resolve, reject) => {
 			advertismentApi
-				.getAllAdvertisements(id)
+				.getDetailedAdvertisement(id)
 				.then((advertisement) => {
 					commit("setAdvertisement", advertisement);
+					resolve();
 				})
 				.catch((error) => reject(error));
 		});

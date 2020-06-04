@@ -100,8 +100,7 @@ public class AdvertisementService {
                 !pattern.matcher(adDTO.getDescription().trim()).matches() || adDTO.getPrice() < 0 ||
                 adDTO.getVehicle().getKilometersTraveled() < 0 || adDTO.getVehicle().getChildSeatNumber() < 0 ||
                 adDTO.getLocation() == null || adDTO.getLocation().trim().equals("") ||
-                !pattern.matcher(adDTO.getDescription().trim()).matches() /*||
-            adDTO.getPhotos().size() <= 0*/) {
+                !lpattern.matcher(adDTO.getLocation().trim()).matches()) {
             return false;
         }
 
