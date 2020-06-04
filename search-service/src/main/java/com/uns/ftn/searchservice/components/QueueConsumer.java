@@ -79,6 +79,13 @@ public class QueueConsumer {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+        } else if (typeId.contains("PhotoDTO")) {
+            try {
+                PhotoDTO photoDTO = new ObjectMapper().readValue(messageBody, PhotoDTO.class);
+                advertisementService.updatePhoto(photoDTO);
+            } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+            }
         }
     }
 }

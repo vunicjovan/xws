@@ -2,6 +2,7 @@ package com.uns.ftn.searchservice.service;
 
 import com.uns.ftn.searchservice.domain.*;
 import com.uns.ftn.searchservice.dto.AdvertisementDTO;
+import com.uns.ftn.searchservice.dto.PhotoDTO;
 import com.uns.ftn.searchservice.repository.AdvertisementRepository;
 import com.uns.ftn.searchservice.repository.PhotoRepository;
 import com.uns.ftn.searchservice.repository.VehicleRepository;
@@ -56,6 +57,23 @@ public class AdvertisementService {
      advertisement.setRating(advertisementDTO.getRating());
      advertisement.setLocation(advertisementDTO.getLocation());
      advertisementRepository.save(advertisement);
+ }
+
+ public void updatePhoto(PhotoDTO photoDTO) {
+     Photo photo = new Photo();
+     Advertisement advertisement = advertisementRepository.
+             findById(photoDTO.getAdvertisement().getId()).
+             orElse(null);
+
+     if (advertisement == null) {
+         return;
+     }
+
+     photo.setId(photoDTO.getId());
+     photo.setPath(photoDTO.getPath());
+     photo.setAdvertisement(advertisement);
+
+    photoRepository.save(photo);
  }
 
 }

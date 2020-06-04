@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isLogged">
+	<div v-if="isLogged">
 		<transition name="fade">
 			<form v-if="show" class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 				<md-card class="md-layout-item md-size-30 md-small-size-100">

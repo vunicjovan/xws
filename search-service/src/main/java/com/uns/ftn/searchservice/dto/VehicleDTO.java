@@ -1,6 +1,7 @@
 package com.uns.ftn.searchservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.uns.ftn.searchservice.domain.Vehicle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,4 +35,16 @@ public class VehicleDTO {
 
     @JsonProperty("modelId")
     private Long modelId;
+
+
+    public VehicleDTO(Vehicle vehicle) {
+        this.id = vehicle.getId();
+        this.kilometersTraveled = vehicle.getKilometersTraveled();
+        this.childSeatNumber = vehicle.getChildSeatNumber();
+        this.hasAndroid = vehicle.getHasAndroid();
+        this.fuelTypeId = vehicle.getFuelType().getId();
+        this.gearboxTypeId = vehicle.getGearboxType().getId();
+        this.vehicleClassId = vehicle.getVehicleClass().getId();
+        this.modelId = vehicle.getModel().getId();
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uns.ftn.agentservice.conf.RabbitMQConfiguration;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.dto.PhotoDTO;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -29,6 +30,11 @@ public class QueueProducer {
     public void produce(AdvertisementDTO advertisementDTO) throws JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(advertisementDTO);
+    }
+
+    public void producePhoto(PhotoDTO photoDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(photoDTO);
     }
 
 }
