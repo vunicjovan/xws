@@ -54,6 +54,7 @@ public class AdvertisementService {
      advertisement.setPhotos(new HashSet<Photo>());
      advertisement.setRentingIntervals(new HashSet<RentingInterval>());
      advertisement.setRating(advertisementDTO.getRating());
+     advertisement.setLocation(advertisementDTO.getLocation());
      advertisementRepository.save(advertisement);
  }
 

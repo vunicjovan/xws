@@ -28,7 +28,7 @@ public class Advertisement {
     private double price;
 
     @Column(name = "kilometersPerDayLimit")
-    private double kilometersPerDayLimit = -1;
+    private int kilometersPerDayLimit = -1;
 
     @Column(name = "collisionDamageWaiver")
     private Boolean collisionDamageWaiver = false;
@@ -39,8 +39,8 @@ public class Advertisement {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "place")
-    private String place;
+    @Column(name = "location")
+    private String location;
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals = new HashSet<>();

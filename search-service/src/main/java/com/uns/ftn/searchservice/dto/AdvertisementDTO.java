@@ -18,10 +18,12 @@ public class AdvertisementDTO {
     private double price;
 
     @JsonProperty("kilometersPerDayLimit")
-    private double kilometersPerDayLimit = -1;
+    private int kilometersPerDayLimit = -1;
 
     @JsonProperty("collisionDamageWaiver")
     private Boolean collisionDamageWaiver = false;
+
+    private String location;
 
     @JsonProperty("description")
     private String description;

@@ -31,11 +31,9 @@ public class AdvertisementService {
 
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\\\.\\\\,\\\\;\\s?]+)$";
-        Pattern pattern = Pattern.compile(regex);
 
         // data validation
-        if (!validateAdPostingData(adDTO, pattern)) {
+        if (!validateAdPostingData(adDTO)) {
             return new ResponseEntity<>("Invalid advertisement or vehicle data.", HttpStatus.BAD_REQUEST);
         }
 
@@ -51,6 +49,7 @@ public class AdvertisementService {
         ad.setCollisionDamageWaiver(adDTO.getCollisionDamageWaiver());
         ad.setDescription(adDTO.getDescription());
         ad.setOwnerId(adDTO.getOwnerId());
+        ad.setLocation(adDTO.getLocation());
 
         // setting vehicle properties
         Vehicle vehicle = new Vehicle();
@@ -82,12 +81,19 @@ public class AdvertisementService {
     }
 
     /*
-    * Returns TRUE if data is valid, else returns FALSE.
-    */
-    private Boolean validateAdPostingData(AdvertisementDTO adDTO, Pattern pattern) {
+     * Returns TRUE if data is valid, else returns FALSE.
+     */
+    private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\!\\?\\#\\.\\,\\;\\s?]+)$";
+        String lrx = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
+        Pattern pattern = Pattern.compile(regex);
+        Pattern lpattern = Pattern.compile(lrx);
+
         if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("") ||
-            !pattern.matcher(adDTO.getDescription().trim()).matches() || adDTO.getPrice() < 0 ||
-            adDTO.getVehicle().getKilometersTraveled() < 0 || adDTO.getVehicle().getChildSeatNumber() < 0 /*||
+                !pattern.matcher(adDTO.getDescription().trim()).matches() || adDTO.getPrice() < 0 ||
+                adDTO.getVehicle().getKilometersTraveled() < 0 || adDTO.getVehicle().getChildSeatNumber() < 0 ||
+                adDTO.getLocation() == null || adDTO.getLocation().trim().equals("") ||
+                !pattern.matcher(adDTO.getDescription().trim()).matches() /*||
             adDTO.getPhotos().size() <= 0*/) {
             return false;
         }

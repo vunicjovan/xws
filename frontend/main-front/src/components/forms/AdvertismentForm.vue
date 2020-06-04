@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isLogged">
+	<div v-if="!isLogged">
 		<transition name="fade">
 			<form v-if="show" class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 				<md-card class="md-layout-item md-size-30 md-small-size-100">
@@ -62,9 +62,11 @@
 								<md-checkbox v-model="form.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
 								<md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
 							</div>
-							<md-field>
+							<md-field :class="{ 'md-invalid': $v.form.location.$error }">
 								<label for="location">Location</label>
 								<md-input v-model="form.location"></md-input>
+								<span class="md-error" v-if="!$v.form.location.required">Location is required</span>
+								<span class="md-error" v-else-if="!$v.form.location.lrx">Location is not in proper format</span>
 							</md-field>
 							<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form.kilometersPerDayLimit.$error }">
 								<label for="kilometersPerDayLimit">Limit</label>
@@ -249,7 +251,7 @@ export default {
 				},
 			},
 			location: {
-				requierd,
+				required,
 				lrx,
 			},
 			price: {
