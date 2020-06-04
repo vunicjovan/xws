@@ -4,9 +4,9 @@
             <md-card>
                 <md-card-media>
                     <hooper :centerMode="true" :itemsToShow="1" :infiniteScroll="true" :progress="true" :autoPlay="true" :playSpeed="2000">
-                        <!-- <slide v-for="photo in getAdvertisement.photos" :key="photo">
-                            <img class="images img1" :src="photo" alt="Vehicle image">
-                        </slide> -->
+                        <slide v-for="photo in getAdvertisement.photos" :key="photo">
+                            <img class="images img1" :src="getPhotoURL(getAdvertisement.id, photo)" alt="Vehicle image">
+                        </slide>
                         <hooper-navigation slot="hooper-addons"></hooper-navigation>
                         <hooper-pagination slot="hooper-addons"></hooper-pagination>
                     </hooper>
@@ -15,7 +15,7 @@
                 <md-card-header>
                     <div class="md-title"><b>{{ getAdvertisement.brand }} {{ getAdvertisement.model }}</b> ({{ getAdvertisement.vehicleClass }}) - Owned by <b>{{ getAdvertisement.owner }}</b></div>
                     <div class="md-subhead"><b>Location:</b> {{ getAdvertisement.location }}</div>
-                    <div class="md-subhead"><b>Price:</b> {{ getAdvertisement.price }} EU</div>
+                    <div class="md-subhead"><b>Price:</b> {{ getAdvertisement.price }} €</div>
                     <div class="md-subhead"><b>Fuel:</b> {{ getAdvertisement.fuel }}</div>
                     <div class="md-subhead"><b>Gearbox:</b> {{ getAdvertisement.gearbox }}</div>
                 </md-card-header>
@@ -54,7 +54,7 @@ export default {
     name: "DetailedView",
     components: {
         Hooper,
-        // Slide,
+        Slide,
         HooperPagination,
         HooperNavigation
     },
@@ -69,10 +69,13 @@ export default {
         this.show = !this.show;
     },
     computed: {
-		...mapGetters(["getAdvertisement"])
+        ...mapGetters(["getAdvertisement"])
     },
     methods: {
         ...mapActions(["getDetailedAdvertisement"]),
+        getPhotoURL(advertisementId, photoName) {
+            return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
+        }
     }
 }
 </script>

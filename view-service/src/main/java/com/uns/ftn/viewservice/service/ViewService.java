@@ -34,9 +34,7 @@ public class ViewService {
                 advertisement.getLocation(),
                 advertisement.getVehicle().getModel().getBrand().getName(),
                 advertisement.getVehicle().getModel().getName(),
-                null
-                //advertisement.getPhotos()
-                //        .stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
         )));
 
         return simpleAdvertisementDTOSet;
@@ -71,8 +69,7 @@ public class ViewService {
                 advertisement.getVehicle().getChildSeatNumber(),
                 advertisement.getVehicle().getHasAndroid(),
                 advertisement.getDescription(),
-                null
-                //advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
         );
 
         return detailedAdvertisementDTO;
