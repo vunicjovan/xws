@@ -1,7 +1,5 @@
 package com.uns.ftn.agentservice.service.impl;
 
-import com.netflix.discovery.converters.Auto;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Photo;
@@ -11,18 +9,15 @@ import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Queue;
 
 @Service
 public class PhotoServiceImpl implements PhotoService {

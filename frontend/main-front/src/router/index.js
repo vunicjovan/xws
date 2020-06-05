@@ -6,6 +6,8 @@ import Register from "../views/account/Register.vue";
 import Catalog from "../views/Catalog.vue";
 import AdvertismentForm from "../components/forms/AdvertismentForm.vue";
 import DetailedView from "../views/advertisement/DetailedView.vue";
+import Cart from "../views/Cart.vue";
+import SimpleUsers from "../views/SimpleUsers.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +41,16 @@ const routes = [
 		path: "/single-ad/:id",
 		name: "DetailedView",
 		component: DetailedView
+	},
+	{
+		path: "/cart",
+		name: "Cart",
+		component: Cart
+	},
+	{
+		path: "/users",
+		name: "SimpleUsers",
+		component: SimpleUsers
 	}
 ];
 
