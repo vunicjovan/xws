@@ -13,11 +13,11 @@ import lombok.Setter;
 public class PhotoDTO {
     private Long id;
     private String path;
-    private AdvertisementDTO advertisement;
+    private Long advertisementId;
 
     public PhotoDTO(Photo photo) {
         this.id = photo.getId();
         this.path = photo.getPath();
-        this.advertisement = new AdvertisementDTO(photo.getAdvertisement());
+        this.advertisementId = photo.getAdvertisement().getId();
     }
 }

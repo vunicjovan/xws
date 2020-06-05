@@ -9,6 +9,7 @@ import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CheckResponseDTO;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
+import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -105,7 +106,7 @@ public class AdvertisementService {
     }
 
     public Advertisement findById(Long id) {
-        return adRepo.getOne(id);
+        return adRepo.findById(id).orElse(null);
     }
 
 }

@@ -65,7 +65,7 @@ public class AdvertisementService {
  public void updatePhoto(PhotoDTO photoDTO) {
      Photo photo = new Photo();
      Advertisement advertisement = advertisementRepository.
-             findById(photoDTO.getAdvertisement().getId()).
+             findById(photoDTO.getAdvertisementId()).
              orElse(null);
 
      if (advertisement == null) {

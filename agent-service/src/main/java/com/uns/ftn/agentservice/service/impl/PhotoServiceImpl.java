@@ -38,8 +38,8 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public void store(MultipartFile[] files, Long adId) throws IOException, URISyntaxException {
         String folder = "images/" + adId + "/";
+        Advertisement advertisement = advertisementService.findById(adId);
         for(MultipartFile file : files) {
-            Advertisement advertisement = advertisementService.findById(adId);
             Photo photo = new Photo();
             byte[] bytes = file.getBytes();
             Files.createDirectories(Paths.get(folder));
