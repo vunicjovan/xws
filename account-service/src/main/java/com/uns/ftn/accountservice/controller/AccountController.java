@@ -5,6 +5,7 @@ import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.dto.UserResponseDTO;
 import com.uns.ftn.accountservice.service.JWTUtil;
+import com.uns.ftn.accountservice.service.SimpleUserService;
 import com.uns.ftn.accountservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private UserService userService;
-
+    private SimpleUserService simpleService;
     private JWTUtil jwtUtil;
 
     @Autowired
-    public AccountController(UserService userService, JWTUtil jwtUtil) {
+    public AccountController(UserService userService, SimpleUserService simpleService, JWTUtil jwtUtil) {
         this.userService = userService;
+        this.simpleService = simpleService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -68,16 +70,16 @@ public class AccountController {
         return null;
     }
 
-    @PreAuthorize("hasAuthority('add')")
+    //@PreAuthorize("hasAuthority('add')")
     @PutMapping("/block/{id}")
     public ResponseEntity<?> block(@PathVariable("id") Long id) {
-        return null;
+        return simpleService.blockUser(id);
     }
 
-    @PreAuthorize("hasAuthority('delete')")
+    //@PreAuthorize("hasAuthority('delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        return null;
+        return userService.deleteUser(id);
     }
 
 

@@ -1,11 +1,13 @@
 package com.uns.ftn.accountservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,6 +36,9 @@ public class User {
 
     @Column(name = "enabled")
     private Boolean enabled = false;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
     @JsonIgnore
     @ManyToMany

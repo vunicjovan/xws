@@ -13,7 +13,6 @@ import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -71,10 +70,8 @@ public class AdvertisementService {
         vehicle.setVehicleClassId(adDTO.getVehicle().getVehicleClassId());
         vehicle.setModelId(adDTO.getVehicle().getModelId());
 
-        vehicle.setAdvertisement(ad);
-
-        // database injection: Photo, Vehicle, Advertisement
         adRepo.save(ad);
+        vehicle.setAdvertisement(ad);
         vehicleRepo.save(vehicle);
 
         try {
