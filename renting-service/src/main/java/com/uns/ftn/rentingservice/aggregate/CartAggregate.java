@@ -28,7 +28,7 @@ public class CartAggregate {
             cartService.createCart(createCartCommand.getUserId());
 
             AggregateLifecycle.apply(new CartCreatedEvent(createCartCommand.getCartAggregateId()));
-        } catch (BadRequestException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
 
             AggregateLifecycle.apply(new CartCreatedFailedEvent(createCartCommand.getCartAggregateId(),
