@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="true">
     <md-card v-for="user in users" :key="user.id" class="md-layout-item md-xlarge-size-20 md-large-size-20 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
       <md-card-header>
         <md-card-header-text>
@@ -13,15 +13,16 @@
       </md-card-header>
 
       <md-card-actions>
-        <md-button class="md-accent" v-if="user.blocked">Unblock</md-button>  
-        <md-button class="md-accent" v-else>Block</md-button>
-        <md-button class="md-raised md-accent">Remove</md-button>
+        <md-button @click="blockUser(user.id)" class="md-accent" v-if="user.blocked">Unblock</md-button>  
+        <md-button @click="blockUser(user.id)" class="md-accent" v-else>Block</md-button>
+        <md-button @click="deleteUser(user.id)" class="md-raised md-accent">Remove</md-button>
       </md-card-actions>
     </md-card>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex"
 export default {
     name: "SimpleUsers",
     data() {
@@ -64,6 +65,15 @@ export default {
                 }
             ]
         }
+    },
+    mounted() {
+      //  this.$store.dispatch("getSimpleUsers")
+    },
+    computed: {
+     //   ...mapGetters(["getSimpleUsers"])
+    },
+    methods: {
+        ...mapActions(["getSimpleUsers", "deleteUser", "blockUser"]),
     }
 
 }

@@ -173,4 +173,8 @@ export default {
 .fade-leave-to {
 	opacity: 0;
 }
+
+.md-dialog .md-dialog-container {
+	transform: none;
+}
 </style>
