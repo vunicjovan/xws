@@ -2,7 +2,9 @@ package com.uns.ftn.accountservice.service;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
-import com.uns.ftn.accountservice.domain.*;
+import com.uns.ftn.accountservice.domain.Agent;
+import com.uns.ftn.accountservice.domain.SimpleUser;
+import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
@@ -14,6 +16,8 @@ import com.uns.ftn.coreapi.commands.CreateSimpleUserCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -111,10 +115,42 @@ public class UserService {
             throw new BadRequestException("Wrong email or password");
         }
 
+        // check if simple-user is blocked or if user is deleted
+        checkIfBlockedOrDeleted(authenticationRequest.getEmail());
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);
+    }
+
+    public ResponseEntity<?> deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with given id does not exist!"));
+
+        if (user.getDeleted()) {
+            throw new BadRequestException("User is already deleted.");
+        }
+
+        user.setDeleted(true);
+        String stremail = user.getEmail();
+        user.setEmail(user.getEmail() + ".deleted");
+        userRepository.save(user);
+
+        return new ResponseEntity<>("User with username " + stremail + " deleted.", HttpStatus.OK);
+    }
+
+    private void checkIfBlockedOrDeleted(String email) {
+        User myUser = getByMail(email);
+        SimpleUser simpleUser = getByUser(myUser);
+        if (simpleUser != null) {
+            if (simpleUser.getBlocked()) {
+                throw new BadRequestException("Your account has been blocked and system log-in is unavailable while block is active.");
+            }
+            else if (myUser.getDeleted()) {
+                throw new NotFoundException("Your account has been deleted.");
+            }
+        }
     }
   
     public User getByMail(String mail) {
@@ -122,9 +158,14 @@ public class UserService {
         return user;
     }
 
+    private SimpleUser getByUser(User user) {
+        SimpleUser simpleUser = simpleUserRepository.findByUser(user);
+        return simpleUser;
+    }
+
     public String getAdvertisementOwner(Long id) {
         User user = userRepository.findById(id)
-                                .orElseThrow(() -> new NotFoundException("Owner whit given id does not exist!"));
+                                .orElseThrow(() -> new NotFoundException("Owner with given id does not exist!"));
 
         return user.getFirstName() + " " + user.getLastName();
     }
