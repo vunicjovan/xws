@@ -18,7 +18,7 @@
 
                 <md-card-actions>
                     <md-button @click.native="$router.push('/single-ad/' + ad.id)">Details</md-button>
-                    <md-button v-if="getUser" @click="addCartItem(ad.id)" class="md-raised md-accent">Add to cart</md-button>
+                    <md-button v-if="isLogged" @click="addCartItem(ad.id)" class="md-raised md-accent">Add to cart</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -39,7 +39,7 @@ export default {
         this.show = !this.show;
     },
     computed: {
-        ...mapGetters(["getAdvertisements", "getUser"]),
+        ...mapGetters(["getAdvertisements", "getUser", "isLogged"]),
     },
     methods: {
         ...mapActions(["getAllAdvertisements"]),

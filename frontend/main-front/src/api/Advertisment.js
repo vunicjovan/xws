@@ -30,4 +30,10 @@ export default {
 			return response.data;
 		})
 	},
+
+	addRentingInterval(rentingInterval) {
+		return axios.post("/agent/interval/", rentingInterval).then((response) => {
+			return response.data
+		})
+	}
 };

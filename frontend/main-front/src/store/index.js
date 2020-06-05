@@ -6,6 +6,7 @@ import advertisment from "./modules/advertisment.js";
 import search from "./modules/search.js"
 import cart from "./modules/cart.js"
 import admin from "./modules/admin.js"
+import renting from "./modules/rentingIntervals.js"
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
 		advertisment,
 		search,
 		cart,
-		admin
+		admin,
+		renting
 	},
 });
