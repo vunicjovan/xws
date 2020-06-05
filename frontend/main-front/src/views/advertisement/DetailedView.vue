@@ -14,7 +14,7 @@
 					</md-datepicker>
 				</md-dialog-content>
 				<md-dialog-actions>
-					<md-button class="md-primary" @click="active = false">Cancel</md-button>
+					<md-button class="md-primary" @click="cancelDialog()">Cancel</md-button>
 					<md-button class="md-primary" @click.prevent="validateDates">Add</md-button>
 				</md-dialog-actions>
 			</md-dialog>
@@ -58,8 +58,8 @@
 				</md-card-content>
 
 				<md-card-actions>
-					<md-button v-if="getUser" @click="active = true" class="md-raised md-accent">Edit availability</md-button>
-					<md-button v-if="getUser" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
+					<md-button v-if="isLogged && getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent">Edit availability</md-button>
+					<md-button v-if="isLogged" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
 				</md-card-actions>
 			</md-card>
 		</div>
@@ -90,6 +90,7 @@ export default {
 			form: {
 				startDate: undefined,
 				endDate: undefined,
+				advertisementId: undefined,
 			},
 		};
 	},
@@ -98,10 +99,10 @@ export default {
 		this.show = !this.show;
 	},
 	computed: {
-		...mapGetters(["getAdvertisement", "getUser"]),
+		...mapGetters(["getAdvertisement", "getUser", "isLogged"]),
 	},
 	methods: {
-		...mapActions(["getDetailedAdvertisement", "addCartItem"]),
+		...mapActions(["getDetailedAdvertisement", "addCartItem", "addRentingInterval"]),
 		getPhotoURL(advertisementId, photoName) {
 			return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
 		},
@@ -116,7 +117,21 @@ export default {
 		},
 
 		addUnabailableTerm() {
-			alert("Beep bop bop");
+			this.$store.dispatch("addRentingInterval", this.form);
+			this.active = false;
+		},
+
+		cancelDialog() {
+			this.active = false;
+			this.$v.$reset();
+			this.form.startDate = undefined;
+			this.form.endDate = undefined;
+			this.form.advertisementId = undefined;
+		},
+
+		setupEdit(id) {
+			this.form.advertisementId = id
+			this.active = true;
 		},
 
 		validateDates() {
