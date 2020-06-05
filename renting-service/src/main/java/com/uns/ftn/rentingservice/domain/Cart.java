@@ -3,6 +3,7 @@ package com.uns.ftn.rentingservice.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -21,5 +22,10 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CartItem> cartItems;
+
+    public Cart(Long userId) {
+        this.userId = userId;
+        this.cartItems = new HashSet<>();
+    }
 
 }

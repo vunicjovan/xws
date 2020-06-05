@@ -10,6 +10,8 @@ import com.uns.ftn.accountservice.repository.AgentRepository;
 import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
+import com.uns.ftn.coreapi.commands.CreateSimpleUserCommand;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 import java.util.regex.Pattern;
 
 @Service
@@ -46,6 +50,9 @@ public class UserService {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @Inject
+    private transient CommandGateway commandGateway;
+
     public UserDTO registerUser(UserDTO userDTO) {
 
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
@@ -74,6 +81,9 @@ public class UserService {
             userRepository.save(user);
             SimpleUser simpleUser = new SimpleUser(user);
             simpleUserRepository.save(simpleUser);
+
+            //emit user created event and begin saga
+            commandGateway.send(new CreateSimpleUserCommand(simpleUser.getId()));
         }
 
         return userDTO;
@@ -115,6 +125,10 @@ public class UserService {
                                 .orElseThrow(() -> new NotFoundException("Owner whit given id does not exist!"));
 
         return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public void createSimpleUserRollback(Long userId) {
+        System.out.println("TREBA ISPISATI FUNKCIJU ZA ROLLBACK MOMCI");
     }
   
     /*

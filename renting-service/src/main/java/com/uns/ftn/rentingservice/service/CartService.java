@@ -72,6 +72,15 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
+    public void createCart(Long userId) {
+        if (cartRepository.findByUserId(userId) != null) {
+            throw new BadRequestException("User already has a cart!");
+        }
+
+        Cart cart = new Cart(userId);
+        cartRepository.save(cart);
+    }
+
     public Cart findOneCart(Long userId) {
         return cartRepository.findByUserId(userId);
     }
