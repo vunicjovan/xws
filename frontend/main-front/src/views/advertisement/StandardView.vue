@@ -17,7 +17,8 @@
                 </md-card-header>
 
                 <md-card-actions>
-                    <md-button @click.native="$router.push('/single-ad/' + ad.id)">View advertisement</md-button>
+                    <md-button @click.native="$router.push('/single-ad/' + ad.id)">Details</md-button>
+                    <md-button v-if="getUser" @click="addCartItem(ad.id)" class="md-raised md-accent">Add to cart</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -38,12 +39,21 @@ export default {
         this.show = !this.show;
     },
     computed: {
-        ...mapGetters(["getAdvertisements"]),
+        ...mapGetters(["getAdvertisements", "getUser"]),
     },
     methods: {
         ...mapActions(["getAllAdvertisements"]),
         getPhotoURL(advertisementId, photoName) {
             return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
+        },
+
+        addCartItem(advertisementId) {
+            let payload = {
+                cartId: this.getUser.id,
+                cartItemId: advertisementId
+            };
+            
+            this.$store.dispatch("addCartItem", payload);
         }
     }
 }

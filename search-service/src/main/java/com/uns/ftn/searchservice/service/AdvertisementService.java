@@ -6,11 +6,14 @@ import com.uns.ftn.searchservice.dto.PhotoDTO;
 import com.uns.ftn.searchservice.repository.AdvertisementRepository;
 import com.uns.ftn.searchservice.repository.PhotoRepository;
 import com.uns.ftn.searchservice.repository.VehicleRepository;
+import com.uns.ftn.searchservice.specifications.AdvertisementSpecs;
+import com.uns.ftn.searchservice.specifications.SearchCriteria;
 import org.apache.commons.configuration.resolver.CatalogResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class AdvertisementService {
@@ -74,6 +77,13 @@ public class AdvertisementService {
      photo.setAdvertisement(advertisement);
 
     photoRepository.save(photo);
+ }
+
+ public List<Advertisement> findByLocationLike(String location) {
+     AdvertisementSpecs spec =
+             new AdvertisementSpecs(new SearchCriteria("location", ":", location));
+
+     return advertisementRepository.findAll(spec);
  }
 
 }

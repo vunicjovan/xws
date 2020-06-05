@@ -32,16 +32,20 @@ public class Vehicle {
     @Column(name = "hasAndroid")
     private Boolean hasAndroid = false;
 
-    @OneToOne
+    @OneToOne()
+    @JoinColumn(name = "fuelTypeId")
     private FuelType fuelType;
 
     @OneToOne
+    @JoinColumn(name = "gearboxTypeId")
     private GearboxType gearboxType;
 
     @OneToOne
+    @JoinColumn(name = "vehicleClassId")
     private VehicleClass vehicleClass;
 
     @OneToOne
+    @JoinColumn(name = "modelId")
     private Model model;
 
 }

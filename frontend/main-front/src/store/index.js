@@ -4,6 +4,7 @@ import user from "./modules/user.js";
 import catalog from "./modules/catalog.js";
 import advertisment from "./modules/advertisment.js";
 import search from "./modules/search.js"
+import cart from "./modules/cart.js"
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
 		user,
 		catalog,
 		advertisment,
-		search
+		search,
+		cart
 	},
 });

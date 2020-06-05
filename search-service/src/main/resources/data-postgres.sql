@@ -80,3 +80,63 @@ insert into vehicle_class (vehicle_class_id, name, deleted) values (7, 'Luxury S
 insert into vehicle_class (vehicle_class_id, name, deleted) values (8, 'Sports Car', false);
 insert into vehicle_class (vehicle_class_id, name, deleted) values (9, 'SUV', false);
 insert into vehicle_class (vehicle_class_id, name, deleted) values (10, 'Old Timer', false);
+
+-- Vehicles
+insert into vehicle
+(id, kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id)
+values (1, 15000, 2, true, 1, 1, 1, 1);
+insert into vehicle
+(id, kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id)
+values (2, 2200, 1, false, 1, 2, 1, 2);
+insert into vehicle
+(id, kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id)
+values (3, 5000, 2, true, 2, 1, 3, 1);
+insert into vehicle
+(id, kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id)
+values (4, 1000, 1, true, 3, 2, 3, 4);
+
+
+-- Advertisements
+insert into advertisement
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
+values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 1, 1);
+insert into advertisement
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
+values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2, 1);
+insert into advertisement
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
+values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 3, 1);
+insert into advertisement
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
+values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 4, 1);
+
+-- Photos
+insert into photo (id, path, advertisement_id) values (1, 'logan1.jpg', 1);
+insert into photo (id, path, advertisement_id) values (2, 'logan2.jpg', 1);
+insert into photo (id, path, advertisement_id) values (3, 'logan3.jpeg', 1);
+insert into photo (id, path, advertisement_id) values (4, 'logan4.jpg', 1);
+insert into photo (id, path, advertisement_id) values (5, 'logan1.jpg', 2);
+insert into photo (id, path, advertisement_id) values (6, 'logan2.jpg', 2);
+insert into photo (id, path, advertisement_id) values (7, 'logan3.jpeg', 2);
+insert into photo (id, path, advertisement_id) values (8, 'logan4.jpg', 2);
+insert into photo (id, path, advertisement_id) values (9, 'logan1.jpg', 3);
+insert into photo (id, path, advertisement_id) values (10, 'logan2.jpg', 3);
+insert into photo (id, path, advertisement_id) values (11, 'logan3.jpeg', 3);
+insert into photo (id, path, advertisement_id) values (12, 'logan4.jpg', 3);
+insert into photo (id, path, advertisement_id) values (13, 'logan1.jpg', 4);
+insert into photo (id, path, advertisement_id) values (14, 'logan2.jpg', 4);
+insert into photo (id, path, advertisement_id) values (15, 'logan3.jpeg', 4);
+insert into photo (id, path, advertisement_id) values (16, 'logan4.jpg', 4);
+
+-- Renting Intervals
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (1, '2020-06-06', '2020-06-08', 1);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (2, '2020-06-09', '2020-06-12', 1);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (3, '2020-06-15', '2020-06-17', 1);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (4, '2020-06-10', '2020-06-16', 2);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (5, '2020-06-18', '2020-06-21', 2);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (6, '2020-06-07', '2020-06-13', 3);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (7, '2020-06-17', '2020-06-20', 3);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (8, '2020-06-17', '2020-06-20', 4);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (9, '2020-06-13', '2020-06-15', 4);
+insert into renting_interval (id, start_date, end_date, advertisement_id) values (10, '2020-06-25', '2020-06-28', 4);
+
