@@ -13,6 +13,8 @@
 			<md-button to="/catalog">Catalog</md-button>
 			<md-button v-if="!isLogged" @click.native="$router.push('/login')">Login</md-button>
 			<md-button v-if="!isLogged" @click.native="$router.push('/register')">Register</md-button>
+			<md-button to="/users">Users</md-button>
+			<md-button v-if="isLogged" to="/cart">Cart</md-button>
 			<md-button v-if="isLogged" @click="logout()">Logout</md-button>
 		</md-toolbar>
 	</div>

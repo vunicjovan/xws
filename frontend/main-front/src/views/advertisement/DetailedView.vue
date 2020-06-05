@@ -1,6 +1,25 @@
 <template>
     <transition name="fade">
         <div v-if="show && getAdvertisement !== null" class="md-layout md-alignment-center-center">
+            
+            <md-dialog :md-active.sync="active">
+            <md-dialog-title>Unavailable term</md-dialog-title>
+                <md-dialog-content>
+                     <md-datepicker :class="{'md-invalid': $v.form.startDate.$error}" v-model="form.startDate">
+                        <label>Select start date</label>
+                        <span class="md-error" v-if="!$v.form.startDate.required">Start date is required</span>
+                    </md-datepicker>
+                    <md-datepicker :class="{'md-invalid': $v.form.endDate.$error}" v-model="form.endDate">
+                        <label>Select end date</label>
+                        <span class="md-error" v-if="!$v.form.endDate.required">End date is required</span>
+                    </md-datepicker>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="active = false">Cancel</md-button>
+                    <md-button class="md-primary" @click.prevent="validateDates">Add</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+
             <md-card>
                 <md-card-media>
                     <hooper :centerMode="true" :itemsToShow="1" :infiniteScroll="true" :progress="true" :autoPlay="true" :playSpeed="2000">
@@ -38,7 +57,8 @@
                 </md-card-content>
 
                 <md-card-actions>
-                    <md-button class="md-raised md-accent">Add to cart</md-button>
+                    <md-button v-if="getUser" @click="active = true" class="md-raised md-accent">Edit availability</md-button>
+                    <md-button v-if="getUser" @click="deleteCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -48,10 +68,13 @@
 <script>
 import { Hooper, Slide, Pagination as HooperPagination, Navigation as HooperNavigation } from 'hooper';
 import 'hooper/dist/hooper.css';
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 
 import { mapGetters, mapAction, mapActions } from "vuex";
 export default {
     name: "DetailedView",
+    mixins: [validationMixin],
     components: {
         Hooper,
         Slide,
@@ -61,7 +84,12 @@ export default {
     data: function() {
         return {
             ad: null,
-            show: false
+            show: false,
+            active: false,
+            form: {
+                startDate: undefined,
+                endDate: undefined
+            }
         };
     },
     mounted: function() {
@@ -69,14 +97,47 @@ export default {
         this.show = !this.show;
     },
     computed: {
-        ...mapGetters(["getAdvertisement"])
+        ...mapGetters(["getAdvertisement", "getUser"])
     },
     methods: {
         ...mapActions(["getDetailedAdvertisement"]),
         getPhotoURL(advertisementId, photoName) {
             return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
-        }
-    }
+        },
+
+        deleteCartItem(advertisementId) {
+            let payload = {
+                cartId: this.getUser.id,
+                cartItemId: advertisementId
+            };
+            
+            this.$store.dispatch("deleteCartItem", payload);
+        },
+
+        addUnabailableTerm() {
+            alert("Beep bop bop");
+        },
+
+        validateDates() {
+            this.$v.$touch();
+
+            if (!this.$v.$invalid) {
+                this.showSearchDialog = false;
+                this.addUnabailableTerm();
+            }
+        },
+    },
+
+    validations: {
+        form: {
+            startDate: {
+                required
+            },
+            endDate: {
+                required
+            }
+		},
+	}
 }
 </script>
 
