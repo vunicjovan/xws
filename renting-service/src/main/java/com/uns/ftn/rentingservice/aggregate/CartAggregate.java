@@ -3,6 +3,7 @@ package com.uns.ftn.rentingservice.aggregate;
 import com.uns.ftn.coreapi.commands.CreateCartCommand;
 import com.uns.ftn.coreapi.events.CartCreatedEvent;
 import com.uns.ftn.coreapi.events.CartCreatedFailedEvent;
+import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.service.CartService;
 import org.axonframework.commandhandling.CommandHandler;
@@ -27,7 +28,7 @@ public class CartAggregate {
             cartService.createCart(createCartCommand.getUserId());
 
             AggregateLifecycle.apply(new CartCreatedEvent(createCartCommand.getCartAggregateId()));
-        } catch (NotFoundException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
 
             AggregateLifecycle.apply(new CartCreatedFailedEvent(createCartCommand.getCartAggregateId(),
