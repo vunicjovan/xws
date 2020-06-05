@@ -83,7 +83,7 @@ public class UserService {
             simpleUserRepository.save(simpleUser);
 
             //emit user created event and begin saga
-            commandGateway.send(new CreateSimpleUserCommand(simpleUser.getId()));
+            commandGateway.send(new CreateSimpleUserCommand(user.getId()));
         }
 
         return userDTO;
