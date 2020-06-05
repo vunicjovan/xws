@@ -56,7 +56,12 @@ const actions = {
 					commit("setLoggedUser", user);
 					resolve();
 				})
-				.catch((error) => reject(error));
+				.catch((error) => {
+					localStorage.removeItem("auth");
+					commit("setLoggedUser", null);
+					commit("setLogged", false);
+					reject(error);
+				});
 		});
 	},
 };
