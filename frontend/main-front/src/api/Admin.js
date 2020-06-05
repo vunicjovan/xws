@@ -14,7 +14,7 @@ export default {
     },
     
     getSimpleUsers() {
-		return axios.post("/account/users/").then((response) => {
+		return axios.get("/account/").then((response) => {
 			return response.data;
 		});
 	},
