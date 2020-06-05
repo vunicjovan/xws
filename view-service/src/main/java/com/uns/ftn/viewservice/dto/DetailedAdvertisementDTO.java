@@ -27,5 +27,6 @@ public class DetailedAdvertisementDTO {
     private boolean android;
     private String description;
     private Set<String> photos;
+    private Long ownerId;
 
 }

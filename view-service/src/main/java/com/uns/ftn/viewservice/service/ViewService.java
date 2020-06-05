@@ -2,6 +2,7 @@ package com.uns.ftn.viewservice.service;
 
 import com.uns.ftn.viewservice.client.AccountClient;
 import com.uns.ftn.viewservice.domain.*;
+import com.uns.ftn.viewservice.dto.CartAdvertisementDTO;
 import com.uns.ftn.viewservice.dto.DetailedAdvertisementDTO;
 import com.uns.ftn.viewservice.dto.SimpleAdvertisementDTO;
 import com.uns.ftn.viewservice.exceptions.NotFoundException;
@@ -69,10 +70,18 @@ public class ViewService {
                 advertisement.getVehicle().getChildSeatNumber(),
                 advertisement.getVehicle().getHasAndroid(),
                 advertisement.getDescription(),
-                advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet()),
+                advertisement.getOwnerId()
         );
 
         return detailedAdvertisementDTO;
+    }
+
+    public Set<CartAdvertisementDTO> getCartAdvertisements(List<Long> advertisementIdList) {
+        List<Advertisement> advertisements = advertisementRepository.findAllById(advertisementIdList);
+
+        return advertisements.stream().
+                map(advertisement -> new CartAdvertisementDTO(advertisement)).collect(Collectors.toSet());
     }
 
 }
