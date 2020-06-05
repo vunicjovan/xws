@@ -17,6 +17,7 @@
 				</md-table-cell>
 			</md-table-row>
 		</md-table>
+		<RentingRequest />
 	</div>
 </template>
 
@@ -24,6 +25,10 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
 	name: "Cart",
+
+	components: {
+		RentingRequest: () => import("../components/cart/RentingRequest.vue"),
+	},
 
 	computed: {
 		...mapGetters(["isLogged", "getUser", "getCartAdvertisements"]),
