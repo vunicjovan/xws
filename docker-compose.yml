@@ -1,6 +1,5 @@
-version: '3'
+version: "3"
 services:
-
   db:
     image: postgres
     build: ./database
@@ -21,6 +20,8 @@ services:
     tty: true
     depends_on:
       - db
+      - rabbitmq-broker
+      - axon-server
 
   axon-server:
     image: axoniq/axonserver:4.3.2
@@ -40,12 +41,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_SCHEMA=account_schema
-      
+      - AXON_HOST=axon-server
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
-      #- axon-server
+      - rabbitmq-broker
+      - axon-server
 
   agent-service:
     build: ./agent-service
@@ -53,29 +55,20 @@ services:
       - "8081:8081"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
-      #- AXON_HOST=axon-server
       - POSTGRES_DB=service-db
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_SCHEMA=agent_schema
+      - RQM_HOST=rabbitmq-broker
+      - RMQ_PORT=5672
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
-      #- axon-server
-
-#  android-service:
-#    build: ./android-service
-#    ports:
-#      - "8082:8082"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - db
-#      - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
 
   catalog-service:
     build: ./catalog-service
@@ -83,45 +76,20 @@ services:
       - "8083:8083"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
-      #- AXON_HOST=axon-server
       - POSTGRES_DB=service-db
       - POSTGRES_DOMAIN=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_SCHEMA=catalog_schema
+      - RQM_HOST=rabbitmq-broker
+      - RMQ_PORT=5672
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
-      #- axon-server
-
-#  mail-service:
-#    build: ./mail-service
-#    ports:
-#      - "8084:8084"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#    tty: true
-#    depends_on:
-#      - db
-#      - eureka-serviceregistry
-
-#  message-service:
-#    build: ./message-service
-#    ports:
-#      - "8085:8085"
-#    environment:
-#      - REGISTRY_HOST=eureka-serviceregistry
-#      - POSTGRES_DB=service-db
-#      - POSTGRES_DOMAIN=db
-#      - POSTGRES_PORT=5432
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=mocanpass
-#    tty: true
-#    depends_on:
-#      - db
-#      - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
 
   renting-service:
     build: ./renting-service
@@ -135,10 +103,15 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_SCHEMA=renting_schema
+      - AXON_HOST=axon-server
+      - RQM_HOST=rabbitmq-broker
+      - RMQ_PORT=5672
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
 
   view-service:
     build: ./view-service
@@ -151,11 +124,15 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
-      - POSTGRES_SCHEMA=agent_schema
+      - POSTGRES_SCHEMA=view_schema
+      - RQM_HOST=rabbitmq-broker
+      - RMQ_PORT=5672
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
 
   search-service:
     build: ./search-service
@@ -168,11 +145,15 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
-      - POSTGRES_SCHEMA=agent_schema
+      - POSTGRES_SCHEMA=search_schema
+      - RQM_HOST=rabbitmq-broker
+      - RMQ_PORT=5672
     tty: true
     depends_on:
       - db
       - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
 
   zuul:
     build: ./gateway
@@ -184,17 +165,19 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - axon-server
       - account-service
       - agent-service
-      #- android-service
       - catalog-service
-      #- mail-service
-      #- message-service
       - renting-service
       - search-service
       - view-service
+      - rabbitmq-broker
+      - axon-server
 
-
-
-
+  rabbitmq-broker:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq-broker
+    ports:
+      - 5672:5672
+      - 5671:5671
+      - 15671:15671
