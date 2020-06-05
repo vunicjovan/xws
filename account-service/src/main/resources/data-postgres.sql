@@ -3,10 +3,6 @@
 -- noinspection SqlNoDataSourceInspectionForFile
 
 -- Users
--- insert into users (first_name, last_name, email, password, enabled) values ('Me', 'Aka', 'AkaMe', 'www', true)
--- insert into users (first_name, last_name, email, password, enabled) values ('Not', 'Me', 'NotMe', 'sss', true)
--- insert into users (first_name, last_name, email, password, enabled) values ('Not', 'Me', 'kakadu@kaka.com', 'kakadu', true)
-
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Richard', 'Hendricks', 'admin@soul.com', '$2a$10$R4KtI.gPRqYv3C2YAI.Fv.lDGjQMxGJPnzyqOcTKw23bKVkVguAVS', true, false)
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Russ', 'Hanneman', 'agent@soul.com', '$2a$10$br1I6SY4.QlAabOd3juw5.16R7eL2olnU8vl9QiMIB2.L8sZIJzo2', true, false)
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Jared', 'Dunn', 'user@soul.com', '$2a$10$CUWHTtIHSnEfgQE2ysgeIuAgtBZrBt9IKDF6dCLk9ri4VRvbUlUMm', true, false)
@@ -41,7 +37,7 @@ insert into role_permissions (role_id, permission_id) values (3, 1)
 insert into role_permissions (role_id, permission_id) values (3, 2)
 
 -- User - Roles
--- insert into user_roles (user_id, role_id) values (1, 1)
--- insert into user_roles (user_id, role_id) values (2, 2)
--- insert into user_roles (user_id, role_id) values (3, 1)
+insert into user_roles (user_id, role_id) values (1, 1)
+insert into user_roles (user_id, role_id) values (2, 2)
+insert into user_roles (user_id, role_id) values (3, 1)
 

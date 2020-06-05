@@ -1,13 +1,13 @@
 <template>
-  <div v-if="true">
-    <md-card v-for="user in users" :key="user.id" class="md-layout-item md-xlarge-size-20 md-large-size-20 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
+  <div v-if="getSimpleUsers">
+    <md-card v-for="user in getSimpleUsers" :key="user.id" class="md-layout-item md-xlarge-size-20 md-large-size-20 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
       <md-card-header>
         <md-card-header-text>
             <div class="md-title">{{ user.firstName}} {{user.lastName}}</div>
             <div class="md-subhead">
-                <span v-if="user.numberOfCancelations === 3" class="warning">Number of cancelations: {{ user.numberOfCancelations }}</span>
-                <span v-else-if="user.numberOfCancelations > 2" class="block">Number of cancelations: {{ user.numberOfCancelations }}</span>
-                <span v-else>Number of cancelations: {{ user.numberOfCancelations }}</span>
+                <span v-if="user.numberOfCancelations === 3" class="warning">Number of cancelations: {{ user.numberOfCancelation }}</span>
+                <span v-else-if="user.numberOfCancelations > 2" class="block">Number of cancelations: {{ user.numberOfCancelation }}</span>
+                <span v-else>Number of cancelations: {{ user.numberOfCancelation }}</span>
             </div>
         </md-card-header-text>
       </md-card-header>
@@ -67,13 +67,13 @@ export default {
         }
     },
     mounted() {
-      //  this.$store.dispatch("getSimpleUsers")
+        this.$store.dispatch("getSimpleUsers")
     },
     computed: {
-     //   ...mapGetters(["getSimpleUsers"])
+        ...mapGetters(["getSimpleUsers"])
     },
     methods: {
-        ...mapActions(["getSimpleUsers", "deleteUser", "blockUser"]),
+        ...mapActions(["deleteUser", "blockUser"]),
     }
 
 }

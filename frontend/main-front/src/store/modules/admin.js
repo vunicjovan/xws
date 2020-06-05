@@ -39,7 +39,7 @@ const actions = {
             adminApi
                 .deleteUser(userId)
                 .then((simpleUser) => {
-                    commit("deleteSimpleUser", simpleUser);
+                    commit("deleteSimpleUser", userId);
                     resolve(simpleUser);
                 })
                 .catch((error) => reject(error))
@@ -51,13 +51,13 @@ const actions = {
 const mutations = {
     setSimpleUsers: (state, simpleUsers) => (state.simpleUsers = simpleUsers),
     blockUser: (state, simpleUser) => {
-        state.simpleUsers.array.forEach(element => {
-                if (element.id == simpleUser.id) {
-                    element.blocked == true;
+        state.simpleUsers.forEach(element => {
+                if (element.id === simpleUser.id) {
+                    element.blocked = simpleUser.blocked;
                 }
         });
     },
-    deleteSimpleUsers: (state, simpleUserId) => {
+    deleteSimpleUser: (state, simpleUserId) => {
         state.simpleUsers = state.simpleUsers.filter((simpleUser) => simpleUser.id != simpleUserId);
     }
 };

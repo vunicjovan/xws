@@ -30,7 +30,7 @@ public class AccountController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
-        return null;
+        return new ResponseEntity<>(simpleService.getSimpleUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
