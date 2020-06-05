@@ -32,14 +32,18 @@ public class Vehicle {
     private Advertisement advertisement;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fuelTypeId")
     private FuelType fuelType;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "gearboxTypeId")
     private GearboxType gearboxType;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vehicleClassId")
     private VehicleClass vehicleClass;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "modelId")
     private Model model;
 }

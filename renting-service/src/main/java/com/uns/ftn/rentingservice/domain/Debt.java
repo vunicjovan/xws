@@ -1,12 +1,13 @@
 package com.uns.ftn.rentingservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class Debt {
 

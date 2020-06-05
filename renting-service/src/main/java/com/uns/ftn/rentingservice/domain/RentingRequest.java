@@ -1,13 +1,16 @@
 package com.uns.ftn.rentingservice.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "rentingRequest")
 public class RentingRequest {
@@ -26,7 +29,16 @@ public class RentingRequest {
    @Enumerated(EnumType.ORDINAL)
    private RequestStatus status = RequestStatus.pending;
 
+   @Column(name = "senderId", nullable = false)
+   private Long senderId;
+
    @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   private java.util.Set<RentingReport> rentingReports;
+   private Set<RentingReport> rentingReports;
+
+   //@JsonIgnore
+   @ManyToMany
+   @JoinTable(name = "renting_request_advertisements", joinColumns = @JoinColumn(name = "renting_request_id",
+           referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id"))
+   private Set<Advertisement> advertisements;
 
 }

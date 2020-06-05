@@ -1,15 +1,21 @@
 import axios from "axios";
 
 export default {
-    getSimpleSearchResults(params) {
-        return axios.get("/search/simple", params).then((response) => {
-            return response.data;
-        });
-    },
+	async getSimpleSearchResults(params) {
+		try {
+			const response = await axios.get("/search/simple", { params });
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 
-    getAdvancedSearchResults(params) {
-        return axios.get("/search/advandced", params).then((response) => {
-            return response.data;
-        });
-    }
+	async getAdvancedSearchResults(params) {
+		try {
+			const response = await axios.get("/search/advanced", { params });
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

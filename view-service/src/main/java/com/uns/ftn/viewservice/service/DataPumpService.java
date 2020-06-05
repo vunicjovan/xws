@@ -39,7 +39,7 @@ public class DataPumpService {
 
         if (advertisement == null) {
             advertisement = new Advertisement();
-            advertisement.setId(advertisementDTO.getVehicle().getId());
+            advertisement.setId(advertisementDTO.getId());
         }
 
         if (vehicle == null) {
