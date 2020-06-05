@@ -142,7 +142,7 @@ public class DataPumpService {
 
     public void photoHandler(PhotoDTO photoDTO) {
         Photo photo = findPhotoById(photoDTO.getId());
-        Advertisement ad = findAdvertisementById(photoDTO.getAdvertisement().getId());
+        Advertisement ad = findAdvertisementById(photoDTO.getAdvertisementId());
 
         if (ad == null) {
             return;
