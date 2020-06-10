@@ -12,7 +12,7 @@
                           <md-input id="currentPassword" name="currentPassword" type="password" v-model="form.currentPassword" />
                           <span class="md-error" v-if="!$v.form.currentPassword.required">Password is required</span>
                           <span class="md-error" v-else-if="!$v.form.currentPassword.alpha">Invalid password format</span>
-                          <span class="md-error" v-else-if="!$v.form.currentPassword.minLength">Password requires at least 8 characters</span>
+                          <span class="md-error" v-else-if="!$v.form.currentPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
                   <div class="md-layout-item md-small-size-100">
@@ -21,7 +21,7 @@
                           <md-input id="newPassword" name="newPassword" type="password" v-model="form.newPassword" />
                           <span class="md-error" v-if="!$v.form.newPassword.required">Password is required</span>
                           <span class="md-error" v-else-if="!$v.form.newPassword.alpha">Invalid password format</span>
-                          <span class="md-error" v-else-if="!$v.form.newPassword.minLength">Password requires at least 8 characters</span>
+                          <span class="md-error" v-else-if="!$v.form.newPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
                   <div class="md-layout-item md-small-size-100">
@@ -30,7 +30,7 @@
                           <md-input id="newRepeatPassword" name="newRepeatPassword" type="password" v-model="form.newRepeatPassword" />
                           <span class="md-error" v-if="!$v.form.newRepeatPassword.required">Password is required</span>
                           <span class="md-error" v-else-if="!$v.form.newRepeatPassword.alpha">Invalid password format</span>
-                          <span class="md-error" v-else-if="!$v.form.newRepeatPassword.minLength">Password requires at least 8 characters</span>
+                          <span class="md-error" v-else-if="!$v.form.newRepeatPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
               </md-card-content>
@@ -83,17 +83,17 @@ export default {
             currentPassword: {
 				required,
 				sqli,
-				minLength: minLength(8),
+				minLength: minLength(10),
             },
             newPassword: {
 				required,
 				sqli,
-				minLength: minLength(8),
+				minLength: minLength(10),
 			},
 			newRepeatPassword: {
 				required,
 				sqli,
-				minLength: minLength(8),
+				minLength: minLength(10),
 			},
         }
     }
