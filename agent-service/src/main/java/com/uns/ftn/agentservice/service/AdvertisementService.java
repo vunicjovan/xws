@@ -9,13 +9,13 @@ import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CheckResponseDTO;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
-import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
@@ -89,7 +89,7 @@ public class AdvertisementService {
      * Returns TRUE if data is valid, else returns FALSE.
      */
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\!\\?\\#\\.\\,\\;\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]+)$";
         String lrx = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
         Pattern pattern = Pattern.compile(regex);
         Pattern lpattern = Pattern.compile(lrx);
@@ -108,5 +108,43 @@ public class AdvertisementService {
     public Advertisement findById(Long id) {
         return adRepo.findById(id).orElse(null);
     }
+
+    /* START: Methods for checking when deleting catalog item. */
+    public ResponseEntity<?> checkForModel(Long id) {
+        Set<Vehicle> vehicles = vehicleRepo.findAllByModelId(id);
+        if (!vehicles.isEmpty()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> checkForClass(Long id) {
+        Set<Vehicle> vehicles = vehicleRepo.findAllByVehicleClassId(id);
+        if (!vehicles.isEmpty()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> checkForGearbox(Long id) {
+        Set<Vehicle> vehicles = vehicleRepo.findAllByGearboxTypeId(id);
+        if (!vehicles.isEmpty()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> checkForFuel(Long id) {
+        Set<Vehicle> vehicles = vehicleRepo.findAllByFuelTypeId(id);
+        if (!vehicles.isEmpty()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+    /* END: Methods for checking when deleting catalog item. */
 
 }

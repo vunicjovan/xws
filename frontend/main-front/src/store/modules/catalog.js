@@ -45,6 +45,12 @@ const actions = {
 	},
 
 	addFuelType({ commit }, fuelType) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(fuelType.name)) {
+			alert("Fuel type name requires only words, starting with capital word.");
+			return;
+		}
+		
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.addFuelType(fuelType)
@@ -56,6 +62,11 @@ const actions = {
 	},
 
 	updateFuelType({ commit }, fuelType) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(fuelType.name)) {
+			alert("Fuel type name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateFuelType(fuelType)
@@ -79,6 +90,12 @@ const actions = {
 	},
 
 	addGearboxType({ commit }, gearboxType) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(gearboxType.name)) {
+			alert("Gearbox type name requires only words, starting with capital word.");
+			return;
+		}
+		
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.addGearboxType(gearboxType)
@@ -90,6 +107,11 @@ const actions = {
 	},
 
 	updateGearboxType({ commit }, gearboxType) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(gearboxType.name)) {
+			alert("Gearbox type name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateGearboxType(gearboxType)
@@ -102,6 +124,11 @@ const actions = {
 
 	//BRAND ACTIONS
 	addBrand({ commit }, brand) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(brand.name)) {
+			alert("Brand name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.addBrand(brand)
@@ -113,6 +140,11 @@ const actions = {
 	},
 
 	updateBrand({ commit }, brand) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(brand.name)) {
+			alert("Brand name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateBrand(brand)
@@ -136,6 +168,11 @@ const actions = {
 
 	// MODEL ACTIONS
 	addModel({ commit }, payload) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(payload.model.name)) {
+			alert("Model name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.addModel(payload.brandId, payload.model)
@@ -147,6 +184,11 @@ const actions = {
 		});
 	},
 	updateModel({ commit }, payload) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(payload.model.name)) {
+			alert("Model name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateModel(payload.brandId, payload.model)
@@ -182,6 +224,11 @@ const actions = {
 		});
 	},
 	addVehicleClass({ commit }, vehicleClass) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(vehicleClass.name)) {
+			alert("Vehicle class name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resovle, reject) => {
 			catalogApi
 				.addVehicleClass(vehicleClass)
@@ -193,6 +240,11 @@ const actions = {
 		});
 	},
 	updateVehicleClass({ commit }, vehicleClass) {
+		let sqli = new RegExp("^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$");
+		if (!sqli.test(vehicleClass.name)) {
+			alert("Vehicle class name requires only words, starting with capital word.");
+			return;
+		}
 		return new Promise((resolve, reject) => {
 			catalogApi
 				.updateVehicleClass(vehicleClass)

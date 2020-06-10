@@ -1,6 +1,7 @@
 package com.uns.ftn.catalogservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.catalogservice.client.VehicleClient;
 import com.uns.ftn.catalogservice.components.QueueProducer;
 import com.uns.ftn.catalogservice.domain.VehicleClass;
 import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
@@ -23,11 +24,14 @@ public class VehicleClassService {
 
     private VehicleClassRepository vehicleClassRepository;
     private QueueProducer queueProducer;
+    private VehicleClient vehicleClient;
 
     @Autowired
-    public VehicleClassService(VehicleClassRepository vehicleClassRepository, QueueProducer queueProducer) {
+    public VehicleClassService(VehicleClassRepository vehicleClassRepository, QueueProducer queueProducer,
+                               VehicleClient vehicleClient) {
         this.vehicleClassRepository = vehicleClassRepository;
         this.queueProducer = queueProducer;
+        this.vehicleClient = vehicleClient;
     }
 
     public VehicleClass save(VehicleClass vehicleClass) { return vehicleClassRepository.save(vehicleClass); }
@@ -39,7 +43,9 @@ public class VehicleClassService {
 
     public List<VehicleClass> findAll() { return vehicleClassRepository.findAll(); }
 
-    public VehicleClass findOne(String name) { return vehicleClassRepository.findByName(name); }
+    public VehicleClass findByName(String name) {
+        return vehicleClassRepository.findByName(name);
+    }
 
     public Set<VehicleClassDTO> getAllVehicleClasses() {
         List<VehicleClass> vehicleClassList = vehicleClassRepository.findAllByDeleted(false);
@@ -52,11 +58,19 @@ public class VehicleClassService {
 
     public ResponseEntity<?> newVehicleClass(VehicleClassDTO vehicleClassDTO) {
 
-        if(!validatePostingData(vehicleClassDTO)) {
+        if (!validatePostingData(vehicleClassDTO)) {
             throw new BadRequestException("Invalid format of vehicle class name. Please try again with valid input.");
         }
 
         vehicleClassDTO.setName(Encode.forHtml(vehicleClassDTO.getName()));
+
+        if (findByName(vehicleClassDTO.getName()) != null) {
+            if (findByName(vehicleClassDTO.getName()).getDeleted()) {
+                findByName(vehicleClassDTO.getName()).setDeleted(false);
+                save(findByName(vehicleClassDTO.getName()));
+                return new ResponseEntity<>(new VehicleClassDTO(findByName(vehicleClassDTO.getName())), HttpStatus.CREATED);
+            }
+        }
 
         VehicleClass vehicleClass = new VehicleClass();
         vehicleClass.setName(vehicleClassDTO.getName());
@@ -96,6 +110,9 @@ public class VehicleClassService {
 
     public ResponseEntity<?> deleteVehicleClass(Long id) {
         VehicleClass vehicleClass = findOne(id);
+        if (!this.vehicleClient.checkIfClassIsTaken(id)) {
+            throw new BadRequestException("Class cannot be deleted because it is still used by some vehicles.");
+        }
         vehicleClass.setDeleted(true);
         vehicleClass = save(vehicleClass);
 
@@ -103,7 +120,7 @@ public class VehicleClassService {
     }
 
     private Boolean validatePostingData(VehicleClassDTO vehicleClassDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\-\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         return vehicleClassDTO.getName() != null

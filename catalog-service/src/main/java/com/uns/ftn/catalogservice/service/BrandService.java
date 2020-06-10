@@ -59,6 +59,14 @@ public class BrandService {
 
         brandDTO.setName(Encode.forHtml(brandDTO.getName()));
 
+        if (findByName(brandDTO.getName()) != null) {
+            if (findByName(brandDTO.getName()).getDeleted()) {
+                findByName(brandDTO.getName()).setDeleted(false);
+                save(findByName(brandDTO.getName()));
+                return new ResponseEntity<>(new BrandDTO(findByName(brandDTO.getName())), HttpStatus.CREATED);
+            }
+        }
+
         Brand brand = new Brand();
         brand.setName(brandDTO.getName());
 
@@ -107,7 +115,7 @@ public class BrandService {
 
     private Boolean validatePostingData(BrandDTO brandDTO) {
         String regex =
-                "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\-\\s?]+)$";
+                "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         return brandDTO.getName() != null && !brandDTO.getName().trim().equals("") &&

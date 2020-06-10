@@ -1,9 +1,8 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.uns.ftn.catalogservice.client.VehicleClient;
 import com.uns.ftn.catalogservice.components.QueueProducer;
-import com.uns.ftn.catalogservice.domain.FuelType;
 import com.uns.ftn.catalogservice.domain.GearboxType;
-import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
 import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
 import com.uns.ftn.catalogservice.exceptions.BadRequestException;
 import com.uns.ftn.catalogservice.exceptions.NotFoundException;
@@ -28,6 +27,9 @@ public class GearboxTypeService {
 
     @Autowired
     private QueueProducer queueProducer;
+
+    @Autowired
+    private VehicleClient vehicleClient;
 
     public GearboxType save(GearboxType gbt) {
         return gearboxRepo.save(gbt);
@@ -64,14 +66,21 @@ public class GearboxTypeService {
         // data sanitization
         gbtDTO.setName(Encode.forHtml(gbtDTO.getName()));
 
+        if (findByName(gbtDTO.getName()) != null) {
+            if (findByName(gbtDTO.getName()).getDeleted()) {
+                findByName(gbtDTO.getName()).setDeleted(false);
+                save(findByName(gbtDTO.getName()));
+                return new ResponseEntity<>(new GearboxTypeDTO(findByName(gbtDTO.getName())), HttpStatus.CREATED);
+            }
+        }
+
         GearboxType gbt = new GearboxType();
         gbt.setName(gbtDTO.getName());
 
         try {
             gbt = save(gbt);
             queueProducer.produceGearboxType(new GearboxTypeDTO(gbt.getId(), gbt.getName(), gbt.getDeleted()));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new BadRequestException("Gearbox type with requested name already exists.");
         }
 
@@ -103,6 +112,9 @@ public class GearboxTypeService {
     */
     public ResponseEntity<?> deleteGearboxType(Long id) {
         GearboxType gbt = findOne(id);
+        if (!vehicleClient.checkIfGearboxIsTaken(id)) {
+            throw new BadRequestException("Gearbox type cannot be deleted because it is still used by some vehicles.");
+        }
         gbt.setDeleted(true);
         gbt = save(gbt);
 
@@ -113,7 +125,7 @@ public class GearboxTypeService {
     * Returns TRUE if gearbox posting data is valid, else returns FALSE.
     */
     private Boolean validatePostingData(GearboxTypeDTO gbtDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\-\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         return gbtDTO.getName() != null && !gbtDTO.getName().trim().equals("") &&

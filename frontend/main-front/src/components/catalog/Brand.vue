@@ -8,7 +8,7 @@
 			md-confirm-text="Add"
 			@md-confirm="addBrand(form)"
 		/>
-
+		
 		<md-dialog-prompt
 			:md-active.sync="editMode"
 			v-model="form.name"
@@ -49,6 +49,7 @@
 
 <script>
 import { mapGetters, mapAction, mapActions } from "vuex";
+
 export default {
 	data() {
 		return {
@@ -82,7 +83,6 @@ export default {
 			this.form.id = undefined;
 			this.form.name = undefined;
 		},
-
 		f(s) {
 			alert(s);
 		},
