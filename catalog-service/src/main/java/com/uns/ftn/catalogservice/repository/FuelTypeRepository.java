@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface FuelTypeRepository extends JpaRepository<FuelType, Long> {
     List<FuelType> findAllByDeleted(Boolean deleted);
+
+    FuelType findByName(String name);
 }

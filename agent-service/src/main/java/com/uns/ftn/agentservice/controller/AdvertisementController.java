@@ -1,13 +1,9 @@
 package com.uns.ftn.agentservice.controller;
 
-import com.netflix.discovery.converters.Auto;
-import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,14 +33,36 @@ public class AdvertisementController {
     }
 
     @GetMapping("/{id}/comment")
-    public ResponseEntity<?> getAllComments(@PathVariable ("id") Long id) {
+    public ResponseEntity<?> getAllComments(@PathVariable("id") Long id) {
         return null;
     }
 
     @GetMapping("/{id}/comment/{comId}")
-    public ResponseEntity<?> getComment(@PathVariable ("id") Long adId, @PathVariable ("comId") Long id) {
+    public ResponseEntity<?> getComment(@PathVariable("id") Long adId, @PathVariable("comId") Long id) {
         return null;
     }
+
+    /* START: Endpoints for checking when deleting catalog item. */
+    @GetMapping("/modelCheck/{id}")
+    public ResponseEntity<?> checkAdsForModel(@PathVariable Long id) {
+        return adService.checkForModel(id);
+    }
+
+    @GetMapping("/gearboxCheck/{id}")
+    public ResponseEntity<?> checkAdsForGearbox(@PathVariable Long id) {
+        return adService.checkForGearbox(id);
+    }
+
+    @GetMapping("/fuelCheck/{id}")
+    public ResponseEntity<?> checkAdsForFuel(@PathVariable Long id) {
+        return adService.checkForFuel(id);
+    }
+
+    @GetMapping("/classCheck/{id}")
+    public ResponseEntity<?> checkAdsForClass(@PathVariable Long id) {
+        return adService.checkForClass(id);
+    }
+    /* END: Endpoints for checking when deleting catalog item. */
 
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody AdvertisementDTO adDTO) {
@@ -52,7 +70,7 @@ public class AdvertisementController {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<?> postComment(@PathVariable ("id") Long id) {
+    public ResponseEntity<?> postComment(@PathVariable("id") Long id) {
         return null;
     }
 

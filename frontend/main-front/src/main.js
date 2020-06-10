@@ -11,8 +11,8 @@ import store from "./store";
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 
-Vue.use(VueMaterial);
 
+Vue.use(VueMaterial);
 Vue.use(VueResource);
 
 axios.defaults.baseURL = "http://localhost:8089";

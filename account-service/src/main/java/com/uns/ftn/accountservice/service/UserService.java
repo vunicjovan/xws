@@ -59,10 +59,12 @@ public class UserService {
 
     public UserDTO registerUser(UserDTO userDTO) {
 
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
-        Pattern pattern = Pattern.compile(regex);
+        String regexNames = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
+        String regexPass = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W+)([a-zA-Z0-9!?#\\s?]+)$";
+        Pattern patternNames = Pattern.compile(regexNames);
+        Pattern patternPass = Pattern.compile(regexPass);
 
-        if (!validateUser(userDTO, pattern)) {
+        if (!validateUser(userDTO, patternNames, patternPass)) {
             throw new BadRequestException("Given data is not well formed!");
         }
 
@@ -96,7 +98,7 @@ public class UserService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W+)([a-zA-Z0-9!?#\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         if (!validateLoginData(authenticationRequest.getEmail(), authenticationRequest.getPassword(), pattern)) {
@@ -173,25 +175,25 @@ public class UserService {
     public void createSimpleUserRollback(Long userId) {
         System.out.println("TREBA ISPISATI FUNKCIJU ZA ROLLBACK MOMCI");
     }
-  
+
     /*
-    * Checks if there is mismatch against given regex in any of String attributes of User, which are received from
-    * client through DTO. It also checks if attributes are existing.
-    * Returns TRUE if given DTO is valid, else returns FALSE.
-    */
-    private Boolean validateUser(UserDTO userDTO, Pattern pattern) {
+     * Checks if there is mismatch against given regex in any of String attributes of User, which are received from
+     * client through DTO. It also checks if attributes are existing.
+     * Returns TRUE if given DTO is valid, else returns FALSE.
+     */
+    private Boolean validateUser(UserDTO userDTO, Pattern patternNames, Pattern patternPass) {
         if (userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null ||
-            userDTO.getPassword() == null || userDTO.getRepeatPassword() == null ||
-            userDTO.getFirstName().trim().equals("") || userDTO.getLastName().trim().equals("") ||
-            userDTO.getEmail().trim().equals("") || userDTO.getPassword().trim().equals("") ||
-            userDTO.getRepeatPassword().trim().equals("") || userDTO.getFirstName().length() < 3 ||
-            userDTO.getLastName().length() < 3 || userDTO.getPassword().length() < 8 ||
-            userDTO.getRepeatPassword().length() < 8 || !userDTO.getRepeatPassword().equals(userDTO.getPassword()) ||
-            (userDTO.getEmail().trim().split("@").length <= 1) ||
-            !pattern.matcher(userDTO.getFirstName().trim()).matches() ||
-            !pattern.matcher(userDTO.getLastName().trim()).matches() ||
-            !pattern.matcher(userDTO.getPassword().trim()).matches() ||
-            !pattern.matcher(userDTO.getRepeatPassword().trim()).matches()) {
+                userDTO.getPassword() == null || userDTO.getRepeatPassword() == null ||
+                userDTO.getFirstName().trim().equals("") || userDTO.getLastName().trim().equals("") ||
+                userDTO.getEmail().trim().equals("") || userDTO.getPassword().trim().equals("") ||
+                userDTO.getRepeatPassword().trim().equals("") || userDTO.getFirstName().length() < 3 ||
+                userDTO.getLastName().length() < 3 || userDTO.getPassword().length() < 10 ||
+                userDTO.getRepeatPassword().length() < 10 || !userDTO.getRepeatPassword().equals(userDTO.getPassword()) ||
+                (userDTO.getEmail().trim().split("@").length <= 1) ||
+                !patternNames.matcher(userDTO.getFirstName().trim()).matches() ||
+                !patternNames.matcher(userDTO.getLastName().trim()).matches() ||
+                !patternPass.matcher(userDTO.getPassword().trim()).matches() ||
+                !patternPass.matcher(userDTO.getRepeatPassword().trim()).matches()) {
             return false;
         }
 
@@ -203,8 +205,8 @@ public class UserService {
     */
     private Boolean validateLoginData(String email, String password, Pattern pattern) {
         if (email == null || password == null || email.trim().equals("") || password.trim().equals("") ||
-            (email.trim().split("@").length <= 1) || password.length() < 8 ||
-            !pattern.matcher(password.trim()).matches()) {
+                (email.trim().split("@").length <= 1) || password.length() < 10 ||
+                !pattern.matcher(password.trim()).matches()) {
             return false;
         }
 

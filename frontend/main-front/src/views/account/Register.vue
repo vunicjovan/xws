@@ -12,8 +12,8 @@
 								<label for="first-name">First name</label>
 								<md-input type="text" name="first-name" id="first-name" v-model="form.firstName" :disabled="sending" />
 								<span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
+								<span class="md-error" v-else-if="!$v.form.firstName.lrx">Name should contain only capital words</span>
 								<span class="md-error" v-else-if="!$v.form.firstName.minlength">First name must have at least 3 characters</span>
-								<span class="md-error" v-else-if="!$v.form.firstName.sqli">Invalid name format</span>
 							</md-field>
 						</div>
 						<div class="md-layout-item md-small-size-100">
@@ -21,8 +21,8 @@
 								<label for="last-name">Last name</label>
 								<md-input type="text" name="last-name" id="last-name" v-model="form.lastName" :disabled="sending" />
 								<span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
+								<span class="md-error" v-else-if="!$v.form.lastName.lrx">Surname should contain only capital words</span>
 								<span class="md-error" v-else-if="!$v.form.lastName.minlength">Last name must have at least 3 characters</span>
-								<span class="md-error" v-else-if="!$v.form.lastName.sqli">Invalid name format</span>
 							</md-field>
 						</div>
 						<div class="md-layout-item md-small-size-100">
@@ -38,8 +38,8 @@
 								<label for="first-name">Password</label>
 								<md-input type="password" name="password" id="password" v-model="form.password" :disabled="sending" />
 								<span class="md-error" v-if="!$v.form.password.required">Password is required</span>
-								<span class="md-error" v-else-if="!$v.form.password.alpha">Invalid password format</span>
-								<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 8 characters</span>
+								<span class="md-error" v-else-if="!$v.form.password.sqli">At least 1: capital letter, digit and special character (#!?)</span>
+								<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 10 characters</span>
 							</md-field>
 						</div>
 						<div class="md-layout-item md-small-size-100">
@@ -47,8 +47,8 @@
 								<label for="first-name">Repeat Password</label>
 								<md-input type="password" name="password" id="password-repeat" v-model="form.repeatPassword" :disabled="sending" />
 								<span class="md-error" v-if="!$v.form.repeatPassword.required">Password is required</span>
-								<span class="md-error" v-else-if="!$v.form.repeatPassword.alpha">Invalid password format</span>
-								<span class="md-error" v-else-if="!$v.form.repeatPassword.minLength">Password requires at least 8 characters</span>
+								<span class="md-error" v-else-if="!$v.form.repeatPassword.sqli">At least 1: capital letter, digit and special character (#!?)</span>
+								<span class="md-error" v-else-if="!$v.form.repeatPassword.minLength">Password requires at least 10 characters</span>
 							</md-field>
 						</div>
 						<div class="md-layout-item md-small-size-100">
@@ -72,7 +72,8 @@ import { required, minLength, email } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
 import { mapActions } from "vuex";
 import axios from "axios";
-const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\!\\?\\#\s?]+)$/);
+const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\W+)([a-zA-Z0-9!?#\s?]+)$/);
+const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {
 	name: "Register",
@@ -147,12 +148,12 @@ export default {
 		form: {
 			firstName: {
 				required,
+				lrx,
 				minLength: minLength(3),
-				sqli,
 			},
 			lastName: {
 				required,
-				sqli,
+				lrx,
 				minLength: minLength(3),
 			},
 			email: {
@@ -162,12 +163,12 @@ export default {
 			password: {
 				required,
 				sqli,
-				minLength: minLength(8),
+				minLength: minLength(10),
 			},
 			repeatPassword: {
 				required,
 				sqli,
-				minLength: minLength(8),
+				minLength: minLength(10),
 			},
 		},
 	},

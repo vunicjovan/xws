@@ -1,6 +1,7 @@
 package com.uns.ftn.catalogservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.catalogservice.client.VehicleClient;
 import com.uns.ftn.catalogservice.components.QueueProducer;
 import com.uns.ftn.catalogservice.domain.FuelType;
 import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
@@ -26,6 +27,9 @@ public class FuelTypeService {
     @Autowired
     QueueProducer queueProducer;
 
+    @Autowired
+    private VehicleClient vehicleClient;
+
     public FuelType findOne(Long id) {
         return fuelTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("Requested fuel type does not exist."));
     }
@@ -37,9 +41,21 @@ public class FuelTypeService {
                 .map(fuelType -> new FuelTypeDTO(fuelType.getId(), fuelType.getName())).collect(Collectors.toSet());
     }
 
+    public FuelType findByName(String name) {
+        return fuelTypeRepository.findByName(name);
+    }
+
     public FuelTypeDTO addFuelType(FuelTypeDTO fuelTypeDTO) {
 
         fuelTypeDTO.setName(validateAndSanitize(fuelTypeDTO.getName()));
+
+        if (findByName(fuelTypeDTO.getName()) != null) {
+            if (findByName(fuelTypeDTO.getName()).getDeleted()) {
+                findByName(fuelTypeDTO.getName()).setDeleted(false);
+                fuelTypeRepository.save(findByName(fuelTypeDTO.getName()));
+                return new FuelTypeDTO(findByName(fuelTypeDTO.getName()));
+            }
+        }
 
         FuelType fuelType;
 
@@ -85,6 +101,10 @@ public class FuelTypeService {
         FuelType fuelType = fuelTypeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Fuel type with that id does not exist!"));
 
+        if (!vehicleClient.checkIfFuelIsTaken(id)) {
+            throw new BadRequestException("Fuel type cannot be deleted because it is still used by some vehicles.");
+        }
+
         fuelType.setDeleted(true);
         fuelType = fuelTypeRepository.save(fuelType);
 
@@ -98,7 +118,7 @@ public class FuelTypeService {
     }
 
     private String validateAndSanitize(String name) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE)([a-zA-Z0-9\\\\!\\\\?\\\\#\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         if (name == null || name.isEmpty() || !pattern.matcher(name.trim()).matches()) {

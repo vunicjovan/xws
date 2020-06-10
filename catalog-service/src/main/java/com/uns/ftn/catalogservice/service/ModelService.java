@@ -1,5 +1,6 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.uns.ftn.catalogservice.client.VehicleClient;
 import com.uns.ftn.catalogservice.domain.Brand;
 import com.uns.ftn.catalogservice.domain.Model;
 import com.uns.ftn.catalogservice.dto.ModelDTO;
@@ -19,13 +20,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ModelService {
+
     private ModelRepository modelRepository;
     private BrandService brandService;
+    private VehicleClient vehicleClient;
 
     @Autowired
-    public ModelService(ModelRepository modelRepository, BrandService brandService) {
+    public ModelService(ModelRepository modelRepository, BrandService brandService, VehicleClient vehicleClient) {
         this.modelRepository = modelRepository;
         this.brandService = brandService;
+        this.vehicleClient = vehicleClient;
     }
 
     public Model save(Model model) {
@@ -41,7 +45,7 @@ public class ModelService {
         return modelRepository.findAll();
     }
 
-    public Model findOne(String name) {
+    public Model findByName(String name) {
         return modelRepository.findByName(name);
     }
 
@@ -62,6 +66,14 @@ public class ModelService {
 
         modelDTO.setName(Encode.forHtml(modelDTO.getName()));
         Brand brand = brandService.findOne(brandId);
+
+        if (findByName(modelDTO.getName()) != null) {
+            if (findByName(modelDTO.getName()).getDeleted()) {
+                findByName(modelDTO.getName()).setDeleted(false);
+                save(findByName(modelDTO.getName()));
+                return new ResponseEntity<>(new ModelDTO(findByName(modelDTO.getName())), HttpStatus.CREATED);
+            }
+        }
 
         if (modelRepository.findByNameAndBrand(modelDTO.getName(), brand) != null) {
             throw new BadRequestException("Model with requested name for specified brand already exist.");
@@ -104,6 +116,9 @@ public class ModelService {
         if (model == null) {
             throw new BadRequestException("Model with specified brand does not exist.");
         }
+        if (!this.vehicleClient.checkIfModelIsTaken(id)) {
+            throw new BadRequestException("Model cannot be deleted because it is still used by some vehicles.");
+        }
         model.setDeleted(true);
         model = save(model);
 
@@ -111,7 +126,7 @@ public class ModelService {
     }
 
     private Boolean validatePostingData(ModelDTO modelDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9\\-\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         return modelDTO.getName() != null
