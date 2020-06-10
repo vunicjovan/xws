@@ -22,4 +22,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	changePassword(passwordSet) {
+		return axios.put("/account/password/", passwordSet).then((response) => {
+			return response.data;
+		});
+	},
 };

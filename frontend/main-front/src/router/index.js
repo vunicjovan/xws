@@ -8,6 +8,7 @@ import AdvertismentForm from "../components/forms/AdvertismentForm.vue";
 import DetailedView from "../views/advertisement/DetailedView.vue";
 import Cart from "../views/Cart.vue";
 import SimpleUsers from "../views/SimpleUsers.vue";
+import ChangePassword from "../views/account/ChangePassword.vue"
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes = [
 		path: "/users",
 		name: "SimpleUsers",
 		component: SimpleUsers
+	},
+	{
+		path: "/password",
+		name: "ChangePassword",
+		component: ChangePassword
 	}
 ];
 
