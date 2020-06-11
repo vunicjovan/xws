@@ -5,7 +5,9 @@ import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.Agent;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.dto.AgentRegisterDTO;
 import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
+import com.uns.ftn.accountservice.dto.UnregisteredAgentDTO;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
@@ -28,7 +30,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -63,6 +67,11 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+    public void delete(Long id) { userRepository.deleteById(id); }
+
+    public User findOne(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("User with provided id does not exist.")); }
 
     public UserDTO registerUser(UserDTO userDTO) {
 
@@ -151,6 +160,11 @@ public class UserService {
 
     private void checkIfBlockedOrDeleted(String email) {
         User myUser = getByMail(email);
+
+        if (!myUser.getEnabled()) {
+            throw new BadRequestException("You must enable your account before login. Please verify and try again.");
+        }
+
         SimpleUser simpleUser = getByUser(myUser);
         if (simpleUser != null) {
             if (simpleUser.getBlocked()) {
@@ -205,6 +219,36 @@ public class UserService {
         user = save(user);
 
         return new ResponseEntity<>("Successfully changed password for user with username " + user.getEmail() + ".", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getUnregisteredAgents() {
+        List<Agent> agents = agentRepository.findAll();
+        return new ResponseEntity<>(
+                agents.stream()
+                        .filter(agent -> agent.getUser().getEnabled().equals(false))
+                        .map(agent -> new UnregisteredAgentDTO(agent.getUser().getId(),
+                                agent.getUser().getFirstName(),
+                                agent.getUser().getLastName()))
+                        .collect(Collectors.toList()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> registerAgent(AgentRegisterDTO agnRegDTO) {
+        User user = findOne(agnRegDTO.getId());
+        if(user.getEnabled()) {
+            throw new BadRequestException("User already registered and verified!");
+        }
+        if(agnRegDTO.getAccepted()) {
+            user.setEnabled(true);
+            save(user);
+            //TODO 1.1 Send confirmation email to the agent.
+        }
+        else {
+            //TODO 1.2 Send notification email about rejecting to the agent.
+            delete(agnRegDTO.getId());
+            return new ResponseEntity<>("User successfully deleted", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(agnRegDTO, HttpStatus.OK);
     }
 
     private void validateAndSanitizePasswordData(PasswordChangeDTO pcDTO) {
