@@ -2,6 +2,7 @@ package com.uns.ftn.accountservice.controller;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.dto.AgentRegisterDTO;
 import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.dto.UserResponseDTO;
@@ -61,6 +62,11 @@ public class AccountController {
         return new ResponseEntity<>(jwtUtil.validateToken(token), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/unregistered", produces = "application/json")
+    public ResponseEntity<?> getUnregisteredAgents() {
+        return userService.getUnregisteredAgents();
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
         return new ResponseEntity<>(userService.login(authenticationRequest), HttpStatus.ACCEPTED);
@@ -86,6 +92,11 @@ public class AccountController {
     @PutMapping(value = "/changePassword", consumes = "application/json")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO pcDTO) {
         return userService.changePassword(pcDTO);
+    }
+
+    @PutMapping(value = "/registerAgent", consumes = "application/json")
+    public ResponseEntity<?> registerAgent(@RequestBody AgentRegisterDTO agnRegDTO) {
+        return userService.registerAgent(agnRegDTO);
     }
 
     //@PreAuthorize("hasAuthority('delete')")
