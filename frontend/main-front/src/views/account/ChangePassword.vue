@@ -7,12 +7,12 @@
               </md-card-header>
               <md-card-content>
                   <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('currentPassword')">
-                          <label for="currentPassword">Current password</label>
-                          <md-input id="currentPassword" name="currentPassword" type="password" v-model="form.currentPassword" />
-                          <span class="md-error" v-if="!$v.form.currentPassword.required">Password is required</span>
-                          <span class="md-error" v-else-if="!$v.form.currentPassword.alpha">Invalid password format</span>
-                          <span class="md-error" v-else-if="!$v.form.currentPassword.minLength">Password requires at least 10 characters</span>
+                      <md-field :class="getValidationClass('oldPassword')">
+                          <label for="oldPassword">Current password</label>
+                          <md-input id="oldPassword" name="oldPassword" type="password" v-model="form.oldPassword" />
+                          <span class="md-error" v-if="!$v.form.oldPassword.required">Password is required</span>
+                          <span class="md-error" v-else-if="!$v.form.oldPassword.alpha">Invalid password format</span>
+                          <span class="md-error" v-else-if="!$v.form.oldPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
                   <div class="md-layout-item md-small-size-100">
@@ -25,12 +25,12 @@
                       </md-field>
                   </div>
                   <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('newRepeatPassword')">
-                          <label for="newRepeatPassword">New password</label>
-                          <md-input id="newRepeatPassword" name="newRepeatPassword" type="password" v-model="form.newRepeatPassword" />
-                          <span class="md-error" v-if="!$v.form.newRepeatPassword.required">Password is required</span>
-                          <span class="md-error" v-else-if="!$v.form.newRepeatPassword.alpha">Invalid password format</span>
-                          <span class="md-error" v-else-if="!$v.form.newRepeatPassword.minLength">Password requires at least 10 characters</span>
+                      <md-field :class="getValidationClass('newPasswordRetype')">
+                          <label for="newPasswordRetype">New password</label>
+                          <md-input id="newPasswordRetype" name="newPasswordRetype" type="password" v-model="form.newPasswordRetype" />
+                          <span class="md-error" v-if="!$v.form.newPasswordRetype.required">Password is required</span>
+                          <span class="md-error" v-else-if="!$v.form.newPasswordRetype.alpha">Invalid password format</span>
+                          <span class="md-error" v-else-if="!$v.form.newPasswordRetype.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
               </md-card-content>
@@ -54,9 +54,9 @@ export default {
     data() {
         return {
             form: {
-                currentPassword: undefined,
+                oldPassword: undefined,
                 newPassword: undefined,
-                newRepeatPassword: undefined,
+                newPasswordRetype: undefined,
             }
         }
     },
@@ -74,13 +74,18 @@ export default {
 			this.$v.$touch();
 
 			if (!this.$v.$invalid) {
-				alert('Under construction')
+				this.$store
+				.dispatch("changePassword", this.form)
+				.then(() => {
+				    this.$router.push("/")
+				})
+				.catch((error) => console.log(error));
 			}
 		},
     },
     validations: {
         form: {
-            currentPassword: {
+            oldPassword: {
 				required,
 				sqli,
 				minLength: minLength(10),
@@ -90,7 +95,7 @@ export default {
 				sqli,
 				minLength: minLength(10),
 			},
-			newRepeatPassword: {
+			newPasswordRetype: {
 				required,
 				sqli,
 				minLength: minLength(10),

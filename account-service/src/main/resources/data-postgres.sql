@@ -3,9 +3,9 @@
 -- noinspection SqlNoDataSourceInspectionForFile
 
 -- Users
-insert into users (first_name, last_name, email, password, enabled, deleted) values ('Richard', 'Hendricks', 'admin@soul.com', '$2a$10$R4KtI.gPRqYv3C2YAI.Fv.lDGjQMxGJPnzyqOcTKw23bKVkVguAVS', true, false)
-insert into users (first_name, last_name, email, password, enabled, deleted) values ('Russ', 'Hanneman', 'agent@soul.com', '$2a$10$br1I6SY4.QlAabOd3juw5.16R7eL2olnU8vl9QiMIB2.L8sZIJzo2', true, false)
-insert into users (first_name, last_name, email, password, enabled, deleted) values ('Jared', 'Dunn', 'user@soul.com', '$2a$10$CUWHTtIHSnEfgQE2ysgeIuAgtBZrBt9IKDF6dCLk9ri4VRvbUlUMm', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Richard', 'Hendricks', 'admin@soul.com', '$2y$10$R/LdCKwv38VfUAMuTFH/GOPi3PYHOiYwAUELhptoOHrf0XPMmTdoG', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Russ', 'Hanneman', 'agent@soul.com', '$2y$10$RfARh5QRZOaPEiae9l/lW.X5OGp54jupb1ShrnOltBRiE0eImx6eC', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Jared', 'Dunn', 'user@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
 
 -- Simple user
 insert into simple_user (blocked, number_of_ads, number_of_cancelations, user_id) values (false, 0, 0, 3)
