@@ -5,6 +5,7 @@ import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.Agent;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
@@ -20,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,10 @@ public class UserService {
 
     @Inject
     private transient CommandGateway commandGateway;
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 
     public UserDTO registerUser(UserDTO userDTO) {
 
@@ -167,13 +174,69 @@ public class UserService {
 
     public String getAdvertisementOwner(Long id) {
         User user = userRepository.findById(id)
-                                .orElseThrow(() -> new NotFoundException("Owner with given id does not exist!"));
+                .orElseThrow(() -> new NotFoundException("Owner with given id does not exist!"));
 
         return user.getFirstName() + " " + user.getLastName();
     }
 
     public void createSimpleUserRollback(Long userId) {
         System.out.println("TREBA ISPISATI FUNKCIJU ZA ROLLBACK MOMCI");
+    }
+
+    public ResponseEntity<?> changePassword(PasswordChangeDTO pcDTO) {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = currentUser.getName();
+
+        // validate and sanitize password data
+        validateAndSanitizePasswordData(pcDTO);
+
+        if (authenticationManager != null) {
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, pcDTO.getOldPassword()));
+            } catch (Exception e) {
+                throw new BadRequestException("Invalid username or password. User cannot be authenticated.");
+            }
+        } else {
+            throw new BadRequestException("Authentication manager is invalid or not working.");
+        }
+
+        User user = findByUsername(username);
+        user.setPassword(passwordEncoder.encode(pcDTO.getNewPassword()));
+        user = save(user);
+
+        return new ResponseEntity<>("Successfully changed password for user with username " + user.getEmail() + ".", HttpStatus.OK);
+    }
+
+    private void validateAndSanitizePasswordData(PasswordChangeDTO pcDTO) {
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W+)([a-zA-Z0-9!?#\\s?]+)$";
+        Pattern pattern = Pattern.compile(regex);
+
+        if (pcDTO.getOldPassword() == null || pcDTO.getOldPassword().trim().equals("") ||
+                pcDTO.getNewPassword() == null || pcDTO.getNewPassword().trim().equals("") ||
+                pcDTO.getNewPasswordRetype() == null || pcDTO.getNewPasswordRetype().trim().equals("") ||
+                !pattern.matcher(pcDTO.getOldPassword().trim()).matches() ||
+                !pattern.matcher(pcDTO.getNewPassword().trim()).matches() ||
+                !pattern.matcher(pcDTO.getNewPasswordRetype().trim()).matches() ||
+                pcDTO.getOldPassword().trim().length() < 10 ||
+                pcDTO.getNewPassword().trim().length() < 10 ||
+                pcDTO.getNewPasswordRetype().trim().length() < 10) {
+            throw new BadRequestException("Entered data is either corrupted or invalid. Please try again with valid data.");
+        } else if (!pcDTO.getNewPassword().equals(pcDTO.getNewPasswordRetype())) {
+            throw new BadRequestException("New password is not repeated correctly. Please try again.");
+        }
+
+        pcDTO.setOldPassword(Encode.forHtml(pcDTO.getOldPassword().trim()));
+        pcDTO.setNewPassword(Encode.forHtml(pcDTO.getNewPassword().trim()));
+        pcDTO.setNewPasswordRetype(Encode.forHtml(pcDTO.getNewPasswordRetype().trim()));
+    }
+
+    private User findByUsername(String username) {
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new NotFoundException("User does not exist.");
+        }
+
+        return user;
     }
 
     /*

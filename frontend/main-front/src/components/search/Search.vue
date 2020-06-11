@@ -1,6 +1,9 @@
 <template>
 	<div>
-		<md-button @click="showSearchDialog = true">Search</md-button>
+		<md-button @click="showSearchDialog = true">
+			<i class="fas fa-search fa-2x"></i>
+			<md-tooltip>Search advertisements</md-tooltip>
+		</md-button>
 		<md-dialog @md-opened="openSearchDialog()" :md-active.sync="showSearchDialog">
 			<md-dialog-title>Search</md-dialog-title>
 
