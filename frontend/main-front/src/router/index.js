@@ -10,6 +10,7 @@ import Cart from "../views/Cart.vue";
 import SimpleUsers from "../views/SimpleUsers.vue";
 import Chat from "../views/chat/Chat.vue";
 import UnpublishedComments from "../components/comments/UnpublishedComments.vue";
+import ChangePassword from "../views/account/ChangePassword.vue"
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,11 @@ const routes = [
 		path: "/unpublishedComments",
 		name: "UnpublishedComments",
 		component: UnpublishedComments
+  },
+  {
+		path: "/password",
+		name: "ChangePassword",
+		component: ChangePassword
 	}
 ];
 

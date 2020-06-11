@@ -33,6 +33,7 @@
 				<i class="fas fa-shopping-cart fa-2x"></i>
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
+      <md-button @click.native="$router.push('/password')">Password</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>
 				<md-button md-menu-trigger>
