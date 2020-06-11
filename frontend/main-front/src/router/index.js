@@ -8,6 +8,8 @@ import AdvertismentForm from "../components/forms/AdvertismentForm.vue";
 import DetailedView from "../views/advertisement/DetailedView.vue";
 import Cart from "../views/Cart.vue";
 import SimpleUsers from "../views/SimpleUsers.vue";
+import Chat from "../views/chat/Chat.vue";
+import UnpublishedComments from "../components/comments/UnpublishedComments.vue";
 import ChangePassword from "../views/account/ChangePassword.vue"
 
 Vue.use(VueRouter);
@@ -54,6 +56,16 @@ const routes = [
 		component: SimpleUsers
 	},
 	{
+		path: "/chat",
+		name: "Chat",
+		component: Chat
+	},
+	{
+		path: "/unpublishedComments",
+		name: "UnpublishedComments",
+		component: UnpublishedComments
+  },
+  {
 		path: "/password",
 		name: "ChangePassword",
 		component: ChangePassword

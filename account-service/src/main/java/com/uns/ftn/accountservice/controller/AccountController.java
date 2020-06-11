@@ -2,6 +2,7 @@ package com.uns.ftn.accountservice.controller;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
 import com.uns.ftn.accountservice.dto.UserDTO;
 import com.uns.ftn.accountservice.dto.UserResponseDTO;
 import com.uns.ftn.accountservice.service.JWTUtil;
@@ -47,11 +48,17 @@ public class AccountController {
     public ResponseEntity<?> getLogged(@RequestHeader("username") String username) {
         User user = userService.getByMail(username);
 
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(new UserResponseDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/verify", produces = "application/json")
+    public ResponseEntity<?> verify(@RequestParam(value = "token") String token) {
+        System.out.println("Verification invoked!");
+        return new ResponseEntity<>(jwtUtil.validateToken(token), HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -76,17 +83,15 @@ public class AccountController {
         return simpleService.blockUser(id);
     }
 
+    @PutMapping(value = "/changePassword", consumes = "application/json")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO pcDTO) {
+        return userService.changePassword(pcDTO);
+    }
+
     //@PreAuthorize("hasAuthority('delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return userService.deleteUser(id);
-    }
-
-
-    @GetMapping(value = "/verify", produces = "application/json")
-    public ResponseEntity<?> verify(@RequestParam(value = "token") String token) {
-        System.out.println("Verification invoked!");
-        return new ResponseEntity<>(jwtUtil.validateToken(token), HttpStatus.OK);
     }
 
 }

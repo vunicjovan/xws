@@ -9,14 +9,55 @@
 			</router-link>
 			<div style="flex: 1;"></div>
 			<searchDialog/>
-			<md-button to="/post-ad">Post advertisement</md-button>
-			<md-button to="/catalog">Catalog</md-button>
-			<md-button v-if="!isLogged" @click.native="$router.push('/login')">Login</md-button>
-			<md-button v-if="!isLogged" @click.native="$router.push('/register')">Register</md-button>
-			<md-button to="/users">Users</md-button>
-			<md-button @click.native="$router.push('/password')">Password</md-button>
-			<md-button v-if="isLogged" @click.native="$router.push('/cart')">Cart</md-button>
-			<md-button v-if="isLogged" @click="logout()">Logout</md-button>
+			<md-button to="/post-ad">
+				<i class="fas fa-ad fa-2x"></i>
+				<md-tooltip>Post new advertisement</md-tooltip>
+			</md-button>
+			<md-button to="/chat">
+				<i class="far fa-comments fa-2x"></i>
+				<md-tooltip>RentaSoul Chatbox</md-tooltip>
+			</md-button>
+			<md-button to="/unpublishedComments">
+				<i class="fas fa-comment-medical fa-2x"></i>
+				<md-tooltip>Publish/Reject comments</md-tooltip>
+			</md-button>
+			<md-button to="/catalog">
+				<i class="fas fa-warehouse fa-2x"></i>
+				<md-tooltip>Catalog</md-tooltip>
+			</md-button>
+			<md-button to="/users">
+				<i class="fas fa-address-book fa-2x"></i>
+				<md-tooltip>Active users</md-tooltip>
+			</md-button>
+			<md-button v-if="isLogged" @click.native="$router.push('/cart')">
+				<i class="fas fa-shopping-cart fa-2x"></i>
+				<md-tooltip>Your cart</md-tooltip>
+			</md-button>
+      <md-button @click.native="$router.push('/password')">Password</md-button>
+			<div style="flex: 1;"></div>
+			<md-menu>
+				<md-button md-menu-trigger>
+					<i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
+					<md-tooltip>Account options</md-tooltip>
+				</md-button>
+
+				<md-menu-content>
+					<md-menu-item v-if="!isLogged">
+						<i class="fas fa-sign-in-alt fa-lg"></i>
+						<md-button @click.native="$router.push('/login')">Sign in</md-button>
+					</md-menu-item>
+
+					<md-menu-item v-if="!isLogged">
+						<i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+						<md-button @click.native="$router.push('/register')">Register</md-button>
+					</md-menu-item>
+
+					<md-menu-item v-if="isLogged">
+						<i class="fas fa-sign-out-alt fa-lg"></i>
+						<md-button @click="logout()">Logout</md-button>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
 		</md-toolbar>
 	</div>
 </template>
