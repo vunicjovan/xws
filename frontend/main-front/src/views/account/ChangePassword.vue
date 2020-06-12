@@ -77,7 +77,7 @@ export default {
 				this.$store
 				.dispatch("changePassword", this.form)
 				.then(() => {
-				    this.$router.push("/")
+                    this.$router.push("/")
 				})
 				.catch((error) => console.log(error));
 			}
