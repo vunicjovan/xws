@@ -64,7 +64,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             adminApi
                 .sendRegistrationResponse(registrationResponse)
-                .then((registrationResponse) => {
+                .then((payload) => {
                     commit("setRegistrationResponse", registrationResponse.id);
                     resolve();
                 })

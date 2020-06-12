@@ -61,8 +61,7 @@ export default {
                 "id": reqId,
                 "accepted": false
             }
-            this.sendRegistrationResponse(resp);
-            //this.$store.dispatch("sendRegistrationResponse", resp);
+            this.$store.dispatch("sendRegistrationResponse", resp);
         }
     }
 }
