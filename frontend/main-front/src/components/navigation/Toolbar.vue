@@ -29,11 +29,14 @@
 				<i class="fas fa-address-book fa-2x"></i>
 				<md-tooltip>Active users</md-tooltip>
 			</md-button>
+			<md-button to="/registrationRequests">
+				<i class="fas fa-user-plus fa-2x"></i>
+				<md-tooltip>Agent registration requests</md-tooltip>
+			</md-button>
 			<md-button v-if="isLogged" @click.native="$router.push('/cart')">
 				<i class="fas fa-shopping-cart fa-2x"></i>
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
-      <md-button @click.native="$router.push('/password')">Password</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>
 				<md-button md-menu-trigger>
@@ -45,16 +48,24 @@
 					<md-menu-item v-if="!isLogged">
 						<i class="fas fa-sign-in-alt fa-lg"></i>
 						<md-button @click.native="$router.push('/login')">Sign in</md-button>
+						<div style="flex: 1;"></div>
 					</md-menu-item>
 
 					<md-menu-item v-if="!isLogged">
 						<i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
 						<md-button @click.native="$router.push('/register')">Register</md-button>
+						<div style="flex: 1;"></div>
+					</md-menu-item>
+
+					<md-menu-item v-if="isLogged">
+						<i class="fas fa-key fa-lg" aria-hidden="true"></i>
+						<md-button @click.native="$router.push('/password')">Change password</md-button>
 					</md-menu-item>
 
 					<md-menu-item v-if="isLogged">
 						<i class="fas fa-sign-out-alt fa-lg"></i>
-						<md-button @click="logout()">Logout</md-button>
+						<md-button @click="logout()">Log out</md-button>
+						<div style="flex: 1;"></div>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>

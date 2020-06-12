@@ -27,5 +27,6 @@ export default {
 		return axios.put("/account/changePassword/", passwordSet).then((response) => {
 			return response.data;
 		});
-	},
+	}
+	
 };

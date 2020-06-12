@@ -18,4 +18,16 @@ export default {
 			return response.data;
 		});
 	},
+
+	getUnregisteredAgents() {
+		return axios.get("/account/unregistered/").then((response) => {
+			return response.data;
+		});
+	},
+
+	sendRegistrationResponse(registrationResponse) {
+		return axios.put("/account/registerAgent/", registrationResponse).then((response) => {
+			return response.data;
+		});
+	}
 }

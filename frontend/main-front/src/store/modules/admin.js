@@ -1,11 +1,13 @@
 import adminApi from "@/api/Admin.js"
 
 const state = {
-    simpleUsers: null
+    simpleUsers: null,
+    registrationRequests: null
 };
 
 const getters = {
     getSimpleUsers: (state) => state.simpleUsers,
+    getRegistrationRequests: (state) => state.registrationRequests
 };
 
 const actions = {
@@ -44,6 +46,30 @@ const actions = {
                 })
                 .catch((error) => reject(error))
         })
+    },
+
+    getRegistrationRequests({commit}) {
+        return new Promise((resolve, reject) => {
+            adminApi
+                .getUnregisteredAgents()
+                .then((registrationRequests) => {
+                    commit("setRegistrationRequests", registrationRequests);
+                    resolve(registrationRequests);
+                })
+                .catch((error) => reject(error))
+        });
+    },
+
+    sendRegistrationResponse({commit}, registrationResponse) {
+        return new Promise((resolve, reject) => {
+            adminApi
+                .sendRegistrationResponse(registrationResponse)
+                .then((payload) => {
+                    commit("setRegistrationResponse", registrationResponse.id);
+                    resolve();
+                })
+                .catch((error) => reject(error))
+        });
     }
 
 };
@@ -59,7 +85,11 @@ const mutations = {
     },
     deleteSimpleUser: (state, simpleUserId) => {
         state.simpleUsers = state.simpleUsers.filter((simpleUser) => simpleUser.id != simpleUserId);
-    }
+    },
+    setRegistrationRequests: (state, registrationRequests) => (state.registrationRequests = registrationRequests),
+    setRegistrationResponse: (state, id) => {
+		state.registrationRequests = state.registrationRequests.filter((registrationRequest) => registrationRequest.id != id);
+	},
 };
 
 export default {

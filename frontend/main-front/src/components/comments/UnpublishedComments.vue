@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="somediv">
+        <div class="md-headline">Comments to be published</div>
         <md-list class="md-triple-line md-dense" v-for="comm in comments" v-bind:key="comm.id">
             <md-list-item>
                 <md-avatar>
@@ -111,5 +112,16 @@ export default {
     }
     .some-span {
         padding-right: 2.5%;
+    }
+    .somediv {
+        width: 70%;
+        margin: 0 auto;
+    }
+    .md-headline {
+        width: 50%;
+        margin: 2.5% auto;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        text-align: center;
+        vertical-align: middle;
     }
 </style>
