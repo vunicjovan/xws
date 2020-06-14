@@ -62,16 +62,16 @@
 								<md-checkbox v-model="form.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
 								<md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
 							</div>
+							<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form.kilometersPerDayLimit.$error }">
+								<label for="kilometersPerDayLimit">Limit</label>
+								<md-input v-model="form.kilometersPerDayLimit" type="number" />
+								<span class="md-error" v-if="!$v.form.kilometersPerDayLimit.integer">Kilometers Per Day Limit must be integer</span>
+							</md-field>
 							<md-field :class="{ 'md-invalid': $v.form.location.$error }">
 								<label for="location">Location</label>
 								<md-input v-model="form.location"></md-input>
 								<span class="md-error" v-if="!$v.form.location.required">Location is required</span>
 								<span class="md-error" v-else-if="!$v.form.location.lrx">Location is not in proper format</span>
-							</md-field>
-							<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form.kilometersPerDayLimit.$error }">
-								<label for="kilometersPerDayLimit">Limit</label>
-								<md-input v-model="form.kilometersPerDayLimit" type="number" />
-								<span class="md-error" v-if="!$v.form.kilometersPerDayLimit.integer">Kilometers Per Day Limit must be integer</span>
 							</md-field>
 							<md-field :class="{ 'md-invalid': $v.form.price.$error }">
 								<label for="price">Price</label>

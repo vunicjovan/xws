@@ -5,7 +5,7 @@ import axios from "axios";
 import VueResource from "vue-resource";
 import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
-import "vue-material/dist/theme/default-dark.css";
+import "vue-material/dist/theme/black-green-light.css";
 import store from "./store";
 
 import '@fortawesome/fontawesome-free/css/all.css'

@@ -72,7 +72,7 @@ import "hooper/dist/hooper.css";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 
-import { mapGetters, mapAction, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
 	name: "DetailedView",
 	mixins: [validationMixin],
