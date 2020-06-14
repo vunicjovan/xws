@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters, mapAction, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
     name: "StandardView",
     data: function() {

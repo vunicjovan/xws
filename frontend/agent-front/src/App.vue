@@ -2,9 +2,12 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/postAd">Post advertisement</router-link>
+      <router-link to="/abouta">Chat</router-link>
     </div>
-    <router-view/>
+    <div id="body">
+			<router-view />
+		</div>
   </div>
 </template>
 
@@ -23,10 +26,19 @@
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #486685;
+  padding: 0.75%;
 }
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#body {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	padding: 15px;
+	color: white;
 }
 </style>
