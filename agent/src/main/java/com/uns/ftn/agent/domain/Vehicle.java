@@ -20,7 +20,7 @@ public class Vehicle {
    private Long id;
 
    @Column(name = "km_traveled", nullable = false)
-   private double kilometersTraveled;
+   private int kilometersTraveled;
 
    @Column(name = "child_seats", nullable = false)
    private int childSeatNumber;

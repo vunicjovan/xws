@@ -24,6 +24,9 @@ public class FuelType {
    @Column(name = "name", nullable = false)
    private String name;
 
+   @Column(name = "deleted")
+   private Boolean deleted = false;
+
    @JsonIgnore
    @OneToMany(mappedBy = "fuelType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<Vehicle> vehicles = new HashSet<Vehicle>();

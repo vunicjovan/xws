@@ -27,6 +27,9 @@ public class Model {
    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    private Brand brand;
 
+   @Column(name = "deleted")
+   private Boolean deleted = false;
+
    @JsonIgnore
    @OneToMany(mappedBy = "model", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Vehicle> vehicles = new HashSet<Vehicle>();

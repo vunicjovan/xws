@@ -23,6 +23,9 @@ public class Brand {
    @Column(name = "name", nullable = false)
    private String name;
 
+   @Column(name = "deleted")
+   private Boolean deleted = false;
+
    @JsonIgnore
    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Model> models = new HashSet<Model>();
