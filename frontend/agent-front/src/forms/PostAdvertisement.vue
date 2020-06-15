@@ -1,107 +1,107 @@
 <template>
-    <div>
-        <md-steppers :md-active-step.sync="active" md-linear>
-            <md-step id="first" md-label="First Step" :md-done.sync="first">
-                <form class="md-layout md-alignment-top-center" autocomplete="off">
-                    <md-field :class="{ 'md-invalid': $v.brandId.$error }">
-                        <label for="brand">Brand</label>
-                        <md-select name="brand" v-model="brandId">
-                            <md-option v-for="brand in getBrands" :key="brand.id" :value="brand.id">{{ brand.name }}</md-option>
-                        </md-select>
-                        <span class="md-error" v-if="!$v.brandId.required">Brand is required</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form1.vehicle.modelId.$error }">
-                        <label for="model">Model</label>
-                        <md-select name="model" v-model="form1.vehicle.modelId" :disabled="brandId == undefined">
-                            <div v-for="model in getModels" :key="model.id">
-                                <md-option v-if="model.brand.id == brandId" :value="model.id">{{ model.name }}</md-option>
-                            </div>
-                        </md-select>
-                        <span class="md-error" v-if="!$v.form1.vehicle.modelId.required">Model is required</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form1.vehicle.vehicleClassId.$error }">
-                        <label for="vehicleClass">Vehicle Class</label>
-                        <md-select name="vehicleClass" v-model="form1.vehicle.vehicleClassId">
-                            <md-option v-for="vehicleClass in getVehicleClasses" :key="vehicleClass.id" :value="vehicleClass.id">{{ vehicleClass.name }}</md-option>
-                        </md-select>
-                        <span class="md-error" v-if="!$v.form1.vehicle.vehicleClassId.required">Vehicle Class is required</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form1.vehicle.gearboxTypeId.$error }">
-                        <label for="gearboxType">Gearbox Type</label>
-                        <md-select name="gearboxType" v-model="form1.vehicle.gearboxTypeId">
-                            <md-option v-for="gearboxType in getGearboxTypes" :key="gearboxType.id" :value="gearboxType.id">{{ gearboxType.name }}</md-option>
-                        </md-select>
-                        <span class="md-error" v-if="!$v.form1.vehicle.gearboxTypeId.required">Gearbox Type is required</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form1.vehicle.fuelTypeId.$error }">
-                        <label for="fuelType">Fuel Type</label>
-                        <md-select name="fuelType" v-model="form1.vehicle.fuelTypeId">
-                            <md-option v-for="fuelType in getFuelTypes" :key="fuelType.id" :value="fuelType.id">{{ fuelType.name }}</md-option>
-                        </md-select>
-                        <span class="md-error" v-if="!$v.form1.vehicle.fuelTypeId.required">Fuel Type is required</span>
-                    </md-field>
-                </form>
-                <md-button @click="validateAd1" class="md-raised md-primary">Continue</md-button>
-            </md-step>
+	<div>
+		<md-steppers :md-active-step.sync="active" md-linear>
+			<md-step id="first" md-label="First Step" :md-done.sync="first">
+				<form class="md-layout md-alignment-top-center" autocomplete="off">
+					<md-field :class="{ 'md-invalid': $v.brandId.$error }">
+						<label for="brand">Brand</label>
+						<md-select name="brand" v-model="brandId">
+							<md-option v-for="brand in getBrands" :key="brand.id" :value="brand.id">{{ brand.name }}</md-option>
+						</md-select>
+						<span class="md-error" v-if="!$v.brandId.required">Brand is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form1.vehicle.modelId.$error }">
+						<label for="model">Model</label>
+						<md-select name="model" v-model="form1.vehicle.modelId" :disabled="brandId == undefined">
+							<div v-for="model in getModels" :key="model.id">
+								<md-option v-if="model.brand.id == brandId" :value="model.id">{{ model.name }}</md-option>
+							</div>
+						</md-select>
+						<span class="md-error" v-if="!$v.form1.vehicle.modelId.required">Model is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form1.vehicle.vehicleClassId.$error }">
+						<label for="vehicleClass">Vehicle Class</label>
+						<md-select name="vehicleClass" v-model="form1.vehicle.vehicleClassId">
+							<md-option v-for="vehicleClass in getVehicleClasses" :key="vehicleClass.id" :value="vehicleClass.id">{{ vehicleClass.name }}</md-option>
+						</md-select>
+						<span class="md-error" v-if="!$v.form1.vehicle.vehicleClassId.required">Vehicle Class is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form1.vehicle.gearboxTypeId.$error }">
+						<label for="gearboxType">Gearbox Type</label>
+						<md-select name="gearboxType" v-model="form1.vehicle.gearboxTypeId">
+							<md-option v-for="gearboxType in getGearboxTypes" :key="gearboxType.id" :value="gearboxType.id">{{ gearboxType.name }}</md-option>
+						</md-select>
+						<span class="md-error" v-if="!$v.form1.vehicle.gearboxTypeId.required">Gearbox Type is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form1.vehicle.fuelTypeId.$error }">
+						<label for="fuelType">Fuel Type</label>
+						<md-select name="fuelType" v-model="form1.vehicle.fuelTypeId">
+							<md-option v-for="fuelType in getFuelTypes" :key="fuelType.id" :value="fuelType.id">{{ fuelType.name }}</md-option>
+						</md-select>
+						<span class="md-error" v-if="!$v.form1.vehicle.fuelTypeId.required">Fuel Type is required</span>
+					</md-field>
+				</form>
+				<md-button @click="validateAd1" class="md-raised md-primary">Continue</md-button>
+			</md-step>
 
-            <md-step id="second" md-label="Second Step" :md-done.sync="second">
-                <form class="md-layout md-alignment-top-center" autocomplete="off">
-                    <md-field :class="{ 'md-invalid': $v.form2.vehicle.kilometersTraveled.$error }">
-                        <label for="kilometersTraveled">Kilometers Traveled</label>
-                        <md-input v-model="form2.vehicle.kilometersTraveled" type="number" />
-                        <span class="md-error" v-if="!$v.form2.vehicle.kilometersTraveled.required">Kilometers Traveled is required</span>
-                        <span class="md-error" v-else-if="!$v.form2.vehicle.kilometersTraveled.integer">Fuel Type must be integer</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form2.vehicle.childSeatNumber.$error }">
-                        <label for="childSeatNumber">Childseat Number</label>
-                        <md-input v-model="form2.vehicle.childSeatNumber" type="number" />
-                        <span class="md-error" v-if="!$v.form2.vehicle.childSeatNumber.required">Childseat Number is required</span>
-                        <span class="md-error" v-else-if="!$v.form2.vehicle.childSeatNumber.integer">Childseat Number must be integer</span>
-                    </md-field>
-                    <div>
-                        <md-checkbox v-model="form2.vehicle.hasAndroid" class="md-primary">Has Android</md-checkbox>
-                        <md-checkbox v-model="form2.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
-                        <md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
-                    </div>
-                    <md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form2.kilometersPerDayLimit.$error }">
-                        <label for="kilometersPerDayLimit">Limit</label>
-                        <md-input v-model="form2.kilometersPerDayLimit" type="number" />
-                        <span class="md-error" v-if="!$v.form2.kilometersPerDayLimit.integer">Kilometers Per Day Limit must be integer</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form2.location.$error }">
-                        <label for="location">Location</label>
-                        <md-input v-model="form2.location"></md-input>
-                        <span class="md-error" v-if="!$v.form2.location.required">Location is required</span>
-                        <span class="md-error" v-else-if="!$v.form2.location.lrx">Location is not in proper format</span>
-                    </md-field>
-                    <md-field :class="{ 'md-invalid': $v.form2.price.$error }">
-                        <label for="price">Price</label>
-                        <span class="md-prefix">€</span>
-                        <md-input v-model="form2.price" type="number" step="0.01"></md-input>
-                        <span class="md-error" v-if="!$v.form2.price.required">Price is required</span>
-                        <span class="md-error" v-else-if="!$v.form2.price.decimal">Price must be number</span>
-                    </md-field>
-                    <md-button @click="validateAd2" class="md-raised md-primary">Continue</md-button>
-                </form>
-            </md-step>
+			<md-step id="second" md-label="Second Step" :md-done.sync="second">
+				<form class="md-layout md-alignment-top-center" autocomplete="off">
+					<md-field :class="{ 'md-invalid': $v.form2.vehicle.kilometersTraveled.$error }">
+						<label for="kilometersTraveled">Kilometers Traveled</label>
+						<md-input v-model="form2.vehicle.kilometersTraveled" type="number" />
+						<span class="md-error" v-if="!$v.form2.vehicle.kilometersTraveled.required">Kilometers Traveled is required</span>
+						<span class="md-error" v-else-if="!$v.form2.vehicle.kilometersTraveled.integer">Fuel Type must be integer</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form2.vehicle.childSeatNumber.$error }">
+						<label for="childSeatNumber">Childseat Number</label>
+						<md-input v-model="form2.vehicle.childSeatNumber" type="number" />
+						<span class="md-error" v-if="!$v.form2.vehicle.childSeatNumber.required">Childseat Number is required</span>
+						<span class="md-error" v-else-if="!$v.form2.vehicle.childSeatNumber.integer">Childseat Number must be integer</span>
+					</md-field>
+					<div>
+						<md-checkbox v-model="form2.vehicle.hasAndroid" class="md-primary">Has Android</md-checkbox>
+						<md-checkbox v-model="form2.collisionDamageWaiver" class="md-primary">Collision Damage Waiver</md-checkbox>
+						<md-checkbox v-model="hasKilometersLimit" class="md-primary">Has kilometers per day limit</md-checkbox>
+					</div>
+					<md-field v-if="hasKilometersLimit" :class="{ 'md-invalid': $v.form2.kilometersPerDayLimit.$error }">
+						<label for="kilometersPerDayLimit">Limit</label>
+						<md-input v-model="form2.kilometersPerDayLimit" type="number" />
+						<span class="md-error" v-if="!$v.form2.kilometersPerDayLimit.integer">Kilometers Per Day Limit must be integer</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form2.location.$error }">
+						<label for="location">Location</label>
+						<md-input v-model="form2.location"></md-input>
+						<span class="md-error" v-if="!$v.form2.location.required">Location is required</span>
+						<span class="md-error" v-else-if="!$v.form2.location.lrx">Location is not in proper format</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.form2.price.$error }">
+						<label for="price">Price</label>
+						<span class="md-prefix">€</span>
+						<md-input v-model="form2.price" type="number" step="0.01"></md-input>
+						<span class="md-error" v-if="!$v.form2.price.required">Price is required</span>
+						<span class="md-error" v-else-if="!$v.form2.price.decimal">Price must be number</span>
+					</md-field>
+					<md-button @click="validateAd2" class="md-raised md-primary">Continue</md-button>
+				</form>
+			</md-step>
 
-            <md-step id="third" md-label="Third Step" :md-done.sync="third">
-                <form class="md-layout md-alignment-top-center" autocomplete="off">
-                    <md-field :class="{ 'md-invalid': $v.form3.description.$error }">
-                        <label for="description">Description</label>
-                        <md-textarea v-model="form3.description"></md-textarea>
-                        <span class="md-error" v-if="!$v.form3.description.required">Description is required</span>
-                        <span class="md-error" v-else-if="!$v.form3.description.sqli">Description is not in proper format</span>
-                    </md-field>
-                    <md-field>
-                        <label>Photos</label>
-                        <md-file accept="image/*" ref="file" multiple @change="handleFileChange" />
-                    </md-field>
-                    <md-button @click="validateAd3" class="md-raised md-primary" :disabled="sending">Done</md-button>
-                </form>
-            </md-step>
-        </md-steppers>
-    </div>
+			<md-step id="third" md-label="Third Step" :md-done.sync="third">
+				<form class="md-layout md-alignment-top-center" autocomplete="off">
+					<md-field :class="{ 'md-invalid': $v.form3.description.$error }">
+						<label for="description">Description</label>
+						<md-textarea v-model="form3.description"></md-textarea>
+						<span class="md-error" v-if="!$v.form3.description.required">Description is required</span>
+						<span class="md-error" v-else-if="!$v.form3.description.sqli">Description is not in proper format</span>
+					</md-field>
+					<md-field>
+						<label>Photos</label>
+						<md-file accept="image/*" ref="file" multiple @change="handleFileChange" />
+					</md-field>
+					<md-button @click="validateAd3" class="md-raised md-primary" :disabled="sending">Done</md-button>
+				</form>
+			</md-step>
+		</md-steppers>
+	</div>
 </template>
 
 <script>
@@ -113,22 +113,22 @@ const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|
 const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {
-    name: "PostAdvertisement",
-    mixins: [validationMixin],
-    data() {
+	name: "PostAdvertisement",
+	mixins: [validationMixin],
+	data() {
 		return {
 			show: false,
 			brandId: undefined,
 			hasKilometersLimit: false,
-            photos: [],
-            form1: {
-                vehicle: {
-                    modeld: undefined,
-                    vehicleClassId: undefined,
-                    fuelTypeId: undefined,
-                    gearboxTypeId: undefined
-                }
-            },
+			photos: [],
+			form1: {
+				vehicle: {
+					modeld: undefined,
+					vehicleClassId: undefined,
+					fuelTypeId: undefined,
+					gearboxTypeId: undefined,
+				},
+			},
 			form2: {
 				vehicle: {
 					kilometersTraveled: undefined,
@@ -138,43 +138,42 @@ export default {
 				price: undefined,
 				kilometersPerDayLimit: undefined,
 				collisionDamageWaiver: false,
-				location: undefined
-            },
-            form3: {
-                description: undefined,
-				ownerId: undefined,
-            },
-            sending: false,
-            active: 'first',
-            first: false,
-            second: false,
-            third: false
-        };
-    },
-    computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", 
-                        "getGearboxTypes", "getFuelTypes", "getUser"]),
-    methods: {
-        ...mapActions(["addAdvertisement", "addPhotos", "getCatalog"]),
+				location: undefined,
+			},
+			form3: {
+				description: undefined,
+			},
+			sending: false,
+			active: "first",
+			first: false,
+			second: false,
+			third: false,
+		};
+	},
+	created() {
+		this.$store.dispatch("getCatalog");
+	},
+	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes"]),
+	methods: {
+		...mapActions(["addAdvertisement", "addPhotos", "getCatalog"]),
 
-        setDone (id, index) {
-            this[id] = true;
-            
-            if (index) {
-                this.active = index;
-            }
-        },
+		setDone(id, index) {
+			this[id] = true;
 
-        submitAd() {
+			if (index) {
+				this.active = index;
+			}
+		},
+
+		submitAd() {
 			this.sending = true;
-
-			this.form3.ownerId = this.getUser.id;
 			if (!this.form2.kilometersPerDayLimit) {
 				this.form2.kilometersPerDayLimit = -1;
-            }
-            
-            var form = {
+			}
+
+			var form = {
 				vehicle: {
-					modeld: this.form1.vehicle.modeld,
+					modelId: this.form1.vehicle.modelId,
 					vehicleClassId: this.form1.vehicle.vehicleClassId,
 					fuelTypeId: this.form1.vehicle.fuelTypeId,
 					gearboxTypeId: this.form1.vehicle.gearboxTypeId,
@@ -187,13 +186,12 @@ export default {
 				collisionDamageWaiver: this.form2.collisionDamageWaiver,
 				location: this.form2.location,
 				description: this.form3.description,
-				ownerId: this.form3.ownerId,
 			};
 
 			this.$store
 				.dispatch("addAdvertisement", form)
 				.then((ad) => {
-					let formData = new FormData();
+					/*let formData = new FormData();
 					let id = ad.id;
 					for (var i = 0; i < this.photos.length; i++) {
 						let file = this.photos[i];
@@ -209,7 +207,7 @@ export default {
 					this.$store
 						.dispatch("addPhotos", payload)
 						.then(() => console.log("SUCCESS!"))
-						.catch((error) => console.log(error));
+						.catch((error) => console.log(error));*/
 				})
 				.catch((error) => console.log(error));
 		},
@@ -219,36 +217,36 @@ export default {
 		},
 
 		validateAd1() {
-            this.$v.brandId.$touch();
+			this.$v.brandId.$touch();
 			this.$v.form1.$touch();
 
 			if (!this.$v.form1.$invalid || !this.$v.brandId.$invalid) {
-				this.setDone('first', 'second');
+				this.setDone("first", "second");
 			}
-        },
-        
-        validateAd2() {
+		},
+
+		validateAd2() {
 			this.$v.form2.$touch();
 
 			if (!this.$v.form2.$invalid) {
-                this.setDone('second', 'third');
+				this.setDone("second", "third");
 			}
-        },
-        
-        validateAd3() {
+		},
+
+		validateAd3() {
 			this.$v.form3.$touch();
 
 			if (!this.$v.form3.$invalid) {
-                this.submitAd();
+				this.submitAd();
 			}
-        }
-    },
-    validations: {
+		},
+	},
+	validations: {
 		brandId: {
 			required,
-        },
-        form1: {
-            vehicle: {
+		},
+		form1: {
+			vehicle: {
 				modelId: {
 					required,
 				},
@@ -260,9 +258,9 @@ export default {
 				},
 				fuelTypeId: {
 					required,
-				}
-			}
-        },
+				},
+			},
+		},
 		form2: {
 			vehicle: {
 				kilometersTraveled: {
@@ -285,24 +283,24 @@ export default {
 			kilometersPerDayLimit: {
 				integer,
 			},
-        },
-        form3: {
-            description: {
+		},
+		form3: {
+			description: {
 				required,
 				sqli,
 			},
-        }
-	}
-}
+		},
+	},
+};
 </script>
 
 <style>
-    .md-steppers {
-        width: 70%;
-        margin: 0 auto;
-    }
+.md-steppers {
+	width: 70%;
+	margin: 0 auto;
+}
 
-    .somespan {
-        width: 70%;
-    }
+.somespan {
+	width: 70%;
+}
 </style>

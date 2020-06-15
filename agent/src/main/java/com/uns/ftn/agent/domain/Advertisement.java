@@ -23,7 +23,13 @@ public class Advertisement {
    private double price;
 
    @Column(name = "km_limit", nullable = false)
-   private double kilometersPerDayLimit = -1;
+   private int kilometersPerDayLimit = -1;
+
+   @Column(name = "description")
+   private String description;
+
+   @Column(name = "location")
+   private String location;
 
    @Column(name = "cdw", nullable = false)
    private Boolean collisionDamageWaiver = false;
@@ -39,9 +45,8 @@ public class Advertisement {
    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
    private Vehicle vehicle;
 
-   @JsonIgnore
-   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-   private Agent owner;
+   @Column(name = "ownerId")
+   private Long ownerId;
 
    @JsonIgnore
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

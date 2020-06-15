@@ -7,14 +7,14 @@ const state = {
 
 const getters = {
 	getAdvertisements: (state) => state.advertisements,
-	getAdvertisement: (state) => state.advertisement
+	getAdvertisement: (state) => state.advertisement,
 };
 
 const actions = {
 	addAdvertisement({ commit }, advertisement) {
 		return new Promise((resolve, reject) => {
 			advertisementApi
-				.postAdvertisment(advertisement)
+				.postAdvertisement(advertisement)
 				.then((ad) => {
 					resolve(ad);
 				})
