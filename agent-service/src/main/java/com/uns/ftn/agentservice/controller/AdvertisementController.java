@@ -42,6 +42,11 @@ public class AdvertisementController {
         return null;
     }
 
+    @GetMapping("/{id}/statistic")
+    public ResponseEntity<?> getStatisticReport(@PathVariable Long id) {
+        return adService.returnStatisticReport(id);
+    }
+
     /* START: Endpoints for checking when deleting catalog item. */
     @GetMapping("/modelCheck/{id}")
     public ResponseEntity<?> checkAdsForModel(@PathVariable Long id) {

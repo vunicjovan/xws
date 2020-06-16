@@ -1,8 +1,8 @@
 package com.uns.ftn.agent.controller;
 
-import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.service.AdvertisementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +12,8 @@ public class AdvertisementController {
 
     private AdvertisementService advertisementService;
 
-    public AdvertisementController(
-            AdvertisementService advertisementService
-    ) {
+    @Autowired
+    public AdvertisementController(AdvertisementService advertisementService) {
         this.advertisementService = advertisementService;
     }
 
@@ -31,6 +30,11 @@ public class AdvertisementController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getAd(@PathVariable Long id) {
         return null;
+    }
+
+    @GetMapping("/{id}/statistic")
+    public ResponseEntity<?> getStatisticReport(@PathVariable Long id) {
+        return advertisementService.returnStatisticReport(id);
     }
 
 }
