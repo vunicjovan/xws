@@ -1,7 +1,7 @@
 <template>
     <div class="somediv">
         <div class="md-headline">Comments to be published</div>
-        <md-list class="md-triple-line md-dense" v-for="comm in comments" v-bind:key="comm.id">
+        <md-list class="md-triple-line md-dense" v-for="comm in getUnpublishedCommentList" v-bind:key="comm.id">
             <md-list-item>
                 <md-avatar>
                     <i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
@@ -14,11 +14,11 @@
                 </div>
                 
                 <span class="some-span">
-                    <md-button class="md-icon-button md-list-action">
+                    <md-button @click="acceptComment(comm)" class="md-icon-button md-list-action">
                         <i class="fas fa-check-circle fa-2x"></i>
                         <md-tooltip>Publish comment</md-tooltip>
                     </md-button>
-                    <md-button class="md-icon-button md-list-action">
+                    <md-button @click="declineComment(comm)" class="md-icon-button md-list-action">
                         <i class="fas fa-times-circle fa-2x"></i>
                         <md-tooltip>Reject comment</md-tooltip>
                     </md-button>
@@ -30,69 +30,24 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
     name: "UnpublishedComments",
-    data: function() {
-        return {
-            comments: [
-                {
-                    "id": 1,
-                    "owner": "John Doe",
-                    "title": "Hey! This is awesome!",
-                    "content": "NICE ONE BRO",
-                    "vehicle": "BMW X8"
-                },
-                {
-                    "id": 2,
-                    "owner": "Jack Smith",
-                    "title": "NOPE",
-                    "content": "This is not what I have expected...",
-                    "vehicle": "Audi R8"
-                },
-                {
-                    "id": 3,
-                    "owner": "John Doe",
-                    "title": "Hey! This is awesome!",
-                    "content": "NICE ONE BRO",
-                    "vehicle": "BMW X8"
-                },
-                {
-                    "id": 4,
-                    "owner": "Jimmy Page",
-                    "title": "Oh yeah",
-                    "content": "A car with a taste!",
-                    "vehicle": "Reno 4"
-                },
-                {
-                    "id": 5,
-                    "owner": "Perica Ognjenovic",
-                    "title": "Ima nas...",
-                    "content": "... koji volimo Jugo.",
-                    "vehicle": "Yugo Koral 45"
-                },
-                {
-                    "id": 6,
-                    "owner": "Erlich Bachmann",
-                    "title": "B A C K M A N I T Y",
-                    "content": "A real trouble with that gearbox, tho.",
-                    "vehicle": "Dacia Logan"
-                },
-                {
-                    "id": 7,
-                    "owner": "Skitty Skittles",
-                    "title": "Thunderstruck",
-                    "content": "If you like my comment, you are pathetic loser.",
-                    "vehicle": "BMW X8"
-                },
-                {
-                    "id": 8,
-                    "owner": "Jian Yang",
-                    "title": "What if I told you",
-                    "content": "There is an application for SEAFOOD. Not SEEfood, but SEAfood.",
-                    "vehicle": "Tesla 2000"
-                }
-            ]
-        };
+    computed: {
+        ...mapGetters(["getUnpublishedCommentList"]),
+    },
+    mounted: function() {
+        this.$store.dispatch("getUnpublishedComments");
+    },
+    methods: {
+        ...mapActions(["getUnpublishedComments", "publishComment", "rejectComment"]),
+        acceptComment(comm) {
+            this.$store.dispatch("publishComment", comm);
+        },
+        declineComment(comm) {
+            this.$store.dispatch("rejectComment", comm);
+        }
     }
 }
 </script>

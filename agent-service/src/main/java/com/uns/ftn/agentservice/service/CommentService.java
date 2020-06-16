@@ -96,6 +96,10 @@ public class CommentService {
     public ResponseEntity<?> rejectComment(Long adId, Long id) {
         Comment comment = findOne(id);
 
+        if (comment.getAllowed()) {
+            throw new BadRequestException("Requested comment is posted and cannot be deleted.");
+        }
+
         if (comment.getAdvertisement().getId() != adId) {
             throw new BadRequestException("Requested comment doesn't belong to searched advertisement.");
         }

@@ -7,6 +7,7 @@ import search from "./modules/search.js"
 import cart from "./modules/cart.js"
 import admin from "./modules/admin.js"
 import renting from "./modules/rentingIntervals.js"
+import comment from "./modules/comment.js"
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
 		search,
 		cart,
 		admin,
-		renting
+		renting,
+		comment
 	},
 });
