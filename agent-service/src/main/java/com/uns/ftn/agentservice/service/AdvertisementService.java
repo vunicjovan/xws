@@ -7,6 +7,8 @@ import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Vehicle;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CheckResponseDTO;
+import com.uns.ftn.agentservice.dto.StatisticDTO;
+import com.uns.ftn.agentservice.dto.StatisticReportDTO;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
@@ -15,8 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import static java.util.Comparator.comparing;
 
 @Service
 public class AdvertisementService {
@@ -146,5 +153,79 @@ public class AdvertisementService {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
     /* END: Methods for checking when deleting catalog item. */
+
+    /*
+     * Collecting data used for statistic report.
+     */
+    public ResponseEntity<?> returnStatisticReport(Long id) {
+        List<StatisticDTO> bestRated = findStatisticalAds(id, "Rating");
+        List<StatisticDTO> mostCommented = findStatisticalAds(id, "Commented");
+        List<StatisticDTO> mostTraveled = findStatisticalAds(id, "Traveled");
+
+        return new ResponseEntity<>(new StatisticReportDTO(bestRated, mostCommented, mostTraveled), HttpStatus.OK);
+    }
+
+    private List<StatisticDTO> findStatisticalAds(Long ownerId, String statType) {
+        List<Advertisement> ownersAds = adRepo.findByOwnerId(ownerId);
+        List<StatisticDTO> retval = new ArrayList<>();
+
+        switch (statType) {
+            // best rated advertisements
+            case "Rating":
+                ownersAds.sort(comparing(Advertisement::getRating).reversed());
+                if (ownersAds.size() > 5) {
+                    ownersAds = ownersAds.subList(0, 5);
+                }
+
+                for (Advertisement ad : ownersAds) {
+                    retval.add(new StatisticDTO(ad));
+                }
+
+                break;
+            // most commented advertisements
+            case "Commented":
+                for (int i = 0; i < ownersAds.size() - 1; i++) {
+                    for (int j = i + 1; j < ownersAds.size(); j++) {
+                        if (ownersAds.get(i).getComments().size() < ownersAds.get(j).getComments().size()) {
+                            Collections.swap(ownersAds, i, j);
+                        }
+                    }
+                }
+
+                if (ownersAds.size() > 5) {
+                    ownersAds = ownersAds.subList(0, 5);
+                }
+
+                for (Advertisement ad : ownersAds) {
+                    retval.add(new StatisticDTO(ad));
+                }
+
+                break;
+            // vehicles with longest distance traveled
+            case "Traveled":
+                List<Vehicle> ownersVehicles = new ArrayList<>();
+
+                for (Advertisement ad : ownersAds) {
+                    ownersVehicles.add(ad.getVehicle());
+                }
+
+                ownersVehicles.sort(comparing(Vehicle::getKilometersTraveled).reversed());
+                if (ownersAds.size() > 5) {
+                    ownersVehicles = ownersVehicles.subList(0, 5);
+                }
+
+                for (Vehicle v : ownersVehicles) {
+                    retval.add(new StatisticDTO(v.getAdvertisement()));
+                }
+
+                break;
+            // return empty list by default
+            default:
+                break;
+        }
+
+        // DTO with three lists, each containing TOP5 (or less) advertisements by different criteria
+        return retval;
+    }
 
 }

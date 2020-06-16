@@ -49,6 +49,12 @@ public class AdvertisementController {
     @GetMapping("/comment/unapproved/")
     public ResponseEntity<?> getUnapprovedComments() { return commentService.getUnapprovedComments(); }
 
+    @GetMapping("/{id}/statistic")
+    public ResponseEntity<?> getStatisticReport(@PathVariable Long id) {
+        return adService.returnStatisticReport(id);
+    }
+
+
     /* START: Endpoints for checking when deleting catalog item. */
     @GetMapping("/modelCheck/{id}")
     public ResponseEntity<?> checkAdsForModel(@PathVariable Long id) {
