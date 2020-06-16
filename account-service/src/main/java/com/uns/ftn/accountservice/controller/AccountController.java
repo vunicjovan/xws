@@ -37,7 +37,7 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return null;
+        return userService.getUser(id);
     }
 
     @GetMapping("/owner/{id}")

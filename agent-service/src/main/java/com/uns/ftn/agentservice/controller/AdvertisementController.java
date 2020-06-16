@@ -2,6 +2,7 @@ package com.uns.ftn.agentservice.controller;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
+import com.uns.ftn.agentservice.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,13 @@ import org.springframework.web.bind.annotation.*;
 public class AdvertisementController {
 
     private AdvertisementService adService;
+    private CommentService commentService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService adService) {
+    public AdvertisementController(AdvertisementService adService,
+                                   CommentService commentService) {
         this.adService = adService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
@@ -42,10 +46,14 @@ public class AdvertisementController {
         return null;
     }
 
+    @GetMapping("/comment/unapproved/")
+    public ResponseEntity<?> getUnapprovedComments() { return commentService.getUnapprovedComments(); }
+
     @GetMapping("/{id}/statistic")
     public ResponseEntity<?> getStatisticReport(@PathVariable Long id) {
         return adService.returnStatisticReport(id);
     }
+
 
     /* START: Endpoints for checking when deleting catalog item. */
     @GetMapping("/modelCheck/{id}")
@@ -91,7 +99,7 @@ public class AdvertisementController {
 
     @PutMapping("/{id}/comment/{comId}")
     public ResponseEntity<?> approveComment(@PathVariable ("id") Long adId, @PathVariable ("comId") Long id) {
-        return null;
+        return commentService.approveComment(adId, id);
     }
 
     @DeleteMapping("/{id}")
@@ -99,4 +107,9 @@ public class AdvertisementController {
         return null;
     }
 
+
+    @DeleteMapping("/{adId}/comment/{id}")
+    public ResponseEntity<?> rejectComment(@PathVariable("adId") Long adId, @PathVariable("id") Long id) {
+        return commentService.rejectComment(adId, id);
+    }
 }
