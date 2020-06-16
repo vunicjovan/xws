@@ -12,14 +12,11 @@ import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,9 +43,7 @@ public class RentingRequestService {
 
     public ResponseEntity<?> createRequest(RentingRequestDTO rdto) {
 
-        if (rdto.getStartDate().after(rdto.getEndDate())) {
-            throw new BadRequestException("Start of renting interval cannot be after the end of it.");
-        }
+        checkDateValidityForRequest(rdto);
 
         // check if all requested advertisements exist
         Set<Advertisement> ads = checkIfAdsExist(rdto.getAdvertisementIDs());
@@ -117,7 +112,7 @@ public class RentingRequestService {
 
         if (!rentingIntervals.isEmpty()) {
             for(RentingInterval rentingInterval : rentingIntervals) {
-                if (!(endDate.before(rentingInterval.getStartDate()) || startDate.after(rentingInterval.getEndDate()))){
+                if (!(endDate.before(rentingInterval.getStartDate()) || startDate.after(rentingInterval.getEndDate()))) {
                     overlaps = true;
                     break;
                 }
@@ -125,6 +120,16 @@ public class RentingRequestService {
         }
 
         return overlaps;
+    }
+
+    private void checkDateValidityForRequest(RentingRequestDTO rdto) {
+        if (rdto.getStartDate() == null || rdto.getEndDate() == null) {
+            throw new BadRequestException("Every request must have both begin and end dates for renting.");
+        }
+
+        if (rdto.getStartDate().after(rdto.getEndDate())) {
+            throw new BadRequestException("Start of renting interval cannot be after the end of it.");
+        }
     }
 
 }

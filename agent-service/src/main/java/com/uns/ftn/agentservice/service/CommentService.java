@@ -2,7 +2,6 @@ package com.uns.ftn.agentservice.service;
 
 import com.uns.ftn.agentservice.client.AccountClient;
 import com.uns.ftn.agentservice.domain.Comment;
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CommentResponseDTO;
 import com.uns.ftn.agentservice.dto.UserResponseDTO;
 import com.uns.ftn.agentservice.exceptions.BadRequestException;
@@ -67,7 +66,11 @@ public class CommentService {
     public ResponseEntity<?> rejectComment(Long adId, Long id) {
         Comment comment = findOne(id);
 
-        if(comment.getAdvertisement().getId() != adId) {
+        if (comment.getAllowed()) {
+            throw new BadRequestException("Requested comment is posted and cannot be deleted.");
+        }
+
+        if (comment.getAdvertisement().getId() != adId) {
             throw new BadRequestException("Requested comment doesn't belong to searched advertisement.");
         }
 
