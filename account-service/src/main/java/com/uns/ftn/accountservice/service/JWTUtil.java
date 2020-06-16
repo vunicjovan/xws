@@ -1,5 +1,6 @@
 package com.uns.ftn.accountservice.service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
-
-import io.jsonwebtoken.Claims;
 
 @Service
 public class JWTUtil {
