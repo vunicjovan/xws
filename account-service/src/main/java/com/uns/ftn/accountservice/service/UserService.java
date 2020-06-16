@@ -5,10 +5,7 @@ import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.Agent;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
-import com.uns.ftn.accountservice.dto.AgentRegisterDTO;
-import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
-import com.uns.ftn.accountservice.dto.UnregisteredAgentDTO;
-import com.uns.ftn.accountservice.dto.UserDTO;
+import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
 import com.uns.ftn.accountservice.repository.AgentRepository;
@@ -249,6 +246,17 @@ public class UserService {
         }
 
         return new ResponseEntity<>(agnRegDTO, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getUser(Long id) {
+        User user = findOne(id);
+        UserResponseDTO userDTO = new UserResponseDTO();
+
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     private void validateAndSanitizePasswordData(PasswordChangeDTO pcDTO) {
