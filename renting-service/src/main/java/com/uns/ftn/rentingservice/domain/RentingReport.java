@@ -30,4 +30,8 @@ public class RentingReport {
    @JsonIgnore
    private RentingRequest rentingRequest;
 
+   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @JsonIgnore
+   private Advertisement advertisement;
+
 }

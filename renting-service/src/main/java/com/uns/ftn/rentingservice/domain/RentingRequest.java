@@ -41,4 +41,7 @@ public class RentingRequest {
            referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id"))
    private Set<Advertisement> advertisements;
 
+   @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private  Set<Comment> comments;
+
 }

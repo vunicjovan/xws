@@ -2,9 +2,11 @@ package com.uns.ftn.rentingservice.controller;
 
 import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
+import com.uns.ftn.rentingservice.service.CommentService;
 import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.service.RentingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +17,12 @@ import java.text.ParseException;
 public class RentingRequestController {
 
     private RentingRequestService requestService;
+    private CommentService commentService;
 
     @Autowired
-    public RentingRequestController(RentingRequestService requestService) {
+    public RentingRequestController(RentingRequestService requestService, CommentService commentService) {
         this.requestService = requestService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
@@ -39,6 +43,12 @@ public class RentingRequestController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Long id, @RequestBody RequestStatusDTO request) {
         return requestService.updateRequestStatus(id, request);
+    }
+
+    @GetMapping("/comment/{userId}/{advertisementId}")
+    public ResponseEntity<?> checkCommentPostPermission(@PathVariable("userId") Long userId,
+                                                      @PathVariable("advertisementId") Long advertisementId) {
+        return new ResponseEntity(commentService.checkCommentPermission(userId, advertisementId), HttpStatus.OK);
     }
 
 }

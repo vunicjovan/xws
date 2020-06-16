@@ -35,4 +35,10 @@ public class Advertisement {
     @ManyToMany(mappedBy = "advertisements")
     private Set<RentingRequest> rentingRequests;
 
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private  Set<Comment> comments;
+
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private  Set<RentingReport> rentingReports;
+
 }
