@@ -43,15 +43,33 @@ export default {
 	},
 
 	mounted() {
-		this.$store.dispatch("getCart", this.getUser.id).then((advertisementIdList) => {
-			let adIds = [];
-			for (var i = 0; i < advertisementIdList.cartItemDTOS.length; i++) {
-				adIds.push(advertisementIdList.cartItemDTOS[i].advertisementId);
+		if (this.getUser) {
+			this.$store.dispatch("getCart", this.getUser.id).then((advertisementIdList) => {
+				let adIds = [];
+				for (var i = 0; i < advertisementIdList.cartItemDTOS.length; i++) {
+					adIds.push(advertisementIdList.cartItemDTOS[i].advertisementId);
+				}
+				let parameters = new URLSearchParams();
+				parameters.append("cart", adIds);
+				this.$store.dispatch("getCartItems", parameters);
+			});
+		}
+	},
+
+	watch: {
+		getUser: function(val) {
+			if (val) {
+				this.$store.dispatch("getCart", val.id).then((advertisementIdList) => {
+					let adIds = [];
+					for (var i = 0; i < advertisementIdList.cartItemDTOS.length; i++) {
+						adIds.push(advertisementIdList.cartItemDTOS[i].advertisementId);
+					}
+					let parameters = new URLSearchParams();
+					parameters.append("cart", adIds);
+					this.$store.dispatch("getCartItems", parameters);
+				});
 			}
-			let parameters = new URLSearchParams();
-			parameters.append("cart", adIds);
-			this.$store.dispatch("getCartItems", parameters);
-		});
+		},
 	},
 
 	methods: {
