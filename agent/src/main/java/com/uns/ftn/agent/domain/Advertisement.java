@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,7 +22,7 @@ public class Advertisement {
    @Column(name = "price", nullable = false)
    private double price;
 
-   @Column(name = "km_limit", nullable = false)
+   @Column(name = "kilometersPerDayLimit", nullable = false)
    private int kilometersPerDayLimit = -1;
 
    @Column(name = "description")
@@ -31,7 +31,7 @@ public class Advertisement {
    @Column(name = "location")
    private String location;
 
-   @Column(name = "cdw", nullable = false)
+   @Column(name = "collisionDamageWaiver", nullable = false)
    private Boolean collisionDamageWaiver = false;
 
    @Column(name = "rating", nullable = false)
@@ -41,8 +41,7 @@ public class Advertisement {
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<RentingInterval> rentingIntervals;
 
-   @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-   @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+   @OneToOne(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Vehicle vehicle;
 
    @Column(name = "ownerId")
@@ -51,5 +50,8 @@ public class Advertisement {
    @JsonIgnore
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Photo> photos;
+
+   @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private Set<Comment> comments;
 
 }

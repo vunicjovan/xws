@@ -3,18 +3,23 @@ package com.uns.ftn.agent.service;
 import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.domain.Vehicle;
 import com.uns.ftn.agent.dto.AdvertisementDTO;
+import com.uns.ftn.agent.dto.StatisticDTO;
+import com.uns.ftn.agent.dto.StatisticReportDTO;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.repository.AdvertisementRepository;
 import com.uns.ftn.agent.repository.VehicleRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import org.owasp.encoder.Encode;
-
-import java.security.spec.EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import static java.util.Comparator.comparing;
 
 @Service
 public class AdvertisementService {
@@ -85,7 +90,91 @@ public class AdvertisementService {
         }
 
         return true;
+    }
 
+    /*
+     * Collecting data used for statistic report.
+     */
+    public ResponseEntity<?> returnStatisticReport(Long id) {
+        List<StatisticDTO> bestRated = findStatisticalAds(id, "Rating");
+        List<StatisticDTO> mostCommented = findStatisticalAds(id, "Commented");
+        List<StatisticDTO> mostTraveled = findStatisticalAds(id, "Traveled");
+
+        return new ResponseEntity<>(new StatisticReportDTO(bestRated, mostCommented, mostTraveled), HttpStatus.OK);
+    }
+
+    private List<StatisticDTO> findStatisticalAds(Long ownerId, String statType) {
+        List<Advertisement> ownersAds = advertisementRepository.findByOwnerId(ownerId);
+        List<StatisticDTO> retval = new ArrayList<>();
+
+        switch (statType) {
+            // best rated advertisements
+            case "Rating":
+                ownersAds.sort(comparing(Advertisement::getRating).reversed());
+                if (ownersAds.size() > 5) {
+                    ownersAds = ownersAds.subList(0, 5);
+                }
+
+                for (Advertisement ad : ownersAds) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(ad.getVehicle().getModel().getBrand().getName()).append(" ")
+                            .append(ad.getVehicle().getModel().getName());
+
+                    retval.add(new StatisticDTO(ad, sb.toString()));
+                }
+
+                break;
+            // most commented advertisements
+            case "Commented":
+                for (int i = 0; i < ownersAds.size() - 1; i++) {
+                    for (int j = i + 1; j < ownersAds.size(); j++) {
+                        if (ownersAds.get(i).getComments().size() < ownersAds.get(j).getComments().size()) {
+                            Collections.swap(ownersAds, i, j);
+                        }
+                    }
+                }
+
+                if (ownersAds.size() > 5) {
+                    ownersAds = ownersAds.subList(0, 5);
+                }
+
+                for (Advertisement ad : ownersAds) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(ad.getVehicle().getModel().getBrand().getName()).append(" ")
+                            .append(ad.getVehicle().getModel().getName());
+
+                    retval.add(new StatisticDTO(ad, sb.toString()));
+                }
+
+                break;
+            // vehicles with longest distance traveled
+            case "Traveled":
+                List<Vehicle> ownersVehicles = new ArrayList<>();
+
+                for (Advertisement ad : ownersAds) {
+                    ownersVehicles.add(ad.getVehicle());
+                }
+
+                ownersVehicles.sort(comparing(Vehicle::getKilometersTraveled).reversed());
+                if (ownersAds.size() > 5) {
+                    ownersVehicles = ownersVehicles.subList(0, 5);
+                }
+
+                for (Vehicle v : ownersVehicles) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(v.getModel().getBrand().getName()).append(" ").append(v.getModel().getName());
+
+                    retval.add(new StatisticDTO(v.getAdvertisement(), sb.toString()));
+                }
+
+                break;
+            // return empty list by default
+            default:
+                break;
+        }
+
+        // DTO with three lists, each containing TOP5 (or less) advertisements by different criteria
+        return retval;
     }
 
 }
