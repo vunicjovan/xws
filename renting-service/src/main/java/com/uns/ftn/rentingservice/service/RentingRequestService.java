@@ -6,13 +6,16 @@ import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.CreateResponseDTO;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
+import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -26,12 +29,20 @@ public class RentingRequestService {
 
     private AdvertisementRepository adRepo;
     private RentingRequestRepository requestRepo;
+    private TaskScheduler taskScheduler;
 
     @Autowired
-    public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo) {
+    public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
+                                 TaskScheduler taskScheduler) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
+        this.taskScheduler = taskScheduler;
     }
+
+    public RentingRequest findOne(Long id) { return requestRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException("Requested renting request doesn't exist.")); }
+
+    public RentingRequest save(RentingRequest rentingRequest) { return requestRepo.save(rentingRequest); }
 
     public ResponseEntity<?> createRequest(RentingRequestDTO rdto) {
 
@@ -60,7 +71,34 @@ public class RentingRequestService {
 
         req = this.requestRepo.save(req);
 
+        RentingRequest finalReq = req;
+        Runnable myRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                RentingRequest rentingRequest = findOne(finalReq.getId());
+                if (rentingRequest.getStatus() == RequestStatus.pending) {
+                    rentingRequest.setStatus(RequestStatus.canceled);
+                    save(rentingRequest);
+                }
+            }
+        };
+
+        taskScheduler.schedule(myRunnable, new Date(System.currentTimeMillis() + 86400000));
+
         return new ResponseEntity<>(new CreateResponseDTO(req), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> updateRequestStatus(Long id, RequestStatusDTO request) {
+        RentingRequest rentingRequest = findOne(id);
+
+        rentingRequest.setStatus(request.getStatus());
+        rentingRequest = save(rentingRequest);
+
+
+
+        return new ResponseEntity<>(
+                new RequestStatusDTO(rentingRequest.getId(), rentingRequest.getStatus()), HttpStatus.OK);
     }
 
     private Set<Advertisement> checkIfAdsExist(Set<Long> adIDs) {
