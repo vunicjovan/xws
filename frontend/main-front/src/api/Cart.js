@@ -24,4 +24,13 @@ export default {
 			return response.data;
 		});
 	},
+
+	async sendRentingRequest(payload) {
+		try {
+			const response = await axios.post("/rent/request/", payload);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

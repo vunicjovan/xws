@@ -1,15 +1,15 @@
 import cartApi from "@/api/Cart";
 
 const state = {
-    cartAdvertisements: null
+	cartAdvertisements: null,
 };
 
 const getters = {
-    getCartAdvertisements: (state) => state.cartAdvertisements
+	getCartAdvertisements: (state) => state.cartAdvertisements,
 };
 
 const actions = {
-    getCart({ commit }, cartId) {
+	getCart({ commit }, cartId) {
 		return new Promise((resolve, reject) => {
 			cartApi
 				.getCart(cartId)
@@ -20,60 +20,76 @@ const actions = {
 					reject(error);
 				});
 		});
-    },
-    
-    getCartItems({ commit }, advertisementIdList) {
+	},
+
+	getCartItems({ commit }, advertisementIdList) {
 		return new Promise((resolve, reject) => {
 			cartApi
 				.getCartAdvertisements(advertisementIdList)
 				.then((advertisements) => {
-                    commit("setCartAdvertisements", advertisements);
-                    resolve(advertisements);
+					commit("setCartAdvertisements", advertisements);
+					resolve(advertisements);
 				})
 				.catch((error) => {
 					reject(error);
 				});
 		});
-    },
+	},
 
-    addCartItem({ commit }, payload) {
+	addCartItem({ commit }, payload) {
 		return new Promise((resolve, reject) => {
 			cartApi
 				.addCartItem(payload.cartId, payload.cartItemId)
 				.then((cartItem) => {
-					resolve()
+					resolve();
 				})
 				.catch((error) => {
 					reject(error);
 				});
 		});
-    },
+	},
 
-    deleteCartItem({ commit }, payload) {
+	deleteCartItem({ commit }, payload) {
 		return new Promise((resolve, reject) => {
 			cartApi
 				.deleteCartItem(payload.cartId, payload.cartItemId)
 				.then((cartItem) => {
-                    commit("deleteCartItem", payload.cartItemId)
-                    resolve(cartItem);
+					commit("deleteCartItem", payload.cartItemId);
+					resolve(cartItem);
 				})
 				.catch((error) => {
 					reject(error);
 				});
 		});
-    },
+	},
+
+	sendRequest({ commit }, payload) {
+		return new Promise((resolve, reject) => {
+			cartApi
+				.sendRentingRequest(payload)
+				.then((data) => {
+					payload.advertisementIDs.forEach((item) => {
+						commit("deleteCartItem", item);
+					});
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
 };
 
 const mutations = {
-    setCartAdvertisements: (state, cartAdvertisements) => (state.cartAdvertisements = cartAdvertisements),
-    deleteCartItem: (state, cartAdvertisementId) => {
-        state.cartAdvertisements = state.cartAdvertisements.filter((cartAdvertisement) => cartAdvertisement.id != cartAdvertisementId);
-    }
+	setCartAdvertisements: (state, cartAdvertisements) => (state.cartAdvertisements = cartAdvertisements),
+	deleteCartItem: (state, cartAdvertisementId) => {
+		state.cartAdvertisements = state.cartAdvertisements.filter((cartAdvertisement) => cartAdvertisement.id != cartAdvertisementId);
+	},
 };
 
 export default {
-    state,
-    getters,
-    actions,
-    mutations
-}
+	state,
+	getters,
+	actions,
+	mutations,
+};

@@ -2,7 +2,7 @@ import accountApi from "@/api/Account";
 
 const state = {
 	logged: false,
-	loggedUser: Object,
+	loggedUser: null,
 };
 
 const getters = {
@@ -74,9 +74,9 @@ const actions = {
 				})
 				.catch((error) => {
 					reject(error);
-				})
-		})
-	}
+				});
+		});
+	},
 };
 
 const mutations = {
