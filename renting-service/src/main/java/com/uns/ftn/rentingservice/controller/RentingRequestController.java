@@ -1,6 +1,8 @@
 package com.uns.ftn.rentingservice.controller;
 
+import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
+import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.service.RentingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +37,8 @@ public class RentingRequestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id) {
-        return null;
+    public ResponseEntity<?> updateStatus(@PathVariable("id") Long id, @RequestBody RequestStatusDTO request) {
+        return requestService.updateRequestStatus(id, request);
     }
 
 }
