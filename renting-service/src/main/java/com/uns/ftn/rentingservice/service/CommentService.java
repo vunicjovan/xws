@@ -1,10 +1,12 @@
 package com.uns.ftn.rentingservice.service;
 
 import com.uns.ftn.rentingservice.domain.Advertisement;
+import com.uns.ftn.rentingservice.domain.Comment;
 import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.dto.CommentDTO;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
+import com.uns.ftn.rentingservice.repository.CommentRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class CommentService {
 
     @Autowired
     private AdvertisementRepository advertisementRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     public CommentDTO checkCommentPermission(Long userId, Long advertisementId) {
         List<RentingRequest> rentingRequestList = rentingRequestRepository.findAllBySenderId(userId);
@@ -43,6 +48,10 @@ public class CommentService {
                     .filter(comment -> comment.getAdvertisement().getId() == advertisementId)
                     .findFirst()
                     .orElse(null) == null) {
+                Comment comment = new Comment();
+                comment.setAdvertisement(advertisement);
+                comment.setRentingRequest(rentingRequest);
+                commentRepository.save(comment);
                 commentDTO.setRentingRequestId(rentingRequest.getId());
                 return commentDTO;
             }
