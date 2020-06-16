@@ -1,6 +1,5 @@
 package com.uns.ftn.agentservice.dto;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.uns.ftn.agentservice.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

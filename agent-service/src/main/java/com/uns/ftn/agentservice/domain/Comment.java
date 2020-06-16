@@ -36,6 +36,9 @@ public class Comment {
    @Column(name = "userId")
    private Long userId;
 
+   @Column(name = "rentingRequestId")
+   private Long rentingRequestId;
+
    @JsonIgnore
    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
    private Advertisement advertisement;

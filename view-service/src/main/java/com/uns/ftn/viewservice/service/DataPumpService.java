@@ -33,6 +33,9 @@ public class DataPumpService {
     @Autowired
     private PhotoRepository photoRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     public void advertisementHandler(AdvertisementDTO advertisementDTO) {
         Advertisement advertisement = advertisementRepository.findById(advertisementDTO.getId()).orElse(null);
         Vehicle vehicle = vehicleRepository.findById(advertisementDTO.getVehicle().getId()).orElse(null);
@@ -157,6 +160,19 @@ public class DataPumpService {
         photo.setAdvertisement(ad);
 
         photoRepository.save(photo);
+    }
+
+    public void commentHandler(CommDTO commDTO) {
+        Advertisement advertisement = findAdvertisementById(commDTO.getAdvertisementId());
+        Comment comment = new Comment();
+        comment.setId(commDTO.getId());
+        comment.setTitle(commDTO.getTitle());
+        comment.setContent(commDTO.getContent());
+        comment.setAllowed(true);
+        comment.setUserId(commDTO.getUserId());
+        comment.setAdvertisement(advertisement);
+
+        commentRepository.save(comment);
     }
 
     private FuelType findFuelTypeById(Long id) {

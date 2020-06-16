@@ -1,9 +1,11 @@
 package com.uns.ftn.agentservice.controller;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,9 +84,9 @@ public class AdvertisementController {
         return adService.postNewAd(adDTO);
     }
 
-    @PostMapping("/{id}/comment")
-    public ResponseEntity<?> postComment(@PathVariable("id") Long id) {
-        return null;
+    @PostMapping("/comment")
+    public ResponseEntity<?> postComment(@RequestBody CommDTO commDTO) {
+        return new ResponseEntity<>(commentService.postComment(commDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

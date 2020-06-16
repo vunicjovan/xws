@@ -54,6 +54,9 @@ public class QueueConsumer {
         } else if (typeId.contains("PhotoDTO")) {
             PhotoDTO photoDTO = new ObjectMapper().readValue(messageBody, PhotoDTO.class);
             dataPumpService.photoHandler(photoDTO);
+        } else if(typeId.contains("CommDTO")) {
+            CommDTO commentDTO = new ObjectMapper().readValue(messageBody, CommDTO.class);
+            dataPumpService.commentHandler(commentDTO);
         }
 
     }
