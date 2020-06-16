@@ -1,6 +1,6 @@
-package com.uns.ftn.agentservice.repository;
+package com.uns.ftn.agent.repository;
 
-import com.uns.ftn.agentservice.domain.Advertisement;
+import com.uns.ftn.agent.domain.Advertisement;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

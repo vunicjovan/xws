@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,10 +22,16 @@ public class Advertisement {
    @Column(name = "price", nullable = false)
    private double price;
 
-   @Column(name = "km_limit", nullable = false)
-   private double kilometersPerDayLimit = -1;
+   @Column(name = "kilometersPerDayLimit", nullable = false)
+   private int kilometersPerDayLimit = -1;
 
-   @Column(name = "cdw", nullable = false)
+   @Column(name = "description")
+   private String description;
+
+   @Column(name = "location")
+   private String location;
+
+   @Column(name = "collisionDamageWaiver", nullable = false)
    private Boolean collisionDamageWaiver = false;
 
    @Column(name = "rating", nullable = false)
@@ -35,16 +41,17 @@ public class Advertisement {
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<RentingInterval> rentingIntervals;
 
-   @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-   @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+   @OneToOne(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Vehicle vehicle;
 
-   @JsonIgnore
-   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-   private Agent owner;
+   @Column(name = "ownerId")
+   private Long ownerId;
 
    @JsonIgnore
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Photo> photos;
+
+   @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private Set<Comment> comments;
 
 }

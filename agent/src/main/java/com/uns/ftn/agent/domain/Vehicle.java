@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.*;
 
 @Entity
 @Data
@@ -19,16 +18,17 @@ public class Vehicle {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "km_traveled", nullable = false)
-   private double kilometersTraveled;
+   @Column(name = "kilometersTraveled", nullable = false)
+   private int kilometersTraveled;
 
-   @Column(name = "child_seats", nullable = false)
+   @Column(name = "childSeatNumber", nullable = false)
    private int childSeatNumber;
 
-   @Column(name = "android", nullable = false)
+   @Column(name = "hasAndroid", nullable = false)
    private Boolean hasAndroid = false;
 
-   @OneToOne(mappedBy = "vehicle")
+   @JsonIgnore
+   @OneToOne
    private Advertisement advertisement;
 
    @JsonIgnore
