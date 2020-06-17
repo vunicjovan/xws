@@ -21,4 +21,10 @@ public class ModelDTO {
         this.brand = new BrandDTO(model.getBrand());
     }
 
+    public ModelDTO(rs.ac.uns.ftn.catalog.Model model) {
+        this.id = model.getId();
+        this.name = model.getName();
+        this.brand = new BrandDTO(model.getBrand());
+    }
+
 }

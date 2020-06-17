@@ -1,0 +1,93 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.ftn.uns.ac.rs/catalog" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/catalog" targetNamespace="http://www.ftn.uns.ac.rs/catalog">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/catalog">
+
+    <xs:element name="getCatalogRequest">
+        <xs:complexType>
+
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCatalogResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="brands" nillable="true" type="tns:brand"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="models" nillable="true" type="tns:model"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="fuelTypes" nillable="true" type="tns:fuelType"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="gearboxTypes" nillable="true" type="tns:gearboxType"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="vehicleClasses" nillable="true" type="tns:vehicleClass"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="brand">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="fuelType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="gearboxType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="vehicleClass">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="model">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="brand" type="tns:brand"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getCatalogRequest">
+    <wsdl:part element="tns:getCatalogRequest" name="getCatalogRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCatalogResponse">
+    <wsdl:part element="tns:getCatalogResponse" name="getCatalogResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CatalogPort">
+    <wsdl:operation name="getCatalog">
+      <wsdl:input message="tns:getCatalogRequest" name="getCatalogRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getCatalogResponse" name="getCatalogResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CatalogPortSoap11" type="tns:CatalogPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getCatalog">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getCatalogRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCatalogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CatalogPortService">
+    <wsdl:port binding="tns:CatalogPortSoap11" name="CatalogPortSoap11">
+      <soap:address location="http://localhost:8083/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

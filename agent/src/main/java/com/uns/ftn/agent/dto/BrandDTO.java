@@ -18,4 +18,9 @@ public class BrandDTO {
         this.id = brand.getId();
         this.name = brand.getName();
     }
+
+    public BrandDTO(rs.ac.uns.ftn.catalog.Brand brand) {
+        this.id = brand.getId();
+        this.name = brand.getName();
+    }
 }
