@@ -18,4 +18,9 @@ public class GearboxTypeDTO {
         this.id = gearboxType.getId();
         this.name = gearboxType.getName();
     }
+
+    public GearboxTypeDTO(rs.ac.uns.ftn.catalog.GearboxType gearboxType) {
+        this.id = gearboxType.getId();
+        this.name = gearboxType.getName();
+    }
 }

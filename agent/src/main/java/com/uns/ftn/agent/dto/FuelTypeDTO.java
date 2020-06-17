@@ -19,4 +19,9 @@ public class FuelTypeDTO {
         this.id = fuelType.getId();
         this.name = fuelType.getName();
     }
+
+    public FuelTypeDTO(rs.ac.uns.ftn.catalog.FuelType fuelType)  {
+        this.id = fuelType.getId();
+        this.name = fuelType.getName();
+    }
 }

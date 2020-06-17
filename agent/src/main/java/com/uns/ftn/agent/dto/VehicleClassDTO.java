@@ -19,4 +19,9 @@ public class VehicleClassDTO {
         this.id = vehicleClass.getId();
         this.name = vehicleClass.getName();
     }
+
+    public VehicleClassDTO(rs.ac.uns.ftn.catalog.VehicleClass vehicleClass) {
+        this.id = vehicleClass.getId();
+        this.name = vehicleClass.getName();
+    }
 }

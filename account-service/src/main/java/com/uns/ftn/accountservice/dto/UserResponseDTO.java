@@ -1,6 +1,5 @@
 package com.uns.ftn.accountservice.dto;
 
-import com.uns.ftn.accountservice.domain.Role;
 import com.uns.ftn.accountservice.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

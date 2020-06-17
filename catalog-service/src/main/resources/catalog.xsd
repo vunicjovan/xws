@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ftn.uns.ac.rs/catalog"
+           targetNamespace="http://www.ftn.uns.ac.rs/catalog">
+
+    <xs:element name="getCatalogRequest">
+        <xs:complexType>
+
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCatalogResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="brands" type="tns:brand" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+                <xs:element name="models" type="tns:model" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+                <xs:element name="fuelTypes" type="tns:fuelType" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+                <xs:element name="gearboxTypes" type="tns:gearboxType" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+                <xs:element name="vehicleClasses" type="tns:vehicleClass" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="brand">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="fuelType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="gearboxType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="vehicleClass">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="model">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="brand" type="tns:brand"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,6 +1,5 @@
 package com.uns.ftn.accountservice.service;
 
-import com.uns.ftn.accountservice.domain.Role;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.SimpleUserDTO;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
