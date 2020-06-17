@@ -53,4 +53,16 @@ public class AdvertisementDTO implements Serializable {
         this.rating = ad.getRating();
     }
 
+    public AdvertisementDTO(rs.ac.uns.ftn.advertisement.Advertisement ad) {
+        this.id = ad.getId();
+        this.price = ad.getPrice();
+        this.kilometersPerDayLimit = ad.getKilometersPerDayLimit();
+        this.collisionDamageWaiver = ad.isCollisionDamageWaiver();
+        this.location = ad.getLocation();
+        this.description = ad.getDescription();
+        this.vehicle = new VehicleDTO(ad.getVehicle());
+        this.ownerId = ad.getOwnerId();
+        this.rating = ad.getRating();
+    }
+
 }

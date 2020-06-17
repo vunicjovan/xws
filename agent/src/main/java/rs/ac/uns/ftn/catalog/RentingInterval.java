@@ -11,22 +11,24 @@ package rs.ac.uns.ftn.catalog;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for model complex type.
+ * <p>Java class for rentingInterval complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="model"&gt;
+ * &lt;complexType name="rentingInterval"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="brand" type="{http://www.ftn.uns.ac.rs/catalog}brand"/&gt;
+ *         &lt;element name="startDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
+ *         &lt;element name="endDate" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,18 +38,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "model", propOrder = {
+@XmlType(name = "rentingInterval", namespace = "http://www.ftn.uns.ac.rs/advertisement", propOrder = {
     "id",
-    "name",
-    "brand"
+    "startDate",
+    "endDate"
 })
-public class Model {
+public class RentingInterval {
 
     protected long id;
     @XmlElement(required = true)
-    protected String name;
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar startDate;
     @XmlElement(required = true)
-    protected Brand brand;
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar endDate;
 
     /**
      * Gets the value of the id property.
@@ -66,51 +70,51 @@ public class Model {
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the startDate property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getName() {
-        return name;
+    public XMLGregorianCalendar getStartDate() {
+        return startDate;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the startDate property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setStartDate(XMLGregorianCalendar value) {
+        this.startDate = value;
     }
 
     /**
-     * Gets the value of the brand property.
+     * Gets the value of the endDate property.
      * 
      * @return
      *     possible object is
-     *     {@link Brand }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public Brand getBrand() {
-        return brand;
+    public XMLGregorianCalendar getEndDate() {
+        return endDate;
     }
 
     /**
-     * Sets the value of the brand property.
+     * Sets the value of the endDate property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Brand }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setBrand(Brand value) {
-        this.brand = value;
+    public void setEndDate(XMLGregorianCalendar value) {
+        this.endDate = value;
     }
 
 }

@@ -52,4 +52,15 @@ public class VehicleDTO implements Serializable {
         this.vehicleClassId = vehicle.getVehicleClassId();
         this.modelId = vehicle.getModelId();
     }
+
+    public VehicleDTO(rs.ac.uns.ftn.advertisement.Vehicle vehicle) {
+        this.id = vehicle.getId();
+        this.kilometersTraveled = vehicle.getKilometersTraveled();
+        this.childSeatNumber = vehicle.getChildSeatNumber();
+        this.hasAndroid = vehicle.isHasAndroid();
+        this.fuelTypeId = vehicle.getFuelTypeId();
+        this.gearboxTypeId = vehicle.getGearboxTypeId();
+        this.vehicleClassId = vehicle.getVehicleClassId();
+        this.modelId = vehicle.getModelId();
+    }
 }

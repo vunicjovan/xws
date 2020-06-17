@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ftn.uns.ac.rs/advertisement"
+        targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
+
+    <xs:element name="newAdvertisementRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisement" type="tns:advertisement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newAdvertisementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisement" type="tns:advertisement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="advertisement">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="price" type="xs:double"/>
+            <xs:element name="kilometersPerDayLimit" type="xs:int"/>
+            <xs:element name="collisionDamageWaiver" type="xs:boolean"/>
+            <xs:element name="rating" type="xs:double"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="location" type="xs:string"/>
+            <xs:element name="vehicle" type="tns:vehicle"/>
+            <xs:element name="ownerId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="vehicle">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="kilometersTraveled" type="xs:int"/>
+            <xs:element name="childSeatNumber" type="xs:int"/>
+            <xs:element name="hasAndroid" type="xs:boolean"/>
+            <xs:element name="fuelTypeId" type="xs:long"/>
+            <xs:element name="gearboxTypeId" type="xs:long"/>
+            <xs:element name="vehicleClassId" type="xs:long"/>
+            <xs:element name="modelId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="rentingInterval">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="startDate" type="xs:date"/>
+            <xs:element name="endDate" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="comment">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="content" type="xs:string"/>
+            <xs:element name="allowed" type="xs:boolean"/>
+            <xs:element name="userId" type="xs:long"/>
+            <xs:element name="rentingRequestId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
