@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class VehicleDTO {
 
+    private Long id;
     private Long modelId;
     private Long vehicleClassId;
     private Long fuelTypeId;
@@ -21,6 +22,7 @@ public class VehicleDTO {
     private Boolean hasAndroid;
 
     public VehicleDTO(Vehicle vehicle) {
+        this.id = vehicle.getId();
         this.modelId = vehicle.getModel().getId();
         this.vehicleClassId = vehicle.getVehicleClass().getId();
         this.fuelTypeId = vehicle.getFuelType().getId();

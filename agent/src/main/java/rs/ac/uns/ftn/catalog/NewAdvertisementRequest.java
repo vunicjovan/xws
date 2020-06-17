@@ -11,21 +11,21 @@ package rs.ac.uns.ftn.catalog;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for gearboxType complex type.
+ * <p>Java class for anonymous complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="gearboxType"&gt;
+ * &lt;complexType&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="advertisement" type="{http://www.ftn.uns.ac.rs/advertisement}advertisement"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,54 +35,37 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "gearboxType", propOrder = {
-    "id",
-    "name"
+@XmlType(name = "", propOrder = {
+    "advertisement"
 })
-public class GearboxType {
+@XmlRootElement(name = "newAdvertisementRequest", namespace = "http://www.ftn.uns.ac.rs/advertisement")
+public class NewAdvertisementRequest {
 
-    protected long id;
     @XmlElement(required = true)
-    protected String name;
+    protected Advertisement advertisement;
 
     /**
-     * Gets the value of the id property.
-     * 
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     */
-    public void setId(long value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the name property.
+     * Gets the value of the advertisement property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Advertisement }
      *     
      */
-    public String getName() {
-        return name;
+    public Advertisement getAdvertisement() {
+        return advertisement;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the advertisement property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Advertisement }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setAdvertisement(Advertisement value) {
+        this.advertisement = value;
     }
 
 }

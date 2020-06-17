@@ -15,7 +15,6 @@ public class CatalogEndpoint {
 
     private CatalogService catalogService;
 
-
     @Autowired
     public CatalogEndpoint(CatalogService catalogService) {
         this.catalogService = catalogService;
