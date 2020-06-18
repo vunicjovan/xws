@@ -70,9 +70,6 @@ public class RentingReportService {
         } else if (!currentTime.after(request.getEndDate())) {
             throw new BadRequestException("This request is yet to be expired in terms of renting time.");
         }
-        /*else if (!request.getAdvertisements().contains(advertisement)) {
-            throw new BadRequestException("This advertisement does not belong to given renting request.");
-        }*/
         else if (rdto.getKilometersTraveled() < 0 || !pattern.matcher(rdto.getContent().trim()).matches()) {
             throw new BadRequestException("Either you entered negative value for traveled distance or you haven't wrote valid content.");
         }
