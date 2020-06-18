@@ -29,11 +29,11 @@ public class RentingReport {
    @Column(name = "limitBroken", nullable = false)
    private Boolean limitBroken = false;
 
-   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
    @JsonIgnore
    private RentingRequest rentingRequest;
 
-   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
    @JsonIgnore
    private Advertisement advertisement;
 
