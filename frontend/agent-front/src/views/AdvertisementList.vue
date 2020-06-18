@@ -18,7 +18,7 @@
             
             <md-card-actions>
                 <md-button @click="showPhotos = true">Photos</md-button>
-                <md-button @click="showModal = true">Details</md-button>
+                <md-button @click="showDialog(ad.id)">Details</md-button>
             </md-card-actions>
 
             <md-dialog :md-active.sync="showModal">
@@ -71,6 +71,64 @@
                             </md-list-item>
                         </md-list>
                     </md-tab>
+                    <md-tab md-label="Rent intervals">
+                        <form class="md-layout md-alignment-top-center">
+                            <md-card class="md-layout-item md-size-40 md-small-size-100">
+                                <md-card-header>
+                                    <div class="md-title">Unavailable intervals</div>
+                                </md-card-header>
+                                <md-card-content>
+                                    <md-datepicker :class="{ 'md-invalid': $v.rentingInterval.startDate.$error }" v-model="rentingInterval.startDate">
+                                        <label>Select start date</label>
+                                        <span class="md-error" v-if="!$v.rentingInterval.startDate.required">Start date is required</span>
+                                    </md-datepicker>
+                                    <md-datepicker :class="{ 'md-invalid': $v.rentingInterval.endDate.$error }" v-model="rentingInterval.endDate">
+                                        <label>Select end date</label>
+                                        <span class="md-error" v-if="!$v.rentingInterval.endDate.required">End date is required</span>
+                                    </md-datepicker>
+                                </md-card-content>
+                                <md-card-actions>
+                                    <md-button class="md-primary" @click="resetDates()" >Reset</md-button>
+                                    <md-button class="md-primary" type="submit"  @click.prevent="validateDates">Add</md-button>
+                                </md-card-actions>
+                            </md-card>
+                        </form>
+                    </md-tab>
+                    <md-tab md-label="Add comment">
+                        <form class="md-layout md-alignment-top-center">
+                            <md-card class="md-layout-item md-size-40 md-small-size-100">
+                                <md-card-header>
+                                    <div class="md-title">Post comment</div>
+                                </md-card-header>
+                                <md-card-content>
+                                    <div class="md-layout">
+                                    <div class="md-layout-item md-small-size-100">
+                                        <md-field :class="getValidationClass('title')">
+                                            <label>Title</label>
+                                            <md-input type="text" v-model="comment.title"></md-input>
+                                            <span class="md-error" v-if="!$v.comment.title.required">Title is rquired</span>
+                                            <span class="md-error" v-if="!$v.comment.title.lrx">Title is not well formed</span>
+                                        </md-field>
+                                    </div>
+                                    </div>
+                                    <div class="md-layout">
+                                    <div class="md-layout-item md-small-size-100">
+                                        <md-field :class="getValidationClass('content')">
+                                            <label>Content</label>
+                                            <md-textarea type="text" v-model="comment.content" />
+                                            <span class="md-error" v-if="!$v.comment.content.required">Content is required</span>
+                                            <span class="md-error" v-if="!$v.comment.content.lrx">Content is not well formed</span>
+                                        </md-field>
+                                    </div>
+                                    </div>
+                                </md-card-content>
+                                <md-card-actions>
+                                    <md-button class="md-primary" @click="resetComment()">Reset</md-button>
+                                    <md-button class="md-primary" type="submit" @click.prevent="validateComment">Add</md-button>
+                                </md-card-actions>
+                            </md-card>
+                        </form>
+                    </md-tab>
                 </md-tabs>
             </md-dialog>
             <md-dialog :md-active.sync="showPhotos">
@@ -92,9 +150,14 @@
 import { mapGetters, mapActions } from "vuex";
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+import { helpers } from "vuelidate/lib/validators";
+const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {
     name: "AdvertisementList",
+    mixins: [validationMixin],
     components: {
         Swiper,
         SwiperSlide
@@ -205,7 +268,19 @@ export default {
                         "https://img-ik.cars.co.za/images/2019/9/Merc%20EQS/tr:n-news_large/mercedes-benz-vision-eqs-2019%203.jpg"
                     ]
                 }
-            ]
+            ],
+            selectedAdvertisementId: undefined,
+            rentingInterval: {
+                startDate: undefined,
+                endDate: undefined,
+                advertisementId: undefined
+            },
+
+            comment: {
+                title: undefined,
+                content: undefined,
+                advertisementId: undefined,
+            }
         };
     },
     mounted: function() {
@@ -229,8 +304,83 @@ export default {
             };
             
             this.$store.dispatch("addCartItem", payload);
+        },
+
+        addUnabailableTerm() {
+            this.rentingInterval.advertisementId = this.selectedAdvertisementId
+			this.$store.dispatch("addRentingInterval", this.rentingInterval);
+		},
+
+		resetDates() {
+			this.$v.$reset();
+			this.rentingInterval.startDate = undefined;
+			this.rentingInterval.endDate = undefined;
+        },
+        
+        validateDates() {
+			this.$v.rentingInterval.$touch();
+
+			if (!this.$v.rentingInterval.$invalid) {
+				this.addUnabailableTerm();
+			}
+        },
+
+        postComment() {
+            this.comment.advertisementId = this.selectedAdvertisementId;
+            this.$store.dispatch("postComment", this.comment);
+        },
+
+        resetComment() {
+            this.$v.$reset();
+            this.comment.title = undefined;
+            this.comment.content = undefined;
+        },
+
+        validateComment() {
+            this.$v.comment.$touch();
+
+			if (!this.$v.comment.$invalid) {
+				this.postComment();
+			}
+        },
+
+        getValidationClass(fieldName) {
+			const field = this.$v.comment[fieldName];
+
+			if (field) {
+				return {
+					"md-invalid": field.$invalid && field.$dirty,
+				};
+			}
+		},
+        
+        showDialog(id) {
+            this.selectedAdvertisementId = id;
+            this.showModal = true;
         }
-    }
+    },
+
+    validations: {
+		rentingInterval: {
+			startDate: {
+				required,
+			},
+			endDate: {
+				required,
+			},
+        },
+        
+        comment: {
+            title: {
+                required,
+                lrx,
+            },
+            content: {
+                required,
+                lrx,
+            }
+        }
+	},
 }
 </script>
 
