@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="finishedRequests" type="{http://www.ftn.uns.ac.rs/renting}finishedRequest" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="comments" type="{http://www.ftn.uns.ac.rs/advertisement}comment" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -38,41 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "finishedRequests"
+    "comments"
 })
-@XmlRootElement(name = "getFinishedResponse", namespace = "http://www.ftn.uns.ac.rs/renting")
-public class GetFinishedResponse {
+@XmlRootElement(name = "commentResponse")
+public class CommentResponse {
 
     @XmlElement(nillable = true)
-    protected List<FinishedRequest> finishedRequests;
+    protected List<Comment> comments;
 
     /**
-     * Gets the value of the finishedRequests property.
+     * Gets the value of the comments property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the finishedRequests property.
+     * This is why there is not a <CODE>set</CODE> method for the comments property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getFinishedRequests().add(newItem);
+     *    getComments().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link FinishedRequest }
+     * {@link Comment }
      * 
      * 
      */
-    public List<FinishedRequest> getFinishedRequests() {
-        if (finishedRequests == null) {
-            finishedRequests = new ArrayList<FinishedRequest>();
+    public List<Comment> getComments() {
+        if (comments == null) {
+            comments = new ArrayList<Comment>();
         }
-        return this.finishedRequests;
+        return this.comments;
     }
 
 }

@@ -38,4 +38,14 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
 
         return response;
     }
+
+    public CommentResponse getComments(Long id) {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setOwnerId(id);
+
+        CommentResponse commentResponse =(CommentResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(commentRequest);
+
+        return commentResponse;
+    }
 }

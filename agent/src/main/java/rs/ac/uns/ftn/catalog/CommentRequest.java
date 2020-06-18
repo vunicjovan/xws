@@ -23,6 +23,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -31,9 +34,28 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
-@XmlRootElement(name = "getCatalogRequest", namespace = "http://www.ftn.uns.ac.rs/catalog")
-public class GetCatalogRequest {
+@XmlType(name = "", propOrder = {
+    "ownerId"
+})
+@XmlRootElement(name = "commentRequest")
+public class CommentRequest {
 
+    protected long ownerId;
+
+    /**
+     * Gets the value of the ownerId property.
+     * 
+     */
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Sets the value of the ownerId property.
+     * 
+     */
+    public void setOwnerId(long value) {
+        this.ownerId = value;
+    }
 
 }
