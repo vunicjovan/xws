@@ -1,7 +1,9 @@
 package com.uns.ftn.rentingservice.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -35,7 +37,6 @@ public class RentingRequest {
    @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<RentingReport> rentingReports;
 
-   //@JsonIgnore
    @ManyToMany
    @JoinTable(name = "renting_request_advertisements", joinColumns = @JoinColumn(name = "renting_request_id",
            referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id"))

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/renting"
+                  targetNamespace="http://www.ftn.uns.ac.rs/renting">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/renting">
+
+            <!-- Getter for finished renting requests on agent-app -->
+            <xs:element name="getFinishedRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="getFinishedResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="finishedRequests" nillable="true"
+                                    type="tns:finishedRequest"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:complexType name="finishedRequest">
+                <xs:sequence>
+                    <xs:element name="requestId" type="xs:long"/>
+                    <xs:element name="startDate" type="xs:dateTime"/>
+                    <xs:element name="endDate" type="xs:dateTime"/>
+                    <xs:element name="advertisementId" type="xs:long"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Renting report creation -->
+            <xs:element name="compileReportRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="kilometersTraveled" type="xs:int"/>
+                        <xs:element name="content" type="xs:string"/>
+                        <xs:element name="requestID" type="xs:long"/>
+                        <xs:element name="advertisementID" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="compileReportResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="kilometersTraveled" type="xs:int"/>
+                        <xs:element name="content" type="xs:string"/>
+                        <xs:element name="requestID" type="xs:long"/>
+                        <xs:element name="advertisementID" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="compileReportResponse">
+        <wsdl:part element="tns:compileReportResponse" name="compileReportResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getFinishedResponse">
+        <wsdl:part element="tns:getFinishedResponse" name="getFinishedResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="compileReportRequest">
+        <wsdl:part element="tns:compileReportRequest" name="compileReportRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getFinishedRequest">
+        <wsdl:part element="tns:getFinishedRequest" name="getFinishedRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="RentingPort">
+        <wsdl:operation name="compileReport">
+            <wsdl:input message="tns:compileReportRequest" name="compileReportRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:compileReportResponse" name="compileReportResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getFinished">
+            <wsdl:input message="tns:getFinishedRequest" name="getFinishedRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:getFinishedResponse" name="getFinishedResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="RentingPortSoap11" type="tns:RentingPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="compileReport">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="compileReportRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="compileReportResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getFinished">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="getFinishedRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getFinishedResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="RentingPortService">
+        <wsdl:port binding="tns:RentingPortSoap11" name="RentingPortSoap11">
+            <soap:address location="http://localhost:8086/ws"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
