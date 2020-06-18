@@ -21,6 +21,7 @@ public class AdvertisementDTO {
     private String location;
     private String description;
     private Long ownerId;
+    private double rating;
 
     public AdvertisementDTO(Advertisement advertisement) {
         this.id = advertisement.getId();
@@ -31,6 +32,7 @@ public class AdvertisementDTO {
         this.location = advertisement.getLocation();
         this.description = advertisement.getDescription();
         this.ownerId = advertisement.getOwnerId();
+        this.rating = advertisement.getRating();
     }
 
 }

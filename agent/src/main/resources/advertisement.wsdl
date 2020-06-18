@@ -1,0 +1,102 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.ftn.uns.ac.rs/advertisement" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/advertisement" targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
+
+    <xs:element name="newAdvertisementRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisement" type="tns:advertisement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newAdvertisementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisement" type="tns:advertisement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="advertisement">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="price" type="xs:double"/>
+            <xs:element name="kilometersPerDayLimit" type="xs:int"/>
+            <xs:element name="collisionDamageWaiver" type="xs:boolean"/>
+            <xs:element name="rating" type="xs:double"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="location" type="xs:string"/>
+            <xs:element name="vehicle" type="tns:vehicle"/>
+            <xs:element name="ownerId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="vehicle">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="kilometersTraveled" type="xs:int"/>
+            <xs:element name="childSeatNumber" type="xs:int"/>
+            <xs:element name="hasAndroid" type="xs:boolean"/>
+            <xs:element name="fuelTypeId" type="xs:long"/>
+            <xs:element name="gearboxTypeId" type="xs:long"/>
+            <xs:element name="vehicleClassId" type="xs:long"/>
+            <xs:element name="modelId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="rentingInterval">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="startDate" type="xs:date"/>
+            <xs:element name="endDate" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="comment">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="content" type="xs:string"/>
+            <xs:element name="allowed" type="xs:boolean"/>
+            <xs:element name="userId" type="xs:long"/>
+            <xs:element name="rentingRequestId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="newAdvertisementResponse">
+    <wsdl:part element="tns:newAdvertisementResponse" name="newAdvertisementResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="newAdvertisementRequest">
+    <wsdl:part element="tns:newAdvertisementRequest" name="newAdvertisementRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AdvertisementPort">
+    <wsdl:operation name="newAdvertisement">
+      <wsdl:input message="tns:newAdvertisementRequest" name="newAdvertisementRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:newAdvertisementResponse" name="newAdvertisementResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AdvertisementPortSoap11" type="tns:AdvertisementPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="newAdvertisement">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="newAdvertisementRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="newAdvertisementResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AdvertisementPortService">
+    <wsdl:port binding="tns:AdvertisementPortSoap11" name="AdvertisementPortSoap11">
+      <soap:address location="http://localhost:8081/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

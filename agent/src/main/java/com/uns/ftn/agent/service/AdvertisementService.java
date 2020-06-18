@@ -1,11 +1,15 @@
 package com.uns.ftn.agent.service;
 
+import com.uns.ftn.agent.client.AdvertisementClient;
+import com.uns.ftn.agent.controller.AdvertisementController;
+import com.uns.ftn.agent.domain.AdWrapper;
 import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.domain.Vehicle;
 import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.dto.StatisticDTO;
 import com.uns.ftn.agent.dto.StatisticReportDTO;
 import com.uns.ftn.agent.exceptions.BadRequestException;
+import com.uns.ftn.agent.repository.AdWrapperRepository;
 import com.uns.ftn.agent.repository.AdvertisementRepository;
 import com.uns.ftn.agent.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,16 +32,22 @@ public class AdvertisementService {
     private AdvertisementRepository advertisementRepository;
     private VehicleRepository vehicleRepository;
     private CatalogService catalogService;
+    private AdvertisementClient advertisementClient;
+    private AdWrapperRepository adWrapperRepository;
 
     @Autowired
     public AdvertisementService(
             AdvertisementRepository advertisementRepository,
             VehicleRepository vehicleRepository,
-            CatalogService catalogService
+            CatalogService catalogService,
+            AdvertisementClient advertisementClient,
+            AdWrapperRepository adWrapperRepository
     ) {
         this.advertisementRepository = advertisementRepository;
         this.vehicleRepository = vehicleRepository;
         this.catalogService = catalogService;
+        this.advertisementClient = advertisementClient;
+        this.adWrapperRepository = adWrapperRepository;
     }
 
     public Advertisement saveAd(Advertisement advertisement) { return advertisementRepository.save(advertisement); }
@@ -71,6 +82,14 @@ public class AdvertisementService {
         ad.setRating(0.0);
         ad.setPrice(adDTO.getPrice());
         ad = saveAd(ad);
+
+        NewAdvertisementResponse response = advertisementClient.newAdvertisement(new AdvertisementDTO(ad));
+        if(response != null) {
+            AdWrapper adWrapper = new AdWrapper();
+            adWrapper.setRemoteId(response.getAdvertisement().getId());
+            adWrapper.setAdvertisement(ad);
+            adWrapperRepository.save(adWrapper);
+        }
 
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
     }

@@ -1,12 +1,13 @@
 package com.uns.ftn.agent.conf;
 
+import com.uns.ftn.agent.client.AdvertisementClient;
 import com.uns.ftn.agent.client.CatalogClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 @Configuration
-public class CatalogClientConfig {
+public class ClientsConfig {
 
     @Bean
     public Jaxb2Marshaller marshaller() {
@@ -19,6 +20,15 @@ public class CatalogClientConfig {
     public CatalogClient catalogClient(Jaxb2Marshaller marshaller) {
         CatalogClient client = new CatalogClient();
         client.setDefaultUri("http://localhost:8083/ws");
+        client.setMarshaller(marshaller);
+        client.setUnmarshaller(marshaller);
+        return client;
+    }
+
+    @Bean
+    public AdvertisementClient advertisementClient(Jaxb2Marshaller marshaller) {
+        AdvertisementClient client = new AdvertisementClient();
+        client.setDefaultUri("http://localhost:8081/ws");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         return client;

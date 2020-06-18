@@ -37,6 +37,54 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NewAdvertisementRequest }
+     * 
+     */
+    public NewAdvertisementRequest createNewAdvertisementRequest() {
+        return new NewAdvertisementRequest();
+    }
+
+    /**
+     * Create an instance of {@link Advertisement }
+     * 
+     */
+    public Advertisement createAdvertisement() {
+        return new Advertisement();
+    }
+
+    /**
+     * Create an instance of {@link NewAdvertisementResponse }
+     * 
+     */
+    public NewAdvertisementResponse createNewAdvertisementResponse() {
+        return new NewAdvertisementResponse();
+    }
+
+    /**
+     * Create an instance of {@link Vehicle }
+     * 
+     */
+    public Vehicle createVehicle() {
+        return new Vehicle();
+    }
+
+    /**
+     * Create an instance of {@link RentingInterval }
+     * 
+     */
+    public RentingInterval createRentingInterval() {
+        return new RentingInterval();
+    }
+
+    /**
+     * Create an instance of {@link Comment }
+     * 
+     */
+    public Comment createComment() {
+        return new Comment();
+    }
+
+    /**
      * Create an instance of {@link GetCatalogRequest }
      *
      */
