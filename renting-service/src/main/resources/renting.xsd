@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ftn.uns.ac.rs/renting"
+           targetNamespace="http://www.ftn.uns.ac.rs/renting">
+
+    <!-- Getter for finished renting requests on agent-app -->
+    <xs:element name="getFinishedRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getFinishedResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="finishedRequests" type="tns:finishedRequest" minOccurs="0" maxOccurs="unbounded"
+                            nillable="true"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="finishedRequest">
+        <xs:sequence>
+            <xs:element name="requestId" type="xs:long"/>
+            <xs:element name="startDate" type="xs:dateTime"/>
+            <xs:element name="endDate" type="xs:dateTime"/>
+            <xs:element name="advertisementId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Renting report creation -->
+    <xs:element name="compileReportRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="kilometersTraveled" type="xs:int"/>
+                <xs:element name="content" type="xs:string"/>
+                <xs:element name="requestID" type="xs:long"/>
+                <xs:element name="advertisementID" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="compileReportResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="kilometersTraveled" type="xs:int"/>
+                <xs:element name="content" type="xs:string"/>
+                <xs:element name="requestID" type="xs:long"/>
+                <xs:element name="advertisementID" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

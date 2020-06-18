@@ -1,16 +1,13 @@
 package com.uns.ftn.rentingservice.controller;
 
-import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
-import com.uns.ftn.rentingservice.service.CommentService;
 import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
+import com.uns.ftn.rentingservice.service.CommentService;
 import com.uns.ftn.rentingservice.service.RentingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
 
 @RestController
 @RequestMapping("/request")
@@ -33,6 +30,11 @@ public class RentingRequestController {
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         return null;
+    }
+
+    @GetMapping("/{agentId}/finished")
+    public ResponseEntity<?> getAllFinished(@PathVariable Long agentId) {
+        return new ResponseEntity<>(this.requestService.getAllFinished(agentId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/", consumes = "application/json")

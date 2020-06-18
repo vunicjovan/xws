@@ -5,6 +5,7 @@ import com.uns.ftn.rentingservice.domain.RentingInterval;
 import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.CreateResponseDTO;
+import com.uns.ftn.rentingservice.dto.GetRentingRequestDTO;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
 import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
@@ -91,14 +92,33 @@ public class RentingRequestService {
         rentingRequest = save(rentingRequest);
 
 
-
         return new ResponseEntity<>(
                 new RequestStatusDTO(rentingRequest.getId(), rentingRequest.getStatus()), HttpStatus.OK);
     }
 
+    public Set<GetRentingRequestDTO> getAllFinished(Long agentId) {
+        Set<Advertisement> agentsAds = adRepo.findAllByOwnerId(agentId);
+        Set<GetRentingRequestDTO> retval = new HashSet<>();
+        Date currentTime = new Date();
+
+        if (!agentsAds.isEmpty()) {
+            for (Advertisement ad : agentsAds) {
+                for (RentingRequest request : ad.getRentingRequests()) {
+                    if (request.getStatus() == RequestStatus.paid && currentTime.after(request.getEndDate())) {
+                        GetRentingRequestDTO gdto = new GetRentingRequestDTO(request);
+                        gdto.setAdvertisementID(ad.getId());
+                        retval.add(gdto);
+                    }
+                }
+            }
+        }
+
+        return retval;
+    }
+
     private Set<Advertisement> checkIfAdsExist(Set<Long> adIDs) {
         Set<Advertisement> adSet = new HashSet<>();
-        for (Long id: adIDs) {
+        for (Long id : adIDs) {
             Advertisement ad = this.adRepo.findById(id).orElseThrow(() ->
                     new NotFoundException("Requested advertisement does not exist."));
             adSet.add(ad);

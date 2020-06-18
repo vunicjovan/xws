@@ -1,7 +1,10 @@
 package com.uns.ftn.rentingservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -17,8 +20,8 @@ public class RentingReport {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "kilometersTraveled", nullable = false)
-   private double kilometersTraveled;
+    @Column(name = "kilometersTraveled", nullable = false)
+    private int kilometersTraveled;
 
    @Column(name = "content", nullable = false)
    private String content;

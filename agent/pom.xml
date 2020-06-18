@@ -122,8 +122,9 @@
 					<generatePackage>rs.ac.uns.ftn.catalog</generatePackage>
 					<schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
 					<schemaIncludes>
-						<include>catalog.wsdl</include>
-					</schemaIncludes>
+                        <include>catalog.wsdl</include>
+                        <include>renting.wsdl</include>
+                    </schemaIncludes>
 				</configuration>
 			</plugin>
 		</plugins>

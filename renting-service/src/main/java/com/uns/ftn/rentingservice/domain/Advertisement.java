@@ -5,7 +5,6 @@ package com.uns.ftn.rentingservice.domain;
  * Purpose: Defines the Class Advertisement
  ***********************************************************************/
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,7 @@ public class Advertisement {
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals = new HashSet<>();
 
-    //@JsonIgnore
-    @ManyToMany(mappedBy = "advertisements")
+    @ManyToMany(mappedBy = "advertisements", fetch = FetchType.EAGER)
     private Set<RentingRequest> rentingRequests;
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
