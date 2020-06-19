@@ -21,6 +21,6 @@ public class AdWrapper {
     @Column(name = "remoteId")
     private Long remoteId;
 
-    @OneToOne
-    private Advertisement advertisement;
+    @Column(name = "advertisementId")
+    private Long advertisementId;
 }

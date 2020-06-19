@@ -17,7 +17,6 @@ import java.util.*;
 public class Model {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "name", nullable = false)
@@ -29,8 +28,4 @@ public class Model {
 
    @Column(name = "deleted")
    private Boolean deleted = false;
-
-   @JsonIgnore
-   @OneToMany(mappedBy = "model", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 }

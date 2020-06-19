@@ -19,7 +19,6 @@ import java.util.*;
 public class GearboxType {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "name", nullable = false)
@@ -28,8 +27,5 @@ public class GearboxType {
    @Column(name = "deleted")
    private Boolean deleted = false;
 
-   @JsonIgnore
-   @OneToMany(mappedBy = "gearboxType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 
 }

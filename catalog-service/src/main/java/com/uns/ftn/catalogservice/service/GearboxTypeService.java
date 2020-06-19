@@ -39,8 +39,8 @@ public class GearboxTypeService {
         return gearboxRepo.findById(id).orElseThrow(() -> new NotFoundException("Requested gearbox type does not exist."));
     }
 
-    public List<GearboxType> findAll() {
-        return gearboxRepo.findAll();
+    public Set<GearboxTypeDTO> findAll() {
+        return gearboxRepo.findAll().stream().map(GearboxTypeDTO::new).collect(Collectors.toSet());
     }
 
     public GearboxType findByName(String name) {

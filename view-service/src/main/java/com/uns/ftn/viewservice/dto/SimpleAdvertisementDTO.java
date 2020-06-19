@@ -1,10 +1,13 @@
 package com.uns.ftn.viewservice.dto;
 
+import com.uns.ftn.viewservice.domain.Advertisement;
+import com.uns.ftn.viewservice.domain.Photo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +20,14 @@ public class SimpleAdvertisementDTO {
     private String brand;
     private String model;
     private Set<String> photo;
+
+    public SimpleAdvertisementDTO(Advertisement advertisement) {
+        this.id = advertisement.getId();
+        this.price = advertisement.getPrice();
+        this.location = advertisement.getLocation();
+        this.brand = advertisement.getVehicle().getModel().getBrand().getName();
+        this.model = advertisement.getVehicle().getModel().getName();
+        this.photo = advertisement.getPhotos().stream().map(Photo::getPath).collect(Collectors.toSet());
+    }
 
 }

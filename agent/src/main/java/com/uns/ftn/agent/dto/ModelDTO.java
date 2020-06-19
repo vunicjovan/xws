@@ -14,6 +14,7 @@ public class ModelDTO {
     private Long id;
     private String name;
     private BrandDTO brand;
+    private Boolean deleted;
 
     public ModelDTO(Model model) {
         this.id = model.getId();
@@ -25,6 +26,7 @@ public class ModelDTO {
         this.id = model.getId();
         this.name = model.getName();
         this.brand = new BrandDTO(model.getBrand());
+        this.deleted = model.isDeleted();
     }
 
 }

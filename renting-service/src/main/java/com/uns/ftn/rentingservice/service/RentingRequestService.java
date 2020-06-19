@@ -1,13 +1,11 @@
 package com.uns.ftn.rentingservice.service;
 
+import com.uns.ftn.rentingservice.client.AdvertisementClient;
 import com.uns.ftn.rentingservice.domain.Advertisement;
 import com.uns.ftn.rentingservice.domain.RentingInterval;
 import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.domain.RequestStatus;
-import com.uns.ftn.rentingservice.dto.CreateResponseDTO;
-import com.uns.ftn.rentingservice.dto.GetRentingRequestDTO;
-import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
-import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
+import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
@@ -20,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RentingRequestService {
@@ -28,13 +28,15 @@ public class RentingRequestService {
     private AdvertisementRepository adRepo;
     private RentingRequestRepository requestRepo;
     private TaskScheduler taskScheduler;
+    private AdvertisementClient advertisementClient;
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
-                                 TaskScheduler taskScheduler) {
+                                 TaskScheduler taskScheduler, AdvertisementClient advertisementClient) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
+        this.advertisementClient = advertisementClient;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -114,6 +116,49 @@ public class RentingRequestService {
         }
 
         return retval;
+    }
+
+    public Set<ReqResponseDTO> getRequestForUser(Long id) {
+        List<RentingRequest> requests = requestRepo.findAllBySenderId(id);
+        Set<RentingRequest> response = new HashSet<>();
+
+        if(requests.isEmpty()) {
+            Set<Advertisement> advertisements = adRepo.findAllByOwnerId(id);
+            for(Advertisement ad : advertisements) {
+                for(RentingRequest req : ad.getRentingRequests()) {
+                    if(req.getStatus() == RequestStatus.pending &&
+                            req.getEndDate().after(new Date(System.currentTimeMillis()))){
+                        response.add(req);
+                    }
+                }
+            }
+
+            return getReqResponseDTOS(response);
+        }
+
+        for(RentingRequest req : requests) {
+            if(req.getStatus() == RequestStatus.pending &&
+                    req.getEndDate().after(new Date(System.currentTimeMillis()))) {
+                response.add(req);
+            }
+        }
+
+        return getReqResponseDTOS(response);
+    }
+
+    private Set<ReqResponseDTO> getReqResponseDTOS(Set<RentingRequest> response) {
+        return response.stream().map(req -> {
+            ReqResponseDTO resp = new ReqResponseDTO();
+            resp.setId(req.getId());
+            resp.setSenderId(req.getSenderId());
+            resp.setStartDate(req.getStartDate());
+            resp.setEndDate(req.getEndDate());
+            for(Advertisement adv : req.getAdvertisements()) {
+                AdvertClientResponseDTO ad = advertisementClient.getAd(adv.getId());
+                resp.getAdvertisements().add(ad);
+            }
+            return resp;
+        }).collect(Collectors.toSet());
     }
 
     private Set<Advertisement> checkIfAdsExist(Set<Long> adIDs) {

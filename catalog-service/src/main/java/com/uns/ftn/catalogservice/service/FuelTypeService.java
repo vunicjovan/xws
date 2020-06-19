@@ -30,6 +30,10 @@ public class FuelTypeService {
     @Autowired
     private VehicleClient vehicleClient;
 
+    public Set<FuelTypeDTO> findAll() {
+        return fuelTypeRepository.findAll().stream().map(FuelTypeDTO::new).collect(Collectors.toSet());
+    }
+
     public FuelType findOne(Long id) {
         return fuelTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("Requested fuel type does not exist."));
     }

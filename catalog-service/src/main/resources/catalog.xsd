@@ -4,7 +4,6 @@
 
     <xs:element name="getCatalogRequest">
         <xs:complexType>
-
         </xs:complexType>
     </xs:element>
 
@@ -24,6 +23,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="deleted" type="xs:boolean" default="false"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -31,6 +31,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="deleted" type="xs:boolean" default="false"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -38,6 +39,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="deleted" type="xs:boolean" default="false"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -45,6 +47,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="deleted" type="xs:boolean" default="false"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -53,6 +56,7 @@
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="brand" type="tns:brand"/>
+            <xs:element name="deleted" type="xs:boolean" default="false"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

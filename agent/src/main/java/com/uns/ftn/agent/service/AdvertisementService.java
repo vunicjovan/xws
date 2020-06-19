@@ -9,6 +9,7 @@ import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.dto.StatisticDTO;
 import com.uns.ftn.agent.dto.StatisticReportDTO;
 import com.uns.ftn.agent.exceptions.BadRequestException;
+import com.uns.ftn.agent.exceptions.NotFoundException;
 import com.uns.ftn.agent.repository.AdWrapperRepository;
 import com.uns.ftn.agent.repository.AdvertisementRepository;
 import com.uns.ftn.agent.repository.VehicleRepository;
@@ -53,6 +54,15 @@ public class AdvertisementService {
     public Advertisement saveAd(Advertisement advertisement) { return advertisementRepository.save(advertisement); }
     public Vehicle saveVehicle(Vehicle vehicle) { return vehicleRepository.save(vehicle); }
 
+    public AdWrapper findOneAdWrapper(Long id) {
+        return adWrapperRepository.findByAdvertisementId(id);
+    }
+
+    public Advertisement findOne(Long id) {
+        return advertisementRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Requested advertisement doesn't exist"));
+    }
+
     public ResponseEntity<?> addNewAdvertisement(AdvertisementDTO adDTO) {
 
         if (!validateAdPostingData(adDTO)) {
@@ -87,7 +97,7 @@ public class AdvertisementService {
         if(response != null) {
             AdWrapper adWrapper = new AdWrapper();
             adWrapper.setRemoteId(response.getAdvertisement().getId());
-            adWrapper.setAdvertisement(ad);
+            adWrapper.setAdvertisementId(ad.getId());
             adWrapperRepository.save(adWrapper);
         }
 

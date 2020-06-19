@@ -41,8 +41,8 @@ public class ModelService {
                 new NotFoundException("Requested vehicle model does not exist."));
     }
 
-    public List<Model> findAll() {
-        return modelRepository.findAll();
+    public Set<ModelDTO> findAll() {
+        return modelRepository.findAll().stream().map(ModelDTO::new).collect(Collectors.toSet());
     }
 
     public Model findByName(String name) {

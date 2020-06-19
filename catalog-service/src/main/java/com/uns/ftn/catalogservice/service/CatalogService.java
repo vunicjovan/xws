@@ -45,6 +45,23 @@ public class CatalogService {
         return catalogDTO;
     }
 
+    public CatalogDTO getCatalogSOAP() {
+        CatalogDTO catalogDTO = new CatalogDTO();
+        Set<FuelTypeDTO> fuelTypeDTOSet = fuelTypeService.findAll();
+        Set<GearboxTypeDTO> gearboxTypeDTOSet = gearboxService.findAll();
+        Set<BrandDTO> brandDTOSet = brandService.findAll();
+        Set<ModelDTO> modelDTOSet = modelService.findAll();
+        Set<VehicleClassDTO> vehicleClassDTOSet = vehicleClassService.findAll();
+
+        catalogDTO.setFuelTypes(fuelTypeDTOSet);
+        catalogDTO.setGearboxTypes(gearboxTypeDTOSet);
+        catalogDTO.setBrands(brandDTOSet);
+        catalogDTO.setModels(modelDTOSet);
+        catalogDTO.setVehicleClasses(vehicleClassDTOSet);
+
+        return catalogDTO;
+    }
+
     public ResponseEntity<?> checkResources(String resources) {
         String[] parts = resources.split("-");
         CheckResponseDTO crd = new CheckResponseDTO();
