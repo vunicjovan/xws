@@ -1,6 +1,7 @@
 package com.uns.ftn.agent.client;
 
 import com.uns.ftn.agent.dto.AdvertisementDTO;
+import com.uns.ftn.agent.dto.PhotoRequestDTO;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import rs.ac.uns.ftn.catalog.*;
 
@@ -35,6 +36,17 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
 
         NewAdvertisementResponse response = (NewAdvertisementResponse) getWebServiceTemplate()
                 .marshalSendAndReceive(request);
+
+        return response;
+    }
+
+
+    public NewPhotoResponse newPhoto(PhotoRequestDTO photoRequestDTO) {
+        NewPhotoRequest request = new NewPhotoRequest();
+        request.setBytes(photoRequestDTO.getBytes());
+        request.setPath(photoRequestDTO.getPath());
+        request.setAdId(photoRequestDTO.getId());
+        NewPhotoResponse response = (NewPhotoResponse) getWebServiceTemplate().marshalSendAndReceive(request);
 
         return response;
     }

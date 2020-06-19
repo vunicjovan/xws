@@ -36,8 +36,8 @@ public class BrandService {
         return brandRepository.findById(id).orElseThrow(() -> new NotFoundException("Requested brand does not exist."));
     }
 
-    public List<Brand> findAll() {
-        return brandRepository.findAll();
+    public Set<BrandDTO> findAll() {
+        return brandRepository.findAll().stream().map(BrandDTO::new).collect(Collectors.toSet());
     }
 
     public Brand findByName(String name) {

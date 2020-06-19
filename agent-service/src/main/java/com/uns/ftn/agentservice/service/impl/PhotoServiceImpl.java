@@ -12,6 +12,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import rs.ac.uns.ftn.advertisement.NewPhotoRequest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -20,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class PhotoServiceImpl implements PhotoService {
+public class  PhotoServiceImpl implements PhotoService {
 
     PhotoRepository photoRepository;
     AdvertisementService advertisementService;
@@ -58,5 +59,17 @@ public class PhotoServiceImpl implements PhotoService {
         byte[] bytes = Files.readAllBytes(Paths.get(folder + filename));
 
         return new ByteArrayResource(bytes);
+    }
+
+    public void storeSOAP(NewPhotoRequest request) throws IOException {
+        String folder = "images/" + request.getAdId() + "/";
+        Advertisement advertisement = advertisementService.findById(request.getAdId());
+        Photo photo = new Photo();
+        Files.createDirectories(Paths.get(folder));
+        Path path = Paths.get(folder + request.getPath());
+        Files.write(path, request.getBytes());
+        photo.setPath(request.getPath());
+        photo.setAdvertisement(advertisement);
+        photoRepository.save(photo);
     }
 }

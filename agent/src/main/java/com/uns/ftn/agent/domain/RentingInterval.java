@@ -17,7 +17,6 @@ import java.util.*;
 public class RentingInterval {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "startDate", nullable = false)

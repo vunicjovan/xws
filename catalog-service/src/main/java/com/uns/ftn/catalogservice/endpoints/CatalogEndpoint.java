@@ -24,12 +24,13 @@ public class CatalogEndpoint {
     @ResponsePayload
     public GetCatalogResponse getCatalog() {
         GetCatalogResponse response = new GetCatalogResponse();
-        CatalogDTO catalogDTO = catalogService.getCatalog();
+        CatalogDTO catalogDTO = catalogService.getCatalogSOAP();
 
         for(BrandDTO brandDTO : catalogDTO.getBrands()) {
             Brand brand = new Brand();
             brand.setId(brandDTO.getId());
             brand.setName(brandDTO.getName());
+            brand.setDeleted(brandDTO.getDeleted());
             response.getBrands().add(brand);
         }
 
@@ -41,6 +42,7 @@ public class CatalogEndpoint {
             model.setId(modelDTO.getId());
             model.setName(modelDTO.getName());
             model.setBrand(brand);
+            model.setDeleted(modelDTO.getDeleted());
             response.getModels().add(model);
         }
 
@@ -48,6 +50,7 @@ public class CatalogEndpoint {
             FuelType fuelType = new FuelType();
             fuelType.setId(fuelTypeDTO.getId());
             fuelType.setName(fuelTypeDTO.getName());
+            fuelType.setDeleted(fuelTypeDTO.getDeleted());
             response.getFuelTypes().add(fuelType);
         }
 
@@ -55,6 +58,7 @@ public class CatalogEndpoint {
             GearboxType gearboxType = new GearboxType();
             gearboxType.setId(gearboxTypeDTO.getId());
             gearboxType.setName(gearboxTypeDTO.getName());
+            gearboxType.setDeleted(gearboxTypeDTO.getDeleted());
             response.getGearboxTypes().add(gearboxType);
         }
 
@@ -62,6 +66,7 @@ public class CatalogEndpoint {
             VehicleClass vehicleClass = new VehicleClass();
             vehicleClass.setId(vehicleClassDTO.getId());
             vehicleClass.setName(vehicleClassDTO.getName());
+            vehicleClass.setDeleted(vehicleClassDTO.getDeleted());
             response.getVehicleClasses().add(vehicleClass);
         }
 

@@ -191,7 +191,7 @@ export default {
 			this.$store
 				.dispatch("addAdvertisement", form)
 				.then((ad) => {
-					/*let formData = new FormData();
+					let formData = new FormData();
 					let id = ad.id;
 					for (var i = 0; i < this.photos.length; i++) {
 						let file = this.photos[i];
@@ -207,7 +207,7 @@ export default {
 					this.$store
 						.dispatch("addPhotos", payload)
 						.then(() => console.log("SUCCESS!"))
-						.catch((error) => console.log(error));*/
+						.catch((error) => console.log(error));
 				})
 				.catch((error) => console.log(error));
 		},

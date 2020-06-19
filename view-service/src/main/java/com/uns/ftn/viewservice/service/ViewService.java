@@ -2,6 +2,7 @@ package com.uns.ftn.viewservice.service;
 
 import com.uns.ftn.viewservice.client.AccountClient;
 import com.uns.ftn.viewservice.domain.*;
+import com.uns.ftn.viewservice.dto.AdvertClientResponseDTO;
 import com.uns.ftn.viewservice.dto.CartAdvertisementDTO;
 import com.uns.ftn.viewservice.dto.DetailedAdvertisementDTO;
 import com.uns.ftn.viewservice.dto.SimpleAdvertisementDTO;
@@ -76,6 +77,21 @@ public class ViewService {
 
         return detailedAdvertisementDTO;
     }
+
+    public AdvertClientResponseDTO getAdvert(Long id) {
+        Advertisement ad = advertisementRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Requested advertisement doesn't exist."));
+
+        return new AdvertClientResponseDTO(ad.getId(), ad.getVehicle().getModel().getName(),
+                ad.getVehicle().getModel().getBrand().getName(), ad.getLocation());
+    }
+
+    public Set<SimpleAdvertisementDTO> getAgentsAdvertisements(Long id) {
+        return advertisementRepository.findAllByOwnerId(id).stream()
+                .map(SimpleAdvertisementDTO::new).collect(Collectors.toSet());
+    }
+
+
 
     public Set<CartAdvertisementDTO> getCartAdvertisements(List<Long> advertisementIdList) {
         List<Advertisement> advertisements = advertisementRepository.findAllById(advertisementIdList);

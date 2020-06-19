@@ -18,7 +18,6 @@ import java.util.*;
 public class FuelType {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "name", nullable = false)
@@ -26,8 +25,4 @@ public class FuelType {
 
    @Column(name = "deleted")
    private Boolean deleted = false;
-
-   @JsonIgnore
-   @OneToMany(mappedBy = "fuelType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 }

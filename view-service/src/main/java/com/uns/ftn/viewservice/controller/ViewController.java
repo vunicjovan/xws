@@ -24,6 +24,16 @@ public class ViewController {
         return new ResponseEntity<>(viewService.getAdvertisement(id), HttpStatus.OK);
     }
 
+    @GetMapping("/client/{id}")
+    public ResponseEntity<?> clientAd(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(viewService.getAdvert(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/agent/{id}")
+    public ResponseEntity<?> agentAds(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(viewService.getAgentsAdvertisements(id), HttpStatus.OK);
+    }
+
     @GetMapping("/cart")
     public ResponseEntity<?> cartView(@RequestParam(value = "cart") List<Long> advertisementIdList) {
         return new ResponseEntity<>(viewService.getCartAdvertisements(advertisementIdList), HttpStatus.OK);

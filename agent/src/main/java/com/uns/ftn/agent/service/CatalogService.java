@@ -66,32 +66,77 @@ public class CatalogService {
 
     public ResponseEntity<?> getCatalog() {
         CatalogDTO catalog = new CatalogDTO();
+
+        try{
         GetCatalogResponse response = catalogClient.getCatalog();
 
         if(response != null) {
-            catalog.setBrands(response.getBrands().stream().map(BrandDTO::new).collect(Collectors.toSet()));
-            catalog.setFuelTypes(response.getFuelTypes().stream().map(FuelTypeDTO::new).collect(Collectors.toSet()));
-            catalog.setGearboxTypes(response.getGearboxTypes().stream().map(GearboxTypeDTO::new)
-                    .collect(Collectors.toSet()));
-            catalog.setVehicleClasses(response.getVehicleClasses().stream().map(VehicleClassDTO::new)
-                    .collect(Collectors.toSet()));
-            catalog.setModels(response.getModels().stream().map(ModelDTO::new).collect(Collectors.toSet()));
-
-            //updateCatalog(catalog);
-        } else {
-
+            updateCatalog(response);
         }
-        return new ResponseEntity(catalog, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Nema ne radi katalog service");
+        }
+        catalog.setBrands(brandRepository.findAllByDeleted(false).stream().map(BrandDTO::new).collect(Collectors.toSet()));
+        catalog.setFuelTypes(fuelTypeRepository.findAllByDeleted(false).stream().map(FuelTypeDTO::new).collect(Collectors.toSet()));
+        catalog.setGearboxTypes(gearboxTypeRepository.findAllByDeleted(false).stream().map(GearboxTypeDTO::new)
+                .collect(Collectors.toSet()));
+        catalog.setVehicleClasses(vehicleClassRepository.findAllByDeleted(false).stream().map(VehicleClassDTO::new)
+                .collect(Collectors.toSet()));
+        catalog.setModels(modelRepository.findAllByDeleted(false).stream().map(ModelDTO::new).collect(Collectors.toSet()));
+
+        return new ResponseEntity<>(catalog, HttpStatus.OK);
     }
 
-    private void updateCatalog(CatalogDTO catalogDTO) {
+    private void updateCatalog(GetCatalogResponse catalogDTO) {
+
+        List<Model> models = catalogDTO.getModels().stream().map(modelDTO -> {
+            Model model = new Model();
+            Brand brand = findOneBrand(modelDTO.getBrand().getId());
+            model.setId(modelDTO.getId());
+            model.setName(modelDTO.getName());
+            model.setBrand(brand);
+            model.setDeleted(modelDTO.isDeleted());
+            return model;
+        }).collect(Collectors.toList());
+        modelRepository.saveAll(models);
+
         List<Brand> brands = catalogDTO.getBrands().stream().map(brandDTO -> {
             Brand brand = new Brand();
             brand.setId(brandDTO.getId());
             brand.setName(brandDTO.getName());
+            brand.setDeleted(brandDTO.isDeleted());
             return brand;
         }).collect(Collectors.toList());
         brandRepository.saveAll(brands);
+
+
+
+        List<FuelType> fuelTypes = catalogDTO.getFuelTypes().stream().map(fuelTypeDTO -> {
+            FuelType fuelType = new FuelType();
+            fuelType.setId(fuelTypeDTO.getId());
+            fuelType.setName(fuelTypeDTO.getName());
+            fuelType.setDeleted(fuelTypeDTO.isDeleted());
+            return fuelType;
+        }).collect(Collectors.toList());
+        fuelTypeRepository.saveAll(fuelTypes);
+
+        List<GearboxType> gearboxTypes = catalogDTO.getGearboxTypes().stream().map(gearboxTypeDTO -> {
+            GearboxType gearboxType = new GearboxType();
+            gearboxType.setId(gearboxTypeDTO.getId());
+            gearboxType.setName(gearboxTypeDTO.getName());
+            gearboxType.setDeleted(gearboxTypeDTO.isDeleted());
+            return gearboxType;
+        }).collect(Collectors.toList());
+        gearboxTypeRepository.saveAll(gearboxTypes);
+
+        List<VehicleClass> vehicleClasses = catalogDTO.getVehicleClasses().stream().map(vehicleClassDTO -> {
+            VehicleClass vehicleClass = new VehicleClass();
+            vehicleClass.setId(vehicleClassDTO.getId());
+            vehicleClass.setName(vehicleClassDTO.getName());
+            vehicleClass.setDeleted(vehicleClassDTO.isDeleted());
+            return vehicleClass;
+        }).collect(Collectors.toList());
+        vehicleClassRepository.saveAll(vehicleClasses);
     }
 
 }

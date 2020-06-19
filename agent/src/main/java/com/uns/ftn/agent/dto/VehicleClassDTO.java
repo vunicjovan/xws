@@ -14,6 +14,7 @@ public class VehicleClassDTO {
 
     private Long id;
     private String name;
+    private Boolean deleted;
 
     public VehicleClassDTO(VehicleClass vehicleClass) {
         this.id = vehicleClass.getId();
@@ -23,5 +24,6 @@ public class VehicleClassDTO {
     public VehicleClassDTO(rs.ac.uns.ftn.catalog.VehicleClass vehicleClass) {
         this.id = vehicleClass.getId();
         this.name = vehicleClass.getName();
+        this.deleted = vehicleClass.isDeleted();
     }
 }

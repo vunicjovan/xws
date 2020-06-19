@@ -30,7 +30,7 @@ public class AdvertisementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable ("id") Long id) {
-        return null;
+        return new ResponseEntity<>(new AdvertisementDTO(adService.findById(id)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/vehicle")

@@ -41,7 +41,9 @@ public class VehicleClassService {
                 new NotFoundException("Requested vehicle class does not exist."));
     }
 
-    public List<VehicleClass> findAll() { return vehicleClassRepository.findAll(); }
+    public Set<VehicleClassDTO> findAll() {
+        return vehicleClassRepository.findAll().stream().map(VehicleClassDTO::new).collect(Collectors.toSet());
+    }
 
     public VehicleClass findByName(String name) {
         return vehicleClassRepository.findByName(name);

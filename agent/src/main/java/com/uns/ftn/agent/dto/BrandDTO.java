@@ -13,6 +13,7 @@ import lombok.Setter;
 public class BrandDTO {
     private Long id;
     private String name;
+    private Boolean deleted;
 
     public BrandDTO(Brand brand) {
         this.id = brand.getId();
@@ -22,5 +23,6 @@ public class BrandDTO {
     public BrandDTO(rs.ac.uns.ftn.catalog.Brand brand) {
         this.id = brand.getId();
         this.name = brand.getName();
+        this.deleted = brand.isDeleted();
     }
 }

@@ -9,12 +9,10 @@
                         <p class="md-subhead">{{ ad.location }}</p>
                     </div>
                 </md-card-header-text>
-
-                <md-card-media class="md-layout-item md-size-55">
-                    <img :src="getPhotoURL(ad.id, ad.photos[0])" alt="Vehicle image">
-                </md-card-media>
-            </md-card-header>
-
+				<md-card-media class="md-layout-item md-size-55">
+					<img :src="getPhotoURL(ad.id, ad.photos[0])" alt="Vehicle image" />
+				</md-card-media>
+			</md-card-header>
             
             <md-card-actions>
                 <md-button @click="showPhotos = true">Photos</md-button>
@@ -167,8 +165,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
@@ -295,35 +293,14 @@ export default {
                 advertisementId: undefined
             },
 
-            comment: {
-                title: undefined,
-                content: undefined,
-                advertisementId: undefined,
-            }
-        };
-    },
-    mounted: function() {
-        this.$store.dispatch("getAllAdvertisements");
-        this.show = !this.show;
-    },
-    computed: {
-        ...mapGetters(["getAdvertisements", "getUser", "isLogged"]),
-    },
-    methods: {
-        ...mapActions(["getAllAdvertisements"]),
-        getPhotoURL(advertisementId, photoName) {
-            return photoName;
-            //return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
-        },
+		addCartItem(advertisementId) {
+			let payload = {
+				cartId: this.getUser.id,
+				cartItemId: advertisementId,
+			};
 
-        addCartItem(advertisementId) {
-            let payload = {
-                cartId: this.getUser.id,
-                cartItemId: advertisementId
-            };
-            
-            this.$store.dispatch("addCartItem", payload);
-        },
+			this.$store.dispatch("addCartItem", payload);
+		},
 
         addUnabailableTerm() {
             this.rentingInterval.advertisementId = this.selectedAdvertisement.id
@@ -334,15 +311,15 @@ export default {
 			this.$v.rentingInterval.$reset();
 			this.rentingInterval.startDate = undefined;
 			this.rentingInterval.endDate = undefined;
-        },
-        
-        validateDates() {
+		},
+
+		validateDates() {
 			this.$v.rentingInterval.$touch();
 
 			if (!this.$v.rentingInterval.$invalid) {
 				this.addUnabailableTerm();
 			}
-        },
+		},
 
         postComment() {
             this.comment.advertisementId = this.selectedAdvertisement.id;
@@ -355,15 +332,15 @@ export default {
             this.comment.content = undefined;
         },
 
-        validateComment() {
-            this.$v.comment.$touch();
+		validateComment() {
+			this.$v.comment.$touch();
 
 			if (!this.$v.comment.$invalid) {
 				this.postComment();
 			}
-        },
+		},
 
-        getValidationClass(fieldName) {
+		getValidationClass(fieldName) {
 			const field = this.$v.comment[fieldName];
 
 			if (field) {
@@ -379,7 +356,13 @@ export default {
         }
     },
 
-    validations: {
+		showDialog(id) {
+			this.selectedAdvertisementId = id;
+			this.showModal = true;
+		},
+	},
+
+	validations: {
 		rentingInterval: {
 			startDate: {
 				required,
@@ -387,37 +370,37 @@ export default {
 			endDate: {
 				required,
 			},
-        },
-        
-        comment: {
-            title: {
-                required,
-                lrx,
-            },
-            content: {
-                required,
-                lrx,
-            }
-        }
+		},
+
+		comment: {
+			title: {
+				required,
+				lrx,
+			},
+			content: {
+				required,
+				lrx,
+			},
+		},
 	},
-}
+};
 </script>
 
 <style>
-    .md-card {
-        margin: 2.5%;
-        display: inline-block;
-        vertical-align: top;
-    }
+.md-card {
+	margin: 2.5%;
+	display: inline-block;
+	vertical-align: top;
+}
 
-    .md-list-item {
-        margin: 0 auto;
-    }
+.md-list-item {
+	margin: 0 auto;
+}
 
-    .swiper {
-        width: 100%;
-        padding: 2.5%;
-    }
+.swiper {
+	width: 100%;
+	padding: 2.5%;
+}
 
     .images {
         width: 100%;

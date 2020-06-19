@@ -13,6 +13,7 @@ import lombok.Setter;
 public class GearboxTypeDTO {
     private Long id;
     private String name;
+    private Boolean deleted;
 
     public GearboxTypeDTO(GearboxType gearboxType) {
         this.id = gearboxType.getId();
@@ -22,5 +23,7 @@ public class GearboxTypeDTO {
     public GearboxTypeDTO(rs.ac.uns.ftn.catalog.GearboxType gearboxType) {
         this.id = gearboxType.getId();
         this.name = gearboxType.getName();
+        this.deleted = gearboxType.isDeleted();
+
     }
 }

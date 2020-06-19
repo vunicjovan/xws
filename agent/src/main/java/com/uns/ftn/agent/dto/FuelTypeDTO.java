@@ -14,6 +14,7 @@ public class FuelTypeDTO {
 
     private Long id;
     private String name;
+    private Boolean deleted;
 
     public FuelTypeDTO(FuelType fuelType) {
         this.id = fuelType.getId();
@@ -23,5 +24,6 @@ public class FuelTypeDTO {
     public FuelTypeDTO(rs.ac.uns.ftn.catalog.FuelType fuelType)  {
         this.id = fuelType.getId();
         this.name = fuelType.getName();
+        this.deleted = fuelType.isDeleted();
     }
 }
