@@ -14,4 +14,5 @@ public class AdvertClientResponseDTO {
     private String model;
     private String brand;
     private String location;
+    private double price;
 }

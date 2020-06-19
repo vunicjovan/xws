@@ -1,16 +1,16 @@
 -- Advertisements
 insert into advertisement
 (price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (25.00, 240, false, 0, 'Opis 1', 'Teslic', 1);
+values (25.00, 240, false, 0, 'Opis 1', 'Teslic', 3);
 insert into advertisement
 (price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 1);
+values (5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 3);
 insert into advertisement
 (price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 1);
+values (26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 3);
 insert into advertisement
 (price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 1);
+values (21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 3);
 
 -- Vehicles
 insert into vehicle
@@ -25,6 +25,10 @@ values (5000, 2, true, 2, 1, 3, 1, 3);
 insert into vehicle
 (kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id, advertisement_id)
 values (1000, 1, true, 3, 2, 3, 4, 4);
+
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Ime', 'Prezime', false, 3, 1);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Ime', 'Prezime', false, 3, 2);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Ime', 'Prezime', false, 3, 1);
 
 -- Photos
 insert into photo (path, advertisement_id) values ('logan1.jpg', 1);

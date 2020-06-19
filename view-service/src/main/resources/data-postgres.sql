@@ -84,16 +84,16 @@ insert into vehicle_class (vehicle_class_id, name, deleted) values (10, 'Old Tim
 -- Advertisements
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 1);
+values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 3);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 1);
+values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 3);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 1);
+values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 3);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 1);
+values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 3);
 
 -- Vehicles
 insert into vehicle
