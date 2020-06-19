@@ -3,6 +3,7 @@ package com.uns.ftn.agent.controller;
 import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class AdvertisementController {
 
     @GetMapping(value = "/")
     public ResponseEntity<?> getAllAds() {
-        return null;
+        return new ResponseEntity<>(advertisementService.getDetailedAdvertisements(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
     "gearboxTypes",
     "vehicleClasses"
 })
-@XmlRootElement(name = "getCatalogResponse")
+@XmlRootElement(name = "getCatalogResponse", namespace = "http://www.ftn.uns.ac.rs/catalog")
 public class GetCatalogResponse {
 
     @XmlElement(nillable = true)

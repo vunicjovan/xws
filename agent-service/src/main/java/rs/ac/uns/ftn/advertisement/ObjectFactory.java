@@ -37,11 +37,18 @@ public class ObjectFactory {
     }
 
     /**
+
      * Create an instance of {@link NewPhotoResponse }
      * 
      */
     public NewPhotoResponse createNewPhotoResponse() {
         return new NewPhotoResponse();
+
+     * Create an instance of {@link CommentRequest }
+     * 
+     */
+    public CommentRequest createCommentRequest() {
+        return new CommentRequest();
     }
 
     /**
@@ -69,11 +76,18 @@ public class ObjectFactory {
     }
 
     /**
+
      * Create an instance of {@link NewPhotoRequest }
      * 
      */
     public NewPhotoRequest createNewPhotoRequest() {
         return new NewPhotoRequest();
+
+     * Create an instance of {@link CommentResponse }
+     * 
+     */
+    public CommentResponse createCommentResponse() {
+        return new CommentResponse();
     }
 
     /**

@@ -5,5 +5,5 @@
 // Generated on: 2020.06.18 at 04:30:07 PM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.ftn.uns.ac.rs/catalog")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.ftn.uns.ac.rs/advertisement")
 package rs.ac.uns.ftn.catalog;

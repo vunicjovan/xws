@@ -40,6 +40,7 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         return response;
     }
 
+
     public NewPhotoResponse newPhoto(PhotoRequestDTO photoRequestDTO) {
         NewPhotoRequest request = new NewPhotoRequest();
         request.setBytes(photoRequestDTO.getBytes());
@@ -48,5 +49,15 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         NewPhotoResponse response = (NewPhotoResponse) getWebServiceTemplate().marshalSendAndReceive(request);
 
         return response;
+    }
+
+    public CommentResponse getComments(Long id) {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setOwnerId(id);
+
+        CommentResponse commentResponse =(CommentResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(commentRequest);
+
+        return commentResponse;
     }
 }

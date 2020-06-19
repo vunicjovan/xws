@@ -18,21 +18,39 @@
         </xs:complexType>
     </xs:element>
 
+
     <xs:element name="newPhotoRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="bytes" type="xs:base64Binary"/>
                 <xs:element name="path" type="xs:string"/>
                 <xs:element name="adId" type="xs:long"/>
+                </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ownerId" type="xs:long" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 
     <xs:element name="newPhotoResponse">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="id" type="xs:long"/>
                 <xs:element name="path" type="xs:string"/>
+              </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comments" type="tns:comment" minOccurs="0" maxOccurs="unbounded" nillable="true" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -79,6 +97,7 @@
             <xs:element name="content" type="xs:string"/>
             <xs:element name="allowed" type="xs:boolean"/>
             <xs:element name="userId" type="xs:long"/>
+            <xs:element name="advertisementId" type="xs:long"/>
             <xs:element name="rentingRequestId" type="xs:long"/>
         </xs:sequence>
     </xs:complexType>

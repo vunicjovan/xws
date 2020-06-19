@@ -4,26 +4,28 @@ import com.uns.ftn.agent.client.AdvertisementClient;
 import com.uns.ftn.agent.controller.AdvertisementController;
 import com.uns.ftn.agent.domain.AdWrapper;
 import com.uns.ftn.agent.domain.Advertisement;
+import com.uns.ftn.agent.domain.Comment;
 import com.uns.ftn.agent.domain.Vehicle;
-import com.uns.ftn.agent.dto.AdvertisementDTO;
-import com.uns.ftn.agent.dto.StatisticDTO;
-import com.uns.ftn.agent.dto.StatisticReportDTO;
+import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.exceptions.NotFoundException;
 import com.uns.ftn.agent.repository.AdWrapperRepository;
 import com.uns.ftn.agent.repository.AdvertisementRepository;
+import com.uns.ftn.agent.repository.CommentRepository;
 import com.uns.ftn.agent.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.catalog.CommentResponse;
 import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
@@ -35,6 +37,7 @@ public class AdvertisementService {
     private CatalogService catalogService;
     private AdvertisementClient advertisementClient;
     private AdWrapperRepository adWrapperRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     public AdvertisementService(
@@ -42,17 +45,24 @@ public class AdvertisementService {
             VehicleRepository vehicleRepository,
             CatalogService catalogService,
             AdvertisementClient advertisementClient,
-            AdWrapperRepository adWrapperRepository
+            AdWrapperRepository adWrapperRepository,
+            CommentRepository commentRepository
     ) {
         this.advertisementRepository = advertisementRepository;
         this.vehicleRepository = vehicleRepository;
         this.catalogService = catalogService;
         this.advertisementClient = advertisementClient;
         this.adWrapperRepository = adWrapperRepository;
+        this.commentRepository = commentRepository;
     }
 
-    public Advertisement saveAd(Advertisement advertisement) { return advertisementRepository.save(advertisement); }
-    public Vehicle saveVehicle(Vehicle vehicle) { return vehicleRepository.save(vehicle); }
+    public Advertisement saveAd(Advertisement advertisement) {
+        return advertisementRepository.save(advertisement);
+    }
+
+    public Vehicle saveVehicle(Vehicle vehicle) {
+        return vehicleRepository.save(vehicle);
+    }
 
     public AdWrapper findOneAdWrapper(Long id) {
         return adWrapperRepository.findByAdvertisementId(id);
@@ -94,7 +104,7 @@ public class AdvertisementService {
         ad = saveAd(ad);
 
         NewAdvertisementResponse response = advertisementClient.newAdvertisement(new AdvertisementDTO(ad));
-        if(response != null) {
+        if (response != null) {
             AdWrapper adWrapper = new AdWrapper();
             adWrapper.setRemoteId(response.getAdvertisement().getId());
             adWrapper.setAdvertisementId(ad.getId());
@@ -204,6 +214,51 @@ public class AdvertisementService {
 
         // DTO with three lists, each containing TOP5 (or less) advertisements by different criteria
         return retval;
+    }
+
+    public List<DetailedAdvertisementDTO> getDetailedAdvertisements() {
+        CommentResponse commentResponse = advertisementClient.getComments((long) 1);
+        List<Advertisement> advertisements = advertisementRepository.findAll();
+        List<DetailedAdvertisementDTO> detailedAdvertisementDTOS = new ArrayList<>();
+
+        advertisements.forEach(advertisement -> {
+
+            List<CommentDTO> commentDTOList = advertisement.getComments()
+                    .stream()
+                    .map(comment -> new CommentDTO(comment.getId(), comment.getTitle(), comment.getContent()))
+                    .collect(Collectors.toList());
+
+            /*
+             * For all comments retrieved from microservices database check if there exist comment,
+             * posted on current advertisement, that is not present in agent database and save that comment.
+             */
+            commentResponse.getComments().forEach(servicesComment -> {
+
+                if (servicesComment.getAdvertisementId() == advertisement.getId()) {
+
+                    Comment comment = advertisement.getComments()
+                            .stream()
+                            .filter(comm -> comm.getId() == servicesComment.getId())
+                            .findFirst()
+                            .orElse(null);
+
+                    if (comment == null) {
+                        comment = new Comment();
+                        comment.setTitle(servicesComment.getTitle());
+                        comment.setContent(servicesComment.getContent());
+                        comment.setAllowed(servicesComment.isAllowed());
+                        comment.setUserId(servicesComment.getUserId());
+                        comment.setAdvertisement(advertisement);
+                        comment = commentRepository.save(comment);
+                        commentDTOList.add(new CommentDTO(comment.getId(), comment.getTitle(), comment.getContent()));
+                    }
+                }
+            });
+
+            detailedAdvertisementDTOS.add(new DetailedAdvertisementDTO(advertisement, commentDTOList));
+        });
+
+        return detailedAdvertisementDTOS;
     }
 
 }

@@ -31,9 +31,73 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: rs.ac.uns.ftn.catalog
+
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link NewAdvertisementRequest }
+     * 
+     */
+    public NewAdvertisementRequest createNewAdvertisementRequest() {
+        return new NewAdvertisementRequest();
+    }
+
+    /**
+     * Create an instance of {@link Advertisement }
+     * 
+     */
+    public Advertisement createAdvertisement() {
+        return new Advertisement();
+    }
+
+    /**
+     * Create an instance of {@link NewAdvertisementResponse }
+     * 
+     */
+    public NewAdvertisementResponse createNewAdvertisementResponse() {
+        return new NewAdvertisementResponse();
+    }
+
+    /**
+     * Create an instance of {@link CommentRequest }
+     * 
+     */
+    public CommentRequest createCommentRequest() {
+        return new CommentRequest();
+    }
+
+    /**
+     * Create an instance of {@link CommentResponse }
+     * 
+     */
+    public CommentResponse createCommentResponse() {
+        return new CommentResponse();
+    }
+
+    /**
+     * Create an instance of {@link Comment }
+     * 
+     */
+    public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link Vehicle }
+     * 
+     */
+    public Vehicle createVehicle() {
+        return new Vehicle();
+    }
+
+    /**
+     * Create an instance of {@link RentingInterval }
+     * 
+     */
+    public RentingInterval createRentingInterval() {
+        return new RentingInterval();
     }
 
     /**
@@ -91,5 +155,46 @@ public class ObjectFactory {
     public VehicleClass createVehicleClass() {
         return new VehicleClass();
     }
+
+    /**
+     * Create an instance of {@link GetFinishedRequest }
+     * 
+     */
+    public GetFinishedRequest createGetFinishedRequest() {
+        return new GetFinishedRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetFinishedResponse }
+     * 
+     */
+    public GetFinishedResponse createGetFinishedResponse() {
+        return new GetFinishedResponse();
+    }
+
+    /**
+     * Create an instance of {@link FinishedRequest }
+     * 
+     */
+    public FinishedRequest createFinishedRequest() {
+        return new FinishedRequest();
+    }
+
+    /**
+     * Create an instance of {@link CompileReportRequest }
+     * 
+     */
+    public CompileReportRequest createCompileReportRequest() {
+        return new CompileReportRequest();
+    }
+
+    /**
+     * Create an instance of {@link CompileReportResponse }
+     * 
+     */
+    public CompileReportResponse createCompileReportResponse() {
+        return new CompileReportResponse();
+    }
+
 
 }

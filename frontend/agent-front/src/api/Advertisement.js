@@ -20,7 +20,7 @@ export default {
 	},
 
 	getAllAdvertisements() {
-		return axios.get(`/view/`).then((response) => {
+		return axios.get(`/ad/`).then((response) => {
 			return response.data;
 		});
 	},

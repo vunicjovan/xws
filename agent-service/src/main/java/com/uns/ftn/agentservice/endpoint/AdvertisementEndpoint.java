@@ -1,9 +1,11 @@
 package com.uns.ftn.agentservice.endpoint;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
 import com.uns.ftn.agentservice.service.impl.PhotoServiceImpl;
+import com.uns.ftn.agentservice.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import rs.ac.uns.ftn.advertisement.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Endpoint
 public class AdvertisementEndpoint {
@@ -22,11 +25,13 @@ public class AdvertisementEndpoint {
 
     private AdvertisementService advertisementService;
     private PhotoServiceImpl photoService;
+    private CommentService commentService;
 
     @Autowired
-    public AdvertisementEndpoint(AdvertisementService advertisementService, PhotoServiceImpl photoService) {
+    public AdvertisementEndpoint(AdvertisementService advertisementService, CommentService commentService, PhotoServiceImpl photoService) {
         this.advertisementService = advertisementService;
-        this.photoService = photoService;
+        this.commentService = commentService;
+       this.photoService = photoService;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newAdvertisementRequest")
@@ -74,6 +79,7 @@ public class AdvertisementEndpoint {
         }
     }
 
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newPhotoRequest")
     @ResponsePayload
     public NewPhotoResponse newPhoto(@RequestPayload NewPhotoRequest request) throws IOException {
@@ -83,6 +89,26 @@ public class AdvertisementEndpoint {
         response.setPath(request.getPath());
 
         return response;
+    }
+  
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "commentRequest")
+    @ResponsePayload
+    public CommentResponse getComments(@RequestPayload CommentRequest commentRequest) {
+        CommentResponse commentResponse = new CommentResponse();
+        List<CommDTO> commDTOlist = commentService.getCommentsByAdvertisementOwner(commentRequest.getOwnerId());
+        commDTOlist.forEach(commDTO -> {
+            Comment comment = new Comment();
+            comment.setId(commDTO.getId());
+            comment.setTitle(commDTO.getTitle());
+            comment.setContent(commDTO.getContent());
+            comment.setAllowed(true);
+            comment.setUserId(commDTO.getUserId());
+            comment.setRentingRequestId(1);
+            comment.setAdvertisementId(commDTO.getAdvertisementId());
+            commentResponse.getComments().add(comment);
+        });
+
+        return commentResponse;
     }
 
 }
