@@ -37,6 +37,10 @@
 				<i class="fas fa-shopping-cart fa-2x"></i>
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
+			<md-button v-if="isLogged" @click.native="$router.push('/ads/published')">
+				<i class="fas fa-ad fa-2x"></i>
+				<md-tooltip>Published Ads</md-tooltip>
+			</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>
 				<md-button md-menu-trigger>
