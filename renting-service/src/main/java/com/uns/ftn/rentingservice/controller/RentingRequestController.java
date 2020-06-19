@@ -42,6 +42,11 @@ public class RentingRequestController {
         return new ResponseEntity<>(this.requestService.getRequestForUser(id), HttpStatus.OK);
     }
 
+    @GetMapping("/history/{id}")
+    public ResponseEntity<?> getUserHistory(@PathVariable Long id) {
+        return new ResponseEntity<>(requestService.getHistoryUser(id), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> createRequest(@RequestBody RentingRequestDTO rdto) {
         return this.requestService.createRequest(rdto);

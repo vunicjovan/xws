@@ -2,13 +2,12 @@ package com.uns.ftn.viewservice.service;
 
 import com.uns.ftn.viewservice.client.AccountClient;
 import com.uns.ftn.viewservice.domain.*;
-import com.uns.ftn.viewservice.dto.AdvertClientResponseDTO;
-import com.uns.ftn.viewservice.dto.CartAdvertisementDTO;
-import com.uns.ftn.viewservice.dto.DetailedAdvertisementDTO;
-import com.uns.ftn.viewservice.dto.SimpleAdvertisementDTO;
+import com.uns.ftn.viewservice.dto.*;
 import com.uns.ftn.viewservice.exceptions.NotFoundException;
 import com.uns.ftn.viewservice.repository.AdvertisementRepository;
+import com.uns.ftn.viewservice.repository.CommentRepository;
 import com.uns.ftn.viewservice.repository.ModelRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,12 @@ public class ViewService {
 
     @Autowired
     private AccountClient accountClient;
+
+    private CommentRepository commentRepository;
+
+    public ViewService(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     public Set<SimpleAdvertisementDTO> getAllAdvertisements() {
         List<Advertisement> advertisements = advertisementRepository.findAll();
@@ -98,6 +103,13 @@ public class ViewService {
 
         return advertisements.stream().
                 map(advertisement -> new CartAdvertisementDTO(advertisement)).collect(Collectors.toSet());
+    }
+
+    public CommentClientResponseDTO getCommentClient(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Comment with that id doesn't exist."));
+
+        return new CommentClientResponseDTO(comment.getId(), comment.getTitle(), comment.getContent());
     }
 
 }
