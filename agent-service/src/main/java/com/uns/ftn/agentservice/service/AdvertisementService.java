@@ -112,6 +112,10 @@ public class AdvertisementService {
         return true;
     }
 
+    public  List<Advertisement> findByOwner(Long id) {
+        return adRepo.findByOwnerId(id);
+    }
+
     public Advertisement findById(Long id) {
         return adRepo.findById(id).orElse(null);
     }

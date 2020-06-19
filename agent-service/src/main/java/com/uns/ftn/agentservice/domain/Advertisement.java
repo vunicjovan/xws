@@ -48,7 +48,7 @@ public class Advertisement {
     @Column(name = "ownerId")
     private Long ownerId;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

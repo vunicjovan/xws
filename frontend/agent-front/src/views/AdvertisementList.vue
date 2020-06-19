@@ -1,6 +1,6 @@
 <template>
     <div class="md-layout md-gutter md-alignment-center">
-        <md-card v-for="ad in ads" v-bind:key="ad.id" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
+        <md-card v-for="ad in getAdvertisements" v-bind:key="ad.id" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
             <md-card-header>
                 <md-card-header-text>
                     <div>
@@ -18,31 +18,31 @@
             
             <md-card-actions>
                 <md-button @click="showPhotos = true">Photos</md-button>
-                <md-button @click="showDialog(ad.id)">Details</md-button>
+                <md-button @click="showDialog(ad)">Details</md-button>
             </md-card-actions>
 
-            <md-dialog :md-active.sync="showModal">
-                <md-dialog-title>{{ ad.brand }} {{ ad.model }} ({{ ad.vehicleClass }})</md-dialog-title>
+            <md-dialog v-if="selectedAdvertisement" :md-active.sync="showModal">
+                <md-dialog-title>{{ selectedAdvertisement.brand }} {{ selectedAdvertisement.model }} ({{ selectedAdvertisement.vehicleClass }})</md-dialog-title>
                 <md-tabs md-dynamic-height>
                     <md-tab md-label="General">
                         <md-list class="md-triple-line md-dense">
                             <md-list-item>
                                 <div class="md-list-item-text">
                                     <span>
-                                        <b>Price:</b> <i>{{ ad.price }} </i>
+                                        <b>Price:</b> <i>{{ selectedAdvertisement.price }} </i>
                                         <i class="fas fa-euro-sign"></i>
                                         <br><br>
                                         <i class="fas fa-search-location"></i>
-                                        <b> Location:</b> <i>{{ ad.location }}</i>
+                                        <b> Location:</b> <i>{{ selectedAdvertisement.location }}</i>
                                         <br><br>
                                         <i class="fas fa-car"></i>
-                                        <b> Traveled:</b> <i>{{ ad.kmTraveled }} km</i>
+                                        <b> Traveled:</b> <i>{{ selectedAdvertisement.kmTraveled }} km</i>
                                         <br><br>
                                         <i class="fas fa-ban"></i>
-                                        <b> Daily travel limit:</b> <i v-if="ad.dailyLimit !== -1">{{ ad.dailyLimit }} km</i><i v-else>None</i>
+                                        <b> Daily travel limit:</b> <i v-if="selectedAdvertisement.dailyLimit !== -1">{{ selectedAdvertisement.dailyLimit }} km</i><i v-else>None</i>
                                         <br><br>
                                         <i class="fas fa-baby"></i>
-                                        <b> Seats for children:</b> <i>{{ ad.childSeatNumber }}x</i>
+                                        <b> Seats for children:</b> <i>{{ selectedAdvertisement.childSeatNumber }}x</i>
                                     </span>
                                 </div>
                             </md-list-item>
@@ -54,18 +54,18 @@
                                 <div class="md-list-item-text">
                                     <span>
                                         <i class="fas fa-gas-pump"></i>
-                                        <b> Fuel type:</b> <i>{{ ad.fuel }} </i>
+                                        <b> Fuel type:</b> <i>{{ selectedAdvertisement.fuel }} </i>
                                         <br><br>
                                         <i class="fas fa-wrench"></i>
-                                        <b> Gearbox type:</b> <i>{{ ad.gearbox }}</i>
+                                        <b> Gearbox type:</b> <i>{{ selectedAdvertisement.gearbox }}</i>
                                         <br><br>
                                         <i class="fas fa-car-crash"></i>
-                                        <b> Collision damage waiver:</b> <i v-if="ad.cdw">Supported</i><i v-else>Not supported</i>
+                                        <b> Collision damage waiver:</b> <i v-if="selectedAdvertisement.cdw">Supported</i><i v-else>Not supported</i>
                                         <br><br>
                                         <i class="fab fa-android"></i>
-                                        <b> Android:</b> <i v-if="ad.android">Supported</i><i v-else>Not supported</i>
+                                        <b> Android:</b> <i v-if="selectedAdvertisement.android">Supported</i><i v-else>Not supported</i>
                                         <br><br>
-                                        <b>Description:</b><br><i>{{ ad.description }}</i>
+                                        <b>Description:</b><br><i>{{ selectedAdvertisement.description }}</i>
                                     </span>
                                 </div>
                             </md-list-item>
@@ -93,6 +93,25 @@
                                 </md-card-actions>
                             </md-card>
                         </form>
+                    </md-tab>
+                    <md-tab md-label="Comments">
+                        <div v-if="selectedAdvertisement.comments.length != 0">
+                            <md-content class="md-scrollbar comments">
+                                <div v-for="comment in selectedAdvertisement.comments" :key="comment.id" class="md-layout md-alignment-top-center">
+                                    <md-card class="md-layout-item md-size-40 md-small-size-100" >
+                                        <md-card-header>
+                                            <div class="md-title">{{ comment.title }}</div>
+                                        </md-card-header>
+                                        <md-card-content>
+                                            <p>{{ comment.content }}</p>
+                                        </md-card-content>
+                                    </md-card>
+                                </div>
+                            </md-content>
+                        </div>
+                        <div v-else>
+                            <md-empty-state md-label="No comments yet!"></md-empty-state>
+                        </div>
                     </md-tab>
                     <md-tab md-label="Add comment">
                         <form class="md-layout md-alignment-top-center">
@@ -131,7 +150,7 @@
                     </md-tab>
                 </md-tabs>
             </md-dialog>
-            <md-dialog :md-active.sync="showPhotos">
+            <md-dialog v-if="ad.photos.length != 0" :md-active.sync="showPhotos">
                 <div class="somediv">
                     <swiper class="swiper" :options="swiperOption">
                         <swiper-slide v-for="photo in ad.photos" :key="photo">
@@ -269,7 +288,7 @@ export default {
                     ]
                 }
             ],
-            selectedAdvertisementId: undefined,
+            selectedAdvertisement: undefined,
             rentingInterval: {
                 startDate: undefined,
                 endDate: undefined,
@@ -307,12 +326,12 @@ export default {
         },
 
         addUnabailableTerm() {
-            this.rentingInterval.advertisementId = this.selectedAdvertisementId
+            this.rentingInterval.advertisementId = this.selectedAdvertisement.id
 			this.$store.dispatch("addRentingInterval", this.rentingInterval);
 		},
 
 		resetDates() {
-			this.$v.$reset();
+			this.$v.rentingInterval.$reset();
 			this.rentingInterval.startDate = undefined;
 			this.rentingInterval.endDate = undefined;
         },
@@ -326,12 +345,12 @@ export default {
         },
 
         postComment() {
-            this.comment.advertisementId = this.selectedAdvertisementId;
+            this.comment.advertisementId = this.selectedAdvertisement.id;
             this.$store.dispatch("postComment", this.comment);
         },
 
         resetComment() {
-            this.$v.$reset();
+            this.$v.comment.$reset();
             this.comment.title = undefined;
             this.comment.content = undefined;
         },
@@ -354,8 +373,8 @@ export default {
 			}
 		},
         
-        showDialog(id) {
-            this.selectedAdvertisementId = id;
+        showDialog(selectedAd) {
+            this.selectedAdvertisement = selectedAd;
             this.showModal = true;
         }
     },
@@ -406,4 +425,10 @@ export default {
         margin-left: auto;
         margin-right: auto;
     }
+
+    .comments {
+    max-width: 200px;
+    max-height: 400px;
+    overflow: auto;
+  }
 </style>

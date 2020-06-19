@@ -19,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,18 @@ public class CommentService {
     public Comment findOne(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Requested comment doesn't exist."));
+    }
+
+    public List<CommDTO> getCommentsByAdvertisementOwner(Long id) {
+        List<Advertisement> advertisements = advertisementService.findByOwner(id);
+        List<CommDTO> commDTOList = new ArrayList<>();
+        advertisements.forEach(advertisement -> {
+            advertisement.getComments().forEach(comment -> {
+                commDTOList.add(new CommDTO(comment.getId(), comment.getTitle(), comment.getContent(),
+                        comment.getUserId(), comment.getAdvertisement().getId(), comment.getRentingRequestId()));
+            });
+        });
+        return commDTOList;
     }
 
     public List<Comment> getAllByAllowed(Boolean allowed) {

@@ -18,6 +18,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="commentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ownerId" type="xs:long" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comments" type="tns:comment" minOccurs="0" maxOccurs="unbounded" nillable="true" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="advertisement">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
@@ -60,6 +76,7 @@
             <xs:element name="content" type="xs:string"/>
             <xs:element name="allowed" type="xs:boolean"/>
             <xs:element name="userId" type="xs:long"/>
+            <xs:element name="advertisementId" type="xs:long"/>
             <xs:element name="rentingRequestId" type="xs:long"/>
         </xs:sequence>
     </xs:complexType>

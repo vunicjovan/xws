@@ -18,6 +18,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="commentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ownerId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="comments" nillable="true" type="tns:comment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="advertisement">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
@@ -60,12 +76,17 @@
             <xs:element name="content" type="xs:string"/>
             <xs:element name="allowed" type="xs:boolean"/>
             <xs:element name="userId" type="xs:long"/>
+            <xs:element name="advertisementId" type="xs:long"/>
             <xs:element name="rentingRequestId" type="xs:long"/>
         </xs:sequence>
     </xs:complexType>
 
 </xs:schema>
   </wsdl:types>
+  <wsdl:message name="commentResponse">
+    <wsdl:part element="tns:commentResponse" name="commentResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="newAdvertisementResponse">
     <wsdl:part element="tns:newAdvertisementResponse" name="newAdvertisementResponse">
     </wsdl:part>
@@ -74,7 +95,17 @@
     <wsdl:part element="tns:newAdvertisementRequest" name="newAdvertisementRequest">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="commentRequest">
+    <wsdl:part element="tns:commentRequest" name="commentRequest">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:portType name="AdvertisementPort">
+    <wsdl:operation name="comment">
+      <wsdl:input message="tns:commentRequest" name="commentRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:commentResponse" name="commentResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="newAdvertisement">
       <wsdl:input message="tns:newAdvertisementRequest" name="newAdvertisementRequest">
     </wsdl:input>
@@ -84,6 +115,15 @@
   </wsdl:portType>
   <wsdl:binding name="AdvertisementPortSoap11" type="tns:AdvertisementPort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="comment">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="commentRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="commentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="newAdvertisement">
       <soap:operation soapAction=""/>
       <wsdl:input name="newAdvertisementRequest">
