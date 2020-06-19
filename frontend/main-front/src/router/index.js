@@ -12,6 +12,8 @@ import Chat from "../views/chat/Chat.vue";
 import UnpublishedComments from "../components/comments/UnpublishedComments.vue";
 import ChangePassword from "../views/account/ChangePassword.vue"
 import RegistrationRequests from "../views/account/RegistrationRequests.vue";
+import PublishedView from "../views/advertisement/PublishedView.vue";
+import RentingRequest from "../views/RentingRequest.vue";
 
 Vue.use(VueRouter);
 
@@ -75,7 +77,17 @@ const routes = [
 		path: "/registrationRequests",
 		name: "RegistrationRequests",
 		component: RegistrationRequests
-	}
+	},
+	{
+		path: "/ads/published",
+		name: "PublishedView",
+		component: PublishedView
+	},
+	{
+		path: "/ads/published/request/:id",
+		name: "RentingRequest",
+		component: RentingRequest
+	},
 ];
 
 const router = new VueRouter({

@@ -33,7 +33,13 @@ export default {
 
 	addRentingInterval(rentingInterval) {
 		return axios.post("/agent/interval/", rentingInterval).then((response) => {
-			return response.data
+			return response.data;
 		})
+	},
+
+	getUserPublishedAdvertisements(ownerId) {
+		return axios.get(`/view/agent/${ownerId}`).then((response) => {
+			return response.data;
+		});
 	}
 };

@@ -77,6 +77,18 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	getUserPublishedAdvertisements({ commit }, ownerId) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.getUserPublishedAdvertisements(ownerId)
+				.then((advertisements) => {
+					commit("setAdvertisements", advertisements);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	}
 };
 
 const mutations = {
