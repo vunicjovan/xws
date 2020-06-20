@@ -41,6 +41,10 @@
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Published Ads</md-tooltip>
 			</md-button>
+			<md-button v-if="isLogged" @click.native="$router.push('/ads/rented')">
+				<i class="fas fa-ad fa-2x"></i>
+				<md-tooltip>Rented Ads</md-tooltip>
+			</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>
 				<md-button md-menu-trigger>

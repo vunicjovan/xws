@@ -14,6 +14,7 @@ import ChangePassword from "../views/account/ChangePassword.vue"
 import RegistrationRequests from "../views/account/RegistrationRequests.vue";
 import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
+import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
 
 Vue.use(VueRouter);
 
@@ -88,6 +89,12 @@ const routes = [
 		name: "RentingRequest",
 		component: RentingRequest
 	},
+	{
+		path: "/ads/rented",
+		name: "RentingHistoryView",
+		component: RentingHistoryView
+	},
+
 ];
 
 const router = new VueRouter({

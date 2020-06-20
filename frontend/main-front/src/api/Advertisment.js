@@ -41,5 +41,5 @@ export default {
 		return axios.get(`/view/agent/${ownerId}`).then((response) => {
 			return response.data;
 		});
-	}
+	},
 };
