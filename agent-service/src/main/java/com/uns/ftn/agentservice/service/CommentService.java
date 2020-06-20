@@ -130,7 +130,7 @@ public class CommentService {
         }
 
         try {
-            checkCommentDTO = rentRequestClient.checkCommentPostingPermission(commentDTO.getUserId(),
+            checkCommentDTO = rentRequestClient.checkCommentPostingPermission(commentDTO.getRentingRequestId(),
                     commentDTO.getAdvertisementId());
         } catch (NotFoundException e) {
             throw new NotFoundException("Advertisement doesn't exist!");
@@ -146,7 +146,7 @@ public class CommentService {
         comment.setContent(commentDTO.getContent());
         comment.setUserId(commentDTO.getUserId());
         comment.setAdvertisement(advertisement);
-        comment.setRentingRequestId(checkCommentDTO.getRentingRequestId());
+        comment.setRentingRequestId(commentDTO.getRentingRequestId());
         commentRepository.save(comment);
         return new CommDTO(comment);
     }
@@ -154,7 +154,11 @@ public class CommentService {
     public CommentClientResponseDTO getClientComment(Long id) {
         Comment comment = findOne(id);
 
-        return new CommentClientResponseDTO(comment.getId(), comment.getTitle(), comment.getContent());
+        if(comment.getAllowed()) {
+            return new CommentClientResponseDTO(comment.getId(), comment.getTitle(), comment.getContent());
+        }
+
+        return null;
     }
 
     private CommDTO validateAndSanitize(CommDTO commDTO) {
