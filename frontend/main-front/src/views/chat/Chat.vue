@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isLogged">
         <md-app>
             <md-app-toolbar class="md-transparent">
                 <span class="md-title">{{ this.selectedTitle }}</span>
@@ -11,10 +11,10 @@
                 </md-toolbar>
 
                 <md-list>
-                    <div v-for="room in rooms" v-bind:key="room.id">
+                    <div v-for="room in getChat" v-bind:key="room.senderId">
                         <md-divider></md-divider>
                         <md-list-item @click="setRoom(room)" class="md-button">
-                            <span class="md-list-item-button">{{ room.name }}</span>
+                            <span class="md-list-item-button">{{ room.senderUsername }}</span>
                         </md-list-item>
                         <md-divider></md-divider>
                     </div>
@@ -24,7 +24,7 @@
             <md-app-content>
                 <div class="msgDiv" v-if="this.selectedRoom != null && this.currentMessages !== null">
                     <div v-for="msg in currentMessages" v-bind:key="getMsgIndex(msg)">
-                        <div v-if="msg.senderID === 2" style="text-align: right;">
+                        <div v-if="msg.senderId === getUser.id" style="text-align: right;">
                             <span class="message-card-mine">{{ msg.content }}</span>
                         </div>
                         <div v-else>
@@ -49,9 +49,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, integer, decimal, helpers } from "vuelidate/lib/validators";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\s?]+)$/);
 
@@ -65,38 +67,35 @@ export default {
             currentMessage: "",
             currentMessages: null,
             msgCounter: 0,
-            rooms: [
-                {
-                    "id": 1,
-                    "name": "Agent Pera",
-                    "messages": [
-                        {
-                            "id": 1,
-                            "senderID": 1,
-                            "receiverID": 2,
-                            "content": "Hey, man",
-                        },
-                        {
-                            "id": 2,
-                            "senderID": 2,
-                            "receiverID": 1,
-                            "content": "How are you?"
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "Agent Mika",
-                    "messages": []
-                }
-            ]
+            rooms: []
         }
     },
-    computed: mapGetters(["isLogged", "getUser"]),
+    computed: mapGetters(["isLogged", "getUser", "getChat"]),
+    mounted() {
+        if (this.isLogged) {
+            this.$store.dispatch("getMessages", this.getUser.id);
+        }
+        this.connect();
+	},
     methods: {
+        ...mapActions(["getMessages"]),
+
+        initializeWebSocketConnection() {
+            // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
+            let ws = new SockJS(this.serverUrl);
+            this.stompClient = Stomp.over(ws);
+            let that = this;
+
+            this.stompClient.connect({}, function () {
+            that.isLoaded = true;
+            that.openGlobalSocket()
+            });
+
+        },
+
         setRoom(room) {
             this.selectedRoom = room;
-            this.selectedTitle = "Conversation with " + this.selectedRoom.name;
+            this.selectedTitle = "Conversation with " + this.selectedRoom.senderUsername;
             this.currentMessages = this.selectedRoom.messages;
             this.msgCounter = this.currentMessages.length;
         },
@@ -110,19 +109,50 @@ export default {
             if (this.selectedTitle !== "" && !this.$v.$invalid && this.currentMessage !== "") {
                 this.msgCounter = this.msgCounter + 1;
                 var msg = {
-                    "senderID": this.getUser.id,
-                    "receiverID": this.selectedRoom.id,
+                    "senderId": this.getUser.id,
+                    "receiverId": this.selectedRoom.id,
                     "content": this.currentMessage,
-                    "username": this.getUser.firstName + " " + this.getUser.lastName 
+                    "username": this.getUser.firstName + " " + this.getUser.lastName
                 };
                 console.log(msg);
 
                 // send message to server
+                if (this.stompClient && this.stompClient.connected) {
+                    this.stompClient.send("/socket-subscriber/send", JSON.stringify(msg), {});
+                }
 
                 this.currentMessages.push(msg);
                 this.currentMessage = "";
             }
-        }
+        },
+
+        send() {
+            console.log("Send message:" + this.send_message);
+            if (this.stompClient && this.stompClient.connected) {
+                const msg = { name: this.send_message };
+                this.stompClient.send("/app/hello", JSON.stringify(msg), {});
+            }
+        },
+
+        connect() {
+            this.socket = new SockJS("http://localhost:8089/message/socket");
+            this.stompClient = Stomp.over(this.socket);
+            this.stompClient.connect(
+                {},
+                frame => {
+                    //this.connected = true;
+                    console.log(frame);
+                    this.stompClient.subscribe("/socket-publisher", tick => {
+                        console.log(tick);
+                        //this.received_messages.push(JSON.parse(tick.body).content);
+                    });
+                },
+                error => {
+                    console.log(error);
+                    //this.connected = false;
+                }
+            );
+        },
     },
     validations: {
 		currentMessage: {
