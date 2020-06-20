@@ -1,5 +1,6 @@
 package com.uns.ftn.viewservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,4 +51,8 @@ public class Advertisement {
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Photo> photos;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ratedAds")
+    private Set<User> ratedByUsers;
 }
