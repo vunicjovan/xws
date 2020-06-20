@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,11 @@ public class ViewController {
     @GetMapping("/agent/{id}")
     public ResponseEntity<?> agentAds(@PathVariable("id") Long id) {
         return new ResponseEntity<>(viewService.getAgentsAdvertisements(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/comment/{id}")
+    public ResponseEntity<?> getComment(@PathVariable Long id) {
+        return new ResponseEntity<>(viewService.getCommentClient(id), HttpStatus.OK);
     }
 
     @GetMapping("/cart")

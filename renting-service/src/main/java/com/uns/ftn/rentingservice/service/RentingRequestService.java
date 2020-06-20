@@ -1,10 +1,7 @@
 package com.uns.ftn.rentingservice.service;
 
 import com.uns.ftn.rentingservice.client.AdvertisementClient;
-import com.uns.ftn.rentingservice.domain.Advertisement;
-import com.uns.ftn.rentingservice.domain.RentingInterval;
-import com.uns.ftn.rentingservice.domain.RentingRequest;
-import com.uns.ftn.rentingservice.domain.RequestStatus;
+import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
@@ -29,14 +26,17 @@ public class RentingRequestService {
     private RentingRequestRepository requestRepo;
     private TaskScheduler taskScheduler;
     private AdvertisementClient advertisementClient;
+    private CommentService commentService;
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
-                                 TaskScheduler taskScheduler, AdvertisementClient advertisementClient) {
+                                 TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
+                                 CommentService commentService) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
         this.advertisementClient = advertisementClient;
+        this.commentService = commentService;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -93,6 +93,20 @@ public class RentingRequestService {
         rentingRequest.setStatus(request.getStatus());
         rentingRequest = save(rentingRequest);
 
+        if(request.getStatus() == RequestStatus.paid) {
+            RentingRequest finalRentingRequest = rentingRequest;
+            finalRentingRequest.getAdvertisements().forEach(advertisement -> {
+                advertisement.getRentingRequests().forEach(req -> {
+                    if(req.getId() != finalRentingRequest.getId() && req.getStatus() == RequestStatus.pending ) {
+                        if(!(req.getEndDate().before(finalRentingRequest.getStartDate()) ||
+                                req.getStartDate().after(finalRentingRequest.getEndDate()))) {
+                            req.setStatus(RequestStatus.canceled);
+                            save(req);
+                        }
+                    }
+                });
+            });
+        }
 
         return new ResponseEntity<>(
                 new RequestStatusDTO(rentingRequest.getId(), rentingRequest.getStatus()), HttpStatus.OK);
@@ -144,6 +158,42 @@ public class RentingRequestService {
         }
 
         return getReqResponseDTOS(response);
+    }
+
+    public Set<AvailableCommentDTO> getHistoryUser(Long id) {
+        List<RentingRequest> requests = requestRepo.findAllBySenderId(id);
+        Set<Advertisement> advertisements = new HashSet<>();
+        Set<AvailableCommentDTO> response = new HashSet<>();
+
+        for(RentingRequest request : requests) {
+            if(request.getEndDate().before(new Date(System.currentTimeMillis())) &&
+                    request.getStatus() == RequestStatus.paid) {
+                for(Advertisement advertisement: request.getAdvertisements()) {
+                    advertisements.add(advertisement);
+                }
+            }
+        }
+
+        advertisements.forEach(advertisement -> {
+            AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
+            availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
+            availableCommentDTO.setCommentAvailable(false);
+            advertisement.getRentingRequests().forEach(request -> {
+                if(request.getSenderId() == id) {
+                    availableCommentDTO.getRentingIntervals().add(new RentingIntervalDTO(request.getStartDate(),
+                            request.getEndDate()));
+                    Comment comment = commentService.findIfExist(advertisement, request);
+                    if(comment == null) {
+                        availableCommentDTO.setCommentAvailable(true);
+                    } else {
+                        availableCommentDTO.getComments().add(advertisementClient.getComment(comment.getId()));
+                    }
+                }
+            });
+            response.add(availableCommentDTO);
+        });
+
+        return response;
     }
 
     private Set<ReqResponseDTO> getReqResponseDTOS(Set<RentingRequest> response) {

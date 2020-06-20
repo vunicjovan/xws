@@ -59,4 +59,8 @@ public class CommentService {
 
         return commentDTO;
     }
+
+    public Comment findIfExist(Advertisement advertisement, RentingRequest rentingRequest) {
+        return commentRepository.findByAdvertisementAndRentingRequest(advertisement, rentingRequest);
+    }
 }
