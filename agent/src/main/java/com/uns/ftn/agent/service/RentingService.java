@@ -2,6 +2,8 @@ package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.RentingReportClient;
 import com.uns.ftn.agent.client.RentingRequestClient;
+import com.uns.ftn.agent.domain.AdWrapper;
+import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.dto.GetRentingRequestDTO;
 import com.uns.ftn.agent.dto.RentingReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,27 +26,33 @@ public class RentingService {
 
     private RentingRequestClient requestClient;
     private RentingReportClient reportClient;
+    private final AdvertisementService advertisementService;
 
     @Autowired
     public RentingService(
             RentingRequestClient requestClient,
-            RentingReportClient reportClient
-    ) {
+            RentingReportClient reportClient,
+            AdvertisementService advertisementService) {
         this.requestClient = requestClient;
         this.reportClient = reportClient;
+        this.advertisementService = advertisementService;
     }
 
     public ResponseEntity<?> getFinishedRequests() {
         Set<GetRentingRequestDTO> retval = new HashSet<>();
-        GetFinishedResponse response = requestClient.getFinishedRequests((long) 1);
+        GetFinishedResponse response = requestClient.getFinishedRequests((long) 3);
 
         for (FinishedRequest fr : response.getFinishedRequests()) {
             GetRentingRequestDTO gdto = new GetRentingRequestDTO();
+            //AdWrapper adWrapper = advertisementService.findOneAdWrapper(fr.getAdvertisementId());
+            Advertisement advertisement = advertisementService.findOne(fr.getAdvertisementId());
 
             gdto.setRequestId(fr.getRequestId());
             gdto.setStartDate(calendarToDate(fr.getStartDate()));
             gdto.setEndDate(calendarToDate(fr.getEndDate()));
-            gdto.setAdvertisementID(fr.getAdvertisementId());
+            gdto.setAdvertisementId(fr.getAdvertisementId());
+            gdto.setBrand(advertisement.getVehicle().getModel().getBrand().getName());
+            gdto.setModel(advertisement.getVehicle().getModel().getName());
             gdto.setStringStartDate(calendarToString(fr.getStartDate()));
             gdto.setStringEndDate(calendarToString(fr.getEndDate()));
 

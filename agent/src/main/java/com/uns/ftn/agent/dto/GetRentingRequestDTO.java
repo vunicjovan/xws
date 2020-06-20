@@ -16,7 +16,9 @@ public class GetRentingRequestDTO {
     private Long requestId;
     private Date startDate;
     private Date endDate;
-    private Long advertisementID;
+    private Long advertisementId;
+    private String brand;
+    private String model;
     private String stringStartDate;
     private String stringEndDate;
 

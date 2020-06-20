@@ -7,6 +7,7 @@ import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
+import com.uns.ftn.rentingservice.repository.RentingReportRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +29,22 @@ public class RentingRequestService {
     private TaskScheduler taskScheduler;
     private AdvertisementClient advertisementClient;
     private CommentService commentService;
-    private final CommentClient commentClient;
+    private CommentClient commentClient;
+    private final RentingReportRepository rentingReportRepository;
+
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
                                  TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
-                                 CommentService commentService, CommentClient commentClient) {
+                                 CommentService commentService, CommentClient commentClient,
+                                 RentingReportRepository rentingReportRepository) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
         this.advertisementClient = advertisementClient;
         this.commentService = commentService;
         this.commentClient = commentClient;
+        this.rentingReportRepository = rentingReportRepository;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -123,7 +128,9 @@ public class RentingRequestService {
         if (!agentsAds.isEmpty()) {
             for (Advertisement ad : agentsAds) {
                 for (RentingRequest request : ad.getRentingRequests()) {
-                    if (request.getStatus() == RequestStatus.paid && currentTime.after(request.getEndDate())) {
+                    RentingReport report = rentingReportRepository.findByAdvertisementAndRentingRequest(ad, request);
+                    if (report == null && request.getStatus() == RequestStatus.paid &&
+                            currentTime.after(request.getEndDate())) {
                         GetRentingRequestDTO gdto = new GetRentingRequestDTO(request);
                         gdto.setAdvertisementID(ad.getId());
                         retval.add(gdto);
