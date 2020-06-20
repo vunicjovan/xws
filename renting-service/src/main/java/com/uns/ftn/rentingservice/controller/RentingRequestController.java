@@ -57,10 +57,10 @@ public class RentingRequestController {
         return requestService.updateRequestStatus(id, request);
     }
 
-    @GetMapping("/comment/{userId}/{advertisementId}")
-    public ResponseEntity<?> checkCommentPostPermission(@PathVariable("userId") Long userId,
+    @GetMapping("/comment/{requestId}/{advertisementId}")
+    public ResponseEntity<?> checkCommentPostPermission(@PathVariable("requestId") Long requestId,
                                                       @PathVariable("advertisementId") Long advertisementId) {
-        return new ResponseEntity(commentService.checkCommentPermission(userId, advertisementId), HttpStatus.OK);
+        return new ResponseEntity(commentService.checkCommentPermission(requestId, advertisementId), HttpStatus.OK);
     }
 
 }
