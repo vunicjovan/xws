@@ -77,7 +77,8 @@ public class ViewService {
                 advertisement.getVehicle().getHasAndroid(),
                 advertisement.getDescription(),
                 advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet()),
-                advertisement.getOwnerId()
+                advertisement.getOwnerId(),
+                getCommentsForDisplay(advertisement.getId())
         );
 
         return detailedAdvertisementDTO;
@@ -88,7 +89,7 @@ public class ViewService {
                 .orElseThrow(() -> new NotFoundException("Requested advertisement doesn't exist."));
 
         return new AdvertClientResponseDTO(ad.getId(), ad.getVehicle().getModel().getName(),
-                ad.getVehicle().getModel().getBrand().getName(), ad.getLocation(), ad.getPrice());
+                ad.getVehicle().getModel().getBrand().getName(), ad.getLocation(), ad.getPrice(), ad.getRatedByUsers());
     }
 
     public Set<SimpleAdvertisementDTO> getAgentsAdvertisements(Long id) {
@@ -110,6 +111,12 @@ public class ViewService {
                 .orElseThrow(() -> new NotFoundException("Comment with that id doesn't exist."));
 
         return new CommentClientResponseDTO(comment.getId(), comment.getTitle(), comment.getContent());
+    }
+
+    public Set<CommentDisplayDTO> getCommentsForDisplay(Long adId) {
+        List<Comment> comments = commentRepository.getAllByAdvertisement_Id(adId);
+
+        return comments.stream().map(comment -> new CommentDisplayDTO(comment)).collect(Collectors.toSet());
     }
 
 }
