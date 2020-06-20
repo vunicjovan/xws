@@ -88,7 +88,7 @@ const actions = {
 				})
 				.catch((error) => reject(error));
 		});
-	}
+	},
 };
 
 const mutations = {

@@ -46,6 +46,17 @@ const actions = {
         })
     },
 
+    postComment({ commit }, comment) {
+        return new Promise((resolve, reject) => {
+            commentApi
+                .postComment(comment)
+                .then((comment) => {
+                    resolve();
+                })
+                .catch((error) => resolve(error));
+        });
+    }
+
 };
 
 const mutations = {

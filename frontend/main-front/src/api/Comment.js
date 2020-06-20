@@ -17,5 +17,11 @@ export default {
 		return axios.delete(`/agent/ad/${adId}/comment/${id}`).then((response) => {
 			return response.data;
 		});
-    }
+	},
+	
+	postComment(comment) {
+		return axios.post(`/agent/ad/comment`, comment).then((response) => {
+			return response.data;
+		});
+	},
 }
