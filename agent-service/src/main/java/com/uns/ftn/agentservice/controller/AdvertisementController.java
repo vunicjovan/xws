@@ -2,8 +2,10 @@ package com.uns.ftn.agentservice.controller;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
+import com.uns.ftn.agentservice.dto.RatingDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.CommentService;
+import com.uns.ftn.agentservice.service.impl.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,14 @@ public class AdvertisementController {
 
     private AdvertisementService adService;
     private CommentService commentService;
+    private final RatingService ratingService;
 
     @Autowired
     public AdvertisementController(AdvertisementService adService,
-                                   CommentService commentService) {
+                                   CommentService commentService, RatingService ratingService) {
         this.adService = adService;
         this.commentService = commentService;
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/")
@@ -87,6 +91,11 @@ public class AdvertisementController {
     @PostMapping("/comment")
     public ResponseEntity<?> postComment(@RequestBody CommDTO commDTO) {
         return new ResponseEntity<>(commentService.postComment(commDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/vehicle/rate")
+    public ResponseEntity<?> postRating(@PathVariable ("id") Long adId, @RequestBody RatingDTO ratingDTO) {
+        return new ResponseEntity<>(ratingService.rateAd(adId, ratingDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

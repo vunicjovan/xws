@@ -16,6 +16,8 @@
                             </md-card-header>
 
                             <md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
+                            <md-button @click="showRateDialog = true">Rate</md-button>
+                            
                             <md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
                                 <md-dialog-title>Comment Advertisement</md-dialog-title>
 
@@ -38,6 +40,24 @@
                                         <md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
                                 </md-dialog-actions>
 
+                            </md-dialog>
+
+                            <md-dialog @md-opened="openRateDialog()" :md-active.sync="showRateDialog" md-dynamic-height md-dynamic-width>
+                                <md-dialog-title>Rate Advertisement</md-dialog-title>
+                                
+                                <md-dialog-content>
+                                    <md-field :class="{ 'md-invalid': $v.rating.$error }">
+                                        <label>Advertisement rating</label>
+                                        <md-input v-model="rating" type="number" min="1" max="5">
+                                            <span class="md-error" v-if="!$v.rating.required">Rating is required</span>
+                                        </md-input>
+                                    </md-field>
+                                </md-dialog-content>
+
+                                <md-dialog-actions>
+                                    <md-button @click="validateRating(ad)" class="md-primary">Post</md-button>
+                                    <md-button @click="showRateDialog = false" class="md-primary">Cancel</md-button>
+                                </md-dialog-actions>
                             </md-dialog>
                         </div>
                         
@@ -96,75 +116,10 @@ export default {
         return {
             show: false,
             showCommentDialog: false,
+            showRateDialog: false,
             commentContent: "",
             commentTitle: "",
-            // rentHistory:
-            // [
-            //     {
-                    
-            //         rentingRequestId: 1,
-            //         advertisement:
-            //         {
-            //              "id": 1,
-            //             "brand": "brend1",
-            //             "model": "model1",
-            //             "price": "price1",
-            //             "location": "location1",
-            //         }
-            //         ,
-            //         commentsAvailable: true,
-            //         rentingIntervals: [
-            //             {
-            //                 "startDate": "2020-10-21T12:39:06.000+00:00",
-            //                 "endDate": "2020-10-21T13:38:06.000+00:00"
-            //             },
-            //             {
-            //                 "startDate": "2020-01-21T13:39:06.000+00:00",
-            //                 "endDate": "2020-01-23T14:38:06.000+00:00"
-            //             }
-            //         ],
-            //         comments: [
-            //             {
-            //                 "id": 1,
-            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            //             }
-            //         ]
-            //     },
-            //     {   
-            //         rentingRequestId: null,
-            //         advertisement: 
-            //         {
-            //             "id": 2,
-            //             "brand": "brend2",
-            //             "model": "model2",
-            //             "price": "price2",
-            //             "location": "location2",
-            //         }
-            //         ,
-            //         commentsAvailable: false,
-            //         rentingIntervals: [
-            //             {
-            //                 "startDate": "2020-10-21T12:39:06.000+00:00",
-            //                 "endDate": "2020-10-21T13:38:06.000+00:00"
-            //             },
-            //             {
-            //                 "startDate": "2020-01-21T13:39:06.000+00:00",
-            //                 "endDate": "2020-01-23T14:38:06.000+00:00"
-            //             }
-            //         ],
-            //         comments: [
-            //             {
-            //                 "id": 2,
-            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            //             },
-            //             {
-            //                 "id": 3,
-            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            //             }
-            //         ]
-            //     },
-                
-            // ]
+            rating: undefined,
         };
     },
 
@@ -185,7 +140,11 @@ export default {
         openCommentDialog: function() {
             this.$v.$reset();
             this.commentContent = "";
-            this.commentTitle = ""
+            this.commentTitle = "";
+        },
+        openRateDialog: function() {
+            this.$v.$reset();
+            this.rating = undefined;
         },
         commentOnAd: function(ad) {
             let comment = {
@@ -203,12 +162,35 @@ export default {
                 })
                 .catch((error) => console.log(error));
         },
+        rateAd: function(ad) {
+            let rate ={
+                "adId": ad.advertisement.id,
+                "rating": {    
+                    "rating": this.rating,
+                    "userId": this.getUser.id
+                }
+            }
+            this.$store
+                .dispatch("postRating", rate)
+                .then((data) => {
+                    this.showRateDialog = false;
+                }) 
+                .catch((error) => console.log(error));
+        },
         validateComment: function(ad) {
             this.$v.$touch();
 
             if (!this.$v.$invalid) {
                 this.showCommentDialog = false;
                 this.commentOnAd(ad);
+            }
+        },
+        validateRating: function(ad) {
+            this.$v.$touch();
+
+            if (!this.$v.$$invalid) {
+                this.showRateDialog = false;
+                this.rateAd(ad);
             }
         }
     },
@@ -226,6 +208,9 @@ export default {
             required,
         },
         commentTitle: {
+            required,
+        },
+        rating: {
             required,
         }
     }
