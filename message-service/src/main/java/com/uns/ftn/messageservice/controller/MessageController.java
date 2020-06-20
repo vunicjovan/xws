@@ -35,8 +35,8 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> sendMessage() {
-        return null;
+    public ResponseEntity<?> sendMessage(@RequestBody MessageDTO messageDTO) {
+        return new ResponseEntity<>(messageService.saveMessage(messageDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -50,7 +50,7 @@ public class MessageController {
     }
 
     @MessageMapping("/send")
-    public void sendMessage(@Payload MessageDTO messageDTO) {
+    public void sendMessageSocket(@Payload MessageDTO messageDTO) {
         simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageDTO.getReceiverId(), messageDTO);
     }
 

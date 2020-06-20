@@ -10,6 +10,7 @@ import renting from "./modules/rentingIntervals.js";
 import comment from "./modules/comment.js";
 import rentingRequest from "./modules/rentingRequest.js";
 import rentingHistory from "./modules/rentingHistory.js";
+import chat from "./modules/chat.js"
 
 Vue.use(Vuex);
 
@@ -25,5 +26,6 @@ export default new Vuex.Store({
 		comment,
 		rentingRequest,
 		rentingHistory,
+		chat
 	},
 });

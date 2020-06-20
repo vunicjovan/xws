@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLogged">
+    <div v-if="getUser">
         <md-app>
             <md-app-toolbar class="md-transparent">
                 <span class="md-title">{{ this.selectedTitle }}</span>
@@ -72,26 +72,26 @@ export default {
     },
     computed: mapGetters(["isLogged", "getUser", "getChat"]),
     mounted() {
-        if (this.isLogged) {
+        if (this.getUser) {
             this.$store.dispatch("getMessages", this.getUser.id);
         }
-        this.connect();
+        //this.connect();
 	},
     methods: {
-        ...mapActions(["getMessages"]),
+        ...mapActions(["getMessages", "sendMessage"]),
 
-        initializeWebSocketConnection() {
-            // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
-            let ws = new SockJS(this.serverUrl);
-            this.stompClient = Stomp.over(ws);
-            let that = this;
+        // initializeWebSocketConnection() {
+        //     // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
+        //     let ws = new SockJS(this.serverUrl);
+        //     this.stompClient = Stomp.over(ws);
+        //     let that = this;
 
-            this.stompClient.connect({}, function () {
-            that.isLoaded = true;
-            that.openGlobalSocket()
-            });
+        //     this.stompClient.connect({}, function () {
+        //     that.isLoaded = true;
+        //     that.openGlobalSocket()
+        //     });
 
-        },
+        // },
 
         setRoom(room) {
             this.selectedRoom = room;
@@ -110,49 +110,45 @@ export default {
                 this.msgCounter = this.msgCounter + 1;
                 var msg = {
                     "senderId": this.getUser.id,
-                    "receiverId": this.selectedRoom.id,
+                    "receiverId": this.selectedRoom.senderId,
                     "content": this.currentMessage,
                     "username": this.getUser.firstName + " " + this.getUser.lastName
                 };
                 console.log(msg);
 
-                // send message to server
-                if (this.stompClient && this.stompClient.connected) {
-                    this.stompClient.send("/socket-subscriber/send", JSON.stringify(msg), {});
-                }
+                this.$store.dispatch("sendMessage", msg);
 
                 this.currentMessages.push(msg);
                 this.currentMessage = "";
             }
         },
 
-        send() {
-            console.log("Send message:" + this.send_message);
-            if (this.stompClient && this.stompClient.connected) {
-                const msg = { name: this.send_message };
-                this.stompClient.send("/app/hello", JSON.stringify(msg), {});
-            }
-        },
+        // send() {
+        //      // send message to server
+        //         if (this.stompClient && this.stompClient.connected) {
+        //             this.stompClient.send("/socket-subscriber/send", JSON.stringify(msg), {});
+        //         }
+        // },
 
-        connect() {
-            this.socket = new SockJS("http://localhost:8089/message/socket");
-            this.stompClient = Stomp.over(this.socket);
-            this.stompClient.connect(
-                {},
-                frame => {
-                    //this.connected = true;
-                    console.log(frame);
-                    this.stompClient.subscribe("/socket-publisher", tick => {
-                        console.log(tick);
-                        //this.received_messages.push(JSON.parse(tick.body).content);
-                    });
-                },
-                error => {
-                    console.log(error);
-                    //this.connected = false;
-                }
-            );
-        },
+        // connect() {
+        //     this.socket = new SockJS("http://localhost:8089/message/socket");
+        //     this.stompClient = Stomp.over(this.socket);
+        //     this.stompClient.connect(
+        //         {},
+        //         frame => {
+        //             //this.connected = true;
+        //             console.log(frame);
+        //             this.stompClient.subscribe("/socket-publisher", tick => {
+        //                 console.log(tick);
+        //                 //this.received_messages.push(JSON.parse(tick.body).content);
+        //             });
+        //         },
+        //         error => {
+        //             console.log(error);
+        //             //this.connected = false;
+        //         }
+        //     );
+        // },
     },
     validations: {
 		currentMessage: {
