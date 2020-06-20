@@ -114,4 +114,9 @@ public class AdvertisementController {
     public ResponseEntity<?> rejectComment(@PathVariable("adId") Long adId, @PathVariable("id") Long id) {
         return commentService.rejectComment(adId, id);
     }
+
+    @GetMapping("comment/{id}")
+    public  ResponseEntity<?> getClientComment(@PathVariable ("id") Long id) {
+        return new ResponseEntity<>(commentService.getClientComment(id), HttpStatus.OK);
+    }
 }

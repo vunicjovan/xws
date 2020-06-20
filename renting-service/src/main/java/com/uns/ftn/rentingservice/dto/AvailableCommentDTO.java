@@ -16,6 +16,7 @@ import java.util.Set;
 public class AvailableCommentDTO {
     private AdvertClientResponseDTO advertisement;
     private boolean commentAvailable;
+    private Long rentingRequestId;
     private Set<RentingIntervalDTO> rentingIntervals = new HashSet<>();
     private Set<CommentClientResponseDTO> comments = new HashSet<>();
 }

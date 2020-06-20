@@ -4,7 +4,7 @@
             <div class="md-headline">Renting History</div>
             <div v-if="show && isLogged" class="md-layout md-gutter md-alignment-center">
                 <div class="card-expansion">
-                    <md-card v-for="ad in rentHistory" v-bind:key="ad.advertisement.id" class="md-layout-item md-size-90">
+                    <md-card v-for="ad in getRentingHistory" v-bind:key="ad.advertisement.id" class="md-layout-item md-size-90">
                         
                         <div id="left-div">
                             <md-card-header>
@@ -15,7 +15,7 @@
                                 </md-card-header-text>
                             </md-card-header>
 
-                            <md-button v-if="ad.commentsAvailable" @click="showCommentDialog = true">Comment</md-button>
+                            <md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
                             <md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
                                 <md-dialog-title>Comment Advertisement</md-dialog-title>
 
@@ -63,8 +63,11 @@
                                     <md-tab md-label="My Comments">
                                         <md-table>
                                             <md-table-row v-for="comment in ad.comments" v-bind:key="comment.id">
-                                                <md-table-cell md-label="Comment">
-                                                        {{ comment.text }}
+                                                <md-table-cell md-label="Title">
+                                                        {{ comment.title }}
+                                                </md-table-cell>
+                                                <md-table-cell md-label="Content">
+                                                        {{ comment.content }}
                                                 </md-table-cell>
                                             </md-table-row>
                                         </md-table>
@@ -95,73 +98,73 @@ export default {
             showCommentDialog: false,
             commentContent: "",
             commentTitle: "",
-            rentHistory:
-            [
-                {
+            // rentHistory:
+            // [
+            //     {
                     
-                    rentingRequestId: 1,
-                    advertisement:
-                    {
-                         "id": 1,
-                        "brand": "brend1",
-                        "model": "model1",
-                        "price": "price1",
-                        "location": "location1",
-                    }
-                    ,
-                    commentsAvailable: true,
-                    rentingIntervals: [
-                        {
-                            "startDate": "2020-10-21T12:39:06.000+00:00",
-                            "endDate": "2020-10-21T13:38:06.000+00:00"
-                        },
-                        {
-                            "startDate": "2020-01-21T13:39:06.000+00:00",
-                            "endDate": "2020-01-23T14:38:06.000+00:00"
-                        }
-                    ],
-                    comments: [
-                        {
-                            "id": 1,
-                            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                        }
-                    ]
-                },
-                {   
-                    rentingRequestId: null,
-                    advertisement: 
-                    {
-                        "id": 2,
-                        "brand": "brend2",
-                        "model": "model2",
-                        "price": "price2",
-                        "location": "location2",
-                    }
-                    ,
-                    commentsAvailable: false,
-                    rentingIntervals: [
-                        {
-                            "startDate": "2020-10-21T12:39:06.000+00:00",
-                            "endDate": "2020-10-21T13:38:06.000+00:00"
-                        },
-                        {
-                            "startDate": "2020-01-21T13:39:06.000+00:00",
-                            "endDate": "2020-01-23T14:38:06.000+00:00"
-                        }
-                    ],
-                    comments: [
-                        {
-                            "id": 2,
-                            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                        },
-                        {
-                            "id": 3,
-                            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                        }
-                    ]
-                },
+            //         rentingRequestId: 1,
+            //         advertisement:
+            //         {
+            //              "id": 1,
+            //             "brand": "brend1",
+            //             "model": "model1",
+            //             "price": "price1",
+            //             "location": "location1",
+            //         }
+            //         ,
+            //         commentsAvailable: true,
+            //         rentingIntervals: [
+            //             {
+            //                 "startDate": "2020-10-21T12:39:06.000+00:00",
+            //                 "endDate": "2020-10-21T13:38:06.000+00:00"
+            //             },
+            //             {
+            //                 "startDate": "2020-01-21T13:39:06.000+00:00",
+            //                 "endDate": "2020-01-23T14:38:06.000+00:00"
+            //             }
+            //         ],
+            //         comments: [
+            //             {
+            //                 "id": 1,
+            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            //             }
+            //         ]
+            //     },
+            //     {   
+            //         rentingRequestId: null,
+            //         advertisement: 
+            //         {
+            //             "id": 2,
+            //             "brand": "brend2",
+            //             "model": "model2",
+            //             "price": "price2",
+            //             "location": "location2",
+            //         }
+            //         ,
+            //         commentsAvailable: false,
+            //         rentingIntervals: [
+            //             {
+            //                 "startDate": "2020-10-21T12:39:06.000+00:00",
+            //                 "endDate": "2020-10-21T13:38:06.000+00:00"
+            //             },
+            //             {
+            //                 "startDate": "2020-01-21T13:39:06.000+00:00",
+            //                 "endDate": "2020-01-23T14:38:06.000+00:00"
+            //             }
+            //         ],
+            //         comments: [
+            //             {
+            //                 "id": 2,
+            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            //             },
+            //             {
+            //                 "id": 3,
+            //                 "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            //             }
+            //         ]
+            //     },
                 
-            ]
+            // ]
         };
     },
 
