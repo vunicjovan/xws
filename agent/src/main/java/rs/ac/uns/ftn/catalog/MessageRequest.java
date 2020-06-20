@@ -10,7 +10,6 @@ package rs.ac.uns.ftn.catalog;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -25,8 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="path" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,54 +35,27 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "id",
-    "path"
+    "userId"
 })
-@XmlRootElement(name = "newPhotoResponse")
-public class NewPhotoResponse {
+@XmlRootElement(name = "messageRequest", namespace = "http://www.ftn.uns.ac.rs/message")
+public class MessageRequest {
 
-    protected long id;
-    @XmlElement(required = true)
-    protected String path;
+    protected long userId;
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the userId property.
      * 
      */
-    public long getId() {
-        return id;
+    public long getUserId() {
+        return userId;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the userId property.
      * 
      */
-    public void setId(long value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the path property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * Sets the value of the path property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPath(String value) {
-        this.path = value;
+    public void setUserId(long value) {
+        this.userId = value;
     }
 
 }
