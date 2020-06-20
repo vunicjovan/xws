@@ -8,4 +8,10 @@ export default {
 		});
 	},
 
+	sendMessage(message) {
+		return axios.post(`/message/`, message).then((response) => {
+			return response.data;
+		});
+	},
+
 }
