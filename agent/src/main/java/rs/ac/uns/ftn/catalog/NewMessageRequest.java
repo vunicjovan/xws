@@ -25,8 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="path" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="message" type="{http://www.ftn.uns.ac.rs/message}message"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,54 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "id",
-    "path"
+    "message"
 })
-@XmlRootElement(name = "newPhotoResponse")
-public class NewPhotoResponse {
+@XmlRootElement(name = "newMessageRequest", namespace = "http://www.ftn.uns.ac.rs/message")
+public class NewMessageRequest {
 
-    protected long id;
     @XmlElement(required = true)
-    protected String path;
+    protected Message message;
 
     /**
-     * Gets the value of the id property.
-     * 
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     */
-    public void setId(long value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the path property.
+     * Gets the value of the message property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Message }
      *     
      */
-    public String getPath() {
-        return path;
+    public Message getMessage() {
+        return message;
     }
 
     /**
-     * Sets the value of the path property.
+     * Sets the value of the message property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Message }
      *     
      */
-    public void setPath(String value) {
-        this.path = value;
+    public void setMessage(Message value) {
+        this.message = value;
     }
 
 }

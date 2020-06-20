@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ftn.uns.ac.rs/message"
+           targetNamespace="http://www.ftn.uns.ac.rs/message">
+
+    <xs:element name="messageRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="messageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chat" type="tns:chat" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newMessageRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="tns:message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newMessageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="tns:message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="chat">
+        <xs:sequence>
+            <xs:element name="senderId" type="xs:long"/>
+            <xs:element name="senderUsername" type="xs:string"/>
+            <xs:element name="messages" type="tns:message" minOccurs="0" maxOccurs="unbounded" nillable="true" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="message">
+        <xs:sequence>
+            <xs:element name="content" type="xs:string"/>
+            <xs:element name="senderId" type="xs:long"/>
+            <xs:element name="receiverId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

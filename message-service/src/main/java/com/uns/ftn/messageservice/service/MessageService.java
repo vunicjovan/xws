@@ -1,10 +1,12 @@
 package com.uns.ftn.messageservice.service;
 
+import com.uns.ftn.messageservice.AccountClient;
 import com.uns.ftn.messageservice.domain.Message;
 import com.uns.ftn.messageservice.dto.ChatDTO;
 import com.uns.ftn.messageservice.dto.MessageDTO;
 import com.uns.ftn.messageservice.exception.BadRequestException;
 import com.uns.ftn.messageservice.repository.MessageRepository;
+import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class MessageService {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private AccountClient accountClient;
 
     public List<ChatDTO> getChat(Long id) {
         List<Message> messages = messageRepository.findAllByReceiverId(id);
@@ -80,8 +85,6 @@ public class MessageService {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
-        System.out.println(messageDTO);
-
         if (messageDTO.getContent() == null || messageDTO.getContent().trim().equals("") ||
                 !pattern.matcher(messageDTO.getContent().trim()).matches() ||  messageDTO.getSenderId() == null
                 || messageDTO.getReceiverId() == null || messageDTO.getUsername() == null
@@ -93,6 +96,16 @@ public class MessageService {
         messageDTO.setContent(Encode.forHtml(messageDTO.getContent()));
         messageDTO.setUsername(Encode.forHtml(messageDTO.getUsername()));
 
+    }
+
+    public MessageDTO saveAgentMessage(MessageDTO messageDTO) throws NotFoundException {
+        try {
+            messageDTO.setUsername(accountClient.getOwnerName(messageDTO.getSenderId()));
+        } catch (Exception e) {
+            throw new NotFoundException("Agent with given id does not exist!");
+        }
+
+        return saveMessage(messageDTO);
     }
 
 }

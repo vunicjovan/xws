@@ -26,7 +26,7 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return new ResponseEntity(messageService.getChat(id), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getChat(id), HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
