@@ -28,5 +28,6 @@ public class DetailedAdvertisementDTO {
     private String description;
     private Set<String> photos;
     private Long ownerId;
+    private Set<CommentDisplayDTO> comments;
 
 }

@@ -55,12 +55,34 @@
 					</div>
 					<br />
 					<div><b>Owner's description:</b><br />{{ getAdvertisement.description }}</div>
+					<br/>
+					
 				</md-card-content>
 
 				<md-card-actions>
 					<md-button v-if="isLogged && getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent">Edit availability</md-button>
 					<md-button v-if="isLogged" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
 				</md-card-actions>
+			</md-card>
+			<md-card v-if="getAdvertisement.comments.length !== 0">
+				<md-card-content>
+					<div>
+						<span class="md-headline">Comments</span>
+					</div>
+					
+					<md-divider></md-divider>
+					<div v-for="comment in getAdvertisement.comments" v-bind:key="comment.id"> 
+						<div>
+							<br/>
+							<span class="md-subheading">{{ comment.title }}</span>
+							<div  class="md-layout md-alignment-center md-subtitle">
+								{{ comment.content }}
+							</div>
+							<br/>
+						</div>
+						<md-divider></md-divider>
+					</div>
+				</md-card-content>
 			</md-card>
 		</div>
 	</transition>
