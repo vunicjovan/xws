@@ -350,11 +350,6 @@ export default {
 				};
 			}
 		},
-
-		showDialog(selectedAd) {
-			this.selectedAdvertisement = selectedAd;
-			this.showModal = true;
-		},
 		showDialog(id) {
 			this.selectedAdvertisementId = id;
 			this.showModal = true;
