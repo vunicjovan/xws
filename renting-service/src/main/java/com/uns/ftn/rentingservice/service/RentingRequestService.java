@@ -1,6 +1,7 @@
 package com.uns.ftn.rentingservice.service;
 
 import com.uns.ftn.rentingservice.client.AdvertisementClient;
+import com.uns.ftn.rentingservice.client.CommentClient;
 import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
@@ -27,16 +28,18 @@ public class RentingRequestService {
     private TaskScheduler taskScheduler;
     private AdvertisementClient advertisementClient;
     private CommentService commentService;
+    private final CommentClient commentClient;
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
                                  TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
-                                 CommentService commentService) {
+                                 CommentService commentService, CommentClient commentClient) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
         this.advertisementClient = advertisementClient;
         this.commentService = commentService;
+        this.commentClient = commentClient;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -178,6 +181,7 @@ public class RentingRequestService {
             AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
             availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
             availableCommentDTO.setCommentAvailable(false);
+            availableCommentDTO.setRentingRequestId(null);
             advertisement.getRentingRequests().forEach(request -> {
                 if(request.getSenderId() == id) {
                     availableCommentDTO.getRentingIntervals().add(new RentingIntervalDTO(request.getStartDate(),
@@ -185,8 +189,9 @@ public class RentingRequestService {
                     Comment comment = commentService.findIfExist(advertisement, request);
                     if(comment == null) {
                         availableCommentDTO.setCommentAvailable(true);
+                        availableCommentDTO.setRentingRequestId(request.getId());
                     } else {
-                        availableCommentDTO.getComments().add(advertisementClient.getComment(comment.getId()));
+                        availableCommentDTO.getComments().add(commentClient.getComment(comment.getId()));
                     }
                 }
             });

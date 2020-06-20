@@ -38,12 +38,12 @@ public class CommentService {
 
         for (RentingRequest rentingRequest : rentingRequestList) {
             if (rentingRequest.getAdvertisements().contains(advertisement)
-                    && rentingRequest.getRentingReports()
+                    /*&& rentingRequest.getRentingReports()
                     .stream()
                     .filter(rentingReport -> rentingReport.getAdvertisement().getId() == advertisementId)
                     .findFirst()
                     .orElse(null) != null
-                    && rentingRequest.getComments()
+                    */&& rentingRequest.getComments()
                     .stream()
                     .filter(comment -> comment.getAdvertisement().getId() == advertisementId)
                     .findFirst()

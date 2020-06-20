@@ -6,10 +6,7 @@ import com.uns.ftn.agentservice.client.RentRequestClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Comment;
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
-import com.uns.ftn.agentservice.dto.CommDTO;
-import com.uns.ftn.agentservice.dto.CommentResponseDTO;
-import com.uns.ftn.agentservice.dto.UserResponseDTO;
+import com.uns.ftn.agentservice.dto.*;
 import com.uns.ftn.agentservice.exceptions.BadRequestException;
 import com.uns.ftn.agentservice.exceptions.NotFoundException;
 import com.uns.ftn.agentservice.repository.CommentRepository;
@@ -154,8 +151,15 @@ public class CommentService {
         return new CommDTO(comment);
     }
 
+    public CommentClientResponseDTO getClientComment(Long id) {
+        Comment comment = findOne(id);
+
+        return new CommentClientResponseDTO(comment.getId(), comment.getTitle(), comment.getContent());
+    }
+
     private CommDTO validateAndSanitize(CommDTO commDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([A-Z])+([a-zA-Z0-9\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]+)$";
+
         Pattern pattern = Pattern.compile(regex);
 
         if (commDTO.getTitle() == null || commDTO.getTitle().isEmpty()
