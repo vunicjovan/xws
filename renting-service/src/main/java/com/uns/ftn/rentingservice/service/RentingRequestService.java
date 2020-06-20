@@ -169,21 +169,31 @@ public class RentingRequestService {
         Set<AvailableCommentDTO> response = new HashSet<>();
 
         for(RentingRequest request : requests) {
-            if(request.getEndDate().before(new Date(System.currentTimeMillis())) &&
-                    request.getStatus() == RequestStatus.paid) {
+            if(checkIfRequestIsFinished(request)) {
                 for(Advertisement advertisement: request.getAdvertisements()) {
-                    advertisements.add(advertisement);
+                    AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
+                    availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
+                    availableCommentDTO.setRentingRequestId(request.getId());
+                    availableCommentDTO.setRentingInterval(new RentingIntervalDTO(request.getStartDate(),
+                            request.getEndDate()));
+                    Comment comment = commentService.findIfExist(advertisement, request);
+                    if(comment == null) {
+                        availableCommentDTO.setCommentAvailable(true);
+                    } else {
+                        availableCommentDTO.setComment(commentClient.getComment(comment.getId()));
+                    }
+                    response.add(availableCommentDTO);
                 }
             }
         }
 
-        advertisements.forEach(advertisement -> {
+       /* advertisements.forEach(advertisement -> {
             AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
             availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
             availableCommentDTO.setCommentAvailable(false);
             availableCommentDTO.setRentingRequestId(null);
             advertisement.getRentingRequests().forEach(request -> {
-                if(request.getSenderId() == id) {
+                if(request.getSenderId().equals(id) && checkIfRequestIsFinished(request)) {
                     availableCommentDTO.getRentingIntervals().add(new RentingIntervalDTO(request.getStartDate(),
                             request.getEndDate()));
                     Comment comment = commentService.findIfExist(advertisement, request);
@@ -196,9 +206,19 @@ public class RentingRequestService {
                 }
             });
             response.add(availableCommentDTO);
-        });
+        });*/
 
         return response;
+    }
+
+    private boolean checkIfRequestIsFinished(RentingRequest rentingRequest)  {
+
+        if(rentingRequest.getEndDate().before(new Date(System.currentTimeMillis())) &&
+                rentingRequest.getStatus().equals(RequestStatus.paid)) {
+            return true;
+        }
+
+        return  false;
     }
 
     private Set<ReqResponseDTO> getReqResponseDTOS(Set<RentingRequest> response) {

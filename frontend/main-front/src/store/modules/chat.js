@@ -19,6 +19,17 @@ const actions = {
 				})
 				.catch((error) => reject(error));
         });
+    },
+
+    sendMessage({commit}, message) {
+        return new Promise((resolve, reject) => {
+            chatApi
+				.sendMessage(message)
+				.then((message) => {
+					resolve(message);
+				})
+				.catch((error) => reject(error));
+        })
     }
 };
 

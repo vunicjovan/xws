@@ -16,45 +16,39 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    @Autowired
     private RentingRequestRepository rentingRequestRepository;
-
-    @Autowired
     private AdvertisementRepository advertisementRepository;
-
-    @Autowired
     private CommentRepository commentRepository;
 
-    public CommentDTO checkCommentPermission(Long userId, Long advertisementId) {
-        List<RentingRequest> rentingRequestList = rentingRequestRepository.findAllBySenderId(userId);
+    @Autowired
+    public CommentService(RentingRequestRepository rentingRequestRepository,
+                          AdvertisementRepository advertisementRepository,
+                          CommentRepository commentRepository) {
+        this.rentingRequestRepository = rentingRequestRepository;
+        this.advertisementRepository = advertisementRepository;
+        this.commentRepository = commentRepository;
+    }
+
+    public CommentDTO checkCommentPermission(Long requestId, Long advertisementId) {
         Advertisement advertisement = advertisementRepository.findById(advertisementId).orElse(null);
+        RentingRequest request = rentingRequestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Request doesn't exist."));
         CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setUserId(userId);
 
         if (advertisement == null) {
             throw new NotFoundException("Advertisement doesn't exist!");
         }
 
+        Comment temp = findIfExist(advertisement, request);
 
-        for (RentingRequest rentingRequest : rentingRequestList) {
-            if (rentingRequest.getAdvertisements().contains(advertisement)
-                    /*&& rentingRequest.getRentingReports()
-                    .stream()
-                    .filter(rentingReport -> rentingReport.getAdvertisement().getId() == advertisementId)
-                    .findFirst()
-                    .orElse(null) != null
-                    */&& rentingRequest.getComments()
-                    .stream()
-                    .filter(comment -> comment.getAdvertisement().getId() == advertisementId)
-                    .findFirst()
-                    .orElse(null) == null) {
-                Comment comment = new Comment();
-                comment.setAdvertisement(advertisement);
-                comment.setRentingRequest(rentingRequest);
-                commentRepository.save(comment);
-                commentDTO.setRentingRequestId(rentingRequest.getId());
-                return commentDTO;
-            }
+        if (temp == null) {
+            Comment comment = new Comment();
+            comment.setAdvertisement(advertisement);
+            comment.setRentingRequest(request);
+            commentRepository.save(comment);
+            commentDTO.setRentingRequestId(request.getId());
+            commentDTO.setUserId(request.getSenderId());
+            return commentDTO;
         }
 
         return commentDTO;

@@ -1,5 +1,6 @@
 package com.uns.ftn.rentingservice.dto;
 
+import com.uns.ftn.rentingservice.domain.RentingInterval;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,6 @@ public class AvailableCommentDTO {
     private AdvertClientResponseDTO advertisement;
     private boolean commentAvailable;
     private Long rentingRequestId;
-    private Set<RentingIntervalDTO> rentingIntervals = new HashSet<>();
-    private Set<CommentClientResponseDTO> comments = new HashSet<>();
+    private RentingIntervalDTO rentingInterval;
+    private CommentClientResponseDTO comment;
 }
