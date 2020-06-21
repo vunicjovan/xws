@@ -89,6 +89,17 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	postRating({ commit }, rate) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.rateAdvertisement(rate.adId, rate.rating)
+				.then((rating) => {
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	}
 };
 
 const mutations = {

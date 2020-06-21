@@ -18,5 +18,5 @@ public class AdvertClientResponseDTO {
     private String brand;
     private String location;
     private double price;
-    private Set<User> ratedByUsers;
+    private Set<UserDTO> ratedByUsers;
 }

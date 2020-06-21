@@ -1,10 +1,8 @@
-package com.uns.ftn.agentservice.repository;
+package com.uns.ftn.viewservice.repository;
 
-import com.uns.ftn.agentservice.domain.User;
+import com.uns.ftn.viewservice.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(Long id);
 }
