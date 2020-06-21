@@ -2,6 +2,7 @@ package com.uns.ftn.agentservice.endpoint;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
+import com.uns.ftn.agentservice.dto.PublisherCommentDTO;
 import com.uns.ftn.agentservice.dto.RentingIntervalDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
@@ -116,8 +117,9 @@ public class AdvertisementEndpoint {
         return commentResponse;
     }
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "")
-    public NewRentingIntervalResponse newRentingIntervalResponse(@RequestBody NewRentingIntervalRequest rentRequest) {
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newRentingIntervalRequest")
+    @ResponsePayload
+    public NewRentingIntervalResponse newRentingInterval(@RequestPayload NewRentingIntervalRequest rentRequest) {
         NewRentingIntervalResponse rentingIntervalResponse = new NewRentingIntervalResponse();
         RentingIntervalDTO rentingIntervalDTO = new RentingIntervalDTO(rentRequest.getRentingInterval());
         rentingIntervalDTO.setAdvertisementId(rentRequest.getAdvertisementId());
@@ -130,6 +132,30 @@ public class AdvertisementEndpoint {
         rentingIntervalResponse.setRentingInterval(rentingInterval);
 
         return  rentingIntervalResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newCommentRequest")
+    @ResponsePayload
+    public NewCommentResponse newComment(@RequestPayload NewCommentRequest commentRequest) {
+        NewCommentResponse commentResponse = new NewCommentResponse();
+        PublisherCommentDTO publisherCommentDTO = new PublisherCommentDTO();
+        publisherCommentDTO.setContent(commentRequest.getContent());
+        publisherCommentDTO.setTitle(commentRequest.getTitle());
+        publisherCommentDTO.setUserId(commentRequest.getUserId());
+        publisherCommentDTO.setAdvertisementId(commentRequest.getAdvertisementId());
+        publisherCommentDTO.setId(commentRequest.getId());
+
+        PublisherCommentDTO responseDTO = commentService.publisherPostComment(publisherCommentDTO);
+
+        Comment comment = new Comment();
+        comment.setAdvertisementId(responseDTO.getAdvertisementId());
+        comment.setContent(responseDTO.getContent());
+        comment.setTitle(responseDTO.getTitle());
+        comment.setUserId(responseDTO.getUserId());
+        comment.setId(responseDTO.getId());
+        commentResponse.setComment(comment);
+
+        return commentResponse;
     }
 
 }

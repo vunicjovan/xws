@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.catalog.CommentResponse;
 import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
+import rs.ac.uns.ftn.catalog.NewCommentResponse;
+import rs.ac.uns.ftn.catalog.NewRentingIntervalResponse;
 
+import javax.xml.datatype.DatatypeFactory;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -109,30 +112,47 @@ public class AdvertisementService {
     }
 
     public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
-        Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
-                orElse(null);
+//        Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
+//                orElse(null);
+//
+//        if (advertisement == null) {
+//            throw new BadRequestException("Renting interval does not exist.");
+//        }
+//
+//        if (rentingIntervalDTO.getStartDate().after(rentingIntervalDTO.getEndDate())) {
+//            throw new BadRequestException("Starting date cannot be after ending date.");
+//        }
+//
+//        RentingInterval rentingInterval = new RentingInterval();
+//        rentingInterval.setAdvertisement(advertisement);
+//        rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
+//        rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
+//
+//        if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
+//            save(rentingInterval);
+////            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
+//            return new RentingIntervalDTO(rentingInterval);
+//        } else {
+//            throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
+//        }
+        NewRentingIntervalResponse response = advertisementClient.newRentingInterval(rentingIntervalDTO);
 
-        if (advertisement == null) {
-            throw new BadRequestException("Renting interval does not exist.");
-        }
-
-        if (rentingIntervalDTO.getStartDate().after(rentingIntervalDTO.getEndDate())) {
-            throw new BadRequestException("Starting date cannot be after ending date.");
-        }
-
+        RentingIntervalDTO responseDTO = new RentingIntervalDTO();
         RentingInterval rentingInterval = new RentingInterval();
-        rentingInterval.setAdvertisement(advertisement);
-        rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
-        rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
-
-        if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
-            save(rentingInterval);
-//            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
-            return new RentingIntervalDTO(rentingInterval);
-        } else {
-            throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
+        try {
+            rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
+            rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        return new RentingIntervalDTO(rentingInterval);
+    }
+
+    public PublisherCommentDTO publisherPostComment(PublisherCommentDTO publisherCommentDTO) {
+        NewCommentResponse response = advertisementClient.newPublisherComment(publisherCommentDTO);
+
+        return new PublisherCommentDTO(response.getComment());
     }
 
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
