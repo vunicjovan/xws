@@ -1,85 +1,83 @@
 <template>
-	<transition>
-		<div>
-			<div class="md-headline">Renting History</div>
-			<div v-if="show && isLogged" class="md-layout md-gutter md-alignment-center">
-				<div class="card-expansion">
-					<md-card v-for="(ad, index) in getRentingHistory" v-bind:key="index" class="md-layout-item md-size-90">
-						<div id="left-div">
-							<md-card-header>
-								<md-card-header-text>
-									<p class="md-title">{{ ad.advertisement.brand }} {{ ad.advertisement.model }}</p>
-									<p class="md-subtitle">{{ ad.advertisement.price }}€</p>
-									<p class="md-subhead">{{ ad.advertisement.location }}</p>
-								</md-card-header-text>
-							</md-card-header>
+	<div>
+		<div class="md-headline">Renting History</div>
+		<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" class="md-layout md-gutter md-alignment-center">
+			<div class="card-expansion">
+				<md-card v-for="(ad, index) in getRentingHistory" v-bind:key="index" class="md-layout-item md-size-90">
+					<div id="left-div">
+						<md-card-header>
+							<md-card-header-text>
+								<p class="md-title">{{ ad.advertisement.brand }} {{ ad.advertisement.model }}</p>
+								<p class="md-subtitle">{{ ad.advertisement.price }}€</p>
+								<p class="md-subhead">{{ ad.advertisement.location }}</p>
+							</md-card-header-text>
+						</md-card-header>
 
-							<md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
-							<md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
-								<md-dialog-title>Comment Advertisement</md-dialog-title>
+						<md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
+						<md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
+							<md-dialog-title>Comment Advertisement</md-dialog-title>
 
-								<md-dialog-content>
-									<md-field :class="{ 'md-invalid': $v.commentTitle.$error }">
-										<label>Comment title</label>
-										<md-textarea v-model="commentTitle" md-autogrow>
-											<span class="md-error" v-if="!$v.commentTitle.required">Comment title is required</span>
-										</md-textarea>
-									</md-field>
-									<md-field :class="{ 'md-invalid': $v.commentContent.$error }">
-										<label>Comment content</label>
-										<md-textarea v-model="commentContent" md-autogrow>
-											<span class="md-error" v-if="!$v.commentContent.required">Comment text is required</span>
-										</md-textarea>
-									</md-field>
-								</md-dialog-content>
-								<md-dialog-actions>
-									<md-button @click="validateComment(ad)" class="md-primary">Post</md-button>
-									<md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
-								</md-dialog-actions>
-							</md-dialog>
-						</div>
+							<md-dialog-content>
+								<md-field :class="{ 'md-invalid': $v.commentTitle.$error }">
+									<label>Comment title</label>
+									<md-textarea v-model="commentTitle" md-autogrow>
+										<span class="md-error" v-if="!$v.commentTitle.required">Comment title is required</span>
+									</md-textarea>
+								</md-field>
+								<md-field :class="{ 'md-invalid': $v.commentContent.$error }">
+									<label>Comment content</label>
+									<md-textarea v-model="commentContent" md-autogrow>
+										<span class="md-error" v-if="!$v.commentContent.required">Comment text is required</span>
+									</md-textarea>
+								</md-field>
+							</md-dialog-content>
+							<md-dialog-actions>
+								<md-button @click="validateComment(ad)" class="md-primary">Post</md-button>
+								<md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
+							</md-dialog-actions>
+						</md-dialog>
+					</div>
 
-						<div right-div>
-							<md-card-content>
-								<md-tabs class="md-transparent" md-alignment="fixed">
-									<md-tab md-label="Intervals">
-										<md-table>
-											<md-table-row>
-												<md-table-cell md-label="Start Date">
-													{{ new Date(ad.rentingInterval.startDate).getDate() }}-{{ new Date(ad.rentingInterval.startDate).getMonth() + 1 }}-{{
-														new Date(ad.rentingInterval.startDate).getFullYear()
-													}}
-													{{ new Date(ad.rentingInterval.startDate).getHours() }}:{{ new Date(ad.rentingInterval.startDate).getMinutes() }}
-												</md-table-cell>
-												<md-table-cell md-label="End Date">
-													{{ new Date(ad.rentingInterval.endDate).getDate() }}-{{ new Date(ad.rentingInterval.endDate).getMonth() + 1 }}-{{
-														new Date(ad.rentingInterval.endDate).getFullYear()
-													}}
-													{{ new Date(ad.rentingInterval.endDate).getHours() }}:{{ new Date(ad.rentingInterval.endDate).getMinutes() }}
-												</md-table-cell>
-											</md-table-row>
-										</md-table>
-									</md-tab>
-									<md-tab md-label="My Comments" v-if="ad.comment">
-										<md-table>
-											<md-table-row>
-												<md-table-cell md-label="Title">
-													{{ ad.comment.title }}
-												</md-table-cell>
-												<md-table-cell md-label="Content">
-													{{ ad.comment.content }}
-												</md-table-cell>
-											</md-table-row>
-										</md-table>
-									</md-tab>
-								</md-tabs>
-							</md-card-content>
-						</div>
-					</md-card>
-				</div>
+					<div right-div>
+						<md-card-content>
+							<md-tabs class="md-transparent" md-alignment="fixed">
+								<md-tab md-label="Intervals">
+									<md-table>
+										<md-table-row>
+											<md-table-cell md-label="Start Date">
+												{{ new Date(ad.rentingInterval.startDate).getDate() }}-{{ new Date(ad.rentingInterval.startDate).getMonth() + 1 }}-{{
+													new Date(ad.rentingInterval.startDate).getFullYear()
+												}}
+												{{ new Date(ad.rentingInterval.startDate).getHours() }}:{{ new Date(ad.rentingInterval.startDate).getMinutes() }}
+											</md-table-cell>
+											<md-table-cell md-label="End Date">
+												{{ new Date(ad.rentingInterval.endDate).getDate() }}-{{ new Date(ad.rentingInterval.endDate).getMonth() + 1 }}-{{
+													new Date(ad.rentingInterval.endDate).getFullYear()
+												}}
+												{{ new Date(ad.rentingInterval.endDate).getHours() }}:{{ new Date(ad.rentingInterval.endDate).getMinutes() }}
+											</md-table-cell>
+										</md-table-row>
+									</md-table>
+								</md-tab>
+								<md-tab md-label="My Comments" v-if="ad.comment">
+									<md-table>
+										<md-table-row>
+											<md-table-cell md-label="Title">
+												{{ ad.comment.title }}
+											</md-table-cell>
+											<md-table-cell md-label="Content">
+												{{ ad.comment.content }}
+											</md-table-cell>
+										</md-table-row>
+									</md-table>
+								</md-tab>
+							</md-tabs>
+						</md-card-content>
+					</div>
+				</md-card>
 			</div>
 		</div>
-	</transition>
+	</div>
 </template>
 
 <script>
@@ -177,7 +175,6 @@ export default {
 
 	computed: {
 		...mapGetters(["getUser", "isLogged", "getRentingHistory"]),
-		...mapGetters(["getUser", "isLogged"]),
 	},
 
 	methods: {

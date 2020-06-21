@@ -1,5 +1,5 @@
 <template>
-    <div class="somediv">
+    <div v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" class="somediv">
         <div class="md-headline">Comments to be published</div>
         <md-list class="md-triple-line md-dense" v-for="comm in getUnpublishedCommentList" v-bind:key="comm.id">
             <md-list-item>
@@ -35,7 +35,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
     name: "UnpublishedComments",
     computed: {
-        ...mapGetters(["getUnpublishedCommentList"]),
+        ...mapGetters(["getUnpublishedCommentList", "isLogged", "getUser"]),
     },
     mounted: function() {
         this.$store.dispatch("getUnpublishedComments");

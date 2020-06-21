@@ -9,39 +9,39 @@
 			</router-link>
 			<div style="flex: 1;"></div>
 			<searchDialog/>
-			<md-button to="/post-ad">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" to="/post-ad">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Post new advertisement</md-tooltip>
 			</md-button>
-			<md-button to="/chat">
+			<md-button v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))" to="/chat">
 				<i class="far fa-comments fa-2x"></i>
 				<md-tooltip>RentaSoul Chatbox</md-tooltip>
 			</md-button>
-			<md-button to="/unpublishedComments">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" to="/unpublishedComments">
 				<i class="fas fa-comment-medical fa-2x"></i>
 				<md-tooltip>Publish/Reject comments</md-tooltip>
 			</md-button>
-			<md-button to="/catalog">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" to="/catalog">
 				<i class="fas fa-warehouse fa-2x"></i>
 				<md-tooltip>Catalog</md-tooltip>
 			</md-button>
-			<md-button to="/users">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" to="/users">
 				<i class="fas fa-address-book fa-2x"></i>
 				<md-tooltip>Active users</md-tooltip>
 			</md-button>
-			<md-button to="/registrationRequests">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" to="/registrationRequests">
 				<i class="fas fa-user-plus fa-2x"></i>
 				<md-tooltip>Agent registration requests</md-tooltip>
 			</md-button>
-			<md-button v-if="isLogged" @click.native="$router.push('/cart')">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/cart')">
 				<i class="fas fa-shopping-cart fa-2x"></i>
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
-			<md-button v-if="isLogged" @click.native="$router.push('/ads/published')">
+			<md-button v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))" @click.native="$router.push('/ads/published')">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Published Ads</md-tooltip>
 			</md-button>
-			<md-button v-if="isLogged" @click.native="$router.push('/ads/rented')">
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/rented')">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Rented Ads</md-tooltip>
 			</md-button>
@@ -88,7 +88,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
 	name: "Toolbar",
 	computed: {
-		...mapGetters(["isLogged"]),
+		...mapGetters(["isLogged", "getUser"]),
 	},
 	methods: {
 		...mapActions(["logout"]),

@@ -1,5 +1,5 @@
 <template>
-	<div class="md-layout md-alignment-top-center">
+	<div v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" class="md-layout md-alignment-top-center">
 		<md-dialog :md-active.sync="active">
 			<md-dialog-title>New Model</md-dialog-title>
 			<md-dialog-content>
@@ -76,7 +76,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["getModels", "getBrands"]),
+		...mapGetters(["getModels", "getBrands", "isLogged", "getUser"]),
 		models: {
 			get() {
 				return this.getModels;
