@@ -1,5 +1,5 @@
 <template>
-    <div v-if="getUser">
+    <div v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))">
         <md-app>
             <md-app-toolbar class="md-transparent">
                 <span class="md-title my-title" v-if='this.selectedTitle !== ""'>

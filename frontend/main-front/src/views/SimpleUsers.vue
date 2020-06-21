@@ -1,5 +1,5 @@
 <template>
-  <div v-if="getSimpleUsers">
+  <div  v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN') && getSimpleUsers">
     <md-card v-for="user in getSimpleUsers" :key="user.id" class="md-layout-item md-xlarge-size-20 md-large-size-20 md-medium-size-40 md-small-size-50 md-xsmall-size-90">
       <md-card-header>
         <md-card-header-text>
@@ -70,7 +70,7 @@ export default {
         this.$store.dispatch("getSimpleUsers")
     },
     computed: {
-        ...mapGetters(["getSimpleUsers"])
+        ...mapGetters(["getSimpleUsers", "isLogged", "getUser"])
     },
     methods: {
         ...mapActions(["deleteUser", "blockUser"]),

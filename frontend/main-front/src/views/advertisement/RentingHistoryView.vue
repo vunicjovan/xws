@@ -1,22 +1,21 @@
 <template>
-	<transition>
-		<div>
-			<div class="md-headline">Renting History</div>
-			<div v-if="show && isLogged" class="md-layout md-gutter md-alignment-center">
-				<div class="card-expansion">
-					<md-card v-for="(ad, index) in getRentingHistory" v-bind:key="index" class="md-layout-item md-size-90">
-						<div id="left-div">
-							<md-card-header>
-								<md-card-header-text>
-									<p class="md-title">{{ ad.advertisement.brand }} {{ ad.advertisement.model }}</p>
-									<p class="md-subtitle">{{ ad.advertisement.price }}€</p>
-									<p class="md-subhead">{{ ad.advertisement.location }}</p>
-								</md-card-header-text>
-							</md-card-header>
+	<div>
+		<div class="md-headline">Renting History</div>
+		<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" class="md-layout md-gutter md-alignment-center">
+			<div class="card-expansion">
+				<md-card v-for="(ad, index) in getRentingHistory" v-bind:key="index" class="md-layout-item md-size-90">
+					<div id="left-div">
+						<md-card-header>
+							<md-card-header-text>
+								<p class="md-title">{{ ad.advertisement.brand }} {{ ad.advertisement.model }}</p>
+								<p class="md-subtitle">{{ ad.advertisement.price }}€</p>
+								<p class="md-subhead">{{ ad.advertisement.location }}</p>
+							</md-card-header-text>
+						</md-card-header>
 
-							<md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
-							<md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
-								<md-dialog-title>Comment Advertisement</md-dialog-title>
+						<md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
+						<md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
+							<md-dialog-title>Comment Advertisement</md-dialog-title>
 
 								<md-dialog-content>
 									<md-field :class="{ 'md-invalid': $v.commentTitle.$error }">
@@ -131,7 +130,6 @@ export default {
 
 	computed: {
 		...mapGetters(["getUser", "isLogged", "getRentingHistory"]),
-		...mapGetters(["getUser", "isLogged"]),
 	},
 
     methods: {

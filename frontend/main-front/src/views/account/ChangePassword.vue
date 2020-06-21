@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLogged && getUser !== null">
       <form novalidate class="md-layout md-alignment-top-center" @submit.prevent="validateData">
           <md-card class="md-layout-item md-size-30 md-small-size-100">
               <md-card-header>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
@@ -59,6 +60,9 @@ export default {
                 newPasswordRetype: undefined,
             }
         }
+    },
+    computed: {
+        ...mapGetters(["isLogged", "getUser"]),
     },
     methods: {
         getValidationClass(fieldName) {

@@ -1,5 +1,5 @@
 <template>
-	<div class="md-layout md-alignment-top-center">
+	<div v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" class="md-layout md-alignment-top-center">
 		<md-dialog-prompt
 			:md-active.sync="active"
 			v-model="form.name"
@@ -59,7 +59,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["getGearboxTypes"]),
+		...mapGetters(["getGearboxTypes", "isLogged", "getUser"]),
 		gearboxTypes: {
 			get() {
 				return this.getGearboxTypes;

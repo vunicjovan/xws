@@ -1,5 +1,5 @@
 <template>
-    <div class="somediv">
+    <div v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN')" class="somediv">
         <div class="md-headline">Agents to be registered</div>
         <md-list class="md-triple-line md-dense" v-for="req in getRegistrationRequests" v-bind:key="req.id">
             <md-list-item>
@@ -32,7 +32,7 @@ import { mapGetters, mapAction, mapActions } from "vuex";
 export default {
     name: "RegistrationRequests",
     computed: {
-		...mapGetters(["getRegistrationRequests"]),
+		...mapGetters(["getRegistrationRequests", "isLogged", "getUser"]),
 		registrationRequests: {
 			get() {
 				return this.getRegistrationRequests;

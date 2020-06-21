@@ -1,39 +1,37 @@
 <template>
 	<div v-if="!isLogged">
-		<transition name="fade">
-			<form v-if="show" novalidate class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateUser">
-				<md-card class="md-layout-item md-size-30 md-small-size-100">
-					<md-card-header>
-						<div class="md-title">Login</div>
-					</md-card-header>
-					<md-card-content>
-						<div class="md-layout md-gutter">
-							<div class="md-layout-item md-small-size-100">
-								<md-field :class="getValidationClass('email')">
-									<label for="first-name">E-mail</label>
-									<md-input type="email" name="email" id="email" v-model="form.email" :disabled="sending" />
-									<span class="md-error" v-if="!$v.form.email.required">Email is required</span>
-									<span class="md-error" v-else-if="!$v.form.email.email">Invalid email format</span>
-								</md-field>
-							</div>
-						</div>
+		<form novalidate class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateUser">
+			<md-card class="md-layout-item md-size-30 md-small-size-100">
+				<md-card-header>
+					<div class="md-title">Login</div>
+				</md-card-header>
+				<md-card-content>
+					<div class="md-layout md-gutter">
 						<div class="md-layout-item md-small-size-100">
-							<md-field :class="getValidationClass('password')">
-								<label for="first-name">Password</label>
-								<md-input type="password" name="password" id="password" v-model="form.password" :disabled="sending" />
-								<span class="md-error" v-if="!$v.form.password.required">Password is required</span>
-								<span class="md-error" v-else-if="!$v.form.password.alpha">Invalid password format</span>
-								<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 8 characters</span>
+							<md-field :class="getValidationClass('email')">
+								<label for="first-name">E-mail</label>
+								<md-input type="email" name="email" id="email" v-model="form.email" :disabled="sending" />
+								<span class="md-error" v-if="!$v.form.email.required">Email is required</span>
+								<span class="md-error" v-else-if="!$v.form.email.email">Invalid email format</span>
 							</md-field>
 						</div>
-					</md-card-content>
-					<md-card-actions>
-						<md-button type="submit" class="md-primary">Login</md-button>
-					</md-card-actions>
-				</md-card>
-				<md-snackbar :md-active.sync="userLogged">Welcome, {{ lastUser }}!</md-snackbar>
-			</form>
-		</transition>
+					</div>
+					<div class="md-layout-item md-small-size-100">
+						<md-field :class="getValidationClass('password')">
+							<label for="first-name">Password</label>
+							<md-input type="password" name="password" id="password" v-model="form.password" :disabled="sending" />
+							<span class="md-error" v-if="!$v.form.password.required">Password is required</span>
+							<span class="md-error" v-else-if="!$v.form.password.alpha">Invalid password format</span>
+							<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 8 characters</span>
+						</md-field>
+					</div>
+				</md-card-content>
+				<md-card-actions>
+					<md-button type="submit" class="md-primary">Login</md-button>
+				</md-card-actions>
+			</md-card>
+			<md-snackbar :md-active.sync="userLogged">Welcome, {{ lastUser }}!</md-snackbar>
+		</form>
 	</div>
 </template>
 
@@ -57,18 +55,11 @@ export default {
 			userLogged: false,
 			sending: false,
 			lastUser: null,
-			show: false,
 		};
-	},
-	mounted: function() {
-		this.fadeMe();
 	},
 	computed: mapGetters(["isLogged"]),
 	methods: {
 		...mapActions(["login", "logged"]),
-		fadeMe: function() {
-			this.show = !this.show;
-		},
 		login: function() {
 			this.sending = true;
 
@@ -122,13 +113,5 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 2s;
-}
 
-.fade-enter,
-.fade-leave-to {
-	opacity: 0;
-}
 </style>

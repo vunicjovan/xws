@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')">
 		<md-card>
 			<md-card-header>
 				<h2>Renting requests</h2>
@@ -65,7 +65,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["getCartAdvertisements", "getUser"]),
+		...mapGetters(["getCartAdvertisements", "getUser", "isLogged"]),
 		groups: {
 			get() {
 				if (this.batch) {

@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isLogged && advertisements">
+	<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER') &&  advertisements">
 		<md-table v-model="advertisements" md-sort="id" md-sort-order="asc" md-card class="md-layout-item md-size-80 md-small-size-150">
 			<md-table-toolbar>
 				<h1 class="md-title md-toolbar-section-start">Cart advertisements</h1>
