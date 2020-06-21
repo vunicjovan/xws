@@ -123,12 +123,6 @@
 			<groupId>wsdl4j</groupId>
 			<artifactId>wsdl4j</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.uns.ftn</groupId>
-            <artifactId>agent</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 	<dependencyManagement>

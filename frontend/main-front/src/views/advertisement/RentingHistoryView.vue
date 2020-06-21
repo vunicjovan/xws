@@ -34,7 +34,7 @@
 							</md-dialog-content>
 							
 							<md-dialog-actions>
-								<md-button @click="validateComment(ad)" class="md-primary">Post</md-button>
+								<md-button @click="validateComment()" class="md-primary">Post</md-button>
 								<md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
 							</md-dialog-actions>
 						</md-dialog>
@@ -176,10 +176,11 @@ export default {
                 "rentingRequestId": ad.rentingRequestId
             }
 
-            this.$store
+			this.$store
                 .dispatch("postComment", comment)
                 .then((data) => {
                     this.showCommentDialog = false;
+					this.$store.dispatch("getUserRentingHistory", this.getUser.id);
                 })
                 .catch((error) => console.log(error));
         },
@@ -192,28 +193,28 @@ export default {
                     "userId": this.getUser.id
                 }
 			}
-			console.log(ad);
             this.$store
                 .dispatch("postRating", rate)
                 .then((data) => {
-                    this.showRateDialog = false;
+					this.showRateDialog = false;
+					this.$store.dispatch("getUserRentingHistory", this.getUser.id);
                 }) 
                 .catch((error) => console.log(error));
         },
-        validateComment: function(ad) {
+        validateComment: function() {
             this.$v.$touch();
 
-            if (!this.$v.$invalid) {
+            if (!this.$v.commentTitle.$invalid && !this.$v.commentContent.$invalid) {
                 this.showCommentDialog = false;
-                this.commentOnAd(ad);
+                this.commentOnAd();
             }
         },
-        validateRating: function(ad) {
+        validateRating: function() {
             this.$v.$touch();
 
-            if (!this.$v.$$invalid) {
+            if (!this.$v.rating.$invalid) {
                 this.showRateDialog = false;
-                this.rateAd(ad);
+                this.rateAd();
             }
 		},
     },

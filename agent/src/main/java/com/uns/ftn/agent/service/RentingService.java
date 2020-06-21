@@ -40,7 +40,7 @@ public class RentingService {
 
     public ResponseEntity<?> getFinishedRequests() {
         Set<GetRentingRequestDTO> retval = new HashSet<>();
-        GetFinishedResponse response = requestClient.getFinishedRequests((long) 3);
+        GetFinishedResponse response = requestClient.getFinishedRequests((long) 2);
 
         for (FinishedRequest fr : response.getFinishedRequests()) {
             GetRentingRequestDTO gdto = new GetRentingRequestDTO();

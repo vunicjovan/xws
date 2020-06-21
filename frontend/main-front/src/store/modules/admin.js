@@ -48,7 +48,7 @@ const actions = {
         })
     },
 
-    getRegistrationRequests({commit}) {
+    getRegistrationRequestList({commit}) {
         return new Promise((resolve, reject) => {
             adminApi
                 .getUnregisteredAgents()

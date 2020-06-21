@@ -119,20 +119,24 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="newCommentRequest">
-        <xs:sequence>
-            <xs:element name="id" type="xs:long"/>
-            <xs:element name="advertisementId" type="xs:long"/>
-            <xs:element name="userId" type="xs:long"/>
-            <xs:element name="title" type="xs:string"/>
-            <xs:element name="content" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="newCommentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="advertisementId" type="xs:long"/>
+                <xs:element name="userId" type="xs:long"/>
+                <xs:element name="title" type="xs:string"/>
+                <xs:element name="content" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-    <xs:complexType name="newCommentResponse">
-        <xs:sequence>
-            <xs:element name="comment" type="tns:comment"/>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="newCommentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comment" type="tns:comment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
 </xs:schema>
