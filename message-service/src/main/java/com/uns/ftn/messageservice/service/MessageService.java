@@ -26,17 +26,18 @@ public class MessageService {
     private AccountClient accountClient;
 
     public List<ChatDTO> getChat(Long id) {
-        List<Message> messages = messageRepository.findAllByReceiverId(id);
+        List<Message> messages;
         List<ChatDTO> chat = new ArrayList<>();
 
+        messages = messageRepository.findAllByReceiverId(id);
         messages.forEach(message -> {
-            addMessageToChat(chat, message, message.getSenderId());
+            addMessageToChat(chat, message, message.getSenderId(), false);
         });
 
         messages = messageRepository.findAllBySenderId(id);
 
         messages.forEach(message -> {
-            addMessageToChat(chat, message, message.getReceiverId());
+            addMessageToChat(chat, message, message.getReceiverId(), true);
         });
 
         chat.forEach(chatDTO -> chatDTO.getMessages()
@@ -46,7 +47,7 @@ public class MessageService {
         return chat;
     }
 
-    private void addMessageToChat(List<ChatDTO> chat, Message message, Long charRoomId) {
+    private void addMessageToChat(List<ChatDTO> chat, Message message, Long charRoomId, Boolean secondLoop) {
         MessageDTO messageDTO = new MessageDTO(message);
 
         ChatDTO chatDTO = chat.stream().filter(singleChat -> singleChat.getSenderId() == charRoomId).
@@ -59,7 +60,11 @@ public class MessageService {
                 }
             });
         } else {
-            chatDTO = new ChatDTO(charRoomId, message.getSenderUsername());
+            if (secondLoop) {
+                chatDTO = new ChatDTO(charRoomId, accountClient.getOwnerName(charRoomId));
+            } else {
+                chatDTO = new ChatDTO(charRoomId, message.getSenderUsername());
+            }
             chatDTO.getMessages().add(messageDTO);
             chat.add(chatDTO);
         }
@@ -106,6 +111,23 @@ public class MessageService {
         }
 
         return saveMessage(messageDTO);
+    }
+
+    public Boolean createChat(Long senderId, Long receiverId) {
+        List<Message> messages = messageRepository.findAllBySenderIdAndReceiverId(senderId, receiverId);
+
+        if (!messages.isEmpty()) {
+            return false;
+        } else {
+            Message message = new Message();
+            message.setSenderId(senderId);
+            message.setReceiverId(receiverId);
+            message.setTimestamp(new Date());
+            message.setContent("Chat available!");
+            message.setSenderUsername(accountClient.getOwnerName(senderId));
+            messageRepository.save(message);
+            return true;
+        }
     }
 
 }

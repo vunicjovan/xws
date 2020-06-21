@@ -2,6 +2,7 @@ package com.uns.ftn.rentingservice.service;
 
 import com.uns.ftn.rentingservice.client.AdvertisementClient;
 import com.uns.ftn.rentingservice.client.CommentClient;
+import com.uns.ftn.rentingservice.client.MessageClient;
 import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
@@ -31,13 +32,15 @@ public class RentingRequestService {
     private CommentService commentService;
     private CommentClient commentClient;
     private final RentingReportRepository rentingReportRepository;
+    private MessageClient messageClient;
 
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
                                  TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
                                  CommentService commentService, CommentClient commentClient,
-                                 RentingReportRepository rentingReportRepository) {
+                                 RentingReportRepository rentingReportRepository,
+                                 MessageClient messageClient) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
@@ -45,6 +48,7 @@ public class RentingRequestService {
         this.commentService = commentService;
         this.commentClient = commentClient;
         this.rentingReportRepository = rentingReportRepository;
+        this.messageClient = messageClient;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -103,6 +107,14 @@ public class RentingRequestService {
 
         if(request.getStatus() == RequestStatus.paid) {
             RentingRequest finalRentingRequest = rentingRequest;
+
+            try {
+                messageClient.createChat(finalRentingRequest.getAdvertisements().iterator().next().getOwnerId(),
+                        rentingRequest.getSenderId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             finalRentingRequest.getAdvertisements().forEach(advertisement -> {
                 advertisement.getRentingRequests().forEach(req -> {
                     if(req.getId() != finalRentingRequest.getId() && req.getStatus() == RequestStatus.pending ) {
