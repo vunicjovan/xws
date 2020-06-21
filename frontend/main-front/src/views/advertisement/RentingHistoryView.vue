@@ -13,92 +13,92 @@
 							</md-card-header-text>
 						</md-card-header>
 
-						<md-button v-if="ad.commentAvailable" @click="showCommentDialog = true">Comment</md-button>
-						<md-dialog @md-opened="openCommentDialog()" :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
+						<md-button v-if="ad.commentAvailable" @click="openCommentDialog(ad)">Comment</md-button>
+						<md-button v-if="ad.ratingAvailable" @click="openRateDialog(ad)">Rate</md-button>
+						<md-dialog :md-active.sync="showCommentDialog" md-dynamic-height md-dynamic-width>
 							<md-dialog-title>Comment Advertisement</md-dialog-title>
 
-								<md-dialog-content>
-									<md-field :class="{ 'md-invalid': $v.commentTitle.$error }">
-										<label>Comment title</label>
-										<md-textarea v-model="commentTitle" md-autogrow>
-											<span class="md-error" v-if="!$v.commentTitle.required">Comment title is required</span>
-										</md-textarea>
-									</md-field>
-									<md-field :class="{ 'md-invalid': $v.commentContent.$error }">
-										<label>Comment content</label>
-										<md-textarea v-model="commentContent" md-autogrow>
-											<span class="md-error" v-if="!$v.commentContent.required">Comment text is required</span>
-										</md-textarea>
-									</md-field>
-								</md-dialog-content>
-								<md-dialog-actions>
-									<md-button @click="validateComment(ad)" class="md-primary">Post</md-button>
-									<md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
-								</md-dialog-actions>
-							</md-dialog>
+							<md-dialog-content>
+								<md-field :class="{ 'md-invalid': $v.commentTitle.$error }">
+									<label>Comment title</label>
+									<md-textarea v-model="commentTitle" md-autogrow>
+										<span class="md-error" v-if="!$v.commentTitle.required">Comment title is required</span>
+									</md-textarea>
+								</md-field>
+								<md-field :class="{ 'md-invalid': $v.commentContent.$error }">
+									<label>Comment content</label>
+									<md-textarea v-model="commentContent" md-autogrow>
+										<span class="md-error" v-if="!$v.commentContent.required">Comment text is required</span>
+									</md-textarea>
+								</md-field>
+							</md-dialog-content>
+							
+							<md-dialog-actions>
+								<md-button @click="validateComment(ad)" class="md-primary">Post</md-button>
+								<md-button @click="showCommentDialog = false" class="md-primary">Cancel</md-button>
+							</md-dialog-actions>
+						</md-dialog>
 						
-                            <md-dialog @md-opened="openRateDialog()" :md-active.sync="showRateDialog" md-dynamic-height md-dynamic-width>
-                                <md-dialog-title>Rate Advertisement</md-dialog-title>
+                        <md-dialog :md-active.sync="showRateDialog" md-dynamic-height md-dynamic-width>
+                            <md-dialog-title>Rate Advertisement</md-dialog-title>
                                 
-                                <md-dialog-content>
-                                    <md-field :class="{ 'md-invalid': $v.rating.$error }">
-                                        <label>Advertisement rating</label>
-                                        <md-input v-model="rating" type="number" min="1" max="5">
-                                            <span class="md-error" v-if="!$v.rating.required">Rating is required</span>
-                                        </md-input>
-                                    </md-field>
-                                </md-dialog-content>
+                            <md-dialog-content>
+                                <md-field :class="{ 'md-invalid': $v.rating.$error }">
+                                    <label>Advertisement rating</label>
+                                    <md-input v-model="rating" type="number" min="1" max="5">
+                                        <span class="md-error" v-if="!$v.rating.required">Rating is required</span>
+                                    </md-input>
+                                </md-field>
+                            </md-dialog-content>
 
-                                <md-dialog-actions>
-                                    <md-button @click="validateRating(ad)" class="md-primary">Post</md-button>
-                                    <md-button @click="showRateDialog = false" class="md-primary">Cancel</md-button>
-                                </md-dialog-actions>
-                            </md-dialog>
-                        </div>
+                            <md-dialog-actions>
+                                <md-button @click="validateRating()" class="md-primary">Post</md-button>
+                                <md-button @click="showRateDialog = false" class="md-primary">Cancel</md-button>
+                            </md-dialog-actions>
+                        </md-dialog>
+                    </div>
                         
                    
-						<div right-div>
-							<md-card-content>
-								<md-tabs class="md-transparent" md-alignment="fixed">
-									<md-tab md-label="Intervals">
-										<md-table>
-											<md-table-row>
-												<md-table-cell md-label="Start Date">
-													{{ new Date(ad.rentingInterval.startDate).getDate() }}-{{ new Date(ad.rentingInterval.startDate).getMonth() + 1 }}-{{
-														new Date(ad.rentingInterval.startDate).getFullYear()
-													}}
-													{{ new Date(ad.rentingInterval.startDate).getHours() }}:{{ new Date(ad.rentingInterval.startDate).getMinutes() }}
-												</md-table-cell>
-												<md-table-cell md-label="End Date">
-													{{ new Date(ad.rentingInterval.endDate).getDate() }}-{{ new Date(ad.rentingInterval.endDate).getMonth() + 1 }}-{{
-														new Date(ad.rentingInterval.endDate).getFullYear()
-													}}
-													{{ new Date(ad.rentingInterval.endDate).getHours() }}:{{ new Date(ad.rentingInterval.endDate).getMinutes() }}
-												</md-table-cell>
-											</md-table-row>
-										</md-table>
-									</md-tab>
-									<md-tab md-label="My Comments" v-if="ad.comment">
-										<md-table>
-											<md-table-row>
-												<md-table-cell md-label="Title">
-													{{ ad.comment.title }}
-												</md-table-cell>
-												<md-table-cell md-label="Content">
-													{{ ad.comment.content }}
-												</md-table-cell>
-											</md-table-row>
-										</md-table>
-									</md-tab>
-								</md-tabs>
-							</md-card-content>
-						</div>
-					</md-card>
-				</div>
+					<div right-div>
+						<md-card-content>
+							<md-tabs class="md-transparent" md-alignment="fixed">
+								<md-tab md-label="Intervals">
+									<md-table>
+										<md-table-row>
+											<md-table-cell md-label="Start Date">
+												{{ new Date(ad.rentingInterval.startDate).getDate() }}-{{ new Date(ad.rentingInterval.startDate).getMonth() + 1 }}-{{
+													new Date(ad.rentingInterval.startDate).getFullYear()
+												}}
+												{{ new Date(ad.rentingInterval.startDate).getHours() }}:{{ new Date(ad.rentingInterval.startDate).getMinutes() }}
+											</md-table-cell>
+											<md-table-cell md-label="End Date">
+												{{ new Date(ad.rentingInterval.endDate).getDate() }}-{{ new Date(ad.rentingInterval.endDate).getMonth() + 1 }}-{{
+													new Date(ad.rentingInterval.endDate).getFullYear()
+												}}
+												{{ new Date(ad.rentingInterval.endDate).getHours() }}:{{ new Date(ad.rentingInterval.endDate).getMinutes() }}
+											</md-table-cell>
+										</md-table-row>
+									</md-table>
+								</md-tab>
+								<md-tab md-label="My Comments" v-if="ad.comment">
+									<md-table>
+										<md-table-row>
+											<md-table-cell md-label="Title">
+												{{ ad.comment.title }}
+											</md-table-cell>
+											<md-table-cell md-label="Content">
+												{{ ad.comment.content }}
+											</md-table-cell>
+										</md-table-row>
+									</md-table>
+								</md-tab>
+							</md-tabs>
+						</md-card-content>
+					</div>
+				</md-card>
 			</div>
 		</div>
-	</transition>
-  
+	</div>
 </template>
 
 <script>
@@ -118,7 +118,8 @@ export default {
             showRateDialog: false,
             commentContent: "",
             commentTitle: "",
-            rating: undefined,
+			rating: undefined,
+			sendingAd: undefined
         };
     },
     mounted: function() {
@@ -130,20 +131,43 @@ export default {
 
 	computed: {
 		...mapGetters(["getUser", "isLogged", "getRentingHistory"]),
+		checkIfRated: function() {
+			const rated = [];
+			let pushed = false;
+			for (let i = 0; i < this.getRentingHistory.length; i++) {
+				for (let j = 0; j < this.getRentingHistory[i].advertisement.ratedByUsers.length; j++) {
+					if (this.getUser.id === this.getRentingHistory[i].advertisement.ratedByUsers[j].userId && !pushed) {
+						rated.push(false);
+						pushed = true;
+					}
+				}
+				if (!pushed) {
+					rated.push(true);
+				}
+				pushed = false;
+			}
+
+			return rated;
+		}
 	},
 
     methods: {
         ...mapActions(["getUserRentingHistory", "postComment"]),
-        openCommentDialog: function() {
+        openCommentDialog: function(ad) {
             this.$v.$reset();
             this.commentContent = "";
-            this.commentTitle = "";
+			this.commentTitle = "";
+			this.showCommentDialog = true;
+			this.sendingAd = ad;
         },
-        openRateDialog: function() {
+        openRateDialog: function(ad) {
             this.$v.$reset();
-            this.rating = undefined;
+			this.rating = undefined;
+			this.sendingAd = ad;
+			this.showRateDialog = true;
         },
-        commentOnAd: function(ad) {
+        commentOnAd: function() {
+			let ad = this.sendingAd;
             let comment = {
                 "title": this.commentTitle,
                 "content": this.commentContent,
@@ -159,14 +183,16 @@ export default {
                 })
                 .catch((error) => console.log(error));
         },
-        rateAd: function(ad) {
+        rateAd: function() {
+			let ad = this.sendingAd;
             let rate ={
                 "adId": ad.advertisement.id,
                 "rating": {    
                     "rating": this.rating,
                     "userId": this.getUser.id
                 }
-            }
+			}
+			console.log(ad);
             this.$store
                 .dispatch("postRating", rate)
                 .then((data) => {
@@ -189,7 +215,7 @@ export default {
                 this.showRateDialog = false;
                 this.rateAd(ad);
             }
-        }
+		},
     },
 
 	watch: {
@@ -200,7 +226,7 @@ export default {
 		},
 	},
 
-	    validations: {
+	validations: {
         commentContent: {
             required,
         },
@@ -211,7 +237,6 @@ export default {
             required,
         }
     }
-}
 };
 
 </script>

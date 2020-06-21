@@ -57,6 +57,13 @@ public class QueueConsumer {
         } else if(typeId.contains("CommDTO")) {
             CommDTO commentDTO = new ObjectMapper().readValue(messageBody, CommDTO.class);
             dataPumpService.commentHandler(commentDTO);
+        } else if(typeId.contains("UserDTO")) {
+            try {
+                UserDTO userDTO = new ObjectMapper().readValue(messageBody, UserDTO.class);
+                dataPumpService.userHandler(userDTO);
+            } catch (JsonProcessingException jpe) {
+                jpe.printStackTrace();
+            }
         }
 
     }

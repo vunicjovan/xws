@@ -5,7 +5,7 @@ import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.dto.RatingDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.CommentService;
-import com.uns.ftn.agentservice.service.impl.RatingService;
+import com.uns.ftn.agentservice.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

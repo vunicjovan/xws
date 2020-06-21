@@ -42,4 +42,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	rateAdvertisement(adId, rating) {
+		return axios.post(`/agent/ad/${adId}/vehicle/rate`, rating).then((response) => {
+			return response.data;
+		});
+	},
 };

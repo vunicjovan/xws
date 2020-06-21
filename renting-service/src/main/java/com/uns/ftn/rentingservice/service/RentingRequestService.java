@@ -189,6 +189,13 @@ public class RentingRequestService {
                     } else {
                         availableCommentDTO.setComment(commentClient.getComment(comment.getId()));
                     }
+                    availableCommentDTO.setRatingAvailable(true);
+                    availableCommentDTO.getAdvertisement().getRatedByUsers().forEach(ratedUser -> {
+                        if (ratedUser.getUserId().equals(id)) {
+                            availableCommentDTO.setRatingAvailable(false);
+                        }
+                    });
+
                     response.add(availableCommentDTO);
                 }
             }

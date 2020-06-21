@@ -53,7 +53,7 @@ const actions = {
                 .then((comment) => {
                     resolve();
                 })
-                .catch((error) => resolve(error));
+                .catch((error) => reject(error));
         });
     }
 

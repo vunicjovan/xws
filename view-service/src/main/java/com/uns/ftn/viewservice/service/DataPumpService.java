@@ -6,35 +6,35 @@ import com.uns.ftn.viewservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public class DataPumpService {
 
-    @Autowired
-    private AdvertisementRepository advertisementRepository;
+    private final AdvertisementRepository advertisementRepository;
+    private final VehicleRepository vehicleRepository;
+    private final FuelTypeRepository fuelTypeRepository;
+    private final GearboxTypeRepository gearboxTypeRepository;
+    private final VehicleClassRepository vehicleClassRepository;
+    private final ModelRepository modelRepository;
+    private final BrandRepository brandRepository;
+    private final PhotoRepository photoRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private VehicleRepository vehicleRepository;
-
-    @Autowired
-    private FuelTypeRepository fuelTypeRepository;
-
-    @Autowired
-    private GearboxTypeRepository gearboxTypeRepository;
-
-    @Autowired
-    private VehicleClassRepository vehicleClassRepository;
-
-    @Autowired
-    private ModelRepository modelRepository;
-
-    @Autowired
-    private BrandRepository brandRepository;
-
-    @Autowired
-    private PhotoRepository photoRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
+    public DataPumpService(AdvertisementRepository advertisementRepository, VehicleRepository vehicleRepository, FuelTypeRepository fuelTypeRepository, GearboxTypeRepository gearboxTypeRepository, VehicleClassRepository vehicleClassRepository, ModelRepository modelRepository, BrandRepository brandRepository, PhotoRepository photoRepository, CommentRepository commentRepository, UserRepository userRepository) {
+        this.advertisementRepository = advertisementRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.fuelTypeRepository = fuelTypeRepository;
+        this.gearboxTypeRepository = gearboxTypeRepository;
+        this.vehicleClassRepository = vehicleClassRepository;
+        this.modelRepository = modelRepository;
+        this.brandRepository = brandRepository;
+        this.photoRepository = photoRepository;
+        this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+    }
 
     public void advertisementHandler(AdvertisementDTO advertisementDTO) {
         Advertisement advertisement = advertisementRepository.findById(advertisementDTO.getId()).orElse(null);
@@ -56,7 +56,7 @@ public class DataPumpService {
         advertisement.setDescription(advertisementDTO.getDescription());
         advertisement.setOwnerId(advertisementDTO.getOwnerId());
         advertisement.setLocation(advertisementDTO.getLocation());
-        advertisement.setRatedByUsers(advertisementDTO.getRatedByUsers());
+//        advertisement.setRatedByUsers(advertisementDTO.getRatedByUsers());
 
         vehicle.setKilometersTraveled(advertisementDTO.getVehicle().getKilometersTraveled());
         vehicle.setChildSeatNumber(advertisementDTO.getVehicle().getChildSeatNumber());
@@ -174,6 +174,27 @@ public class DataPumpService {
         comment.setAdvertisement(advertisement);
 
         commentRepository.save(comment);
+    }
+
+    public void userHandler(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUserId(userDTO.getUserId());
+        user.setRatedAds(new HashSet<>());
+
+
+//        user.setRatedAds(userDTO.getRatedAds());
+
+        userDTO.getRatedAds().forEach(a -> {
+            Advertisement advertisement = findAdvertisementById(a.getId());
+//            advertisement.getRatedByUsers().add(finalUser);
+            if (advertisement != null && !user.getRatedAds().contains(advertisement)) {
+                user.getRatedAds().add(advertisement);
+            }
+//            advertisementRepository.save(advertisement);
+        });
+
+        userRepository.save(user);
     }
 
     private FuelType findFuelTypeById(Long id) {

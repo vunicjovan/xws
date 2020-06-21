@@ -6,6 +6,7 @@ import com.uns.ftn.agentservice.conf.RabbitMQConfiguration;
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.dto.PhotoDTO;
+import com.uns.ftn.agentservice.dto.UserDTO;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -41,6 +42,11 @@ public class QueueProducer {
     public void produceComment(CommDTO commDTO) throws JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(commDTO);
+    }
+
+    public void produceUser(UserDTO userDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(userDTO);
     }
 
 }
