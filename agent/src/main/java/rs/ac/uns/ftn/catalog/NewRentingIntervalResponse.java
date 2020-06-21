@@ -10,6 +10,7 @@ package rs.ac.uns.ftn.catalog;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="rentingInterval" type="{http://www.ftn.uns.ac.rs/advertisement}rentingInterval"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,27 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "id"
+    "rentingInterval"
 })
-@XmlRootElement(name = "getFinishedRequest", namespace = "http://www.ftn.uns.ac.rs/renting")
-public class GetFinishedRequest {
+@XmlRootElement(name = "newRentingIntervalResponse")
+public class NewRentingIntervalResponse {
 
-    protected long id;
+    @XmlElement(required = true)
+    protected RentingInterval rentingInterval;
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the rentingInterval property.
      * 
+     * @return
+     *     possible object is
+     *     {@link RentingInterval }
+     *     
      */
-    public long getId() {
-        return id;
+    public RentingInterval getRentingInterval() {
+        return rentingInterval;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the rentingInterval property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link RentingInterval }
+     *     
      */
-    public void setId(long value) {
-        this.id = value;
+    public void setRentingInterval(RentingInterval value) {
+        this.rentingInterval = value;
     }
 
 }

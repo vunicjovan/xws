@@ -2,17 +2,11 @@ package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.AdvertisementClient;
 import com.uns.ftn.agent.controller.AdvertisementController;
-import com.uns.ftn.agent.domain.AdWrapper;
-import com.uns.ftn.agent.domain.Advertisement;
-import com.uns.ftn.agent.domain.Comment;
-import com.uns.ftn.agent.domain.Vehicle;
+import com.uns.ftn.agent.domain.*;
 import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.exceptions.NotFoundException;
-import com.uns.ftn.agent.repository.AdWrapperRepository;
-import com.uns.ftn.agent.repository.AdvertisementRepository;
-import com.uns.ftn.agent.repository.CommentRepository;
-import com.uns.ftn.agent.repository.VehicleRepository;
+import com.uns.ftn.agent.repository.*;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +15,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.catalog.CommentResponse;
 import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -38,6 +30,7 @@ public class AdvertisementService {
     private AdvertisementClient advertisementClient;
     private AdWrapperRepository adWrapperRepository;
     private CommentRepository commentRepository;
+    private final RentingIntervalRepository rentingIntervalRepository;
 
     @Autowired
     public AdvertisementService(
@@ -46,14 +39,15 @@ public class AdvertisementService {
             CatalogService catalogService,
             AdvertisementClient advertisementClient,
             AdWrapperRepository adWrapperRepository,
-            CommentRepository commentRepository
-    ) {
+            CommentRepository commentRepository,
+            RentingIntervalRepository rentingIntervalRepository) {
         this.advertisementRepository = advertisementRepository;
         this.vehicleRepository = vehicleRepository;
         this.catalogService = catalogService;
         this.advertisementClient = advertisementClient;
         this.adWrapperRepository = adWrapperRepository;
         this.commentRepository = commentRepository;
+        this.rentingIntervalRepository = rentingIntervalRepository;
     }
 
     public Advertisement saveAd(Advertisement advertisement) {
@@ -112,6 +106,33 @@ public class AdvertisementService {
         }
 
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
+    }
+
+    public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
+        Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
+                orElse(null);
+
+        if (advertisement == null) {
+            throw new BadRequestException("Renting interval does not exist.");
+        }
+
+        if (rentingIntervalDTO.getStartDate().after(rentingIntervalDTO.getEndDate())) {
+            throw new BadRequestException("Starting date cannot be after ending date.");
+        }
+
+        RentingInterval rentingInterval = new RentingInterval();
+        rentingInterval.setAdvertisement(advertisement);
+        rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
+        rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
+
+        if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
+            save(rentingInterval);
+//            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
+            return new RentingIntervalDTO(rentingInterval);
+        } else {
+            throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
+        }
+
     }
 
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
@@ -259,6 +280,25 @@ public class AdvertisementService {
         });
 
         return detailedAdvertisementDTOS;
+    }
+
+    private Boolean findIfRangeOverlaps(Set<RentingInterval> rentingIntervals, Date startDate, Date endDate) {
+        Boolean overlaps = false;
+        for(RentingInterval rentingInterval : rentingIntervals) {
+            if (!(endDate.before(rentingInterval.getStartDate()) || startDate.after(rentingInterval.getEndDate()))){
+                overlaps = true;
+                break;
+            }
+        }
+        return overlaps;
+    }
+
+    public Set<RentingInterval> getAll() {
+        return rentingIntervalRepository.findAll().stream().collect(Collectors.toSet());
+    }
+
+    public RentingInterval save(RentingInterval rentingInterval) {
+        return rentingIntervalRepository.save(rentingInterval);
     }
 
 }

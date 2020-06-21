@@ -39,6 +39,21 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="newRentingIntervalRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="rentingInterval" type="tns:rentingInterval"/>
+                        <xs:element name="advertisementId" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="newRentingIntervalResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="rentingInterval" type="tns:rentingInterval"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="commentResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -74,8 +89,8 @@
             <xs:complexType name="rentingInterval">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
-                    <xs:element name="startDate" type="xs:date"/>
-                    <xs:element name="endDate" type="xs:date"/>
+                    <xs:element name="startDate" type="xs:dateTime"/>
+                    <xs:element name="endDate" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="comment">
@@ -91,6 +106,9 @@
             </xs:complexType>
         </xs:schema>
     </wsdl:types>
+    <wsdl:message name="newRentingIntervalRequest">
+        <wsdl:part element="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:part>
+    </wsdl:message>
     <wsdl:message name="newPhotoResponse">
         <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:part>
     </wsdl:message>
@@ -103,6 +121,9 @@
     <wsdl:message name="newPhotoRequest">
         <wsdl:part element="tns:newPhotoRequest" name="newPhotoRequest"> </wsdl:part>
     </wsdl:message>
+    <wsdl:message name="newRentingIntervalResponse">
+        <wsdl:part element="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:part>
+    </wsdl:message>
     <wsdl:message name="newAdvertisementRequest">
         <wsdl:part element="tns:newAdvertisementRequest" name="newAdvertisementRequest"> </wsdl:part>
     </wsdl:message>
@@ -110,6 +131,10 @@
         <wsdl:part element="tns:commentRequest" name="commentRequest"> </wsdl:part>
     </wsdl:message>
     <wsdl:portType name="AdvertisementPort">
+        <wsdl:operation name="newRentingInterval">
+            <wsdl:input message="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:input>
+            <wsdl:output message="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="newPhoto">
             <wsdl:input message="tns:newPhotoRequest" name="newPhotoRequest"> </wsdl:input>
             <wsdl:output message="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:output>
@@ -125,6 +150,15 @@
     </wsdl:portType>
     <wsdl:binding name="AdvertisementPortSoap11" type="tns:AdvertisementPort">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="newRentingInterval">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="newRentingIntervalRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="newRentingIntervalResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="newPhoto">
             <soap:operation soapAction=""/>
             <wsdl:input name="newPhotoRequest">

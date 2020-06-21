@@ -40,7 +40,8 @@ public class RentingIntervalService {
         return rentingIntervalRepository.findAll().stream().collect(Collectors.toSet());
     }
 
-    public ResponseEntity<?> manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
+//    public ResponseEntity<?> manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
+        public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
         Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
                     orElse(null);
 
@@ -59,15 +60,13 @@ public class RentingIntervalService {
 
         if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
             save(rentingInterval);
-            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
+//            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
+            return new RentingIntervalDTO(rentingInterval);
         } else {
             throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
         }
 
     }
-
-
-
 
     private Boolean findIfRangeOverlaps(Set<RentingInterval> rentingIntervals, Date startDate, Date endDate) {
         Boolean overlaps = false;

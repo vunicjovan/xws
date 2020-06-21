@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="message" type="{http://www.ftn.uns.ac.rs/message}message"/&gt;
+ *         &lt;element name="rentingInterval" type="{http://www.ftn.uns.ac.rs/advertisement}rentingInterval"/&gt;
+ *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,36 +37,54 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "message"
+    "rentingInterval",
+    "advertisementId"
 })
-@XmlRootElement(name = "newMessageResponse", namespace = "http://www.ftn.uns.ac.rs/message")
-public class NewMessageResponse {
+@XmlRootElement(name = "newRentingIntervalRequest")
+public class NewRentingIntervalRequest {
 
     @XmlElement(required = true)
-    protected Message message;
+    protected RentingInterval rentingInterval;
+    protected long advertisementId;
 
     /**
-     * Gets the value of the message property.
+     * Gets the value of the rentingInterval property.
      * 
      * @return
      *     possible object is
-     *     {@link Message }
+     *     {@link RentingInterval }
      *     
      */
-    public Message getMessage() {
-        return message;
+    public RentingInterval getRentingInterval() {
+        return rentingInterval;
     }
 
     /**
-     * Sets the value of the message property.
+     * Sets the value of the rentingInterval property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Message }
+     *     {@link RentingInterval }
      *     
      */
-    public void setMessage(Message value) {
-        this.message = value;
+    public void setRentingInterval(RentingInterval value) {
+        this.rentingInterval = value;
+    }
+
+    /**
+     * Gets the value of the advertisementId property.
+     * 
+     */
+    public long getAdvertisementId() {
+        return advertisementId;
+    }
+
+    /**
+     * Sets the value of the advertisementId property.
+     * 
+     */
+    public void setAdvertisementId(long value) {
+        this.advertisementId = value;
     }
 
 }

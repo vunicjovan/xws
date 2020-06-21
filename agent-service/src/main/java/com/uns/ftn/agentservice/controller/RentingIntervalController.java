@@ -3,6 +3,7 @@ package com.uns.ftn.agentservice.controller;
 import com.uns.ftn.agentservice.dto.RentingIntervalDTO;
 import com.uns.ftn.agentservice.service.RentingIntervalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,8 @@ public class RentingIntervalController {
 
     @PostMapping("/")
     public ResponseEntity<?> createRentingInterval(@RequestBody RentingIntervalDTO rentingIntervalDTO) {
-        return rentingIntervalService.manuallyAddInterval(rentingIntervalDTO);
+//        return rentingIntervalService.manuallyAddInterval(rentingIntervalDTO);
+        return new ResponseEntity<>(rentingIntervalService.manuallyAddInterval(rentingIntervalDTO), HttpStatus.OK);
     }
 
 }

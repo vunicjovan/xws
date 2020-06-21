@@ -1,6 +1,7 @@
 package com.uns.ftn.agent.controller;
 
 import com.uns.ftn.agent.dto.AdvertisementDTO;
+import com.uns.ftn.agent.dto.RentingIntervalDTO;
 import com.uns.ftn.agent.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,12 @@ public class AdvertisementController {
     @GetMapping("/{id}/statistic")
     public ResponseEntity<?> getStatisticReport(@PathVariable Long id) {
         return advertisementService.returnStatisticReport(id);
+    }
+
+    @PostMapping("/interval/")
+    public ResponseEntity<?> createRentingInterval(@RequestBody RentingIntervalDTO rentingIntervalDTO) {
+//        return rentingIntervalService.manuallyAddInterval(rentingIntervalDTO);
+        return new ResponseEntity<>(advertisementService.manuallyAddInterval(rentingIntervalDTO), HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,6 @@
-package com.uns.ftn.agentservice.dto;
+package com.uns.ftn.agent.dto;
 
-import com.uns.ftn.agentservice.domain.RentingInterval;
+import com.uns.ftn.agent.domain.RentingInterval;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public class RentingIntervalDTO {
         this.advertisementId = rentingInterval.getAdvertisement().getId();
     }
 
-    public RentingIntervalDTO(rs.ac.uns.ftn.advertisement.RentingInterval rentingInterval) {
+    public RentingIntervalDTO(rs.ac.uns.ftn.catalog.RentingInterval rentingInterval) {
         this.startDate = rentingInterval.getStartDate().toGregorianCalendar().getTime();
         this.endDate = rentingInterval.getEndDate().toGregorianCalendar().getTime();
 //        this.advertisementId = rentingInterval.get
