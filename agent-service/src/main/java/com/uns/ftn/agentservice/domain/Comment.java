@@ -40,6 +40,6 @@ public class Comment {
    private Long rentingRequestId;
 
    @JsonIgnore
-   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+   @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
    private Advertisement advertisement;
 }

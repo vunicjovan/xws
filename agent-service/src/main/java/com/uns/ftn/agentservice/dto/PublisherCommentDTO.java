@@ -26,7 +26,7 @@ public class PublisherCommentDTO {
         this.userId = comment.getUserId();
     }
 
-    public PublisherCommentDTO(rs.ac.uns.ftn.catalog.Comment comment) {
+    public PublisherCommentDTO(rs.ac.uns.ftn.advertisement.Comment comment) {
         this.id = comment.getId();
         this.title = comment.getTitle();
         this.content = comment.getContent();

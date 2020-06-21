@@ -87,7 +87,7 @@
 									</md-card-content>
 									<md-card-actions>
 										<md-button class="md-primary" @click="resetDates()">Reset</md-button>
-										<md-button class="md-primary" type="submit" @click.prevent="validateDates">Add</md-button>
+										<md-button class="md-primary" type="submit" @click.prevent="validateDates()">Add</md-button>
 									</md-card-actions>
 								</md-card>
 							</form>
@@ -141,7 +141,7 @@
 									</md-card-content>
 									<md-card-actions>
 										<md-button class="md-primary" @click="resetComment()">Reset</md-button>
-										<md-button class="md-primary" type="submit" @click.prevent="validateComment">Add</md-button>
+										<md-button class="md-primary" type="submit" @click.prevent="validateComment()">Add</md-button>
 									</md-card-actions>
 								</md-card>
 							</form>
@@ -344,7 +344,8 @@ export default {
 			},
 			comment: {
                 title: undefined,
-                content: undefined,
+				content: undefined,
+				userId: 2,
                 advertisementId: undefined,
 			},
 			statistic: undefined,

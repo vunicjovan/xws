@@ -18,11 +18,11 @@ public class RentingIntervalDTO {
     private Date endDate;
     private Long advertisementId;
 
-    public RentingIntervalDTO(RentingInterval rentingInterval) {
-        this.startDate = rentingInterval.getStartDate();
-        this.endDate = rentingInterval.getEndDate();
-        this.advertisementId = rentingInterval.getAdvertisement().getId();
-    }
+//    public RentingIntervalDTO(RentingInterval rentingInterval) {
+//        this.startDate = rentingInterval.getStartDate();
+//        this.endDate = rentingInterval.getEndDate();
+//        this.advertisementId = rentingInterval.getAdvertisement().getId();
+//    }
 
     public RentingIntervalDTO(rs.ac.uns.ftn.catalog.RentingInterval rentingInterval) {
         this.startDate = rentingInterval.getStartDate().toGregorianCalendar().getTime();

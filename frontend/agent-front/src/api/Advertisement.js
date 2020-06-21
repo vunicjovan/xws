@@ -32,13 +32,13 @@ export default {
 	},
 
 	addRentingInterval(rentingInterval) {
-		return axios.post("/interval/", rentingInterval).then((response) => {
+		return axios.post("/ad/interval/", rentingInterval).then((response) => {
 			return response.data;
 		});
 	},
 
 	postComment(comment) {
-		return axios.post("/comment/", comment).then((response) => {
+		return axios.post("/ad/publisher/comment/", comment).then((response) => {
 			return response.data;
 		});
 	},

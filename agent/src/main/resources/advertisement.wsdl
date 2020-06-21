@@ -104,24 +104,31 @@
                     <xs:element name="rentingRequestId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="newCommentRequest">
-                <xs:sequence>
-                    <xs:element name="id" type="xs:long"/>
-                    <xs:element name="advertisementId" type="xs:long"/>
-                    <xs:element name="userId" type="xs:long"/>
-                    <xs:element name="title" type="xs:string"/>
-                    <xs:element name="content" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="newCommentResponse">
-                <xs:sequence>
-                    <xs:element name="comment" type="tns:comment"/>
-                </xs:sequence>
-            </xs:complexType>
+            <xs:element name="newCommentRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="advertisementId" type="xs:long"/>
+                        <xs:element name="userId" type="xs:long"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="content" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="newCommentResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="comment" type="tns:comment"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="newRentingIntervalRequest">
         <wsdl:part element="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="newCommentResponse">
+        <wsdl:part element="tns:newCommentResponse" name="newCommentResponse"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newPhotoResponse">
         <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:part>
@@ -144,10 +151,17 @@
     <wsdl:message name="commentRequest">
         <wsdl:part element="tns:commentRequest" name="commentRequest"> </wsdl:part>
     </wsdl:message>
+    <wsdl:message name="newCommentRequest">
+        <wsdl:part element="tns:newCommentRequest" name="newCommentRequest"> </wsdl:part>
+    </wsdl:message>
     <wsdl:portType name="AdvertisementPort">
         <wsdl:operation name="newRentingInterval">
             <wsdl:input message="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:input>
             <wsdl:output message="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="newComment">
+            <wsdl:input message="tns:newCommentRequest" name="newCommentRequest"> </wsdl:input>
+            <wsdl:output message="tns:newCommentResponse" name="newCommentResponse"> </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="newPhoto">
             <wsdl:input message="tns:newPhotoRequest" name="newPhotoRequest"> </wsdl:input>
@@ -170,6 +184,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="newRentingIntervalResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="newComment">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="newCommentRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="newCommentResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

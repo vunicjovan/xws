@@ -43,10 +43,10 @@ export default {
 		},
     },
     mounted: function() {
-        this.$store.dispatch("getRegistrationRequests");
+        this.$store.dispatch("getRegistrationRequestList");
     },
     methods: {
-        ...mapActions(["getRegistrationRequests", "sendRegistrationResponse"]),
+        ...mapActions(["getRegistrationRequestList", "sendRegistrationResponse"]),
 
         acceptRequest(reqId) {
             var resp = {

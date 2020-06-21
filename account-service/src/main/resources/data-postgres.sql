@@ -101,7 +101,7 @@ insert into role_permissions (role_id, permission_id) values (3, 14)
 insert into role_permissions (role_id, permission_id) values (3, 15)
 
 -- User - Roles
-insert into user_roles (user_id, role_id) values (1, 1)
+insert into user_roles (user_id, role_id) values (1, 3)
 insert into user_roles (user_id, role_id) values (2, 2)
 insert into user_roles (user_id, role_id) values (3, 1)
 

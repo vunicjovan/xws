@@ -100,6 +100,9 @@ public class AdvertisementService {
         ad.setPrice(adDTO.getPrice());
         ad = saveAd(ad);
 
+        vehicle.setAdvertisement(ad);
+        saveVehicle(vehicle);
+
         NewAdvertisementResponse response = advertisementClient.newAdvertisement(new AdvertisementDTO(ad));
         if (response != null) {
             AdWrapper adWrapper = new AdWrapper();
@@ -146,7 +149,7 @@ public class AdvertisementService {
             e.printStackTrace();
         }
 
-        return new RentingIntervalDTO(rentingInterval);
+        return new RentingIntervalDTO(response.getRentingInterval());
     }
 
     public PublisherCommentDTO publisherPostComment(PublisherCommentDTO publisherCommentDTO) {

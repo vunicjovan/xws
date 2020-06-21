@@ -47,7 +47,7 @@ public class AdvertisementController {
         return new ResponseEntity<>(advertisementService.manuallyAddInterval(rentingIntervalDTO), HttpStatus.OK);
     }
 
-    @PostMapping("/ad/publisher/comment")
+    @PostMapping("/publisher/comment")
     public ResponseEntity<?> publisherPostComment(@RequestBody PublisherCommentDTO commentDTO) {
         return new ResponseEntity<>(advertisementService.publisherPostComment(commentDTO), HttpStatus.OK);
     }
