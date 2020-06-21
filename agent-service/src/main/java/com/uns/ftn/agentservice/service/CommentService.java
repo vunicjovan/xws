@@ -120,6 +120,23 @@ public class CommentService {
         return new ResponseEntity<>("Comment successfully removed.", HttpStatus.OK);
     }
 
+    public PublisherCommentDTO publisherPostComment(PublisherCommentDTO commentDTO) {
+        Advertisement advertisement = advertisementService.findById(commentDTO.getAdvertisementId());
+
+        if (advertisement == null) {
+            throw new NotFoundException("Advertisement doesn't exit!");
+        }
+
+        Comment comment = new Comment();
+        comment.setTitle(commentDTO.getTitle());
+        comment.setContent(commentDTO.getContent());
+        comment.setUserId(commentDTO.getUserId());
+        comment.setAdvertisement(advertisement);
+        commentRepository.save(comment);
+
+        return new PublisherCommentDTO();
+    }
+
     public CommDTO postComment(CommDTO commentDTO) {
         commentDTO = validateAndSanitize(commentDTO);
         CommDTO checkCommentDTO;
@@ -178,4 +195,5 @@ public class CommentService {
             return commDTO;
         }
     }
+
 }

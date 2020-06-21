@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="advertisement" type="{http://www.ftn.uns.ac.rs/advertisement}advertisement"/>
+ *         &lt;element name="rentingInterval" type="{http://www.ftn.uns.ac.rs/advertisement}rentingInterval"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "advertisement"
+    "rentingInterval"
 })
-@XmlRootElement(name = "newAdvertisementRequest")
-public class NewAdvertisementRequest {
+@XmlRootElement(name = "newRentingIntervalResponse")
+public class NewRentingIntervalResponse {
 
     @XmlElement(required = true)
-    protected Advertisement advertisement;
+    protected RentingInterval rentingInterval;
 
     /**
-     * Gets the value of the advertisement property.
+     * Gets the value of the rentingInterval property.
      * 
      * @return
      *     possible object is
-     *     {@link Advertisement }
+     *     {@link RentingInterval }
      *     
      */
-    public Advertisement getAdvertisement() {
-        return advertisement;
+    public RentingInterval getRentingInterval() {
+        return rentingInterval;
     }
 
     /**
-     * Sets the value of the advertisement property.
+     * Sets the value of the rentingInterval property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Advertisement }
+     *     {@link RentingInterval }
      *     
      */
-    public void setAdvertisement(Advertisement value) {
-        this.advertisement = value;
+    public void setRentingInterval(RentingInterval value) {
+        this.rentingInterval = value;
     }
 
 }

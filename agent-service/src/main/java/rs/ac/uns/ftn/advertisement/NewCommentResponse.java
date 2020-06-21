@@ -11,21 +11,20 @@ package rs.ac.uns.ftn.advertisement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for anonymous complex type.
+ * <p>Java class for newCommentResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="newCommentResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="advertisement" type="{http://www.ftn.uns.ac.rs/advertisement}advertisement"/>
+ *         &lt;element name="comment" type="{http://www.ftn.uns.ac.rs/advertisement}comment"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,37 +34,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "advertisement"
+@XmlType(name = "newCommentResponse", propOrder = {
+    "comment"
 })
-@XmlRootElement(name = "newAdvertisementRequest")
-public class NewAdvertisementRequest {
+public class NewCommentResponse {
 
     @XmlElement(required = true)
-    protected Advertisement advertisement;
+    protected Comment comment;
 
     /**
-     * Gets the value of the advertisement property.
+     * Gets the value of the comment property.
      * 
      * @return
      *     possible object is
-     *     {@link Advertisement }
+     *     {@link Comment }
      *     
      */
-    public Advertisement getAdvertisement() {
-        return advertisement;
+    public Comment getComment() {
+        return comment;
     }
 
     /**
-     * Sets the value of the advertisement property.
+     * Sets the value of the comment property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Advertisement }
+     *     {@link Comment }
      *     
      */
-    public void setAdvertisement(Advertisement value) {
-        this.advertisement = value;
+    public void setComment(Comment value) {
+        this.comment = value;
     }
 
 }

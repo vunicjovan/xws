@@ -15,22 +15,20 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for comment complex type.
+ * <p>Java class for newCommentRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="comment">
+ * &lt;complexType name="newCommentRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="allowed" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="rentingRequestId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -40,26 +38,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "comment", propOrder = {
+@XmlType(name = "newCommentRequest", propOrder = {
     "id",
-    "title",
-    "content",
-    "allowed",
-    "userId",
     "advertisementId",
-    "rentingRequestId"
+    "userId",
+    "title",
+    "content"
 })
-public class Comment {
+public class NewCommentRequest {
 
     protected long id;
+    protected long advertisementId;
+    protected long userId;
     @XmlElement(required = true)
     protected String title;
     @XmlElement(required = true)
     protected String content;
-    protected boolean allowed;
-    protected long userId;
-    protected long advertisementId;
-    protected long rentingRequestId;
 
     /**
      * Gets the value of the id property.
@@ -75,6 +69,38 @@ public class Comment {
      */
     public void setId(long value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the advertisementId property.
+     * 
+     */
+    public long getAdvertisementId() {
+        return advertisementId;
+    }
+
+    /**
+     * Sets the value of the advertisementId property.
+     * 
+     */
+    public void setAdvertisementId(long value) {
+        this.advertisementId = value;
+    }
+
+    /**
+     * Gets the value of the userId property.
+     * 
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the value of the userId property.
+     * 
+     */
+    public void setUserId(long value) {
+        this.userId = value;
     }
 
     /**
@@ -123,70 +149,6 @@ public class Comment {
      */
     public void setContent(String value) {
         this.content = value;
-    }
-
-    /**
-     * Gets the value of the allowed property.
-     * 
-     */
-    public boolean isAllowed() {
-        return allowed;
-    }
-
-    /**
-     * Sets the value of the allowed property.
-     * 
-     */
-    public void setAllowed(boolean value) {
-        this.allowed = value;
-    }
-
-    /**
-     * Gets the value of the userId property.
-     * 
-     */
-    public long getUserId() {
-        return userId;
-    }
-
-    /**
-     * Sets the value of the userId property.
-     * 
-     */
-    public void setUserId(long value) {
-        this.userId = value;
-    }
-
-    /**
-     * Gets the value of the advertisementId property.
-     * 
-     */
-    public long getAdvertisementId() {
-        return advertisementId;
-    }
-
-    /**
-     * Sets the value of the advertisementId property.
-     * 
-     */
-    public void setAdvertisementId(long value) {
-        this.advertisementId = value;
-    }
-
-    /**
-     * Gets the value of the rentingRequestId property.
-     * 
-     */
-    public long getRentingRequestId() {
-        return rentingRequestId;
-    }
-
-    /**
-     * Sets the value of the rentingRequestId property.
-     * 
-     */
-    public void setRentingRequestId(long value) {
-        this.rentingRequestId = value;
     }
 
 }

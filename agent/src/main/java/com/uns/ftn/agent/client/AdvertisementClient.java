@@ -2,8 +2,13 @@ package com.uns.ftn.agent.client;
 
 import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.dto.PhotoRequestDTO;
+import com.uns.ftn.agent.dto.PublisherCommentDTO;
+import com.uns.ftn.agent.dto.RentingIntervalDTO;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import rs.ac.uns.ftn.catalog.*;
+
+import javax.xml.datatype.DatatypeFactory;
+import java.util.GregorianCalendar;
 
 public class AdvertisementClient extends WebServiceGatewaySupport {
 
@@ -59,5 +64,43 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
                 .marshalSendAndReceive(commentRequest);
 
         return commentResponse;
+    }
+
+    public NewRentingIntervalResponse newRentingInterval(RentingIntervalDTO rentingIntervalDTO) {
+        NewRentingIntervalRequest rentingIntervalRequest = new NewRentingIntervalRequest();
+        rentingIntervalRequest.setAdvertisementId(rentingIntervalDTO.getAdvertisementId());
+
+        RentingInterval rentingInterval = new RentingInterval();
+
+        GregorianCalendar gc1 = new GregorianCalendar();
+        gc1.setTime(rentingIntervalDTO.getStartDate());
+        GregorianCalendar gc2 = new GregorianCalendar();
+        gc2.setTime(rentingIntervalDTO.getStartDate());
+        try {
+            rentingInterval.setStartDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc1));
+            rentingInterval.setEndDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc2));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        rentingIntervalRequest.setRentingInterval(rentingInterval);
+
+        NewRentingIntervalResponse response = (NewRentingIntervalResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(rentingIntervalRequest);
+
+        return response;
+    }
+
+    public NewCommentResponse newPublisherComment(PublisherCommentDTO publisherCommentDTO) {
+        NewCommentRequest newCommentRequest = new NewCommentRequest();
+        newCommentRequest.setAdvertisementId(publisherCommentDTO.getAdvertisementId());
+        newCommentRequest.setContent(publisherCommentDTO.getContent());
+        newCommentRequest.setTitle(publisherCommentDTO.getTitle());
+        newCommentRequest.setUserId(publisherCommentDTO.getUserId());
+        newCommentRequest.setId(publisherCommentDTO.getId());
+
+        NewCommentResponse response = (NewCommentResponse) getWebServiceTemplate().
+                marshalSendAndReceive(newCommentRequest);
+
+        return response;
     }
 }

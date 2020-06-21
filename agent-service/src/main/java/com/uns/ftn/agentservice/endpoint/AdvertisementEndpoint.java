@@ -2,13 +2,17 @@ package com.uns.ftn.agentservice.endpoint;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
+import com.uns.ftn.agentservice.dto.PublisherCommentDTO;
+import com.uns.ftn.agentservice.dto.RentingIntervalDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
+import com.uns.ftn.agentservice.service.RentingIntervalService;
 import com.uns.ftn.agentservice.service.impl.PhotoServiceImpl;
 import com.uns.ftn.agentservice.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -26,12 +30,14 @@ public class AdvertisementEndpoint {
     private AdvertisementService advertisementService;
     private PhotoServiceImpl photoService;
     private CommentService commentService;
+    private final RentingIntervalService rentingIntervalService;
 
     @Autowired
-    public AdvertisementEndpoint(AdvertisementService advertisementService, CommentService commentService, PhotoServiceImpl photoService) {
+    public AdvertisementEndpoint(AdvertisementService advertisementService, CommentService commentService, PhotoServiceImpl photoService, RentingIntervalService rentingIntervalService) {
         this.advertisementService = advertisementService;
         this.commentService = commentService;
        this.photoService = photoService;
+        this.rentingIntervalService = rentingIntervalService;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newAdvertisementRequest")
@@ -107,6 +113,47 @@ public class AdvertisementEndpoint {
             comment.setAdvertisementId(commDTO.getAdvertisementId());
             commentResponse.getComments().add(comment);
         });
+
+        return commentResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newRentingIntervalRequest")
+    @ResponsePayload
+    public NewRentingIntervalResponse newRentingInterval(@RequestPayload NewRentingIntervalRequest rentRequest) {
+        NewRentingIntervalResponse rentingIntervalResponse = new NewRentingIntervalResponse();
+        RentingIntervalDTO rentingIntervalDTO = new RentingIntervalDTO(rentRequest.getRentingInterval());
+        rentingIntervalDTO.setAdvertisementId(rentRequest.getAdvertisementId());
+
+        RentingIntervalDTO responseDTO = rentingIntervalService.manuallyAddInterval(rentingIntervalDTO);
+
+        RentingInterval rentingInterval = new RentingInterval();
+        rentingInterval.setStartDate(rentRequest.getRentingInterval().getStartDate());
+        rentingInterval.setEndDate(rentRequest.getRentingInterval().getEndDate());
+        rentingIntervalResponse.setRentingInterval(rentingInterval);
+
+        return  rentingIntervalResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newCommentRequest")
+    @ResponsePayload
+    public NewCommentResponse newComment(@RequestPayload NewCommentRequest commentRequest) {
+        NewCommentResponse commentResponse = new NewCommentResponse();
+        PublisherCommentDTO publisherCommentDTO = new PublisherCommentDTO();
+        publisherCommentDTO.setContent(commentRequest.getContent());
+        publisherCommentDTO.setTitle(commentRequest.getTitle());
+        publisherCommentDTO.setUserId(commentRequest.getUserId());
+        publisherCommentDTO.setAdvertisementId(commentRequest.getAdvertisementId());
+        publisherCommentDTO.setId(commentRequest.getId());
+
+        PublisherCommentDTO responseDTO = commentService.publisherPostComment(publisherCommentDTO);
+
+        Comment comment = new Comment();
+        comment.setAdvertisementId(responseDTO.getAdvertisementId());
+        comment.setContent(responseDTO.getContent());
+        comment.setTitle(responseDTO.getTitle());
+        comment.setUserId(responseDTO.getUserId());
+        comment.setId(responseDTO.getId());
+        commentResponse.setComment(comment);
 
         return commentResponse;
     }
