@@ -4,11 +4,13 @@ import searchApi from "@/api/Search.js";
 const state = {
 	advertisements: [],
 	advertisement: null,
+	statistic: []
 };
 
 const getters = {
 	getAdvertisements: (state) => state.advertisements,
-	getAdvertisement: (state) => state.advertisement
+	getAdvertisement: (state) => state.advertisement,
+	getStatistic: (state) => state.statistic,
 };
 
 const actions = {
@@ -90,6 +92,18 @@ const actions = {
 		});
 	},
 
+	getStatisticReport({ commit }, ownerId) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.getStatisticReport(ownerId)
+				.then((statistic) => {
+					commit("setStatistic", statistic);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	},
+
 	postRating({ commit }, rate) {
 		return new Promise((resolve, reject) => {
 			advertismentApi
@@ -99,12 +113,14 @@ const actions = {
 				})
 				.catch((error) => reject(error));
 		});
-	}
+	},
+
 };
 
 const mutations = {
 	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
 	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement),
+	setStatistic: (state, report) => (state.statistic = report),
 };
 
 export default {

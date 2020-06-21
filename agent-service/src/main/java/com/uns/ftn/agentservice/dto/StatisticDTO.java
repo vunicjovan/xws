@@ -13,8 +13,6 @@ import lombok.Setter;
 public class StatisticDTO {
 
     private Long advertisementId;
-    // maybe there should be field "advertisementName" in Advertisement, example: "Audi R8"?
-    //private String advertisementName;
     private double rating;
     private int commentNumber;
     private int kmTraveled;

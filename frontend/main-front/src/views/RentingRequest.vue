@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isLogged && getUser !== null && getUser.roles.includes('ADMIN') && rentingRequest" class="md-layout md-alignment-top-center">
+	<div v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER')) && rentingRequest" class="md-layout md-alignment-top-center">
 		<md-card>
 			<md-card-header>
 				<md-card-header-text>
