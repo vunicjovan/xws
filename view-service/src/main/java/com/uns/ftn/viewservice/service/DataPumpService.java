@@ -56,6 +56,7 @@ public class DataPumpService {
         advertisement.setDescription(advertisementDTO.getDescription());
         advertisement.setOwnerId(advertisementDTO.getOwnerId());
         advertisement.setLocation(advertisementDTO.getLocation());
+        advertisement.setRatedByUsers(advertisementDTO.getRatedByUsers());
 
         vehicle.setKilometersTraveled(advertisementDTO.getVehicle().getKilometersTraveled());
         vehicle.setChildSeatNumber(advertisementDTO.getVehicle().getChildSeatNumber());

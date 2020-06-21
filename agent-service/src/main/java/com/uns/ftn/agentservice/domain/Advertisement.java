@@ -5,6 +5,7 @@ package com.uns.ftn.agentservice.domain;
  * Purpose: Defines the Class Advertisement
  ***********************************************************************/
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -54,4 +55,7 @@ public class Advertisement {
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Photo> photos;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ratedAds")
+    private Set<User> ratedByUsers;
 }
