@@ -3,7 +3,7 @@
 		<div id="nav">
 			<router-link to="/">Home</router-link> |
 			<router-link to="/postAd">Post advertisement</router-link>
-			<router-link to="/abouta">Chat</router-link>
+			<router-link to="/chat">Chat</router-link>
 			<router-link to="/requestsFinished">Finished requests</router-link>
 		</div>
 		<div id="body">

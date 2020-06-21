@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import PostAdvertisement from "../forms/PostAdvertisement.vue";
 import RequestsFinished from "../views/RequestsFinished.vue";
+import Chat from "../views/Chat.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
 		path: "/requestsFinished",
 		name: "RentingFinished",
 		component: RequestsFinished,
+	},
+	{
+		path: "/chat",
+		name: "Chat",
+		component: Chat,
 	},
 ];
 
