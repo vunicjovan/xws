@@ -46,7 +46,7 @@ export default {
         this.$store.dispatch("getRegistrationRequests");
     },
     methods: {
-        ...mapActions(["getRegistrationRequests, sendRegistrationResponse"]),
+        ...mapActions(["getRegistrationRequests", "sendRegistrationResponse"]),
 
         acceptRequest(reqId) {
             var resp = {

@@ -15,6 +15,7 @@ import RegistrationRequests from "../views/account/RegistrationRequests.vue";
 import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
 import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
+import StatisticReport from "../views/statistic/StatisticReport.vue";
 
 Vue.use(VueRouter);
 
@@ -94,7 +95,11 @@ const routes = [
 		name: "RentingHistoryView",
 		component: RentingHistoryView
 	},
-
+	{
+		path: "/statistic/:id",
+		name: "StatisticReport",
+		component: StatisticReport
+	},
 ];
 
 const router = new VueRouter({

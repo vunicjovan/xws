@@ -78,13 +78,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Comment }
-     * 
-     */
-    public ObjectFactory() {
-    }
-
-    /**
      * Create an instance of {@link Vehicle }
      * 
      */

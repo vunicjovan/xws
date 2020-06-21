@@ -38,12 +38,16 @@
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
 			<md-button v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))" @click.native="$router.push('/ads/published')">
-				<i class="fas fa-ad fa-2x"></i>
+				<i class="fas fa-list fa-2x"></i>
 				<md-tooltip>Published Ads</md-tooltip>
 			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/rented')">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Rented Ads</md-tooltip>
+			</md-button>
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" @click.native="$router.push('/statistic/' + getUser.id)">
+				<i class="fa fa-signal fa-2x"></i>
+				<md-tooltip>Statistic report</md-tooltip>
 			</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>

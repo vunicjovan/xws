@@ -42,4 +42,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	getStatisticReport(ownerId) {
+		return axios.get(`/agent/ad/${ownerId}/statistic`).then((response) => {
+			return response.data;
+		});
+	}
 };
