@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MessageController {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+   // @Autowired
+   // private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     private MessageService messageService;
@@ -39,6 +39,11 @@ public class MessageController {
         return new ResponseEntity<>(messageService.saveMessage(messageDTO), HttpStatus.OK);
     }
 
+    @PostMapping("chat/{senderId}/{receiverId}")
+    public ResponseEntity<?> sendMessage(@PathVariable Long senderId, @PathVariable Long receiverId) {
+        return new ResponseEntity<>(messageService.createChat(senderId, receiverId), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Long id) {
         return null;
@@ -51,7 +56,7 @@ public class MessageController {
 
     @MessageMapping("/send")
     public void sendMessageSocket(@Payload MessageDTO messageDTO) {
-        simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageDTO.getReceiverId(), messageDTO);
+  //      simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageDTO.getReceiverId(), messageDTO);
     }
 
 }
