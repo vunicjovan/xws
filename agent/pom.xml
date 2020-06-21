@@ -125,6 +125,7 @@
             <include>renting.wsdl</include>
 						<include>catalog.wsdl</include>
 						<include>advertisement.wsdl</include>
+						<include>message.wsdl</include>
 					</schemaIncludes>
 				</configuration>
 			</plugin>

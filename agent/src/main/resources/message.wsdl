@@ -1,0 +1,111 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.ftn.uns.ac.rs/message" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/message" targetNamespace="http://www.ftn.uns.ac.rs/message">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/message">
+
+    <xs:element name="messageRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="messageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="chat" nillable="true" type="tns:chat"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newMessageRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="tns:message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="newMessageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="tns:message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="chat">
+        <xs:sequence>
+            <xs:element name="senderId" type="xs:long"/>
+            <xs:element name="senderUsername" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="messages" nillable="true" type="tns:message"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="message">
+        <xs:sequence>
+            <xs:element name="content" type="xs:string"/>
+            <xs:element name="senderId" type="xs:long"/>
+            <xs:element name="receiverId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="newMessageRequest">
+    <wsdl:part element="tns:newMessageRequest" name="newMessageRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="newMessageResponse">
+    <wsdl:part element="tns:newMessageResponse" name="newMessageResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="messageRequest">
+    <wsdl:part element="tns:messageRequest" name="messageRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="messageResponse">
+    <wsdl:part element="tns:messageResponse" name="messageResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="MessagePort">
+    <wsdl:operation name="newMessage">
+      <wsdl:input message="tns:newMessageRequest" name="newMessageRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:newMessageResponse" name="newMessageResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="message">
+      <wsdl:input message="tns:messageRequest" name="messageRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:messageResponse" name="messageResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MessagePortSoap11" type="tns:MessagePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="newMessage">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="newMessageRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="newMessageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="message">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="messageRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="messageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MessagePortService">
+    <wsdl:port binding="tns:MessagePortSoap11" name="MessagePortSoap11">
+      <soap:address location="http://localhost:8085/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

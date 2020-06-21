@@ -1,5 +1,6 @@
 package com.uns.ftn.viewservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,6 @@ public class Advertisement {
     @Id
     private Long id;
 
-    @Column(name = "location")
-    private String location;
-
     @Column(name = "price", nullable = false)
     private double price;
 
@@ -36,6 +34,9 @@ public class Advertisement {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "location")
+    private String location;
+
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals;
 
@@ -50,4 +51,8 @@ public class Advertisement {
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Photo> photos;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ratedAds")
+    private Set<User> ratedByUsers;
 }

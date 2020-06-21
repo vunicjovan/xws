@@ -2,11 +2,13 @@ package com.uns.ftn.rentingservice.service;
 
 import com.uns.ftn.rentingservice.client.AdvertisementClient;
 import com.uns.ftn.rentingservice.client.CommentClient;
+import com.uns.ftn.rentingservice.client.MessageClient;
 import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
+import com.uns.ftn.rentingservice.repository.RentingReportRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +30,25 @@ public class RentingRequestService {
     private TaskScheduler taskScheduler;
     private AdvertisementClient advertisementClient;
     private CommentService commentService;
-    private final CommentClient commentClient;
+    private CommentClient commentClient;
+    private final RentingReportRepository rentingReportRepository;
+    private MessageClient messageClient;
+
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
                                  TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
-                                 CommentService commentService, CommentClient commentClient) {
+                                 CommentService commentService, CommentClient commentClient,
+                                 RentingReportRepository rentingReportRepository,
+                                 MessageClient messageClient) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
         this.advertisementClient = advertisementClient;
         this.commentService = commentService;
         this.commentClient = commentClient;
+        this.rentingReportRepository = rentingReportRepository;
+        this.messageClient = messageClient;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -98,6 +107,14 @@ public class RentingRequestService {
 
         if(request.getStatus() == RequestStatus.paid) {
             RentingRequest finalRentingRequest = rentingRequest;
+
+            try {
+                messageClient.createChat(finalRentingRequest.getAdvertisements().iterator().next().getOwnerId(),
+                        rentingRequest.getSenderId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             finalRentingRequest.getAdvertisements().forEach(advertisement -> {
                 advertisement.getRentingRequests().forEach(req -> {
                     if(req.getId() != finalRentingRequest.getId() && req.getStatus() == RequestStatus.pending ) {
@@ -123,7 +140,9 @@ public class RentingRequestService {
         if (!agentsAds.isEmpty()) {
             for (Advertisement ad : agentsAds) {
                 for (RentingRequest request : ad.getRentingRequests()) {
-                    if (request.getStatus() == RequestStatus.paid && currentTime.after(request.getEndDate())) {
+                    RentingReport report = rentingReportRepository.findByAdvertisementAndRentingRequest(ad, request);
+                    if (report == null && request.getStatus() == RequestStatus.paid &&
+                            currentTime.after(request.getEndDate())) {
                         GetRentingRequestDTO gdto = new GetRentingRequestDTO(request);
                         gdto.setAdvertisementID(ad.getId());
                         retval.add(gdto);
@@ -182,6 +201,13 @@ public class RentingRequestService {
                     } else {
                         availableCommentDTO.setComment(commentClient.getComment(comment.getId()));
                     }
+                    availableCommentDTO.setRatingAvailable(true);
+                    availableCommentDTO.getAdvertisement().getRatedByUsers().forEach(ratedUser -> {
+                        if (ratedUser.getUserId().equals(id)) {
+                            availableCommentDTO.setRatingAvailable(false);
+                        }
+                    });
+
                     response.add(availableCommentDTO);
                 }
             }

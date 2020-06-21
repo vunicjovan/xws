@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,4 +18,5 @@ public class AdvertClientResponseDTO {
     private String brand;
     private String location;
     private double price;
+    private Set<UserDTO> ratedByUsers;
 }

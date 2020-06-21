@@ -1,37 +1,38 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/postAd">Post advertisement</router-link>
-      <router-link to="/abouta">Chat</router-link>
-    </div>
-    <div id="body">
+	<div id="app">
+		<div id="nav">
+			<router-link to="/">Home</router-link> |
+			<router-link to="/postAd">Post advertisement</router-link>
+			<router-link to="/chat">Chat</router-link>
+			<router-link to="/requestsFinished">Finished requests</router-link>
+		</div>
+		<div id="body">
 			<router-view />
 		</div>
-  </div>
+	</div>
 </template>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: #2c3e50;
 }
 
 #nav {
-  padding: 30px;
+	padding: 30px;
 }
 
 #nav a {
-  font-weight: bold;
-  color: #486685;
-  padding: 0.75%;
+	font-weight: bold;
+	color: #486685;
+	padding: 0.75%;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+	color: #42b983;
 }
 
 #body {

@@ -1,10 +1,12 @@
 package com.uns.ftn.messageservice.service;
 
+import com.uns.ftn.messageservice.AccountClient;
 import com.uns.ftn.messageservice.domain.Message;
 import com.uns.ftn.messageservice.dto.ChatDTO;
 import com.uns.ftn.messageservice.dto.MessageDTO;
 import com.uns.ftn.messageservice.exception.BadRequestException;
 import com.uns.ftn.messageservice.repository.MessageRepository;
+import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,18 +22,22 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private AccountClient accountClient;
+
     public List<ChatDTO> getChat(Long id) {
-        List<Message> messages = messageRepository.findAllByReceiverId(id);
+        List<Message> messages;
         List<ChatDTO> chat = new ArrayList<>();
 
+        messages = messageRepository.findAllByReceiverId(id);
         messages.forEach(message -> {
-            addMessageToChat(chat, message, message.getSenderId());
+            addMessageToChat(chat, message, message.getSenderId(), false);
         });
 
         messages = messageRepository.findAllBySenderId(id);
 
         messages.forEach(message -> {
-            addMessageToChat(chat, message, message.getReceiverId());
+            addMessageToChat(chat, message, message.getReceiverId(), true);
         });
 
         chat.forEach(chatDTO -> chatDTO.getMessages()
@@ -41,7 +47,7 @@ public class MessageService {
         return chat;
     }
 
-    private void addMessageToChat(List<ChatDTO> chat, Message message, Long charRoomId) {
+    private void addMessageToChat(List<ChatDTO> chat, Message message, Long charRoomId, Boolean secondLoop) {
         MessageDTO messageDTO = new MessageDTO(message);
 
         ChatDTO chatDTO = chat.stream().filter(singleChat -> singleChat.getSenderId() == charRoomId).
@@ -54,7 +60,11 @@ public class MessageService {
                 }
             });
         } else {
-            chatDTO = new ChatDTO(charRoomId, message.getSenderUsername());
+            if (secondLoop) {
+                chatDTO = new ChatDTO(charRoomId, accountClient.getOwnerName(charRoomId));
+            } else {
+                chatDTO = new ChatDTO(charRoomId, message.getSenderUsername());
+            }
             chatDTO.getMessages().add(messageDTO);
             chat.add(chatDTO);
         }
@@ -80,8 +90,6 @@ public class MessageService {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
-        System.out.println(messageDTO);
-
         if (messageDTO.getContent() == null || messageDTO.getContent().trim().equals("") ||
                 !pattern.matcher(messageDTO.getContent().trim()).matches() ||  messageDTO.getSenderId() == null
                 || messageDTO.getReceiverId() == null || messageDTO.getUsername() == null
@@ -93,6 +101,33 @@ public class MessageService {
         messageDTO.setContent(Encode.forHtml(messageDTO.getContent()));
         messageDTO.setUsername(Encode.forHtml(messageDTO.getUsername()));
 
+    }
+
+    public MessageDTO saveAgentMessage(MessageDTO messageDTO) throws NotFoundException {
+        try {
+            messageDTO.setUsername(accountClient.getOwnerName(messageDTO.getSenderId()));
+        } catch (Exception e) {
+            throw new NotFoundException("Agent with given id does not exist!");
+        }
+
+        return saveMessage(messageDTO);
+    }
+
+    public Boolean createChat(Long senderId, Long receiverId) {
+        List<Message> messages = messageRepository.findAllBySenderIdAndReceiverId(senderId, receiverId);
+
+        if (!messages.isEmpty()) {
+            return false;
+        } else {
+            Message message = new Message();
+            message.setSenderId(senderId);
+            message.setReceiverId(receiverId);
+            message.setTimestamp(new Date());
+            message.setContent("Chat available!");
+            message.setSenderUsername(accountClient.getOwnerName(senderId));
+            messageRepository.save(message);
+            return true;
+        }
     }
 
 }

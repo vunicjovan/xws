@@ -43,9 +43,17 @@ export default {
 		});
 	},
 
+
 	getStatisticReport(ownerId) {
 		return axios.get(`/agent/ad/${ownerId}/statistic`).then((response) => {
 			return response.data;
 		});
-	}
+	},
+
+	rateAdvertisement(adId, rating) {
+		return axios.post(`/agent/ad/${adId}/vehicle/rate`, rating).then((response) => {
+			return response.data;
+		});
+	},
+  
 };

@@ -20,4 +20,5 @@ public class AvailableCommentDTO {
     private Long rentingRequestId;
     private RentingIntervalDTO rentingInterval;
     private CommentClientResponseDTO comment;
+    private boolean ratingAvailable;
 }

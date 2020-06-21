@@ -89,7 +89,8 @@ public class ViewService {
                 .orElseThrow(() -> new NotFoundException("Requested advertisement doesn't exist."));
 
         return new AdvertClientResponseDTO(ad.getId(), ad.getVehicle().getModel().getName(),
-                ad.getVehicle().getModel().getBrand().getName(), ad.getLocation(), ad.getPrice());
+                ad.getVehicle().getModel().getBrand().getName(), ad.getLocation(), ad.getPrice(),
+                ad.getRatedByUsers().stream().map(UserDTO::new).collect(Collectors.toSet()));
     }
 
     public Set<SimpleAdvertisementDTO> getAgentsAdvertisements(Long id) {
