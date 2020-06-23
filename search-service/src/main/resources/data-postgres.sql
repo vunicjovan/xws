@@ -99,16 +99,16 @@ values (4, 1000, 1, true, 3, 2, 3, 4);
 -- Advertisements
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
-values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 1, 1);
+values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 1, 2);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
-values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2, 1);
+values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2, 2);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
-values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 3, 1);
+values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 3, 2);
 insert into advertisement
 (id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, vehicle_id, owner_id)
-values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 4, 1);
+values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 4, 2);
 
 -- Photos
 insert into photo (id, path, advertisement_id) values (1, 'logan1.jpg', 1);

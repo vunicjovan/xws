@@ -11,7 +11,7 @@
 	<groupId>com.uns.ftn</groupId>
 	<artifactId>agent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+<!--	<packaging>war</packaging>-->
 	<name>agent</name>
 	<description>XWS project for Faculty of Technical Sciences, Novi Sad</description>
 

@@ -134,7 +134,7 @@ public class CommentService {
         comment.setAdvertisement(advertisement);
         commentRepository.save(comment);
 
-        return new PublisherCommentDTO();
+        return new PublisherCommentDTO(comment);
     }
 
     public CommDTO postComment(CommDTO commentDTO) {

@@ -364,8 +364,8 @@ export default {
 	methods: {
 		...mapActions(["getAllAdvertisements", "getAdvertisementStatistic"]),
 		getPhotoURL(advertisementId, photoName) {
-            return photoName;
-            //return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
+            // return photoName;
+            return `http://localhost:8091/image/${advertisementId}/${photoName}/`;
         },
 		addCartItem(advertisementId) {
 			let payload = {

@@ -138,3 +138,10 @@ insert into renting_interval (id, start_date, end_date, advertisement_id) values
 insert into renting_interval (id, start_date, end_date, advertisement_id) values (8, '2020-06-17', '2020-06-20', 4);
 insert into renting_interval (id, start_date, end_date, advertisement_id) values (9, '2020-06-13', '2020-06-15', 4);
 insert into renting_interval (id, start_date, end_date, advertisement_id) values (10, '2020-06-25', '2020-06-28', 4);
+
+-- Comments
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 1);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Second comment', 'This is second comment.', true, 5, 1);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 7, 2);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 5, 3);

@@ -29,6 +29,20 @@ services:
       - 8024:8024
       - 8124:8124
 
+  agent:
+    build: ./agent
+    ports:
+      - "8091:8091"
+    environment:
+      - POSTGRES_DB=agent
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    tty: true
+    depends_on:
+      - db
+
   account-service:
     build: ./account-service
     ports:
@@ -148,6 +162,27 @@ services:
       - POSTGRES_SCHEMA=search_schema
       - RQM_HOST=rabbitmq-broker
       - RMQ_PORT=5672
+    tty: true
+    depends_on:
+      - db
+      - eureka-serviceregistry
+      - rabbitmq-broker
+      - axon-server
+
+  message-service:
+    build: ./message-service
+    ports:
+      - "8085:8085"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - POSTGRES_DB=service-db
+      - POSTGRES_DOMAIN=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_SCHEMA=message_schema
+      - RQM_HOST=rabbitmq-broker
+      - RQM_PORT=5672
     tty: true
     depends_on:
       - db
