@@ -6,12 +6,20 @@
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Richard', 'Hendricks', 'admin@soul.com', '$2y$10$R/LdCKwv38VfUAMuTFH/GOPi3PYHOiYwAUELhptoOHrf0XPMmTdoG', true, false)
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Russ', 'Hanneman', 'agent@soul.com', '$2y$10$RfARh5QRZOaPEiae9l/lW.X5OGp54jupb1ShrnOltBRiE0eImx6eC', true, false)
 insert into users (first_name, last_name, email, password, enabled, deleted) values ('Jared', 'Dunn', 'user@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Jovan', 'Vunić', 'jovan@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Dušan', 'Petković', 'dusan@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Dejan', 'Radulović', 'dejan@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
+insert into users (first_name, last_name, email, password, enabled, deleted) values ('Boris', 'Opačić', 'boris@soul.com', '$2y$10$onaSB/tLGyTUZ7Rc4dWVFOwqvXHG3oUZfHWgtVQCaWVw/KuyU.sLy', true, false)
 
 -- Simple user
 insert into simple_user (blocked, number_of_ads, number_of_cancelations, user_id) values (false, 0, 0, 3)
+insert into simple_user (blocked, number_of_ads, number_of_cancelations, user_id) values (false, 0, 0, 5)
+insert into simple_user (blocked, number_of_ads, number_of_cancelations, user_id) values (false, 0, 0, 7)
 
 -- Agent
 insert into agent (user_id) values (2)
+insert into agent (user_id) values (4)
+insert into agent (user_id) values (6)
 
 -- Administrator
 insert into administrator (user_id) values (1)
@@ -104,4 +112,8 @@ insert into role_permissions (role_id, permission_id) values (3, 15)
 insert into user_roles (user_id, role_id) values (1, 3)
 insert into user_roles (user_id, role_id) values (2, 2)
 insert into user_roles (user_id, role_id) values (3, 1)
+insert into user_roles (user_id, role_id) values (4, 2)
+insert into user_roles (user_id, role_id) values (5, 1)
+insert into user_roles (user_id, role_id) values (6, 2)
+insert into user_roles (user_id, role_id) values (7, 1)
 
