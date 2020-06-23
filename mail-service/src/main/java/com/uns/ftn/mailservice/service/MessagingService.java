@@ -44,13 +44,11 @@ public class MessagingService {
         } else {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            String htmlMsg = "<p>Please click <a href=\"http://localhost:8090/registerUser/" + mdto.getToken() + "\">here</a> to verify your registration.</p>" +
-                    "<br><br><p>RentaSoul Team</p>";
 
             try {
-                helper.setText(htmlMsg, true); // Use this or above line.
+                helper.setText(mdto.getContent(), true); // Use this or above line.
                 helper.setTo(env.getProperty("spring.mail.username"));
-                helper.setSubject("Confirm your registration to RentaSoul services");
+                helper.setSubject(mdto.getTitle());
                 helper.setFrom(env.getProperty("spring.mail.username"));
                 javaMailSender.send(mimeMessage);
             } catch (MessagingException e) {

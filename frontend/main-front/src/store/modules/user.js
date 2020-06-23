@@ -90,6 +90,32 @@ const actions = {
 				});
 		});
 	},
+
+	createResetToken({ commit }, email) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.createResetToken(email)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
+	resetPassword({ commit }, tokenDTO) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.resetPassword(tokenDTO)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
 };
 
 const mutations = {
