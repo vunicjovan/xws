@@ -13,8 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "verification_token")
-public class VerificationToken {
+@Table(name = "reset_token")
+public class ResetToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
