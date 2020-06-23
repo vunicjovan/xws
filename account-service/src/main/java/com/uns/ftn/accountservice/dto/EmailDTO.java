@@ -1,4 +1,4 @@
-package com.uns.ftn.mailservice.dto;
+package com.uns.ftn.accountservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MessageDTO {
+public class EmailDTO {
 
-    private String title;
-    private String content;
-    private Boolean isAgentRegistration;
+    private String email;
 
 }
