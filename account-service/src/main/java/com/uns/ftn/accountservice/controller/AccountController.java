@@ -99,6 +99,11 @@ public class AccountController {
         return userService.registerAgent(agnRegDTO);
     }
 
+    @PutMapping(value = "/activate/{token}")
+    public ResponseEntity<?> registerUser(@PathVariable("token") String token) {
+        return userService.activateAccount(token);
+    }
+
     //@PreAuthorize("hasAuthority('delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {

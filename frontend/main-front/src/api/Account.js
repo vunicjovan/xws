@@ -27,6 +27,12 @@ export default {
 		return axios.put("/account/changePassword/", passwordSet).then((response) => {
 			return response.data;
 		});
+	},
+
+	activateAccount(token) {
+		return axios.put(`/account/activate/${token}`).then((response) => {
+			return response.data;
+		});
 	}
 	
 };

@@ -65,6 +65,19 @@ const actions = {
 		});
 	},
 
+	activateAccount({ commit }, token) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.activateAccount(token)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
 	changePassword({ commit }, passwordSet) {
 		return new Promise((resolve, reject) => {
 			accountApi
