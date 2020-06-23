@@ -1,4 +1,4 @@
-package com.uns.ftn.agentservice.conf;
+package com.uns.ftn.accountservice.configuration;
 
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -18,18 +18,10 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     @Value("${fanout.exchange}")
     private String fanoutExchangeName;
 
-    @Value("${queue.name}")
-    private String queueName;
-
-    @Value("${queue.name1}")
-    private String queueName1;
-
-
     @Bean
     FanoutExchange exchange() {
         return new FanoutExchange(fanoutExchangeName);
     }
-
 
     @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
@@ -59,6 +51,5 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     public void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
     }
-
 
 }
