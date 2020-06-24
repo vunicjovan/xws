@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isLogged && getUser !== null && getAdvertisement !== null" class="md-layout md-alignment-center-center">
+	<div v-if="getAdvertisement" class="md-layout md-alignment-center-center">
 		<md-dialog :md-active.sync="active">
 			<md-dialog-title>Unavailable term</md-dialog-title>
 			<md-dialog-content>
@@ -54,12 +54,13 @@
 				</div>
 				<br />
 				<div><b>Owner's description:</b><br />{{ getAdvertisement.description }}</div>
-				<br/>
-				
+				<br />
 			</md-card-content>
 
-			<md-card-actions>
-				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent">Edit availability</md-button>
+			<md-card-actions v-if="getUser">
+				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent"
+					>Edit availability</md-button
+				>
 				<md-button v-if="getUser.roles.includes('SIMPLE_USER')" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
 			</md-card-actions>
 		</md-card>
@@ -68,16 +69,16 @@
 				<div>
 					<span class="md-headline">Comments</span>
 				</div>
-				
+
 				<md-divider></md-divider>
-				<div v-for="comment in getAdvertisement.comments" v-bind:key="comment.id"> 
+				<div v-for="comment in getAdvertisement.comments" v-bind:key="comment.id">
 					<div>
-						<br/>
+						<br />
 						<span class="md-subheading">{{ comment.title }}</span>
-						<div  class="md-layout md-alignment-center md-subtitle">
+						<div class="md-layout md-alignment-center md-subtitle">
 							{{ comment.content }}
 						</div>
-						<br/>
+						<br />
 					</div>
 					<md-divider></md-divider>
 				</div>
@@ -148,7 +149,7 @@ export default {
 		},
 
 		setupEdit(id) {
-			this.form.advertisementId = id
+			this.form.advertisementId = id;
 			this.active = true;
 		},
 
