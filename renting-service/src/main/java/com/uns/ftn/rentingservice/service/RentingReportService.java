@@ -62,7 +62,7 @@ public class RentingReportService {
         RentingRequest request = requestService.findOne(rdto.getRequestID());
         Advertisement advertisement = findAdById(rdto.getAdvertisementID());
         Date currentTime = new Date();
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]*)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
         if (request.getStatus() != RequestStatus.paid) {

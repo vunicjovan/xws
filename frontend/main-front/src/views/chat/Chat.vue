@@ -51,7 +51,7 @@
                 <md-field :class="{ 'md-invalid': $v.currentMessage.$error }" md-clearable v-if="this.currentMessages !== null">
                     <label>Send message</label>
                     <md-input v-on:keyup.enter="sendMessage" v-model="currentMessage" class="textara" md-autogrow maxlength="120"></md-input>
-                    <span class="md-error" v-if="!$v.currentMessage.required">Invalid message format</span>
+                    <span class="md-error" v-if="!$v.currentMessage.sqli">Invalid message format</span>
                 </md-field>
             </md-app-content>
 

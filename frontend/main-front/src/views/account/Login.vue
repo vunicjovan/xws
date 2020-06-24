@@ -21,8 +21,8 @@
 							<label for="first-name">Password</label>
 							<md-input type="password" name="password" id="password" v-model="form.password" :disabled="sending" />
 							<span class="md-error" v-if="!$v.form.password.required">Password is required</span>
-							<span class="md-error" v-else-if="!$v.form.password.alpha">Invalid password format</span>
-							<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 8 characters</span>
+							<span class="md-error" v-else-if="!$v.form.password.sqli">At least 1: capital letter, digit and special character (#!?)</span>
+							<span class="md-error" v-else-if="!$v.form.password.minLength">Password requires at least 10 characters</span>
 						</md-field>
 					</div>
 				</md-card-content>
