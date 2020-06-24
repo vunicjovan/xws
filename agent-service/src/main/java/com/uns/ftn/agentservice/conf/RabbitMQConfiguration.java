@@ -12,17 +12,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+
 @Configuration
 public class RabbitMQConfiguration implements RabbitListenerConfigurer {
 
     @Value("${fanout.exchange}")
     private String fanoutExchangeName;
 
-    @Value("${queue.name}")
-    private String queueName;
+    public static final String KEYSTORE_PROVIDER = "SunX509";
 
-    @Value("${queue.name1}")
-    private String queueName1;
+    @Value("${server.ssl.algorithm}")
+    private String algorithm;
+
+    @Value("${RMQ_HOST:localhost}")
+    private String host;
+
+    @Value("${RMQ_PORT:5672}")
+    private String port;
 
 
     @Bean
@@ -32,7 +44,7 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
 
 
     @Bean
-    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate( final ConnectionFactory connectionFactory) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
         return rabbitTemplate;
@@ -59,6 +71,5 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     public void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
     }
-
 
 }

@@ -3,7 +3,7 @@ package com.uns.ftn.accountservice.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
-import com.uns.ftn.accountservice.components.QueueProducer;
+//import com.uns.ftn.accountservice.components.QueueProducer;
 import com.uns.ftn.accountservice.domain.Agent;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
@@ -45,7 +45,7 @@ public class UserService {
     private CustomUserDetailsService userDetailsService;
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
-    private QueueProducer queueProducer;
+    //private QueueProducer queueProducer;
     private VerificationTokenRepository tokenRepo;
 
     @Inject
@@ -61,7 +61,6 @@ public class UserService {
             CustomUserDetailsService userDetailsService,
             AuthenticationManager authenticationManager,
             JWTUtil jwtUtil,
-            QueueProducer queueProducer,
             VerificationTokenRepository tokenRepo
     ) {
         this.userRepository = userRepository;
@@ -72,7 +71,7 @@ public class UserService {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.queueProducer = queueProducer;
+        //this.queueProducer = queueProducer;
         this.tokenRepo = tokenRepo;
     }
 
@@ -131,11 +130,11 @@ public class UserService {
             tokenRepo.save(token);
 
             MessageDTO mdto = new MessageDTO("", "", token.getToken(), false);
-            try {
-                queueProducer.produce(mdto);
+            /*try {
+                //queueProducer.produce(mdto);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         return userDTO;
@@ -282,21 +281,21 @@ public class UserService {
             //Send confirmation email to the agent.
             MessageDTO mdto = new MessageDTO("RentaSoul Registration for " + user.getFirstName() + " " + user.getLastName(),
                     "Your registration request has been accepted. Please sign in to use our services.\n\nRentaSoul Team", "", true);
-            try {
-                queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                queueProducer.produce(mdto);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
         }
         else {
             //Send notification email about rejecting to the agent.
             MessageDTO mdto = new MessageDTO("RentaSoul Registration for " + user.getFirstName() + " " + user.getLastName(),
                     "Your registration request has been rejected. You can send new request at any moment.\n\nRentaSoul Team", "", true);
-            try {
-                queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                queueProducer.produce(mdto);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
 
             delete(agnRegDTO.getId());
             return new ResponseEntity<>("User successfully deleted", HttpStatus.OK);
@@ -320,11 +319,11 @@ public class UserService {
             deleteUser(vt.getUser().getId());
             MessageDTO mdto = new MessageDTO("RentaSoul Registration", "Your registration token has expired. Please send new registration request.",
                     "", true);
-            try {
-                queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                queueProducer.produce(mdto);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
 
             throw new BadRequestException("Registration token expired. Please send new registration request.");
         }
@@ -335,11 +334,11 @@ public class UserService {
         // if everything is ok, notify user through email also
         MessageDTO mdto = new MessageDTO("RentaSoul Registration", "Activation successful. Please sign in to use our services.",
                 "", true);
-        try {
-            queueProducer.produce(mdto);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            queueProducer.produce(mdto);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
 
         return new ResponseEntity<>("Activation successful. Please sign in to use our services.", HttpStatus.OK);
     }
