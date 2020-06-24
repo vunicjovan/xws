@@ -9,10 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MessageDTO {
+public class ResetDTO {
 
-    private String title;
-    private String content;
-    private Boolean isAgentRegistration;
+    private String email;
+    private String newPassword;
+    private String newPasswordRetype;
+    private String token;
 
 }

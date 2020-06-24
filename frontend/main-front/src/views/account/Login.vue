@@ -29,6 +29,8 @@
 				<md-card-actions>
 					<md-button type="submit" class="md-primary">Login</md-button>
 				</md-card-actions>
+				<br>
+				<md-button class="pasbut md-primary" @click.native="$router.push('/sendReset')">Forgot your password?</md-button>
 			</md-card>
 			<md-snackbar :md-active.sync="userLogged">Welcome, {{ lastUser }}!</md-snackbar>
 		</form>
@@ -113,5 +115,12 @@ export default {
 </script>
 
 <style scoped>
-
+	.pasbut {
+		text-align: center;
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 35%;
+		margin-right: 15%;
+		font-size: 70%;
+	}
 </style>

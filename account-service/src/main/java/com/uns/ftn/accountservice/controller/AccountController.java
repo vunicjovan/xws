@@ -2,10 +2,7 @@ package com.uns.ftn.accountservice.controller;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.domain.User;
-import com.uns.ftn.accountservice.dto.AgentRegisterDTO;
-import com.uns.ftn.accountservice.dto.PasswordChangeDTO;
-import com.uns.ftn.accountservice.dto.UserDTO;
-import com.uns.ftn.accountservice.dto.UserResponseDTO;
+import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.service.JWTUtil;
 import com.uns.ftn.accountservice.service.SimpleUserService;
 import com.uns.ftn.accountservice.service.UserService;
@@ -75,6 +72,16 @@ public class AccountController {
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.registerUser(userDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/invokeReset", produces = "application/json")
+    public ResponseEntity<?> invokePasswordReset(@RequestBody EmailDTO edto) {
+        return userService.createResetToken(edto);
+    }
+
+    @PutMapping(value = "/resetPassword", consumes = "application/json")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetDTO rdto) {
+        return userService.resetPassword(rdto);
     }
 
     @PreAuthorize("hasAuthority('create')")
