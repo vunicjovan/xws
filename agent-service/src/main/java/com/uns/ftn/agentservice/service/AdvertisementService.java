@@ -96,7 +96,7 @@ public class AdvertisementService {
      * Returns TRUE if data is valid, else returns FALSE.
      */
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         String lrx = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
         Pattern pattern = Pattern.compile(regex);
         Pattern lpattern = Pattern.compile(lrx);
