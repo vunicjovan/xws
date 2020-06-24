@@ -1,7 +1,6 @@
 package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.AdvertisementClient;
-import com.uns.ftn.agent.controller.AdvertisementController;
 import com.uns.ftn.agent.domain.*;
 import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.BadRequestException;
@@ -17,7 +16,6 @@ import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
 import rs.ac.uns.ftn.catalog.NewCommentResponse;
 import rs.ac.uns.ftn.catalog.NewRentingIntervalResponse;
 
-import javax.xml.datatype.DatatypeFactory;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -159,7 +157,7 @@ public class AdvertisementService {
     }
 
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         String lrx = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
         Pattern pattern = Pattern.compile(regex);
         Pattern lpattern = Pattern.compile(lrx);

@@ -23,12 +23,14 @@
 									<label>Comment title</label>
 									<md-textarea v-model="commentTitle" md-autogrow>
 										<span class="md-error" v-if="!$v.commentTitle.required">Comment title is required</span>
+										<span class="md-error" v-else-if="!$v.commentTitle.sqli">Title is not in proper format</span>
 									</md-textarea>
 								</md-field>
 								<md-field :class="{ 'md-invalid': $v.commentContent.$error }">
 									<label>Comment content</label>
 									<md-textarea v-model="commentContent" md-autogrow>
 										<span class="md-error" v-if="!$v.commentContent.required">Comment text is required</span>
+										<span class="md-error" v-else-if="!$v.commentContent.sqli">Comment is not in proper format</span>
 									</md-textarea>
 								</md-field>
 							</md-dialog-content>
@@ -104,8 +106,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
-import { helpers } from "vuelidate/lib/validators";
+import { required, helpers } from "vuelidate/lib/validators";
+
+const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\s?]+)$/);
+
 export default {
 	mixins: [validationMixin],
   
@@ -229,10 +233,12 @@ export default {
 
 	validations: {
         commentContent: {
-            required,
+			required,
+			sqli,
         },
         commentTitle: {
-            required,
+			required,
+			sqli,
         },
         rating: {
             required,

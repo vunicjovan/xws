@@ -373,7 +373,6 @@ public class UserService {
     }
 
     public ResponseEntity<?> registerAgent(AgentRegisterDTO agnRegDTO) {
-        // TODO: check if sender is really AGENT
         User user = findOne(agnRegDTO.getId());
         if(user.getEnabled()) {
             throw new BadRequestException("User already registered and verified!");

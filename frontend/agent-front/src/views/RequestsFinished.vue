@@ -14,7 +14,7 @@
 						<md-field :class="{ 'md-invalid': $v.form.content.$error }">
 							<label>Free Notes</label>
 							<md-textarea v-model="form.content"></md-textarea>
-							<span class="md-error" v-if="!$v.form.content.required">Content is requeired</span>
+							<span class="md-error" v-if="!$v.form.content.required">Content is required</span>
 							<span class="md-error" v-else-if="!$v.form.content.sqli">Content is not properly formed</span>
 						</md-field>
 					</form>
@@ -48,7 +48,8 @@ import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, integer, decimal, helpers } from "vuelidate/lib/validators";
 
-const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\s?]+)$/);
+const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\s?]+)$/);
+
 export default {
 	name: "RequestsFinished",
 	mixins: [validationMixin],

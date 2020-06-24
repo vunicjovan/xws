@@ -123,7 +123,7 @@
 												<md-field :class="getValidationClass('title')">
 													<label>Title</label>
 													<md-input type="text" v-model="comment.title"></md-input>
-													<span class="md-error" v-if="!$v.comment.title.required">Title is rquired</span>
+													<span class="md-error" v-if="!$v.comment.title.required">Title is required</span>
 													<span class="md-error" v-if="!$v.comment.title.lrx">Title is not well formed</span>
 												</md-field>
 											</div>
@@ -220,7 +220,8 @@ import "swiper/css/swiper.css";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { helpers } from "vuelidate/lib/validators";
-const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
+
+const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\s?]+)$/);
 
 export default {
 	name: "AdvertisementList",
@@ -246,96 +247,6 @@ export default {
 			},
 			showModal: false,
 			showPhotos: false,
-			ads: [
-				{
-					id: 1,
-					brand: "Mercedes",
-					model: "MP40",
-					vehicleClass: "Sportscar",
-					price: 1000,
-					location: "Dortmund",
-					fuel: "Diesel",
-					gearbox: "Dual clutch",
-					kmTraveled: 1345,
-					dailyLimit: 46,
-					childSeatNumber: 2,
-					android: true,
-					cdw: false,
-					description: "That's a hell of a car right there, sir.",
-					photos: [
-						"https://www.mercedes-benz.com/en/company/_jcr_content/root/slider/sliderchilditems/slideritem/image/MQ7-0-image-20191025121730/01-mercedes-benz-ag-company-3400x1440.jpeg",
-						"https://www.mercedes-benz.com/en/eq/_jcr_content/root/slider_copy/sliderchilditems/slideritem_1624211537/image/MQ7-0-image-20190910102600/01-mercedes-benz-vision-eqs-show-car-mercedes-benz-eq-3400x1440.jpeg",
-						"https://robbreportedit.files.wordpress.com/2019/09/19c0690_025.jpg",
-						"https://img-ik.cars.co.za/images/2019/9/Merc%20EQS/tr:n-news_large/mercedes-benz-vision-eqs-2019%203.jpg",
-					],
-				},
-				{
-					id: 2,
-					brand: "Mercedes",
-					model: "MP40",
-					vehicleClass: "Sportscar",
-					price: 1000,
-					location: "Dortmund",
-					fuel: "Diesel",
-					gearbox: "Dual clutch",
-					kmTraveled: 1345,
-					dailyLimit: 46,
-					childSeatNumber: 2,
-					android: true,
-					cdw: false,
-					description: "That's a hell of a car right there, sir.",
-					photos: [
-						"https://www.mercedes-benz.com/en/company/_jcr_content/root/slider/sliderchilditems/slideritem/image/MQ7-0-image-20191025121730/01-mercedes-benz-ag-company-3400x1440.jpeg",
-						"https://www.mercedes-benz.com/en/eq/_jcr_content/root/slider_copy/sliderchilditems/slideritem_1624211537/image/MQ7-0-image-20190910102600/01-mercedes-benz-vision-eqs-show-car-mercedes-benz-eq-3400x1440.jpeg",
-						"https://robbreportedit.files.wordpress.com/2019/09/19c0690_025.jpg",
-						"https://img-ik.cars.co.za/images/2019/9/Merc%20EQS/tr:n-news_large/mercedes-benz-vision-eqs-2019%203.jpg",
-					],
-				},
-				{
-					id: 3,
-					brand: "Mercedes",
-					model: "MP40",
-					vehicleClass: "Sportscar",
-					price: 1000,
-					location: "Dortmund",
-					fuel: "Diesel",
-					gearbox: "Dual clutch",
-					kmTraveled: 1345,
-					dailyLimit: 46,
-					childSeatNumber: 2,
-					android: true,
-					cdw: false,
-					description: "That's a hell of a car right there, sir.",
-					photos: [
-						"https://www.mercedes-benz.com/en/company/_jcr_content/root/slider/sliderchilditems/slideritem/image/MQ7-0-image-20191025121730/01-mercedes-benz-ag-company-3400x1440.jpeg",
-						"https://www.mercedes-benz.com/en/eq/_jcr_content/root/slider_copy/sliderchilditems/slideritem_1624211537/image/MQ7-0-image-20190910102600/01-mercedes-benz-vision-eqs-show-car-mercedes-benz-eq-3400x1440.jpeg",
-						"https://robbreportedit.files.wordpress.com/2019/09/19c0690_025.jpg",
-						"https://img-ik.cars.co.za/images/2019/9/Merc%20EQS/tr:n-news_large/mercedes-benz-vision-eqs-2019%203.jpg",
-					],
-				},
-				{
-					id: 4,
-					brand: "Mercedes",
-					model: "MP40",
-					vehicleClass: "Sportscar",
-					price: 1000,
-					location: "Dortmund",
-					fuel: "Diesel",
-					gearbox: "Dual clutch",
-					kmTraveled: 1345,
-					dailyLimit: 46,
-					childSeatNumber: 2,
-					android: true,
-					cdw: false,
-					description: "That's a hell of a car right there, sir.",
-					photos: [
-						"https://www.mercedes-benz.com/en/company/_jcr_content/root/slider/sliderchilditems/slideritem/image/MQ7-0-image-20191025121730/01-mercedes-benz-ag-company-3400x1440.jpeg",
-						"https://www.mercedes-benz.com/en/eq/_jcr_content/root/slider_copy/sliderchilditems/slideritem_1624211537/image/MQ7-0-image-20190910102600/01-mercedes-benz-vision-eqs-show-car-mercedes-benz-eq-3400x1440.jpeg",
-						"https://robbreportedit.files.wordpress.com/2019/09/19c0690_025.jpg",
-						"https://img-ik.cars.co.za/images/2019/9/Merc%20EQS/tr:n-news_large/mercedes-benz-vision-eqs-2019%203.jpg",
-					],
-				},
-			],
 			selectedAdvertisement: undefined,
 			rentingInterval: {
 				startDate: undefined,
