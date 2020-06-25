@@ -16,6 +16,9 @@ import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
 import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
 import StatisticReport from "../views/statistic/StatisticReport.vue";
+import AccountActivation from "../views/account/AccountActivation.vue";
+import ResetPassword from "../views/account/ResetPassword.vue";
+import ResetEmail from "../views/account/SendResetEmail.vue";
 
 Vue.use(VueRouter);
 
@@ -99,6 +102,21 @@ const routes = [
 		path: "/statistic/:id",
 		name: "StatisticReport",
 		component: StatisticReport
+	},
+	{
+		path: "/registerUser/:token",
+		name: "AccountActivation",
+		component: AccountActivation
+	},
+	{
+		path: "/resetPassword/:token",
+		name: "ResetPassword",
+		component: ResetPassword
+	},
+	{
+		path: "/sendReset",
+		name: "ResetEmail",
+		component: ResetEmail
 	},
 ];
 

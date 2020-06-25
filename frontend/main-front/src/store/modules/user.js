@@ -89,10 +89,49 @@ const actions = {
 		});
 	},
 
+	activateAccount({ commit }, token) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.activateAccount(token)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
 	changePassword({ commit }, passwordSet) {
 		return new Promise((resolve, reject) => {
 			accountApi
 				.changePassword(passwordSet)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
+	createResetToken({ commit }, email) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.createResetToken(email)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
+	resetPassword({ commit }, tokenDTO) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.resetPassword(tokenDTO)
 				.then((data) => {
 					resolve(data);
 				})

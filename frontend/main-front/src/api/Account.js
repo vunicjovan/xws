@@ -43,6 +43,24 @@ export default {
 		return axios.delete("/account/logout/").then((response) => {
 			return response.data;
 		});
-	}
+	},
+  
+	activateAccount(token) {
+		return axios.put(`/account/activate/${token}`).then((response) => {
+			return response.data;
+		});
+	},
+
+	createResetToken(email) {
+		return axios.post("/account/invokeReset/", email).then((response) => {
+			return response.data;
+		});
+	},
+
+	resetPassword(tokenDTO) {
+		return axios.put("/account/resetPassword/", tokenDTO).then((response) => {
+			return response.data;
+		});
+	},
 	
 };

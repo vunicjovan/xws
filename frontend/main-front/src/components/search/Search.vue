@@ -23,6 +23,7 @@
 							<label>Address</label>
 							<md-input v-model="address"></md-input>
 							<span class="md-error" v-if="!$v.address.required">Address is required</span>
+							<span class="md-error" v-else-if="!$v.address.lrx">Address must contain capital words</span>
 						</md-field>
 					</md-dialog-content>
 				</md-tab>
@@ -121,8 +122,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required, integer, decimal, between } from "vuelidate/lib/validators";
-import { helpers } from "vuelidate/lib/validators";
+import { required, integer, decimal, between, helpers } from "vuelidate/lib/validators";
+
+const lrx = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\s?)+$/);
 
 export default {
 	mixins: [validationMixin],
@@ -233,6 +235,7 @@ export default {
 		},
 		address: {
 			required,
+			lrx,
 		},
 		kilometersTraveled: {
 			integer,

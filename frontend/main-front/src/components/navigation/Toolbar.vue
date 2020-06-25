@@ -4,7 +4,7 @@
 			<router-link to="/">
 				<span class="md-layout" :class="`md-alignment-center-center`">
 					<img class="md-layout-item" alt="Vue logo" src="../../assets/logo1.png" />
-					<div><p class="md-layout-item md-title a">RentaSoul</p></div>
+					<md-tooltip>RentaSoul Homepage</md-tooltip>
 				</span>
 			</router-link>
 			<div style="flex: 1;"></div>
