@@ -8,15 +8,18 @@ import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
+import com.uns.ftn.accountservice.exceptions.UnauthorizedException;
 import com.uns.ftn.accountservice.repository.AgentRepository;
 import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
 import com.uns.ftn.coreapi.commands.CreateSimpleUserCommand;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -134,6 +137,37 @@ public class UserService {
         checkIfBlockedOrDeleted(authenticationRequest.getEmail());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return new AuthenticationResponse(jwt);
+    }
+
+    public ResponseCookie createCookie(String mail) {
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
+        return ResponseCookie.
+                from("refreshToken", jwtUtil.generateRefreshToken(userDetails))
+                .path("/account")
+                .maxAge(60 * 40)
+                .sameSite("Strict")
+                .httpOnly(true)
+                .build();
+    }
+
+    public ResponseCookie refreshCookie(String token) {
+        String username = jwtUtil.extractUsername(token);
+        return createCookie(username);
+    }
+
+    public AuthenticationResponse refreshToken(String token) {
+        try {
+            jwtUtil.isTokenExpired(token);
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException("Refresh token has expired!");
+        }
+
+        String username = jwtUtil.extractUsername(token);
+        checkIfBlockedOrDeleted(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);
