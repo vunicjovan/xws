@@ -16,7 +16,13 @@ Vue.use(VueMaterial);
 Vue.use(VueResource);
 Vue.use(VueChatScroll);
 
-axios.defaults.baseURL = "https://localhost:8089";
+
+axios.defaults.baseURL = "http://localhost:8089";
+axios.defaults.withCredentials = true
+axios.defaults.credentials = 'include'
+
+let refreshing = false;
+let waitingActions = [];
 
 axios.interceptors.request.use(
 	(config) => {
@@ -40,9 +46,53 @@ axios.interceptors.response.use(
 		return response;
 	},
 	(error) => {
+		const {
+			config,
+			response: {status, data}
+		} = error
+		
+		const requestInWait = config;
+
+		if (status === 401 && data === 'Token has expired!') {
+			if (!refreshing) {
+				refreshing = true;
+				store.dispatch("refreshToken")
+				.then(({status}) => {
+					if (status === 200) {
+						refreshing = false;
+					}
+					executeActions();
+					waitingActions = [];
+				})
+				.catch(error => {
+					store.dispatch("logout")
+					router.push("/login")
+
+				})
+			}
+
+			const requestAction = new Promise((resolve) => {
+				appendAction(() => {
+					resolve(axios(requestInWait))
+				});
+			});
+
+			return requestAction
+		}
+
 		return Promise.reject(error);
 	}
 );
+
+function appendAction (action) {
+	waitingActions.push(action);
+}
+
+function executeActions() {
+	waitingActions.map(action => action())
+}
+
+waitingActions = [];
 
 Vue.config.productionTip = false;
 

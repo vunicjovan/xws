@@ -42,6 +42,30 @@ const actions = {
 		localStorage.removeItem("auth");
 		commit("setLogged", false);
 		commit("setLoggedUser", null);
+		return new Promise((resolve, reject) => {
+			accountApi
+				.logout()
+				.then(() => {
+					resolve();
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
+	refreshToken({ commit }) {
+		localStorage.removeItem("auth")
+		return new Promise((resolve, reject) => {
+			accountApi
+				.refreshToken()
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
 	},
 
 	setLogged({ commit }, condition) {
