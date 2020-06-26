@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +32,7 @@ public class RentingReportController {
         return null;
     }
 
+    @PreAuthorize("hasAuthority('CREATE_RENT_REPORT')")
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> createReport(@RequestBody RentingReportDTO rdto) {
         LOGGER.info("User requested creating new rentingReport[requestId={}, advertisementId={}]", rdto.getRequestID(),

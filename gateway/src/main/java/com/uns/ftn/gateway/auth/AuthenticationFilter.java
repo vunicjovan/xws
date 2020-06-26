@@ -70,6 +70,8 @@ public class AuthenticationFilter extends ZuulFilter {
             setFailedRequest("User does not exist!", 403);
         } catch (FeignException.Unauthorized e) {
             setFailedRequest("Token has expired!", 401);
+        } catch (FeignException.Forbidden e) {
+            setFailedRequest("Permission denied!", 403);
         }
 
         return null;

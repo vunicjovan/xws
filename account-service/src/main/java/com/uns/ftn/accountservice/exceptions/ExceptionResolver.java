@@ -32,4 +32,11 @@ public class ExceptionResolver {
         return new ResponseEntity<>(exception.getMessage(), headers, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<?> unauthorizedException(ForbiddenException exception) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return new ResponseEntity<>(exception.getMessage(), headers, HttpStatus.FORBIDDEN);
+    }
+
 }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -53,6 +54,7 @@ public class RentingRequestController {
         return new ResponseEntity<>(requestService.getHistoryUser(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('CREATE_RENT_REQUEST')")
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> createRequest(@RequestBody RentingRequestDTO rdto) {
         LOGGER.info("User had requested adding new rentingRequest[senderId={}]", rdto.getSenderId());
@@ -65,6 +67,7 @@ public class RentingRequestController {
         return requestService.updateRequestStatus(id, request);
     }
 
+    // agent-service: post comment
     @GetMapping("/comment/{requestId}/{advertisementId}")
     public ResponseEntity<?> checkCommentPostPermission(@PathVariable("requestId") Long requestId,
                                                       @PathVariable("advertisementId") Long advertisementId) {

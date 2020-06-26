@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
@@ -41,6 +42,7 @@ public class ViewController {
         return new ResponseEntity<>(viewService.getAdvert(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GET_PERSONAL_ADVERTISEMENTS')")
     @GetMapping("/agent/{id}")
     public ResponseEntity<?> agentAds(@PathVariable("id") Long id) {
         LOGGER.info("Feign client had requested advertisements for agent[id={}]", id);
@@ -53,6 +55,7 @@ public class ViewController {
         return new ResponseEntity<>(viewService.getCommentClient(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GET_CART_ITEMS')")
     @GetMapping("/cart")
     public ResponseEntity<?> cartView(@RequestParam(value = "cart") List<Long> advertisementIdList) {
         LOGGER.info("User had requested cart items.");
