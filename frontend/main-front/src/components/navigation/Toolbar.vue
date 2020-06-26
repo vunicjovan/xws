@@ -98,7 +98,6 @@ export default {
 		...mapActions(["logout"]),
 		logout() {
 			this.$store.dispatch("logout");
-			this.$router.push("/login")
 		},
 	},
 	components: {

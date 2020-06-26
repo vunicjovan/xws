@@ -1,11 +1,10 @@
 package com.uns.ftn.catalogservice.client;
 
-import com.uns.ftn.catalogservice.conf.FeignClientConf;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "agent-service", configuration = FeignClientConf.class, url = "https://localhost:8089/agent")
+@FeignClient(name = "agent-service")
 public interface VehicleClient {
 
     @GetMapping("/ad/modelCheck/{id}")

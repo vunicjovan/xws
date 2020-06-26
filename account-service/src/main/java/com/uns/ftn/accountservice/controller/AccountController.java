@@ -1,24 +1,16 @@
 package com.uns.ftn.accountservice.controller;
 
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
-import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.domain.User;
 import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.service.JWTUtil;
 import com.uns.ftn.accountservice.service.SimpleUserService;
 import com.uns.ftn.accountservice.service.UserService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -74,9 +66,7 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        AuthenticationResponse response = userService.login(authenticationRequest);
-        ResponseCookie responseCookie = userService.createCookie(authenticationRequest.getEmail());
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(response);
+        return new ResponseEntity<>(userService.login(authenticationRequest), HttpStatus.ACCEPTED);
     }
 
     @PostMapping(value = "/register", produces = "application/json")
@@ -125,25 +115,6 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return userService.deleteUser(id);
-    }
-
-    @PutMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@CookieValue(value = "refreshToken", required = true) String cookie) {
-        AuthenticationResponse response = userService.refreshToken(cookie);
-        ResponseCookie responseCookie = userService.refreshCookie(cookie);
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(response);
-    }
-
-    @DeleteMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(value = "refreshToken", required = true) String cookie) {
-        ResponseCookie responseCookie = ResponseCookie.
-                from("refreshToken", cookie)
-                .path("/account")
-                .maxAge(0)
-                .sameSite("Strict")
-                .httpOnly(true).build();
-
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).build();
     }
 
 }
