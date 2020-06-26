@@ -11,6 +11,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "fs": "0.0.1-security",
     "hooper": "^0.3.4",
     "sockjs-client": "^1.4.0",
     "vue": "^2.6.11",
