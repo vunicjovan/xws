@@ -29,22 +29,6 @@ export default {
 		});
 	},
 
-	refreshToken() {
-		return axios.put("/account/refresh/").then((response) => {
-			if (response.data != null) {
-				localStorage.setItem("auth", `Bearer ${response.data.jwt}`);
-			}
-
-			return response;
-		});
-	},
-
-	logout() {
-		return axios.delete("/account/logout/").then((response) => {
-			return response.data;
-		});
-	},
-  
 	activateAccount(token) {
 		return axios.put(`/account/activate/${token}`).then((response) => {
 			return response.data;

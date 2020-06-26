@@ -1,8 +1,7 @@
-const fs = require("fs");
+const fs = require('fs')
 
 module.exports = {
-	devServer: {
-		port: 8090,
-		https: true,
-	},
-};
+    devServer: {
+      port: 8090
+    }
+  };

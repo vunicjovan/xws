@@ -1,8 +1,6 @@
 package com.uns.ftn.accountservice.service;
 
-import com.uns.ftn.accountservice.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +30,7 @@ public class JWTUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -42,26 +40,16 @@ public class JWTUtil {
         return createToken(claims, userDetails.getUsername());
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 40))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
-    }
-
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 20))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 8760)) //istice za godinu dana
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
     public List<String> validateToken(String token) {
-        try {
-            isTokenExpired(token);
-        } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException("Token is expired!");
+        if (isTokenExpired(token)) {
+            return null;
         }
 
         Claims claims = extractAllClaims(token);

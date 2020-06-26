@@ -68,8 +68,6 @@ public class AuthenticationFilter extends ZuulFilter {
 
         } catch (FeignException.NotFound e) {
             setFailedRequest("Consumer does not exist!", 403);
-        } catch (FeignException.Unauthorized e) {
-            setFailedRequest("Token has expired!", 401);
         }
 
         return null;
