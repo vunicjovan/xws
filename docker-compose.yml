@@ -216,3 +216,11 @@ services:
       - 5672:5672
       - 5671:5671
       - 15671:15671
+    environment:
+      RABBITMQ_SSL_CACERTFILE: /etc/rabbitmq/cert/tls-ca-chain.pem
+      RABBITMQ_SSL_CERTFILE: /etc/rabbitmq/cert/rabbitmq.crt
+      RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: "true"
+      RABBITMQ_SSL_KEYFILE: /etc/rabbitmq/cert/rabbitmq.key
+      RABBITMQ_SSL_VERIFY: verify_peer
+    volumes:
+      - ./tls/certs/rabbitmq:/etc/rabbitmq/cert
