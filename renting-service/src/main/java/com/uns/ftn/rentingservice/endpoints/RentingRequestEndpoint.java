@@ -1,7 +1,11 @@
 package com.uns.ftn.rentingservice.endpoints;
 
+import com.uns.ftn.rentingservice.domain.RentingReport;
+import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.dto.GetRentingRequestDTO;
 import com.uns.ftn.rentingservice.service.RentingRequestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -20,6 +24,8 @@ import java.util.Set;
 @Endpoint
 public class RentingRequestEndpoint {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RentingRequestEndpoint.class);
+
     private static final String NAMESPACE_URI = "http://www.ftn.uns.ac.rs/renting";
 
     private RentingRequestService requestService;
@@ -32,6 +38,7 @@ public class RentingRequestEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getFinishedRequest")
     @ResponsePayload
     public GetFinishedResponse getFinishedRequests(@RequestPayload GetFinishedRequest getFinishedRequest) {
+        LOGGER.info("User had entered getFinishedRequest endpoint with SOAP");
         GetFinishedResponse response = new GetFinishedResponse();
         Set<GetRentingRequestDTO> requests = requestService.getAllFinished(getFinishedRequest.getId());
 

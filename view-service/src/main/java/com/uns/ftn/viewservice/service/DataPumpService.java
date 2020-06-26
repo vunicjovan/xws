@@ -3,6 +3,8 @@ package com.uns.ftn.viewservice.service;
 import com.uns.ftn.viewservice.domain.*;
 import com.uns.ftn.viewservice.dto.*;
 import com.uns.ftn.viewservice.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.util.HashSet;
 
 @Service
 public class DataPumpService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataPumpService.class);
 
     private final AdvertisementRepository advertisementRepository;
     private final VehicleRepository vehicleRepository;
@@ -37,6 +41,7 @@ public class DataPumpService {
     }
 
     public void advertisementHandler(AdvertisementDTO advertisementDTO) {
+        LOGGER.debug("Advertisement data pump handler start advertisement[id={}]", advertisementDTO.getId());
         Advertisement advertisement = advertisementRepository.findById(advertisementDTO.getId()).orElse(null);
         Vehicle vehicle = vehicleRepository.findById(advertisementDTO.getVehicle().getId()).orElse(null);
 
@@ -70,9 +75,14 @@ public class DataPumpService {
 
         advertisementRepository.save(advertisement);
         vehicleRepository.save(vehicle);
+        LOGGER.info("Database entry: saved advertisement[id={}, brand={}, model={}]", advertisement.getId(),
+                vehicle.getModel().getBrand().getName(), vehicle.getModel().getName());
+        LOGGER.debug("Advertisement data pump handler finish advertisement[id={}]", advertisement.getId());
     }
 
     public void fuelTypeHandler(FuelTypeDTO fuelTypeDTO) {
+        LOGGER.debug("Fuel type data pump handler start fuelType[id={}, name={}]", fuelTypeDTO.getId(),
+                fuelTypeDTO.getName());
         FuelType fuelType = findFuelTypeById(fuelTypeDTO.getId());
 
         if (fuelType == null) {
@@ -84,9 +94,14 @@ public class DataPumpService {
         fuelType.setDeleted(fuelTypeDTO.getDeleted());
 
         fuelTypeRepository.save(fuelType);
+        LOGGER.info("Database entry: saved fuelType[id={}, name={}]", fuelType.getId(), fuelType.getName());
+        LOGGER.debug("Fuel type data pump handler finish fuelType[id={}, name={}]", fuelType.getId(),
+                fuelType.getName());
     }
 
     public void gearboxTypeHandler(GearboxTypeDTO gearboxTypeDTO) {
+        LOGGER.debug("Gearbox type data pump handler start gearboxType[id={}, name={}]", gearboxTypeDTO.getId(),
+                gearboxTypeDTO.getName());
         GearboxType gearboxType = findGearboxTypeById(gearboxTypeDTO.getId());
 
         if (gearboxType == null) {
@@ -98,9 +113,14 @@ public class DataPumpService {
         gearboxType.setDeleted(gearboxTypeDTO.getDeleted());
 
         gearboxTypeRepository.save(gearboxType);
+        LOGGER.info("Database entry: saved gearboxType[id={}, name={}]", gearboxType.getId(), gearboxType.getName());
+        LOGGER.debug("Gearbox type data pump handler finish fuelType[id={}, name={}]", gearboxType.getId(),
+                gearboxType.getName());
     }
 
     public void vehicleClassHandler(VehicleClassDTO vehicleClassDTO) {
+        LOGGER.debug("Gearbox type data pump handler start vehicleClass[id={}, name={}]", vehicleClassDTO.getId(),
+                vehicleClassDTO.getName());
         VehicleClass vehicleClass = findVehicleClassById(vehicleClassDTO.getId());
 
         if (vehicleClass == null) {
@@ -112,23 +132,34 @@ public class DataPumpService {
         vehicleClass.setDeleted(vehicleClassDTO.getDeleted());
 
         vehicleClassRepository.save(vehicleClass);
+        LOGGER.info("Database entry: saved vehicleClass[id={}, name={}]", vehicleClass.getId(), vehicleClass.getName());
+        LOGGER.debug("Gearbox type data pump handler finish vehicleClass[id={}, name={}]", vehicleClass.getId(),
+                vehicleClass.getName());
     }
 
     public void brandHandler(BrandDTO brandDTO) {
+        LOGGER.debug("Brand data pump handler start brand[id={}, name={}]", brandDTO.getId(),
+                brandDTO.getName());
         Brand brand = findBrandById(brandDTO.getId());
 
         if (brand == null) {
             brand = new Brand();
             brand.setId(brandDTO.getId());
-
-            brand.setName(brandDTO.getName());
-            brand.setDeleted(brandDTO.getDeleted());
-
-            brandRepository.save(brand);
         }
+
+        brand.setName(brandDTO.getName());
+        brand.setDeleted(brandDTO.getDeleted());
+
+        brandRepository.save(brand);
+        LOGGER.info("Database entry: saved brand[id={}, name={}]", brand.getId(), brand.getName());
+        LOGGER.debug("Brand data pump handler finish brand[id={}, name={}]", brand.getId(),
+                brand.getName());
+
     }
 
     public void modelHandler(ModelDTO modelDTO) {
+        LOGGER.debug("Model data pump handler start model[id={}, name={}, brand={}]", modelDTO.getId(),
+                modelDTO.getName(), modelDTO.getBrand().getName());
         Model model = findModelById(modelDTO.getId());
         Brand brand = findBrandById(modelDTO.getBrand().getId());
 
@@ -142,9 +173,15 @@ public class DataPumpService {
         model.setBrand(brand);
 
         modelRepository.save(model);
+        LOGGER.info("Database entry: saved model[id={}, name={}, brand={}]", modelDTO.getId(), modelDTO.getName(),
+                modelDTO.getBrand().getName());
+        LOGGER.debug("Model data pump handler finish model[id={}, name={}, brand={}]", model.getId(),
+                model.getName(), model.getBrand().getName());
     }
 
     public void photoHandler(PhotoDTO photoDTO) {
+        LOGGER.debug("Photo data pump handler start photo[id={}, path={}]", photoDTO.getId(), photoDTO.getPath());
+
         Photo photo = findPhotoById(photoDTO.getId());
         Advertisement ad = findAdvertisementById(photoDTO.getAdvertisementId());
 
@@ -161,9 +198,12 @@ public class DataPumpService {
         photo.setAdvertisement(ad);
 
         photoRepository.save(photo);
+        LOGGER.info("Database entry: saved photo[id={}, path={}]", photoDTO.getId(), photoDTO.getPath());
+        LOGGER.debug("Photo data pump handler finish photo[id={}, path={}]", photo.getId(), photo.getPath());
     }
 
     public void commentHandler(CommDTO commDTO) {
+        LOGGER.debug("Comment data pump handler start comment[id={}, title={}]", commDTO.getId(), commDTO.getTitle());
         Advertisement advertisement = findAdvertisementById(commDTO.getAdvertisementId());
         Comment comment = new Comment();
         comment.setId(commDTO.getId());
@@ -174,9 +214,12 @@ public class DataPumpService {
         comment.setAdvertisement(advertisement);
 
         commentRepository.save(comment);
+        LOGGER.info("Database entry: saved comment[id={}, title={}]", comment.getId(), comment.getTitle());
+        LOGGER.debug("Comment data pump handler finish comment[id={}, title={}]", comment.getId(), comment.getTitle());
     }
 
     public void userHandler(UserDTO userDTO) {
+        LOGGER.debug("User data pump handler start user[id={}]", userDTO.getId());
         User user = new User();
         user.setId(userDTO.getId());
         user.setUserId(userDTO.getUserId());
@@ -195,6 +238,8 @@ public class DataPumpService {
         });
 
         userRepository.save(user);
+        LOGGER.info("Database entry: saved user[id={}]", user.getId());
+        LOGGER.debug("User data pump handler finish user[id={}]", user.getId());
     }
 
     private FuelType findFuelTypeById(Long id) {

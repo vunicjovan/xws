@@ -5,6 +5,8 @@ import com.uns.ftn.searchservice.domain.RentingInterval;
 import com.uns.ftn.searchservice.dto.SimpleAdvertisementDTO;
 import com.uns.ftn.searchservice.exceptions.BadRequestException;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class SearchService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchService.class);
 
     private AdvertisementService advertisementService;
 
@@ -36,6 +39,10 @@ public class SearchService {
 
         location = Encode.forHtml(location);
         List<Advertisement> advertisements = advertisementService.findByLocationLike(location);
+
+        if(advertisements.size() == 0) {
+            LOGGER.warn("Advertisement list size 0 for location={}", location);
+        }
 
         return new ResponseEntity<>(findAvailable(advertisements, startDate, endDate), HttpStatus.OK);
     }

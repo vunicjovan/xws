@@ -2,6 +2,8 @@ package com.uns.ftn.rentingservice.controller;
 
 import com.uns.ftn.rentingservice.dto.RentingReportDTO;
 import com.uns.ftn.rentingservice.service.RentingReportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/report")
 public class RentingReportController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RentingReportController.class);
 
     private RentingReportService reportService;
 
@@ -30,6 +33,8 @@ public class RentingReportController {
 
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> createReport(@RequestBody RentingReportDTO rdto) {
+        LOGGER.info("User requested creating new rentingReport[requestId={}, advertisementId={}]", rdto.getRequestID(),
+                rdto.getAdvertisementID());
         return new ResponseEntity<>(reportService.createReport(rdto), HttpStatus.CREATED);
     }
 

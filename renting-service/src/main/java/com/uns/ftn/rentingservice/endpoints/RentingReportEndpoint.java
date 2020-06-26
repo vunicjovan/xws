@@ -2,6 +2,8 @@ package com.uns.ftn.rentingservice.endpoints;
 
 import com.uns.ftn.rentingservice.dto.RentingReportDTO;
 import com.uns.ftn.rentingservice.service.RentingReportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -12,6 +14,8 @@ import rs.ac.uns.ftn.renting.CompileReportResponse;
 
 @Endpoint
 public class RentingReportEndpoint {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RentingReportEndpoint.class);
 
     private static final String NAMESPACE_URI = "http://www.ftn.uns.ac.rs/renting";
 
@@ -25,6 +29,8 @@ public class RentingReportEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "compileReportRequest")
     @ResponsePayload
     public CompileReportResponse compileRentingReport(@RequestPayload CompileReportRequest compileReportRequest) {
+        LOGGER.info("User had entered compileReportRequest endpoint with SOAP report[requestId={}, " +
+                "advertisementId={}", compileReportRequest.getRequestID(), compileReportRequest.getAdvertisementID());
         RentingReportDTO rdto = new RentingReportDTO();
         rdto.setKilometersTraveled(compileReportRequest.getKilometersTraveled());
         rdto.setContent(compileReportRequest.getContent());

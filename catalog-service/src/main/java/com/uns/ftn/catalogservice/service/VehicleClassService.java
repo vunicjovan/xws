@@ -9,6 +9,8 @@ import com.uns.ftn.catalogservice.exceptions.BadRequestException;
 import com.uns.ftn.catalogservice.exceptions.NotFoundException;
 import com.uns.ftn.catalogservice.repository.VehicleClassRepository;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class VehicleClassService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VehicleClassService.class);
 
     private VehicleClassRepository vehicleClassRepository;
     private QueueProducer queueProducer;
@@ -37,8 +41,10 @@ public class VehicleClassService {
     public VehicleClass save(VehicleClass vehicleClass) { return vehicleClassRepository.save(vehicleClass); }
 
     public VehicleClass findOne(Long id) {
-        return vehicleClassRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Requested vehicle class does not exist."));
+        return vehicleClassRepository.findById(id).orElseThrow(() ->{
+            LOGGER.warn("Database query: unable to find vehicle class with id={}", id);
+            return new NotFoundException("Requested vehicle class does not exist.");
+        });
     }
 
     public Set<VehicleClassDTO> findAll() {
@@ -59,8 +65,9 @@ public class VehicleClassService {
     }
 
     public ResponseEntity<?> newVehicleClass(VehicleClassDTO vehicleClassDTO) {
-
+        LOGGER.debug("Adding new vehicle class...");
         if (!validatePostingData(vehicleClassDTO)) {
+            LOGGER.warn("Invalid format for vehicle class name={}", vehicleClassDTO.getName());
             throw new BadRequestException("Invalid format of vehicle class name. Please try again with valid input.");
         }
 
@@ -68,9 +75,11 @@ public class VehicleClassService {
 
         if (findByName(vehicleClassDTO.getName()) != null) {
             if (findByName(vehicleClassDTO.getName()).getDeleted()) {
-                findByName(vehicleClassDTO.getName()).setDeleted(false);
-                save(findByName(vehicleClassDTO.getName()));
-                return new ResponseEntity<>(new VehicleClassDTO(findByName(vehicleClassDTO.getName())), HttpStatus.CREATED);
+                VehicleClass vc = findByName(vehicleClassDTO.getName());
+                LOGGER.warn("Restoring previously deleted brand[id={}, name={}]", vc.getId(), vc.getName());
+                vc.setDeleted(false);
+                save(vc);
+                return new ResponseEntity<>(new VehicleClassDTO(vc), HttpStatus.CREATED);
             }
         }
 
@@ -79,45 +88,67 @@ public class VehicleClassService {
 
         try {
             vehicleClass = save(vehicleClass);
-            queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.info("Database entry: created new vehicleClass[id={}, name={}]", vehicleClass.getId(),
+                    vehicleClass.getName());
         } catch (Exception e) {
+            LOGGER.error("Error occurred during saving new vehicle class", e);
             throw new BadRequestException("Vehicle class with requested name already exist.");
         }
 
+        queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
+
+        LOGGER.debug("Finished adding new vehicle class...");
         return new ResponseEntity<>(new VehicleClassDTO(vehicleClass.getId(), vehicleClass.getName()),
                 HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> updateVehicleClass(VehicleClassDTO vehicleClassDTO) {
+        LOGGER.debug("Updating vehicleClass[id={}, name={}]", vehicleClassDTO.getId(), vehicleClassDTO.getName());
         VehicleClass vehicleClass = findOne(vehicleClassDTO.getId());
 
         if(!validatePostingData(vehicleClassDTO)) {
+            LOGGER.warn("Invalid format for vehicle class name={}", vehicleClassDTO.getName());
             throw new BadRequestException("Invalid format of vehicle class name. Please try again with valid input.");
         }
 
         vehicleClassDTO.setName(Encode.forHtml(vehicleClassDTO.getName()));
-
         vehicleClass.setName(vehicleClassDTO.getName());
+
         try {
             vehicleClass = save(vehicleClass);
+            LOGGER.info("Database update: updated vehicleClass[id={}, name={}]", vehicleClass.getId(),
+                    vehicleClass.getName());
         } catch (Exception e) {
+            LOGGER.error("Error occurred during saving updated vehicle class", e);
             throw new BadRequestException("Vehicle class with requested name already exist.");
         }
 
+        queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
+
+        LOGGER.debug("Finished updating vehicleClass[id={}, name{}]", vehicleClass.getId(), vehicleClass.getName());
         return new ResponseEntity<>(new VehicleClassDTO(vehicleClass.getId(), vehicleClass.getName()),
                 HttpStatus.OK);
     }
 
     public ResponseEntity<?> deleteVehicleClass(Long id) {
         VehicleClass vehicleClass = findOne(id);
+
+        LOGGER.debug("Deleting vehicleClass[id={}, name={}]", vehicleClass.getId(), vehicleClass.getName());
+
         if (!this.vehicleClient.checkIfClassIsTaken(id)) {
+            LOGGER.warn("Unable to delete vehicleClass[id={}, name={}] because it is still used by some vehicles",
+                    vehicleClass.getId(), vehicleClass.getName());
             throw new BadRequestException("Class cannot be deleted because it is still used by some vehicles.");
         }
+
         vehicleClass.setDeleted(true);
         vehicleClass = save(vehicleClass);
+        LOGGER.info("Database entry: deleted vehicleClass[id={}, name={}]", vehicleClass.getId(),
+                vehicleClass.getName());
 
+        queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
+
+        LOGGER.debug("Finished deleting vehicleClass[id={}, name={}]", vehicleClass.getId(), vehicleClass.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

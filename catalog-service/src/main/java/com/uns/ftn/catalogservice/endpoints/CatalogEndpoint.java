@@ -2,6 +2,8 @@ package com.uns.ftn.catalogservice.endpoints;
 
 import com.uns.ftn.catalogservice.dto.*;
 import com.uns.ftn.catalogservice.service.CatalogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -12,6 +14,7 @@ import rs.ac.uns.ftn.catalog.*;
 @Endpoint
 public class CatalogEndpoint {
     private static final String NAMESPACE_URI = "http://www.ftn.uns.ac.rs/catalog";
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogEndpoint.class);
 
     private CatalogService catalogService;
 
@@ -23,6 +26,7 @@ public class CatalogEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCatalogRequest")
     @ResponsePayload
     public GetCatalogResponse getCatalog() {
+        LOGGER.debug("User has enter /getCatalogRequest SOAP-endpoint.");
         GetCatalogResponse response = new GetCatalogResponse();
         CatalogDTO catalogDTO = catalogService.getCatalogSOAP();
 
@@ -70,6 +74,7 @@ public class CatalogEndpoint {
             response.getVehicleClasses().add(vehicleClass);
         }
 
+        LOGGER.debug("/getCatalogRequest SOAP-endpoint returning response.");
         return response;
     }
 }

@@ -5,11 +5,15 @@ import com.uns.ftn.searchservice.domain.*;
 import com.uns.ftn.searchservice.dto.*;
 import com.uns.ftn.searchservice.repository.*;
 import javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CatalogService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogService.class);
 
     private FuelTypeRepository fuelTypeRepository;
     private GearboxTypeRepository gearboxTypeRepository;
@@ -31,6 +35,8 @@ public class CatalogService {
     }
 
     public void updateFuelType(FuelTypeDTO fuelTypeDTO) {
+        LOGGER.debug("Fuel type data pump handler start fuelType[id={}, name={}]", fuelTypeDTO.getId(),
+                fuelTypeDTO.getName());
         FuelType fuelType = new FuelType();
 
         fuelType.setId(fuelTypeDTO.getId());
@@ -38,9 +44,14 @@ public class CatalogService {
         fuelType.setDeleted(fuelTypeDTO.getDeleted());
 
         fuelTypeRepository.save(fuelType);
+        LOGGER.info("Database entry: saved fuelType[id={}, name={}]", fuelType.getId(), fuelType.getName());
+        LOGGER.debug("Fuel type data pump handler finish fuelType[id={}, name={}]", fuelType.getId(),
+                fuelType.getName());
     }
 
     public void updateGearboxType(GearboxTypeDTO gearboxTypeDTO) {
+        LOGGER.debug("Gearbox type data pump handler start gearboxType[id={}, name={}]", gearboxTypeDTO.getId(),
+                gearboxTypeDTO.getName());
         GearboxType gearboxType = new GearboxType();
 
         gearboxType.setId(gearboxTypeDTO.getId());
@@ -48,9 +59,14 @@ public class CatalogService {
         gearboxType.setDeleted(gearboxTypeDTO.getDeleted());
 
         gearboxTypeRepository.save(gearboxType);
+        LOGGER.info("Database entry: saved gearboxType[id={}, name={}]", gearboxType.getId(), gearboxType.getName());
+        LOGGER.debug("Gearbox type data pump handler finish fuelType[id={}, name={}]", gearboxType.getId(),
+                gearboxType.getName());
     }
 
     public void updateBrand(BrandDTO brandDTO) {
+        LOGGER.debug("Brand data pump handler start brand[id={}, name={}]", brandDTO.getId(),
+                brandDTO.getName());
         Brand brand = new Brand();
 
         brand.setId(brandDTO.getId());
@@ -58,9 +74,14 @@ public class CatalogService {
         brand.setDeleted(brandDTO.getDeleted());
 
         brandRepository.save(brand);
+        LOGGER.info("Database entry: saved brand[id={}, name={}]", brand.getId(), brand.getName());
+        LOGGER.debug("Brand data pump handler finish brand[id={}, name={}]", brand.getId(),
+                brand.getName());
     }
 
     public void updateModel(ModelDTO modelDTO) {
+        LOGGER.debug("Model data pump handler start model[id={}, name={}, brand={}]", modelDTO.getId(),
+                modelDTO.getName(), modelDTO.getBrand().getName());
         Model model = new Model();
         Brand brand = brandRepository.findById(modelDTO.getBrand().getId()).orElseGet(() -> null);
 
@@ -71,10 +92,16 @@ public class CatalogService {
             model.setBrand(brand);
 
             modelRepository.save(model);
+            LOGGER.info("Database entry: saved model[id={}, name={}, brand={}]", modelDTO.getId(), modelDTO.getName(),
+                    modelDTO.getBrand().getName());
+            LOGGER.debug("Model data pump handler finish model[id={}, name={}, brand={}]", model.getId(),
+                    model.getName(), model.getBrand().getName());
         }
     }
 
     public void updateVehicleClass(VehicleClassDTO vehicleClassDTO) {
+        LOGGER.debug("Gearbox type data pump handler start vehicleClass[id={}, name={}]", vehicleClassDTO.getId(),
+                vehicleClassDTO.getName());
         VehicleClass vehicleClass = new VehicleClass();
 
         vehicleClass.setId(vehicleClassDTO.getId());
@@ -82,6 +109,9 @@ public class CatalogService {
         vehicleClass.setDeleted(vehicleClassDTO.getDeleted());
 
         vehicleClassRepository.save(vehicleClass);
+        LOGGER.info("Database entry: saved vehicleClass[id={}, name={}]", vehicleClass.getId(), vehicleClass.getName());
+        LOGGER.debug("Gearbox type data pump handler finish vehicleClass[id={}, name={}]", vehicleClass.getId(),
+                vehicleClass.getName());
     }
 
     public FuelType findOneFuelType(Long id) { return fuelTypeRepository.findById(id).orElseGet(() -> null); }
