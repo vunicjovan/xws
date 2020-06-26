@@ -67,7 +67,7 @@ public class AuthenticationFilter extends ZuulFilter {
             ctx.addZuulRequestHeader("permissions", permissions.toString());
 
         } catch (FeignException.NotFound e) {
-            setFailedRequest("Consumer does not exist!", 403);
+            setFailedRequest("User does not exist!", 403);
         } catch (FeignException.Unauthorized e) {
             setFailedRequest("Token has expired!", 401);
         }
