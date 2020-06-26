@@ -10,6 +10,8 @@ import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
 import com.uns.ftn.rentingservice.repository.RentingReportRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RentingRequestService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RentingRequestService.class);
 
     private AdvertisementRepository adRepo;
     private RentingRequestRepository requestRepo;
@@ -52,12 +56,15 @@ public class RentingRequestService {
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
-            .orElseThrow(() -> new NotFoundException("Requested renting request doesn't exist.")); }
+            .orElseThrow(() -> {
+                LOGGER.warn("Database query: request[id={}] doesn't exist", id);
+                return new NotFoundException("Requested renting request doesn't exist.");
+            }); }
 
     public RentingRequest save(RentingRequest rentingRequest) { return requestRepo.save(rentingRequest); }
 
     public ResponseEntity<?> createRequest(RentingRequestDTO rdto) {
-
+        LOGGER.debug("Adding new rentingRequest[senderId={}]", rdto.getSenderId());
         checkDateValidityForRequest(rdto);
 
         // check if all requested advertisements exist
@@ -66,6 +73,8 @@ public class RentingRequestService {
         // check availability of all requested advertisements for suggested renting interval
         for (Advertisement ad : ads) {
             if (findIfRangeOverlaps(ad.getRentingIntervals(), rdto.getStartDate(), rdto.getEndDate())) {
+                LOGGER.warn("Reverting adding new rentingRequest[senderId={}]: at least one vehicle isn't available",
+                        rdto.getSenderId());
                 throw new BadRequestException("At least one vehicle is not available at the requested time.");
             }
         }
@@ -79,27 +88,33 @@ public class RentingRequestService {
 
         req.setAdvertisements(ads);
 
-        req = this.requestRepo.save(req);
+        req = requestRepo.save(req);
+        LOGGER.info("Database entry: created new rentingRequest[id={}, senderId={}]", req.getId(), req.getSenderId());
 
         RentingRequest finalReq = req;
         Runnable myRunnable = new Runnable() {
 
             @Override
             public void run() {
+                LOGGER.debug("Checking if rentingRequest[id={}] is handled", finalReq.getId());
                 RentingRequest rentingRequest = findOne(finalReq.getId());
                 if (rentingRequest.getStatus() == RequestStatus.pending) {
                     rentingRequest.setStatus(RequestStatus.canceled);
                     save(rentingRequest);
+                    LOGGER.info("Database update: rentingRequest[id={}] automatically rejected after 24h",
+                            rentingRequest.getId());
                 }
             }
         };
 
         taskScheduler.schedule(myRunnable, new Date(System.currentTimeMillis() + 86400000));
 
+        LOGGER.debug("Finished adding new rentingRequest[senderId={}]", finalReq.getSenderId());
         return new ResponseEntity<>(new CreateResponseDTO(req), HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> updateRequestStatus(Long id, RequestStatusDTO request) {
+        LOGGER.debug("Updating rentingRequest[id={}, status={}]", id, request.getStatus());
         RentingRequest rentingRequest = findOne(id);
 
         rentingRequest.setStatus(request.getStatus());
@@ -109,10 +124,11 @@ public class RentingRequestService {
             RentingRequest finalRentingRequest = rentingRequest;
 
             try {
+                LOGGER.debug("Feign client requested creating new chat in message-service");
                 messageClient.createChat(finalRentingRequest.getAdvertisements().iterator().next().getOwnerId(),
                         rentingRequest.getSenderId());
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Error occurred during contacting message-service feign client", e);
             }
 
             finalRentingRequest.getAdvertisements().forEach(advertisement -> {
@@ -122,12 +138,15 @@ public class RentingRequestService {
                                 req.getStartDate().after(finalRentingRequest.getEndDate()))) {
                             req.setStatus(RequestStatus.canceled);
                             save(req);
+                            LOGGER.info("Database update: rentingRequest[id={}] automatically rejected because " +
+                                    "overlapping request was reserved", req.getId());
                         }
                     }
                 });
             });
         }
 
+        LOGGER.debug("Finished updating rentingRequest[id={}, status={}]", id, request.getStatus());
         return new ResponseEntity<>(
                 new RequestStatusDTO(rentingRequest.getId(), rentingRequest.getStatus()), HttpStatus.OK);
     }
@@ -265,8 +284,10 @@ public class RentingRequestService {
     private Set<Advertisement> checkIfAdsExist(Set<Long> adIDs) {
         Set<Advertisement> adSet = new HashSet<>();
         for (Long id : adIDs) {
-            Advertisement ad = this.adRepo.findById(id).orElseThrow(() ->
-                    new NotFoundException("Requested advertisement does not exist."));
+            Advertisement ad = this.adRepo.findById(id).orElseThrow(() -> {
+                LOGGER.warn("Database query: advertisement[id={}] doesn't exist", id);
+                return new NotFoundException("Requested advertisement does not exist.");
+            });
             adSet.add(ad);
         }
 
@@ -290,10 +311,12 @@ public class RentingRequestService {
 
     private void checkDateValidityForRequest(RentingRequestDTO rdto) {
         if (rdto.getStartDate() == null || rdto.getEndDate() == null) {
+            LOGGER.warn("Invalid rentingRequest[senderId={}] missing start or end date", rdto.getSenderId());
             throw new BadRequestException("Every request must have both begin and end dates for renting.");
         }
 
         if (rdto.getStartDate().after(rdto.getEndDate())) {
+            LOGGER.warn("Invalid rentingRequest[senderId={}] end date is before start date", rdto.getSenderId());
             throw new BadRequestException("Start of renting interval cannot be after the end of it.");
         }
     }

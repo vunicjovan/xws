@@ -11,6 +11,8 @@ import com.uns.ftn.agentservice.exceptions.BadRequestException;
 import com.uns.ftn.agentservice.exceptions.NotFoundException;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.HashSet;
 
 @Service
 public class RatingService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final AdvertisementRepository advertisementRepository;
     private final UserRepository userRepository;
@@ -31,10 +35,12 @@ public class RatingService {
     }
 
     public RatingDTO rateAd(Long adId, RatingDTO ratingDTO) {
+        logger.info("Rating advertisement with id {}", adId);
         Advertisement advertisement = advertisementRepository.findById(adId)
                 .orElseThrow(() -> new NotFoundException("Requested advertisement doesn't exist."));
 
         if (ratingDTO.getUserId() == null) {
+            logger.error("Requested user cannot rate advertisement, his id has not been assigned");
             throw new BadRequestException("Requested user cannot rate advertisement.");
         }
 
@@ -53,6 +59,7 @@ public class RatingService {
 //            UserDTO userDTO = new UserDTO();
 //            userDTO.setId(user.getId());
 //            userDTO.setUserId(user.getUserId());
+            logger.debug("Sending user through queue");
             queueProducer.produceUser(new UserDTO(user));
         } catch (JsonProcessingException jpe) {
             jpe.printStackTrace();
@@ -62,9 +69,11 @@ public class RatingService {
         int timesRated = advertisement.getRatedByUsers().size();
         double newRating = (oldRating*timesRated + ratingDTO.getRating())/(timesRated + 1);
         advertisement.setRating(newRating);
+        logger.info("Advertisement rating changed to {}", newRating);
 
         advertisement.getRatedByUsers().add(user);
         advertisement = advertisementRepository.save(advertisement);
+        logger.info("Advertisement with id {} successfully saved", advertisement.getId());
 
         return ratingDTO;
     }

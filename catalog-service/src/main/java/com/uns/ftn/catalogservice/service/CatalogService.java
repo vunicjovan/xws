@@ -2,6 +2,8 @@ package com.uns.ftn.catalogservice.service;
 
 import com.uns.ftn.catalogservice.domain.*;
 import com.uns.ftn.catalogservice.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 @Service
 public class CatalogService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogService.class);
 
     private FuelTypeService fuelTypeService;
     private GearboxTypeService gearboxService;
@@ -65,7 +69,7 @@ public class CatalogService {
     public ResponseEntity<?> checkResources(String resources) {
         String[] parts = resources.split("-");
         CheckResponseDTO crd = new CheckResponseDTO();
-
+        LOGGER.debug("Checking for catalog resources existence.");
         try {
             Model md = modelService.findOne(Long.parseLong(parts[0]));
             FuelType ft = fuelTypeService.findOne(Long.parseLong(parts[1]));
@@ -75,11 +79,13 @@ public class CatalogService {
             if (!status.equals("All good.")) {
                 crd.setAvailable(false);
                 crd.setMessage(status);
+                LOGGER.warn("Checking resource existence failed: {}", status);
             } else {
                 crd.setAvailable(true);
                 crd.setMessage("All good.");
             }
         } catch (Exception e) {
+            LOGGER.error("Error occurred during checking for resource existence", e);
             crd.setAvailable(false);
             crd.setMessage(e.getMessage());
         }

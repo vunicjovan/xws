@@ -7,7 +7,10 @@ import com.uns.ftn.viewservice.exceptions.NotFoundException;
 import com.uns.ftn.viewservice.repository.AdvertisementRepository;
 import com.uns.ftn.viewservice.repository.CommentRepository;
 import com.uns.ftn.viewservice.repository.ModelRepository;
+import net.bytebuddy.asm.Advice;
 import org.aspectj.weaver.ast.Not;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +22,17 @@ import java.util.stream.Collectors;
 @Service
 public class ViewService {
 
-    @Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewService.class);
+
     private AdvertisementRepository advertisementRepository;
-
-    @Autowired
     private AccountClient accountClient;
-
     private CommentRepository commentRepository;
 
-    public ViewService(CommentRepository commentRepository) {
+    @Autowired
+    public ViewService(CommentRepository commentRepository, AdvertisementRepository advertisementRepository, AccountClient accountClient) {
         this.commentRepository = commentRepository;
+        this.advertisementRepository = advertisementRepository;
+        this.accountClient = accountClient;
     }
 
     public Set<SimpleAdvertisementDTO> getAllAdvertisements() {
@@ -44,6 +48,10 @@ public class ViewService {
                 advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
         )));
 
+        if(simpleAdvertisementDTOSet.size() == 0) {
+            LOGGER.warn("Advertisement list size equals 0.");
+        }
+
         return simpleAdvertisementDTOSet;
     }
 
@@ -54,9 +62,11 @@ public class ViewService {
         String owner;
 
         try {
+            LOGGER.debug("Account feign client request user[id={}]", advertisement.getOwnerId());
             owner = accountClient.getOwnerName(advertisement.getOwnerId());
+            LOGGER.debug("Account feign client responses user[name={}]", owner);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error occurred while contacting account feign client", e);
             throw new NotFoundException("Advertisement owner does not exist!");
         }
 

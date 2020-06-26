@@ -1,10 +1,9 @@
 package com.uns.ftn.accountservice.service;
 
+import com.uns.ftn.accountservice.exceptions.ForbiddenException;
 import com.uns.ftn.accountservice.exceptions.UnauthorizedException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,8 @@ import java.util.function.Function;
 @Service
 public class JWTUtil {
 
-    private String SECRET_KEY = ")sd.2rPdl9nMew8s.2RPl3X";
+    @Value("${security.signing.key}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -29,7 +29,13 @@ public class JWTUtil {
         return claimsResolver.apply(claims);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        Claims claims;
+        try {
+            claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        } catch (SignatureException e) {
+            throw new ForbiddenException("Signature exception!");
+        }
+        return claims;
     }
 
     public boolean isTokenExpired(String token) {
@@ -61,7 +67,7 @@ public class JWTUtil {
         try {
             isTokenExpired(token);
         } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException("Token is expired!");
+            throw new UnauthorizedException("Token has expired!");
         }
 
         Claims claims = extractAllClaims(token);

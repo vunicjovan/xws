@@ -6,6 +6,8 @@ import com.uns.ftn.agent.domain.AdWrapper;
 import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.dto.GetRentingRequestDTO;
 import com.uns.ftn.agent.dto.RentingReportDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import java.util.Set;
 @Service
 public class RentingService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private RentingRequestClient requestClient;
     private RentingReportClient reportClient;
     private final AdvertisementService advertisementService;
@@ -39,8 +43,10 @@ public class RentingService {
     }
 
     public ResponseEntity<?> getFinishedRequests() {
+        logger.info("Retrieving finished reports");
         Set<GetRentingRequestDTO> retval = new HashSet<>();
         GetFinishedResponse response = requestClient.getFinishedRequests((long) 2);
+        logger.info("Finished request for agent with id {} have been retrieved from microservices", 2);
 
         for (FinishedRequest fr : response.getFinishedRequests()) {
             GetRentingRequestDTO gdto = new GetRentingRequestDTO();
@@ -63,9 +69,11 @@ public class RentingService {
     }
 
     public ResponseEntity<?> compileRentingReport(RentingReportDTO rdto) {
+        logger.info("Send renting report for renting request with id {}", rdto.getRequestID());
         RentingReportDTO retval = new RentingReportDTO();
 
         CompileReportResponse response = reportClient.compileReport(rdto);
+        logger.info("Request has been successfully saved in microservices database");
         retval.setKilometersTraveled(response.getKilometersTraveled());
         retval.setContent(response.getContent());
         retval.setRequestID(response.getRequestID());

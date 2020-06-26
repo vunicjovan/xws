@@ -1,6 +1,8 @@
 package com.uns.ftn.accountservice.configuration;
 
 import com.uns.ftn.accountservice.service.CustomUserDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,7 +66,7 @@ public class AccountServiceConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/register", "/login", "/**")
+                .antMatchers("/**")
                 .permitAll()
                 .anyRequest().authenticated();
 

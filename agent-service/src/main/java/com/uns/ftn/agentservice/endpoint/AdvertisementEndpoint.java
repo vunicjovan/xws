@@ -9,6 +9,8 @@ import com.uns.ftn.agentservice.service.PhotoService;
 import com.uns.ftn.agentservice.service.RentingIntervalService;
 import com.uns.ftn.agentservice.service.impl.PhotoServiceImpl;
 import com.uns.ftn.agentservice.service.CommentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ import java.util.List;
 public class AdvertisementEndpoint {
     private static final String NAMESPACE_URI = "http://www.ftn.uns.ac.rs/advertisement";
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private AdvertisementService advertisementService;
     private PhotoServiceImpl photoService;
     private CommentService commentService;
@@ -43,6 +47,7 @@ public class AdvertisementEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newAdvertisementRequest")
     @ResponsePayload
     public NewAdvertisementResponse newAdvertisement(@RequestPayload NewAdvertisementRequest request) {
+        logger.info("Posting advertisement received via soap");
         NewAdvertisementResponse response = new NewAdvertisementResponse();
         AdvertisementDTO adDTO = new AdvertisementDTO(request.getAdvertisement());
 
@@ -51,10 +56,10 @@ public class AdvertisementEndpoint {
 
 
         if (resp.getStatusCode().equals(HttpStatus.CREATED)) {
-
             adDTO = (AdvertisementDTO) resp.getBody();
             Advertisement ad = new Advertisement();
             Vehicle vehicle = new Vehicle();
+            logger.info("Advertisement with id {} has been saved", adDTO.getId());
 
             assert adDTO != null;
             vehicle.setId(adDTO.getVehicle().getId());
@@ -81,6 +86,7 @@ public class AdvertisementEndpoint {
             return response;
 
         } else {
+            logger.warn("Could not add advertisement");
             return null;
         }
     }
@@ -89,6 +95,7 @@ public class AdvertisementEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newPhotoRequest")
     @ResponsePayload
     public NewPhotoResponse newPhoto(@RequestPayload NewPhotoRequest request) throws IOException {
+        logger.info("Adding new photo received via soap");
         NewPhotoResponse response = new NewPhotoResponse();
         photoService.storeSOAP(request);
 
@@ -100,6 +107,7 @@ public class AdvertisementEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "commentRequest")
     @ResponsePayload
     public CommentResponse getComments(@RequestPayload CommentRequest commentRequest) {
+        logger.info("Retrieving comments from microservices");
         CommentResponse commentResponse = new CommentResponse();
         List<CommDTO> commDTOlist = commentService.getCommentsByAdvertisementOwner(commentRequest.getOwnerId());
         commDTOlist.forEach(commDTO -> {
@@ -120,6 +128,7 @@ public class AdvertisementEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newRentingIntervalRequest")
     @ResponsePayload
     public NewRentingIntervalResponse newRentingInterval(@RequestPayload NewRentingIntervalRequest rentRequest) {
+        logger.info("Adding new renting interval received via soap");
         NewRentingIntervalResponse rentingIntervalResponse = new NewRentingIntervalResponse();
         RentingIntervalDTO rentingIntervalDTO = new RentingIntervalDTO(rentRequest.getRentingInterval());
         rentingIntervalDTO.setAdvertisementId(rentRequest.getAdvertisementId());
@@ -137,6 +146,7 @@ public class AdvertisementEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newCommentRequest")
     @ResponsePayload
     public NewCommentResponse newComment(@RequestPayload NewCommentRequest commentRequest) {
+        logger.info("Adding new comment interval received via soap");
         NewCommentResponse commentResponse = new NewCommentResponse();
         PublisherCommentDTO publisherCommentDTO = new PublisherCommentDTO();
         publisherCommentDTO.setContent(commentRequest.getContent());

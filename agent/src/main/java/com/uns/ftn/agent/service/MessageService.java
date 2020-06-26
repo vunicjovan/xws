@@ -5,6 +5,8 @@ import com.uns.ftn.agent.dto.ChatDTO;
 import com.uns.ftn.agent.dto.MessageDTO;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.catalog.MessageResponse;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class MessageService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private MessageClient messageClient;
 
     @Autowired
@@ -26,9 +30,11 @@ public class MessageService {
     }
 
     public List<ChatDTO> getChat() {
+        logger.info("Getting messages");
         List<ChatDTO> messages = new ArrayList<>();
 
         MessageResponse messageResponse = messageClient.getMessages((long) 2);
+        logger.info("Messages have been retrieved from microservices");
 
         messageResponse.getChat().forEach(chat -> {
             ChatDTO chatDTO = new ChatDTO();
@@ -46,10 +52,15 @@ public class MessageService {
     }
 
     public MessageDTO sendMessage(MessageDTO messageDTO) {
+        logger.info("Validating message for sending");
         validate(messageDTO);
+        logger.info("Message has been validated");
+        
         messageDTO.setSenderId((long) 2);
+        logger.info("Sending message from agent with id {} to user with id {}", 2, messageDTO.getSenderId());
 
         NewMessageResponse newMessageResponse = messageClient.sendMessage(messageDTO);
+        logger.info("Message has been successfully sent to user");
 
         messageDTO.setSenderId(newMessageResponse.getMessage().getSenderId());
         messageDTO.setReceiverId(newMessageResponse.getMessage().getReceiverId());
@@ -64,6 +75,7 @@ public class MessageService {
 
         if (messageDTO.getContent() == null || messageDTO.getContent().trim().equals("") ||
                 !pattern.matcher(messageDTO.getContent().trim()).matches() || messageDTO.getReceiverId() == null) {
+            logger.error("Message has empty or corrupted data");
             throw new BadRequestException("Message is not well formed!");
         }
 

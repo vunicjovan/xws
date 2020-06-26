@@ -1,6 +1,8 @@
 package com.uns.ftn.agent.controller;
 
 import com.uns.ftn.agent.service.PhotoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +17,7 @@ import java.net.URISyntaxException;
 @RequestMapping(value = "/image")
 public class PhotoController {
 
-
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     PhotoService photoService;
 
     @Autowired
@@ -25,7 +27,7 @@ public class PhotoController {
 
     @PostMapping("/{id}")
     public ResponseEntity<?> handleFileUpload(@RequestParam("files") MultipartFile[] files, @PathVariable("id") Long id) throws IOException, URISyntaxException {
-
+        logger.debug("Storing photos");
         photoService.store(files, id);
 
         return null;
@@ -41,7 +43,7 @@ public class PhotoController {
     @GetMapping("/{id}/{filename:.*}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable("filename") String filename, @PathVariable("id") Long id) throws IOException {
-
+        logger.debug("Saving file");
         Resource file = photoService.loadAsResource(filename, id);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);

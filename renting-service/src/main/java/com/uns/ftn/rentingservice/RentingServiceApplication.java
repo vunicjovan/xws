@@ -2,6 +2,8 @@ package com.uns.ftn.rentingservice;
 
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClientImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,12 +25,14 @@ import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 @RestController
 @EnableEurekaClient
 @EnableRabbit
 @EnableFeignClients
 public class RentingServiceApplication {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RentingServiceApplication.class);
 
 	@RequestMapping("/health")
 	public String home() {
@@ -52,24 +56,31 @@ public class RentingServiceApplication {
 			CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
 		URL keystoreResource = RentingServiceApplication.class.getResource("/renting.keystore.p12");
 		URL truststoreResource = RentingServiceApplication.class.getResource("/renting.truststore.p12");
-		String keystorePath = keystoreResource.toURI().getPath();
-		String truststorePath = truststoreResource.toURI().getPath();
-		KeyStore keyStore = KeyStore.getInstance("PKCS12");
-		keyStore.load(new FileInputStream(new File(keystorePath)), "password".toCharArray());
+		try {
+			String keystorePath = keystoreResource.toURI().getPath();
+			String truststorePath = truststoreResource.toURI().getPath();
+			KeyStore keyStore = KeyStore.getInstance("PKCS12");
+			LOGGER.info("Loading keystore from: " + keystorePath);
+			keyStore.load(new FileInputStream(new File(keystorePath)), "password".toCharArray());
 
-		KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-		kmf.init(keyStore, "password".toCharArray());
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+			kmf.init(keyStore, "password".toCharArray());
 
-		KeyStore trustStore = KeyStore.getInstance("PKCS12");
-		trustStore.load(new FileInputStream(new File(truststorePath)), "password".toCharArray());
+			KeyStore trustStore = KeyStore.getInstance("PKCS12");
+			LOGGER.info("Loading truststore from: " + truststorePath);
+			trustStore.load(new FileInputStream(new File(truststorePath)), "password".toCharArray());
 
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-		tmf.init(trustStore);
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+			tmf.init(trustStore);
 
-		SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
-		sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+			sslcontext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
-		return sslcontext;
+			return sslcontext;
+		} catch (Exception e) {
+			LOGGER.error("Error occurred during configuration of SSLContext", e);
+			throw new IllegalStateException("Error while configuring SSLContext", e);
+		}
 	}
 
 }
