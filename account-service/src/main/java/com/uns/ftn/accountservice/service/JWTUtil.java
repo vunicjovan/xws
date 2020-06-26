@@ -61,7 +61,7 @@ public class JWTUtil {
         try {
             isTokenExpired(token);
         } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException("Token is expired!");
+            throw new UnauthorizedException("Token has expired!");
         }
 
         Claims claims = extractAllClaims(token);

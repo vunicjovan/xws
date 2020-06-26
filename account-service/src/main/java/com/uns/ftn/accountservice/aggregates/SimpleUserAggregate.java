@@ -10,9 +10,13 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Aggregate
 public class SimpleUserAggregate {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @AggregateIdentifier
     private Long userId;
@@ -23,6 +27,7 @@ public class SimpleUserAggregate {
 
     @CommandHandler
     public SimpleUserAggregate(CreateSimpleUserCommand createSimpleUserCommand) {
+        logger.debug("Executing CreateSimpleUserCommand");
         AggregateLifecycle.apply(new SimpleUserCreatedEvent(createSimpleUserCommand.getUserId()));
     }
 
@@ -33,6 +38,7 @@ public class SimpleUserAggregate {
 
     @CommandHandler
     public void on(RollbackSimpleUserCommand rollbackSimpleUserCommand, UserService userService) {
+        logger.debug("Rolling back simple user command");
         userService.createSimpleUserRollback(rollbackSimpleUserCommand.getUserId());
         AggregateLifecycle.apply(new SimpleUserRollbackEvent(rollbackSimpleUserCommand.getUserId()));
     }

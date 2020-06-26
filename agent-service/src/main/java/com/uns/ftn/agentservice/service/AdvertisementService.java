@@ -12,6 +12,8 @@ import com.uns.ftn.agentservice.dto.StatisticReportDTO;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import static java.util.Comparator.comparing;
 @Service
 public class AdvertisementService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private AdvertisementRepository adRepo;
 
@@ -41,9 +45,11 @@ public class AdvertisementService {
     private CatalogClient catalogClient;
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
+        logger.info("Posting new advertisement by owner with id {}", adDTO.getOwnerId());
 
         // data validation
         if (!validateAdPostingData(adDTO)) {
+            logger.error("Advertisement or vehicle data are invalid or corrupted");
             return new ResponseEntity<>("Invalid advertisement or vehicle data.", HttpStatus.BAD_REQUEST);
         }
 
@@ -54,8 +60,10 @@ public class AdvertisementService {
         String checker = adDTO.getVehicle().getModelId() + "-" + adDTO.getVehicle().getFuelTypeId() + "-" +
                         adDTO.getVehicle().getGearboxTypeId() + "-" + adDTO.getVehicle().getVehicleClassId();
 
+        logger.info("Performing check in catalog microservices");
         CheckResponseDTO crd = catalogClient.checkIfResourcesExist(checker);
         if (!crd.getMessage().equals("All good.")) {
+            logger.error("Exiting, catalog services found irregularities");
             return new ResponseEntity<>(crd.getMessage(), HttpStatus.NOT_FOUND);
         }
 
@@ -82,8 +90,11 @@ public class AdvertisementService {
         vehicle.setAdvertisement(ad);
         vehicleRepo.save(vehicle);
 
+        logger.info("Advertisement and vehicle saved successfully");
+
         try {
             ad.setVehicle(vehicle);
+            logger.info("Sending vehicle through queue");
             queueProducer.produce(new AdvertisementDTO(ad));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -122,8 +133,10 @@ public class AdvertisementService {
 
     /* START: Methods for checking when deleting catalog item. */
     public ResponseEntity<?> checkForModel(Long id) {
+        logger.info("Checking requirements to delete vehicle model with id {}", id);
         Set<Vehicle> vehicles = vehicleRepo.findAllByModelId(id);
         if (!vehicles.isEmpty()) {
+            logger.warn("Vehicle list with model with id {} is not empty", id);
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
 
@@ -131,8 +144,10 @@ public class AdvertisementService {
     }
 
     public ResponseEntity<?> checkForClass(Long id) {
+        logger.info("Checking requirements to delete vehicle class with id {}", id);
         Set<Vehicle> vehicles = vehicleRepo.findAllByVehicleClassId(id);
         if (!vehicles.isEmpty()) {
+            logger.warn("Vehicle list with class with id {} is not empty", id);
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
 
@@ -140,8 +155,10 @@ public class AdvertisementService {
     }
 
     public ResponseEntity<?> checkForGearbox(Long id) {
+        logger.info("Checking requirements to delete vehicle gearbox type with id {}", id);
         Set<Vehicle> vehicles = vehicleRepo.findAllByGearboxTypeId(id);
         if (!vehicles.isEmpty()) {
+            logger.warn("Vehicle list with gearbox type with id {} is not empty", id);
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
 
@@ -149,8 +166,10 @@ public class AdvertisementService {
     }
 
     public ResponseEntity<?> checkForFuel(Long id) {
+        logger.info("Checking requirements to delete vehicle fuel type with id {}", id);
         Set<Vehicle> vehicles = vehicleRepo.findAllByFuelTypeId(id);
         if (!vehicles.isEmpty()) {
+            logger.warn("Vehicle list with fuel type with id {} is not empty", id);
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
 
@@ -162,6 +181,7 @@ public class AdvertisementService {
      * Collecting data used for statistic report.
      */
     public ResponseEntity<?> returnStatisticReport(Long id) {
+        logger.info("Collecting statistic report for user with id {}", id);
         List<StatisticDTO> bestRated = findStatisticalAds(id, "Rating");
         List<StatisticDTO> mostCommented = findStatisticalAds(id, "Commented");
         List<StatisticDTO> mostTraveled = findStatisticalAds(id, "Traveled");
@@ -170,12 +190,14 @@ public class AdvertisementService {
     }
 
     private List<StatisticDTO> findStatisticalAds(Long ownerId, String statType) {
+        logger.info("Retrieving advertisements from database for owner with id {}", ownerId);
         List<Advertisement> ownersAds = adRepo.findByOwnerId(ownerId);
         List<StatisticDTO> retval = new ArrayList<>();
 
         switch (statType) {
             // best rated advertisements
             case "Rating":
+                logger.info("Forming rating statistic");
                 ownersAds.sort(comparing(Advertisement::getRating).reversed());
                 if (ownersAds.size() > 5) {
                     ownersAds = ownersAds.subList(0, 5);
@@ -188,6 +210,7 @@ public class AdvertisementService {
                 break;
             // most commented advertisements
             case "Commented":
+                logger.info("Forming comment statistic");
                 for (int i = 0; i < ownersAds.size() - 1; i++) {
                     for (int j = i + 1; j < ownersAds.size(); j++) {
                         if (ownersAds.get(i).getComments().size() < ownersAds.get(j).getComments().size()) {
@@ -207,6 +230,7 @@ public class AdvertisementService {
                 break;
             // vehicles with longest distance traveled
             case "Traveled":
+                logger.info("Forming traveled distance statistic");
                 List<Vehicle> ownersVehicles = new ArrayList<>();
 
                 for (Advertisement ad : ownersAds) {
@@ -225,6 +249,7 @@ public class AdvertisementService {
                 break;
             // return empty list by default
             default:
+                logger.warn("No advertisement for statistic for type {}", statType);
                 break;
         }
 

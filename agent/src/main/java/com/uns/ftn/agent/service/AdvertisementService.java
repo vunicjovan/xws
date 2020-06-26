@@ -7,6 +7,8 @@ import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.exceptions.NotFoundException;
 import com.uns.ftn.agent.repository.*;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import static java.util.Comparator.comparing;
 
 @Service
 public class AdvertisementService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private AdvertisementRepository advertisementRepository;
     private VehicleRepository vehicleRepository;
@@ -69,8 +73,10 @@ public class AdvertisementService {
     }
 
     public ResponseEntity<?> addNewAdvertisement(AdvertisementDTO adDTO) {
+        logger.info("Add new advertisement with");
 
         if (!validateAdPostingData(adDTO)) {
+            logger.error("Invalid or corrupted data of advertisement or vehicle");
             throw new BadRequestException("Invalid advertisement or vehicle data.");
         }
 
@@ -86,6 +92,7 @@ public class AdvertisementService {
         vehicle.setHasAndroid(adDTO.getVehicle().getHasAndroid());
         vehicle.setKilometersTraveled(adDTO.getVehicle().getKilometersTraveled());
         vehicle = saveVehicle(vehicle);
+        logger.info("Vehicle with id {} has been saved", vehicle.getId());
 
         Advertisement ad = new Advertisement();
         ad.setVehicle(vehicle);
@@ -97,16 +104,21 @@ public class AdvertisementService {
         ad.setRating(0.0);
         ad.setPrice(adDTO.getPrice());
         ad = saveAd(ad);
+        logger.info("Advertisement with id {} has been saved", ad.getId());
 
         vehicle.setAdvertisement(ad);
         saveVehicle(vehicle);
+        logger.info("Advertisment with id {} has been assigned to vehicle with id {}", ad.getId(), vehicle.getId());
 
         NewAdvertisementResponse response = advertisementClient.newAdvertisement(new AdvertisementDTO(ad));
         if (response != null) {
+            logger.info("Advertisement has been successfully save in microservices database with id {}",
+                    response.getAdvertisement().getId());
             AdWrapper adWrapper = new AdWrapper();
             adWrapper.setRemoteId(response.getAdvertisement().getId());
             adWrapper.setAdvertisementId(ad.getId());
             adWrapperRepository.save(adWrapper);
+            logger.info("Saving wrapper for advertisement with id {}", response.getAdvertisement().getId());
         }
 
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
@@ -136,6 +148,7 @@ public class AdvertisementService {
 //        } else {
 //            throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
 //        }
+        logger.info("Adding renting interval");
         NewRentingIntervalResponse response = advertisementClient.newRentingInterval(rentingIntervalDTO);
 
         RentingIntervalDTO responseDTO = new RentingIntervalDTO();
@@ -147,10 +160,14 @@ public class AdvertisementService {
             e.printStackTrace();
         }
 
+        logger.info("Renting interval with start date {} and end date {} has been successfully save in microservices database",
+                rentingIntervalDTO.getStartDate(), responseDTO.getEndDate());
+
         return new RentingIntervalDTO(response.getRentingInterval());
     }
 
     public PublisherCommentDTO publisherPostComment(PublisherCommentDTO publisherCommentDTO) {
+        logger.info("Publishing new comment from user with id {}", publisherCommentDTO.getUserId());
         NewCommentResponse response = advertisementClient.newPublisherComment(publisherCommentDTO);
 
         return new PublisherCommentDTO(response.getComment());
@@ -177,6 +194,7 @@ public class AdvertisementService {
      * Collecting data used for statistic report.
      */
     public ResponseEntity<?> returnStatisticReport(Long id) {
+        logger.info("Getting statistic report for user with id {}", id);
         List<StatisticDTO> bestRated = findStatisticalAds(id, "Rating");
         List<StatisticDTO> mostCommented = findStatisticalAds(id, "Commented");
         List<StatisticDTO> mostTraveled = findStatisticalAds(id, "Traveled");
@@ -185,12 +203,15 @@ public class AdvertisementService {
     }
 
     private List<StatisticDTO> findStatisticalAds(Long ownerId, String statType) {
+        logger.info("Gathering {} type statistic", statType);
         List<Advertisement> ownersAds = advertisementRepository.findByOwnerId(ownerId);
+        logger.info("Retrieving advertisements created by user with id {}", ownerId);
         List<StatisticDTO> retval = new ArrayList<>();
 
         switch (statType) {
             // best rated advertisements
             case "Rating":
+                logger.debug("Processing advertisements for best rating statistic");
                 ownersAds.sort(comparing(Advertisement::getRating).reversed());
                 if (ownersAds.size() > 5) {
                     ownersAds = ownersAds.subList(0, 5);
@@ -207,6 +228,7 @@ public class AdvertisementService {
                 break;
             // most commented advertisements
             case "Commented":
+                logger.debug("Processing advertisements for most commented ad statistic");
                 for (int i = 0; i < ownersAds.size() - 1; i++) {
                     for (int j = i + 1; j < ownersAds.size(); j++) {
                         if (ownersAds.get(i).getComments().size() < ownersAds.get(j).getComments().size()) {
@@ -230,6 +252,7 @@ public class AdvertisementService {
                 break;
             // vehicles with longest distance traveled
             case "Traveled":
+                logger.debug("Processing advertisements for longest distance traveled statistic");
                 List<Vehicle> ownersVehicles = new ArrayList<>();
 
                 for (Advertisement ad : ownersAds) {
@@ -259,9 +282,11 @@ public class AdvertisementService {
     }
 
     public List<DetailedAdvertisementDTO> getDetailedAdvertisements() {
-        CommentResponse commentResponse = advertisementClient.getComments((long) 1);
+        logger.info("Retrieving advertisement and comments");
+        CommentResponse commentResponse = advertisementClient.getComments((long) 2);
         List<Advertisement> advertisements = advertisementRepository.findAll();
         List<DetailedAdvertisementDTO> detailedAdvertisementDTOS = new ArrayList<>();
+        logger.info("Advertisements have been retrieved from database");
 
         advertisements.forEach(advertisement -> {
 
@@ -292,6 +317,7 @@ public class AdvertisementService {
                         comment.setUserId(servicesComment.getUserId());
                         comment.setAdvertisement(advertisement);
                         comment = commentRepository.save(comment);
+                        logger.info("Comment with id {} and title {} has been save", comment.getId(), comment.getTitle());
                         commentDTOList.add(new CommentDTO(comment.getId(), comment.getTitle(), comment.getContent()));
                     }
                 }
@@ -315,10 +341,12 @@ public class AdvertisementService {
     }
 
     public Set<RentingInterval> getAll() {
+        logger.debug("Retrieving all renting intervals");
         return rentingIntervalRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     public RentingInterval save(RentingInterval rentingInterval) {
+        logger.info("Saving renting interval");
         return rentingIntervalRepository.save(rentingInterval);
     }
 

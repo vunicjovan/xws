@@ -4,6 +4,8 @@ import com.uns.ftn.agent.dto.AdvertisementDTO;
 import com.uns.ftn.agent.dto.PhotoRequestDTO;
 import com.uns.ftn.agent.dto.PublisherCommentDTO;
 import com.uns.ftn.agent.dto.RentingIntervalDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import rs.ac.uns.ftn.catalog.*;
 
@@ -12,7 +14,10 @@ import java.util.GregorianCalendar;
 
 public class AdvertisementClient extends WebServiceGatewaySupport {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public NewAdvertisementResponse newAdvertisement(AdvertisementDTO adDTO) {
+        logger.info("Creating advertisement request for microservices");
         NewAdvertisementRequest request = new NewAdvertisementRequest();
         Vehicle vehicle = new Vehicle();
         Advertisement ad = new Advertisement();
@@ -39,6 +44,7 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
 
         request.setAdvertisement(ad);
 
+        logger.debug("Sending advertisement with vehicle model id {} via soap", adDTO.getVehicle().getModelId());
         NewAdvertisementResponse response = (NewAdvertisementResponse) getWebServiceTemplate()
                 .marshalSendAndReceive(request);
 
@@ -57,9 +63,11 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
     }
 
     public CommentResponse getComments(Long id) {
+        logger.info("Creating request for retrieving comments from microservices");
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setOwnerId(id);
 
+        logger.debug("Sending request via soap for retrieving comments posted by agent with id {}", id);
         CommentResponse commentResponse =(CommentResponse) getWebServiceTemplate()
                 .marshalSendAndReceive(commentRequest);
 
@@ -67,6 +75,7 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
     }
 
     public NewRentingIntervalResponse newRentingInterval(RentingIntervalDTO rentingIntervalDTO) {
+        logger.info("Creating request for new renting interval for advertisement with id {}", rentingIntervalDTO.getAdvertisementId());
         NewRentingIntervalRequest rentingIntervalRequest = new NewRentingIntervalRequest();
         rentingIntervalRequest.setAdvertisementId(rentingIntervalDTO.getAdvertisementId());
 
@@ -80,10 +89,12 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
             rentingInterval.setStartDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc1));
             rentingInterval.setEndDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc2));
         } catch (Exception e) {
+            logger.error("Not valid date formats for renting intervals");
             e.printStackTrace();
         }
         rentingIntervalRequest.setRentingInterval(rentingInterval);
 
+        logger.debug("Sending interval({} - {}) via soap", rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate());
         NewRentingIntervalResponse response = (NewRentingIntervalResponse) getWebServiceTemplate()
                 .marshalSendAndReceive(rentingIntervalRequest);
 
@@ -91,12 +102,14 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
     }
 
     public NewCommentResponse newPublisherComment(PublisherCommentDTO publisherCommentDTO) {
+        logger.info("Creating request for new comment for advertisement {}", publisherCommentDTO.getAdvertisementId());
         NewCommentRequest newCommentRequest = new NewCommentRequest();
         newCommentRequest.setAdvertisementId(publisherCommentDTO.getAdvertisementId());
         newCommentRequest.setContent(publisherCommentDTO.getContent());
         newCommentRequest.setTitle(publisherCommentDTO.getTitle());
         newCommentRequest.setUserId(publisherCommentDTO.getUserId());
 
+        logger.debug("Sending new comment with title {} via soap", publisherCommentDTO.getTitle());
         NewCommentResponse response = (NewCommentResponse) getWebServiceTemplate().
                 marshalSendAndReceive(newCommentRequest);
 

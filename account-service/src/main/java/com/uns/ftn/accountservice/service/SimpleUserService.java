@@ -7,6 +7,8 @@ import com.uns.ftn.accountservice.exceptions.NotFoundException;
 import com.uns.ftn.accountservice.repository.RoleRepository;
 import com.uns.ftn.accountservice.repository.SimpleUserRepository;
 import com.uns.ftn.accountservice.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import java.util.Set;
 @Service
 public class SimpleUserService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private SimpleUserRepository simpleRepo;
     private UserRepository userRepo;
     private RoleRepository roleRepository;
@@ -30,6 +34,7 @@ public class SimpleUserService {
     }
 
     public Set<SimpleUserDTO> getSimpleUsers() {
+        logger.info("Retrieving simple users");
         List<SimpleUser> simpleUsers = simpleRepo.findAll();
 
         Set<SimpleUserDTO> simpleUserDTOSet = new HashSet<>();
@@ -52,6 +57,7 @@ public class SimpleUserService {
     }
 
     public ResponseEntity<?> blockUser(Long userId) {
+        logger.info("Blocking user with id {}", userId);
         User user = this.userRepo.findById(userId).orElseThrow(() ->
                 new NotFoundException("User with given id does not exist!"));
         SimpleUser simpleUser = this.simpleRepo.findByUser(user);
@@ -66,9 +72,10 @@ public class SimpleUserService {
                     simpleUser.getNumberOfCancelations(),
                     simpleUser.getBlocked()
             );
-
+            logger.info("User with username {} has been blocked", user.getEmail());
             return new ResponseEntity<>(simpleUserDTO, HttpStatus.OK);
         } else {
+            logger.error("User with id does not exist", userId);
             throw new NotFoundException("User with given id does not exist!");
         }
     }
