@@ -4,15 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
 import com.uns.ftn.accountservice.components.QueueProducer;
-import com.uns.ftn.accountservice.domain.Agent;
-import com.uns.ftn.accountservice.domain.SimpleUser;
-import com.uns.ftn.accountservice.domain.User;
-import com.uns.ftn.accountservice.domain.VerificationToken;
-import com.uns.ftn.accountservice.components.QueueProducer;
 import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
+import com.uns.ftn.accountservice.exceptions.UnauthorizedException;
 import com.uns.ftn.accountservice.repository.*;
 import com.uns.ftn.coreapi.commands.CreateSimpleUserCommand;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -49,7 +45,7 @@ public class UserService {
     private CustomUserDetailsService userDetailsService;
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
-    //private QueueProducer queueProducer;
+    private QueueProducer queueProducer;
     private VerificationTokenRepository tokenRepo;
     private ResetTokenRepository resetRepo;
 

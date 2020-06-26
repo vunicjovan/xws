@@ -17,7 +17,7 @@ Vue.use(VueResource);
 Vue.use(VueChatScroll);
 
 
-axios.defaults.baseURL = "http://localhost:8089";
+axios.defaults.baseURL = "https://localhost:8089";
 axios.defaults.withCredentials = true
 axios.defaults.credentials = 'include'
 

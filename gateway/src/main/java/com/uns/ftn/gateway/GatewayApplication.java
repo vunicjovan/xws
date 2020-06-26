@@ -1,17 +1,21 @@
 package com.uns.ftn.gateway;
 
 import com.netflix.discovery.DiscoveryClient;
-import com.netflix.discovery.shared.transport.jersey.EurekaJerseyClientImpl;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.server.Ssl;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.Closeable;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,17 +23,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
-
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 
 @SpringBootApplication
@@ -92,7 +85,7 @@ public class GatewayApplication {
 		return new WebMvcConfigurer() {
 			public void addCorsMappings (CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:8090")
+						.allowedOrigins("https://localhost:8090")
 						.allowCredentials(true)
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
 			}
