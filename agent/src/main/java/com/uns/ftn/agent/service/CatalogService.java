@@ -5,6 +5,8 @@ import com.uns.ftn.agent.domain.*;
 import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.NotFoundException;
 import com.uns.ftn.agent.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CatalogService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private ModelRepository modelRepository;
     private BrandRepository brandRepository;
@@ -65,15 +69,18 @@ public class CatalogService {
     }
 
     public ResponseEntity<?> getCatalog() {
+        logger.info("Retrieving catalog");
         CatalogDTO catalog = new CatalogDTO();
 
         try{
         GetCatalogResponse response = catalogClient.getCatalog();
 
         if(response != null) {
+            logger.info("Catalog has been successfully retrieved from microservices database");
             updateCatalog(response);
         }
         } catch (Exception e) {
+            logger.error("Could not retrieve catalog from microservice database");
             System.out.println("Nema ne radi katalog service");
         }
         catalog.setBrands(brandRepository.findAllByDeleted(false).stream().map(BrandDTO::new).collect(Collectors.toSet()));
@@ -88,6 +95,7 @@ public class CatalogService {
     }
 
     private void updateCatalog(GetCatalogResponse catalogDTO) {
+        logger.info("Updating local catalog");
 
         List<Model> models = catalogDTO.getModels().stream().map(modelDTO -> {
             Model model = new Model();
@@ -99,6 +107,7 @@ public class CatalogService {
             return model;
         }).collect(Collectors.toList());
         modelRepository.saveAll(models);
+        logger.info("Model has been saved in database");
 
         List<Brand> brands = catalogDTO.getBrands().stream().map(brandDTO -> {
             Brand brand = new Brand();
@@ -108,7 +117,7 @@ public class CatalogService {
             return brand;
         }).collect(Collectors.toList());
         brandRepository.saveAll(brands);
-
+        logger.info("Brand has been saved in database");
 
 
         List<FuelType> fuelTypes = catalogDTO.getFuelTypes().stream().map(fuelTypeDTO -> {
@@ -119,6 +128,7 @@ public class CatalogService {
             return fuelType;
         }).collect(Collectors.toList());
         fuelTypeRepository.saveAll(fuelTypes);
+        logger.info("Fuel type has been saved in database");
 
         List<GearboxType> gearboxTypes = catalogDTO.getGearboxTypes().stream().map(gearboxTypeDTO -> {
             GearboxType gearboxType = new GearboxType();
@@ -128,6 +138,7 @@ public class CatalogService {
             return gearboxType;
         }).collect(Collectors.toList());
         gearboxTypeRepository.saveAll(gearboxTypes);
+        logger.info("Gearbox type has been saved in database");
 
         List<VehicleClass> vehicleClasses = catalogDTO.getVehicleClasses().stream().map(vehicleClassDTO -> {
             VehicleClass vehicleClass = new VehicleClass();
@@ -137,6 +148,7 @@ public class CatalogService {
             return vehicleClass;
         }).collect(Collectors.toList());
         vehicleClassRepository.saveAll(vehicleClasses);
+        logger.info("Vehicle class has been saved in database");
     }
 
 }

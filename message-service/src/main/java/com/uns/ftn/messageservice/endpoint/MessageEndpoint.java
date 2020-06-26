@@ -4,6 +4,8 @@ import com.uns.ftn.messageservice.dto.ChatDTO;
 import com.uns.ftn.messageservice.dto.MessageDTO;
 import com.uns.ftn.messageservice.service.MessageService;
 import javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -17,6 +19,8 @@ import java.util.List;
 public class MessageEndpoint {
     private static final String NAMESPACE_URI = "http://www.ftn.uns.ac.rs/message";
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private MessageService messageService;
 
@@ -24,8 +28,8 @@ public class MessageEndpoint {
     @ResponsePayload
     public MessageResponse getMessages(@RequestPayload MessageRequest messageRequest) {
         MessageResponse messageResponse = new MessageResponse();
+        logger.info("Get chat for agent with id {}", messageRequest.getUserId());
         List<ChatDTO> chatDTOList = messageService.getChat(messageRequest.getUserId());
-        System.out.println(chatDTOList.size());
         chatDTOList.forEach(chatDTO -> {
             Chat chat = new Chat();
             chat.setSenderId(chatDTO.getSenderId());
@@ -42,7 +46,7 @@ public class MessageEndpoint {
             messageResponse.getChat().add(chat);
         });
 
-        System.out.println(messageResponse.getChat().size());
+        logger.debug("Returning formed chat for agent with id {}", messageRequest.getUserId());
 
         return messageResponse;
     }
@@ -50,6 +54,8 @@ public class MessageEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newMessageRequest")
     @ResponsePayload
     public NewMessageResponse sendMessage(@RequestPayload NewMessageRequest newMessageRequest) throws NotFoundException {
+        logger.info("Sending message by agent with id {} to user with id {}",
+                newMessageRequest.getMessage().getSenderId(), newMessageRequest.getMessage().getReceiverId());
         NewMessageResponse newMessageResponse = new NewMessageResponse();
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setContent(newMessageRequest.getMessage().getContent());

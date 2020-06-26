@@ -6,6 +6,8 @@ import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.domain.Photo;
 import com.uns.ftn.agent.dto.PhotoRequestDTO;
 import com.uns.ftn.agent.repository.PhotoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -22,6 +24,8 @@ import java.nio.file.Paths;
 @Service
 public class PhotoService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     PhotoRepository photoRepository;
     AdvertisementService advertisementService;
     AdvertisementClient advertisementClient;
@@ -36,8 +40,10 @@ public class PhotoService {
     }
 
     public void store(MultipartFile[] files, Long adId) throws IOException, URISyntaxException {
+        logger.info("Storing photos ({}) for advertisement with id {}", files.length, adId);
         String folder = "images/" + adId + "/";
         Advertisement advertisement = advertisementService.findOne(adId);
+        logger.info("Retrieving advertisement with id {}", adId);
         AdWrapper adWrapper = advertisementService.findOneAdWrapper(adId);
         Long remoteId = adWrapper.getRemoteId();
         for(MultipartFile file : files) {
@@ -58,6 +64,7 @@ public class PhotoService {
     }
 
     public Resource loadAsResource(String filename, Long adId) throws IOException {
+        logger.info("Loading photos of advertisement with id {} as resource", adId);
         String folder = "images/" + adId + "/";
         byte[] bytes = Files.readAllBytes(Paths.get(folder + filename));
 

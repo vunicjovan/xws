@@ -8,6 +8,8 @@ import com.uns.ftn.messageservice.exception.BadRequestException;
 import com.uns.ftn.messageservice.repository.MessageRepository;
 import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.regex.Pattern;
 @Service
 public class MessageService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private MessageRepository messageRepository;
 
@@ -26,6 +30,7 @@ public class MessageService {
     private AccountClient accountClient;
 
     public List<ChatDTO> getChat(Long id) {
+        logger.info("Retrieving chat for user with id {}", id);
         List<Message> messages;
         List<ChatDTO> chat = new ArrayList<>();
 
@@ -82,6 +87,7 @@ public class MessageService {
         message.setSenderUsername(messageDTO.getUsername());
 
         message = messageRepository.save(message);
+        logger.info("Message with id {} from user {} is successfully saved", message.getId(), message.getSenderUsername());
 
         return new MessageDTO(message);
     }
@@ -95,6 +101,7 @@ public class MessageService {
                 || messageDTO.getReceiverId() == null || messageDTO.getUsername() == null
                 || messageDTO.getUsername().trim().equals("") ||
                 !pattern.matcher(messageDTO.getUsername().trim()).matches()) {
+            logger.error("Some message data are missing");
             throw new BadRequestException("Message is not well formed!");
         }
 
@@ -107,13 +114,15 @@ public class MessageService {
         try {
             messageDTO.setUsername(accountClient.getOwnerName(messageDTO.getSenderId()));
         } catch (Exception e) {
+            logger.error("Agent with id {} does not exist", messageDTO.getSenderId());
             throw new NotFoundException("Agent with given id does not exist!");
         }
-
+        logger.info("Saving message for agent {}", messageDTO.getUsername());
         return saveMessage(messageDTO);
     }
 
     public Boolean createChat(Long senderId, Long receiverId) {
+        logger.info("Creating base message between users with id {} (sender) and id {} (reciever)", senderId, receiverId);
         List<Message> messages = messageRepository.findAllBySenderIdAndReceiverId(senderId, receiverId);
 
         if (!messages.isEmpty()) {

@@ -7,6 +7,8 @@ import com.uns.ftn.agentservice.dto.PhotoDTO;
 import com.uns.ftn.agentservice.repository.PhotoRepository;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.PhotoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -23,6 +25,8 @@ import java.nio.file.Paths;
 @Service
 public class  PhotoServiceImpl implements PhotoService {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     PhotoRepository photoRepository;
     AdvertisementService advertisementService;
     QueueProducer queueProducer;
@@ -38,6 +42,7 @@ public class  PhotoServiceImpl implements PhotoService {
 
     @Override
     public void store(MultipartFile[] files, Long adId) throws IOException, URISyntaxException {
+        logger.info("Storing photos () of advertisement with id {}", files.length, adId);
         String folder = "images/" + adId + "/";
         Advertisement advertisement = advertisementService.findById(adId);
         for(MultipartFile file : files) {
@@ -55,6 +60,7 @@ public class  PhotoServiceImpl implements PhotoService {
 
     @Override
     public Resource loadAsResource(String filename, Long adId) throws IOException {
+        logger.info("Loading filename {} as resource", filename);
         String folder = "images/" + adId + "/";
         byte[] bytes = Files.readAllBytes(Paths.get(folder + filename));
 
@@ -62,6 +68,7 @@ public class  PhotoServiceImpl implements PhotoService {
     }
 
     public void storeSOAP(NewPhotoRequest request) throws IOException {
+        logger.info("Storing photos of advertisement with id {} received via soap", request.getAdId());
         String folder = "images/" + request.getAdId() + "/";
         Advertisement advertisement = advertisementService.findById(request.getAdId());
         Photo photo = new Photo();

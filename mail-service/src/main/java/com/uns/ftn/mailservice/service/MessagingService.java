@@ -1,6 +1,8 @@
 package com.uns.ftn.mailservice.service;
 
 import com.uns.ftn.mailservice.dto.MessageDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +16,8 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class MessagingService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private JavaMailSender javaMailSender;
 
@@ -39,7 +43,7 @@ public class MessagingService {
             mail.setFrom(env.getProperty("spring.mail.username"));
             mail.setSubject(mdto.getTitle());
             mail.setText(mdto.getContent());
-
+            logger.info("{} is sending mail to {}", env.getProperty("spring.mail.username"), env.getProperty("spring.mail.username"));
             javaMailSender.send(mail);
         } else {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -50,6 +54,7 @@ public class MessagingService {
                 helper.setTo(env.getProperty("spring.mail.username"));
                 helper.setSubject(mdto.getTitle());
                 helper.setFrom(env.getProperty("spring.mail.username"));
+                logger.info("{} is sending mail to {}", env.getProperty("spring.mail.username"), env.getProperty("spring.mail.username"));
                 javaMailSender.send(mimeMessage);
             } catch (MessagingException e) {
                 e.printStackTrace();

@@ -2,6 +2,8 @@ package com.uns.ftn.messageservice.controller;
 
 import com.uns.ftn.messageservice.dto.MessageDTO;
 import com.uns.ftn.messageservice.service.MessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MessageController {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
    // @Autowired
    // private SimpMessagingTemplate simpMessagingTemplate;
@@ -26,6 +30,7 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
+        logger.debug("Get chat for user with id {}", id);
         return new ResponseEntity<>(messageService.getChat(id), HttpStatus.OK);
     }
 
@@ -36,11 +41,13 @@ public class MessageController {
 
     @PostMapping("/")
     public ResponseEntity<?> sendMessage(@RequestBody MessageDTO messageDTO) {
+        logger.debug("Send message from {}", messageDTO.getSenderId());
         return new ResponseEntity<>(messageService.saveMessage(messageDTO), HttpStatus.OK);
     }
 
     @PostMapping("chat/{senderId}/{receiverId}")
     public ResponseEntity<?> sendMessage(@PathVariable Long senderId, @PathVariable Long receiverId) {
+        logger.debug("Create init message for sender {} and receiver {}", senderId, receiverId);
         return new ResponseEntity<>(messageService.createChat(senderId, receiverId), HttpStatus.OK);
     }
 
