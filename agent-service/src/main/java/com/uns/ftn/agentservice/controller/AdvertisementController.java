@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -57,6 +58,7 @@ public class AdvertisementController {
         return null;
     }
 
+    @PreAuthorize("hasAuthority('GET_UNAPPROVED_COMMENTS')")
     @GetMapping("/comment/unapproved/")
     public ResponseEntity<?> getUnapprovedComments() {
         logger.debug("Get unapproved comments");
@@ -97,18 +99,21 @@ public class AdvertisementController {
     }
     /* END: Endpoints for checking when deleting catalog item. */
 
+    @PreAuthorize("hasAuthority('CREATE_ADVERTISEMENT')")
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody AdvertisementDTO adDTO) {
         logger.debug("Creating new advertisement by user with id {}", adDTO.getOwnerId());
         return adService.postNewAd(adDTO);
     }
 
+    @PreAuthorize("hasAuthority('POST_COMMENT')")
     @PostMapping("/comment")
     public ResponseEntity<?> postComment(@RequestBody CommDTO commDTO) {
         logger.debug("Posting new comment from user with id {}", commDTO.getUserId());
         return new ResponseEntity<>(commentService.postComment(commDTO), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('POST_RATING')")
     @PostMapping("/{id}/vehicle/rate")
     public ResponseEntity<?> postRating(@PathVariable ("id") Long adId, @RequestBody RatingDTO ratingDTO) {
         logger.debug("Rating vehicle for advertisement with id {} by user with id", ratingDTO.getUserId());
@@ -125,6 +130,7 @@ public class AdvertisementController {
         return null;
     }
 
+    @PreAuthorize("hasAuthority('APPROVE_COMMENT')")
     @PutMapping("/{id}/comment/{comId}")
     public ResponseEntity<?> approveComment(@PathVariable ("id") Long adId, @PathVariable ("comId") Long id) {
         logger.debug("Approving comment with id {} posted on advertisement with id {}", id, adId);
@@ -136,7 +142,7 @@ public class AdvertisementController {
         return null;
     }
 
-
+    @PreAuthorize("hasAuthority('DELETE_COMMENT')")
     @DeleteMapping("/{adId}/comment/{id}")
     public ResponseEntity<?> rejectComment(@PathVariable("adId") Long adId, @PathVariable("id") Long id) {
         logger.debug("Rejecting comment with id {} posted on advertisement with id {}", id, adId);

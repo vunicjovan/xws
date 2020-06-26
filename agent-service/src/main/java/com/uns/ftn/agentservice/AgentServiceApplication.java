@@ -23,7 +23,7 @@ import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 @EnableEurekaClient
 @RestController
 @EnableRabbit

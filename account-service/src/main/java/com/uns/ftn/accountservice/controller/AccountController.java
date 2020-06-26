@@ -39,6 +39,7 @@ public class AccountController {
         this.jwtUtil = jwtUtil;
     }
 
+    @PreAuthorize("hasAuthority('GET_USERS')")
     @GetMapping("/")
     public ResponseEntity<?> getAll()
     {
@@ -53,12 +54,14 @@ public class AccountController {
         return userService.getUser(id);
     }
 
+    // view-service: getDetailedView
     @GetMapping("/owner/{id}")
     public ResponseEntity<?> getAdvertisementOwner(@PathVariable("id") Long id) {
         logger.debug("Get advertisement owner with id {}", id);
         return new ResponseEntity<>(userService.getAdvertisementOwner(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('LOGGED_IN')")
     @GetMapping("/logged")
     public ResponseEntity<?> getLogged(@RequestHeader("username") String username) {
         logger.debug("Get logged user with username {}", username);
@@ -72,18 +75,21 @@ public class AccountController {
         return new ResponseEntity<>(new UserResponseDTO(user), HttpStatus.OK);
     }
 
+    // gateway
     @GetMapping(value = "/verify", produces = "application/json")
     public ResponseEntity<?> verify(@RequestParam(value = "token") String token) {
         logger.debug("Token verification invoked");
         return new ResponseEntity<>(jwtUtil.validateToken(token), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GET_AGENTS')")
     @GetMapping(value = "/unregistered", produces = "application/json")
     public ResponseEntity<?> getUnregisteredAgents()
     {
         logger.debug("Get unregistered agents");
         return userService.getUnregisteredAgents();
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -111,25 +117,26 @@ public class AccountController {
         return userService.resetPassword(rdto);
     }
 
-    @PreAuthorize("hasAuthority('create')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Long id) {
         return null;
     }
 
-    //@PreAuthorize("hasAuthority('add')")
+    @PreAuthorize("hasAuthority('BLOCK_USERS')")
     @PutMapping("/block/{id}")
     public ResponseEntity<?> block(@PathVariable("id") Long id) {
         logger.debug("Block user with id {}", id);
         return simpleService.blockUser(id);
     }
 
+    @PreAuthorize("hasAuthority('LOGGED_IN')")
     @PutMapping(value = "/changePassword", consumes = "application/json")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO pcDTO) {
         logger.debug("Change password");
         return userService.changePassword(pcDTO);
     }
 
+    @PreAuthorize("hasAuthority('REGISTER_AGENTS')")
     @PutMapping(value = "/registerAgent", consumes = "application/json")
     public ResponseEntity<?> registerAgent(@RequestBody AgentRegisterDTO agnRegDTO) {
         logger.debug("Register agent with id {}", agnRegDTO.getId());
@@ -142,7 +149,7 @@ public class AccountController {
         return userService.activateAccount(token);
     }
 
-    //@PreAuthorize("hasAuthority('delete')")
+    @PreAuthorize("hasAuthority('DELETE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
@@ -157,7 +164,7 @@ public class AccountController {
         ResponseCookie responseCookie = userService.refreshCookie(cookie);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(response);
     }
-
+    
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(@CookieValue(value = "refreshToken", required = true) String cookie) {
         logger.debug("Logout");

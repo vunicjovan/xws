@@ -92,7 +92,7 @@ public class GatewayApplication {
 		return new WebMvcConfigurer() {
 			public void addCorsMappings (CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:8090")
+						.allowedOrigins("https://localhost:8090")
 						.allowCredentials(true)
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
 			}
