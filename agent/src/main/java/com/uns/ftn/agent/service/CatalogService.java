@@ -80,8 +80,7 @@ public class CatalogService {
             updateCatalog(response);
         }
         } catch (Exception e) {
-            logger.error("Could not retrieve catalog from microservice database");
-            System.out.println("Nema ne radi katalog service");
+            logger.error("Could not retrieve catalog from microservice database", e);
         }
         catalog.setBrands(brandRepository.findAllByDeleted(false).stream().map(BrandDTO::new).collect(Collectors.toSet()));
         catalog.setFuelTypes(fuelTypeRepository.findAllByDeleted(false).stream().map(FuelTypeDTO::new).collect(Collectors.toSet()));

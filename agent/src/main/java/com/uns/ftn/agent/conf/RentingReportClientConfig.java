@@ -23,7 +23,7 @@ public class RentingReportClientConfig {
     public RentingReportClient rentingReportClient(Jaxb2Marshaller marshaller, KeyManagerFactory keyManagerFactory,
                                                    TrustManagerFactory trustManagerFactory) {
         RentingReportClient client = new RentingReportClient();
-        client.setDefaultUri("http://localhost:8089/rent/ws");
+        client.setDefaultUri("https://localhost:8089/rent/ws");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         HttpsUrlConnectionMessageSender messageSender = new HttpsUrlConnectionMessageSender();
