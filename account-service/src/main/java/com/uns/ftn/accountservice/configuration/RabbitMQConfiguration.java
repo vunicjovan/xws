@@ -63,34 +63,6 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
         return factory;
     }
 
-//    @Bean
-//    public RabbitConnectionFactoryBean connectionFactoryBean() throws IOException, URISyntaxException {
-//        RabbitConnectionFactoryBean connectionFactoryBean = new RabbitConnectionFactoryBean();
-//        connectionFactoryBean.setHost("localhost");
-//        connectionFactoryBean.setPort(new Integer("5672"));
-//
-//        connectionFactoryBean.setUseSSL(true);
-//        connectionFactoryBean.setSslAlgorithm("TLSv1.2");
-//
-//        URL keystoreResource = AccountServiceApplication.class.getResource("/account.keystore.p12");
-//        URL truststoreResource = AccountServiceApplication.class.getResource("/account.truststore.p12");
-//        String keystorePath = keystoreResource.toURI().getPath();
-//        String truststorePath = truststoreResource.toURI().getPath();
-//
-//        // This information should be stored safely !!!
-//        connectionFactoryBean.setKeyStore(keystorePath);
-//        connectionFactoryBean.setKeyStorePassphrase("password");
-//        connectionFactoryBean.setTrustStore(truststorePath);
-//        connectionFactoryBean.setTrustStorePassphrase("password");
-//
-//
-//        return connectionFactoryBean;
-//    }
-//
-//    @Bean(name = "GEO_RABBIT_CONNECTION")
-//    public ConnectionFactory connectionFactory(RabbitConnectionFactoryBean connectionFactoryBean) throws Exception {
-//        return new CachingConnectionFactory(connectionFactoryBean.getObject());
-//    }
 
     @Override
     public void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {

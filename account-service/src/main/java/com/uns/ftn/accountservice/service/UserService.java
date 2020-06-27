@@ -156,12 +156,9 @@ public class UserService {
             logger.info("User verification token has been saved");
             MessageDTO mdto = new MessageDTO("Confirm your registration to RentaSoul services", "<p>Please click <a href=\"http://localhost:8090/registerUser/" + token.getToken() + "\">here</a> to verify your registration.</p>" +
                     "<br><br><p>RentaSoul Team</p>", false);
-            try {
-                logger.debug("Verification mail has been sent through message queue");
+
+
                 queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
         }
 
         return userDTO;
@@ -281,11 +278,7 @@ public class UserService {
 
         MessageDTO mdto = new MessageDTO("RentaSoul password reset for user " + user.getFirstName() + " " + user.getLastName(),
                 "<p>Please click <a href=\"http://localhost:8090/resetPassword/" + rt.getToken() + "\">here</a> to reset your password.</p><br><br><p>RentaSoul Team</p>", false);
-        try {
-            queueProducer.produce(mdto);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        queueProducer.produce(mdto);
 
         return new ResponseEntity<>("You will receive email with instructions soon.", HttpStatus.CREATED);
     }
@@ -463,7 +456,7 @@ public class UserService {
             try {
                 logger.debug("Message for accepted agent is being sent through queue");
                 queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -474,7 +467,7 @@ public class UserService {
             try {
                 logger.debug("Message for rejected agent is being sent through queue");
                 queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -505,7 +498,7 @@ public class UserService {
             try {
                 logger.debug("Message about expired token is being sent through queue");
                 queueProducer.produce(mdto);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -521,7 +514,7 @@ public class UserService {
         try {
             logger.debug("Message about successful registration is being sent through queue");
             queueProducer.produce(mdto);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

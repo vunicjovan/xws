@@ -25,7 +25,7 @@ public class ClientsConfig {
     public CatalogClient catalogClient(Jaxb2Marshaller marshaller, KeyManagerFactory keyManagerFactory,
                                        TrustManagerFactory trustManagerFactory) {
         CatalogClient client = new CatalogClient();
-        client.setDefaultUri("http://localhost:8089/catalog/ws");
+        client.setDefaultUri("https://localhost:8089/catalog/ws");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
 
@@ -50,7 +50,7 @@ public class ClientsConfig {
     public AdvertisementClient advertisementClient(Jaxb2Marshaller marshaller, KeyManagerFactory keyManagerFactory,
                                                    TrustManagerFactory trustManagerFactory) {
         AdvertisementClient client = new AdvertisementClient();
-        client.setDefaultUri("http://localhost:8089/agent/ws");
+        client.setDefaultUri("https://localhost:8089/agent/ws");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         HttpsUrlConnectionMessageSender messageSender = new HttpsUrlConnectionMessageSender();
@@ -73,7 +73,7 @@ public class ClientsConfig {
     public MessageClient messageClient(Jaxb2Marshaller marshaller, KeyManagerFactory keyManagerFactory,
                                        TrustManagerFactory trustManagerFactory) {
         MessageClient client = new MessageClient();
-        client.setDefaultUri("http://localhost:8089/message/ws");
+        client.setDefaultUri("https://localhost:8089/message/ws");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         HttpsUrlConnectionMessageSender messageSender = new HttpsUrlConnectionMessageSender();
