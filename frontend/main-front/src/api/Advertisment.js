@@ -55,5 +55,11 @@ export default {
 			return response.data;
 		});
 	},
+
+	updateAdvertisement(adId, data) {
+		return axios.put(`/agent/ad/${adId}`, data).then((response) => {
+			return response.data;
+		});
+	},
   
 };

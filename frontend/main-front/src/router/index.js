@@ -19,6 +19,7 @@ import StatisticReport from "../views/statistic/StatisticReport.vue";
 import AccountActivation from "../views/account/AccountActivation.vue";
 import ResetPassword from "../views/account/ResetPassword.vue";
 import ResetEmail from "../views/account/SendResetEmail.vue";
+import EditView from "../views/advertisement/EditView.vue";
 
 Vue.use(VueRouter);
 
@@ -117,6 +118,11 @@ const routes = [
 		path: "/sendReset",
 		name: "ResetEmail",
 		component: ResetEmail
+	},
+	{
+		path: "/ads/published/edit/:id",
+		name: EditView,
+		component: EditView
 	},
 ];
 

@@ -115,6 +115,17 @@ const actions = {
 		});
 	},
 
+	putAdvertisement({ commit }, ad) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.updateAdvertisement(ad.adId, ad.data)
+				.then(() => {
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	},
+
 };
 
 const mutations = {

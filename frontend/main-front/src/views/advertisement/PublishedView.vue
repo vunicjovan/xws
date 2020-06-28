@@ -6,9 +6,19 @@
 				<md-card v-for="ad in getAdvertisements" v-bind:key="ad.id" class="md-layout-item md-size-90">
 					<md-card-header>
 						<md-card-header-text>
-							<p class="md-title">{{ ad.brand }} {{ ad.model }}</p>
-							<p class="md-subtitle">{{ ad.price }} €</p>
-							<p class="md-subhead">{{ ad.location }}</p>
+							<div id="left-div" >
+								<p class="md-title">{{ ad.brand }} {{ ad.model }}</p>
+								<p class="md-subtitle">{{ ad.price }} €</p>
+								<p class="md-subhead">{{ ad.location }}</p>
+							</div>
+							<div id="right-div">
+								<md-button class="md-icon-button btn">
+									<md-icon class="fas fa-trash"></md-icon>
+								</md-button>
+								<md-button @click.native="$router.push('/ads/published/edit/' + ad.id)" class="md-icon-button btn">
+									<md-icon class="fas fa-pen"></md-icon>
+								</md-button>
+							</div>
 						</md-card-header-text>
 					</md-card-header>
 
@@ -38,7 +48,7 @@
 										>
 										<md-table-cell md-label="Manage">
 											<md-button @click.native="$router.push('/ads/published/request/' + request.id)" class="md-icon-button">
-												<md-icon class="fas fa-pen" />
+												<md-icon class="fas fa-book" />
 											</md-button>
 										</md-table-cell>
 									</md-table-row>
@@ -118,4 +128,19 @@ export default {
 .fate-leave-to {
 	opacity: 0;
 }
+
+#left-div {
+	width: 70%;
+	float: left;
+}
+
+#right-div {
+	width: 20%;
+	float: right;
+}
+
+.btn {
+	float: right;
+}
+
 </style>
