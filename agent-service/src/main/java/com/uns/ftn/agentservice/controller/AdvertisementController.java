@@ -1,6 +1,7 @@
 package com.uns.ftn.agentservice.controller;
 
 import com.uns.ftn.agentservice.dto.AdvertisementDTO;
+import com.uns.ftn.agentservice.dto.AdvertisementUpdateDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.dto.RatingDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
@@ -94,22 +95,22 @@ public class AdvertisementController {
     }
 
     @PostMapping("/{id}/vehicle/rate")
-    public ResponseEntity<?> postRating(@PathVariable ("id") Long adId, @RequestBody RatingDTO ratingDTO) {
+    public ResponseEntity<?> postRating(@PathVariable("id") Long adId, @RequestBody RatingDTO ratingDTO) {
         return new ResponseEntity<>(ratingService.rateAd(adId, ratingDTO), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable ("id") Long id) {
-        return null;
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody AdvertisementUpdateDTO adto) {
+        return adService.updateAdvertisement(id, adto);
     }
 
     @PutMapping("/{id}/vehicle")
-    public ResponseEntity<?> updateVehicle(@PathVariable ("id") Long id) {
+    public ResponseEntity<?> updateVehicle(@PathVariable("id") Long id) {
         return null;
     }
 
     @PutMapping("/{id}/comment/{comId}")
-    public ResponseEntity<?> approveComment(@PathVariable ("id") Long adId, @PathVariable ("comId") Long id) {
+    public ResponseEntity<?> approveComment(@PathVariable("id") Long adId, @PathVariable("comId") Long id) {
         return commentService.approveComment(adId, id);
     }
 
