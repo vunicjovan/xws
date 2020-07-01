@@ -41,6 +41,8 @@ public class ViewService {
                 advertisement.getLocation(),
                 advertisement.getVehicle().getModel().getBrand().getName(),
                 advertisement.getVehicle().getModel().getName(),
+                advertisement.getRating(),
+                advertisement.getVehicle().getKilometersTraveled(),
                 advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
         )));
 
@@ -78,7 +80,8 @@ public class ViewService {
                 advertisement.getDescription(),
                 advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet()),
                 advertisement.getOwnerId(),
-                getCommentsForDisplay(advertisement.getId())
+                getCommentsForDisplay(advertisement.getId()),
+                advertisement.getRating()
         );
 
         return detailedAdvertisementDTO;

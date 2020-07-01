@@ -16,6 +16,7 @@ import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
 import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
 import StatisticReport from "../views/statistic/StatisticReport.vue";
+import Profile from "../views/account/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -99,6 +100,11 @@ const routes = [
 		path: "/statistic/:id",
 		name: "StatisticReport",
 		component: StatisticReport
+	},
+	{
+		path: "/profile",
+		name: "Profile",
+		component: Profile
 	},
 ];
 
