@@ -25,6 +25,9 @@ public class RabbitMqConfiguration implements RabbitListenerConfigurer {
     @Value("${fanout.exchange}")
     private String fanoutExchangeName;
 
+    @Value("${fanout.mail}")
+    private String fanoutMailName;
+
     @Value("${queue.name}")
     private String queueName;
 
@@ -32,10 +35,17 @@ public class RabbitMqConfiguration implements RabbitListenerConfigurer {
     Queue queue() {
         return new Queue(queueName);
     }
+
     @Bean
     FanoutExchange exchange() {
         return new FanoutExchange(fanoutExchangeName);
     }
+
+    @Bean
+    FanoutExchange mailExchange() {
+        return new FanoutExchange(fanoutMailName);
+    }
+
     @Bean
     Binding binding(Queue queue, FanoutExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange);

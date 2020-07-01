@@ -1,8 +1,11 @@
 package com.uns.ftn.rentingservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.rentingservice.client.AccountClient;
 import com.uns.ftn.rentingservice.client.AdvertisementClient;
 import com.uns.ftn.rentingservice.client.CommentClient;
 import com.uns.ftn.rentingservice.client.MessageClient;
+import com.uns.ftn.rentingservice.components.QueueProducer;
 import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.*;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
@@ -16,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,14 +33,16 @@ public class RentingRequestService {
     private CommentClient commentClient;
     private final RentingReportRepository rentingReportRepository;
     private MessageClient messageClient;
-
+    private QueueProducer queueProducer;
+    private AccountClient accountClient;
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
                                  TaskScheduler taskScheduler, AdvertisementClient advertisementClient,
                                  CommentService commentService, CommentClient commentClient,
                                  RentingReportRepository rentingReportRepository,
-                                 MessageClient messageClient) {
+                                 MessageClient messageClient, QueueProducer queueProducer,
+                                 AccountClient accountClient) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
@@ -49,6 +51,8 @@ public class RentingRequestService {
         this.commentClient = commentClient;
         this.rentingReportRepository = rentingReportRepository;
         this.messageClient = messageClient;
+        this.queueProducer = queueProducer;
+        this.accountClient = accountClient;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -130,6 +134,40 @@ public class RentingRequestService {
 
         return new ResponseEntity<>(
                 new RequestStatusDTO(rentingRequest.getId(), rentingRequest.getStatus()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> cancelRequest(Long id) {
+        RentingRequest request = findOne(id);
+        if (request.getStatus() == RequestStatus.pending || (request.getStatus() == RequestStatus.paid &&
+                getTomorrowDate().before(request.getStartDate()))) {
+            request.setStatus(RequestStatus.canceled);
+            request = save(request);
+
+            //agent notification placeholder: notify agent through email about cancelation
+            MessageDTO mdto = new MessageDTO("Renting request canceled", "Request with ID " + request.getId() + " for your vehicle(s) was canceled.", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            //feign client placeholder: increment numberOfCancelations for request sender
+            System.out.println(accountClient.incrementCancelation(request.getSenderId()));
+
+            return new ResponseEntity<>(new RentingRequestDTO(request), HttpStatus.OK);
+        } else {
+            throw new BadRequestException("Cancelation period has expired. Request cannot be canceled.");
+        }
+    }
+
+    private Date getTomorrowDate() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+
+        return dt;
     }
 
     public Set<GetRentingRequestDTO> getAllFinished(Long agentId) {

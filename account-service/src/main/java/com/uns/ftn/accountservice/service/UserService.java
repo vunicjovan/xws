@@ -287,7 +287,7 @@ public class UserService {
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(dt);
-        c.add(Calendar.MINUTE, 1);
+        c.add(Calendar.MINUTE, 10);
         dt = c.getTime();
 
         return dt;
@@ -330,6 +330,21 @@ public class UserService {
 
     public void createSimpleUserRollback(Long userId) {
         System.out.println("TREBA ISPISATI FUNKCIJU ZA ROLLBACK MOMCI");
+    }
+
+    public ResponseEntity<?> incrementCancelation(Long id) {
+        User user = findOne(id);
+        SimpleUser simpleUser = simpleUserRepository.findByUser(user);
+
+        if (simpleUser == null) {
+            throw new BadRequestException("Requested user does not exist.");
+        }
+
+        simpleUser.setNumberOfCancelations(simpleUser.getNumberOfCancelations() + 1);
+        //TODO: ban user if number of cancelations is more than 3 and notify him by email
+        simpleUserRepository.save(simpleUser);
+
+        return new ResponseEntity<>("Increment update successful.", HttpStatus.OK);
     }
 
     public ResponseEntity<?> changePassword(PasswordChangeDTO pcDTO) {
