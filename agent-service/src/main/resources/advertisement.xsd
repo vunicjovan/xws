@@ -72,6 +72,52 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="updateAdvertisementRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisementId" type="xs:long" />
+                <xs:element name="priceListItemId" type="xs:long" />
+                <xs:element name="description" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateAdvertisementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisementId" type="xs:long" />
+                <xs:element name="priceListItemId" type="xs:long" />
+                <xs:element name="description" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="priceRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="priceListItem" type="tns:priceListItem" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="priceResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="priceListItem" type="tns:priceListItem" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="priceListItem">
+        <xs:sequence>
+            <xs:element name="dailyPrice" type="xs:double"/>
+            <xs:element name="cdwPrice" type="xs:double"/>
+            <xs:element name="debtPrice" type="xs:double"/>
+            <xs:element name="serviceId" type="xs:long" nillable="true"/>
+            <xs:element name="agentId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="advertisement">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>

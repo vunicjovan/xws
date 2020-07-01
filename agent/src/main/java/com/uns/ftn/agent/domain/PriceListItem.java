@@ -1,15 +1,13 @@
-package com.uns.ftn.agentservice.domain;
+package com.uns.ftn.agent.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
-/***********************************************************************
- * Module:  PriceListItem.java
- * Author:  Vunic
- * Purpose: Defines the Class PriceListItem
- ***********************************************************************/
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,8 +30,11 @@ public class PriceListItem {
     @Column(name = "debtPrice")
     private double debtPrice;
 
+    @Column(name = "servicesId")
+    private Long servicesId;
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PriceList priceList;
+    @OneToMany(mappedBy = "priceListItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Advertisement> advertisements;
 
 }

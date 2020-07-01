@@ -117,13 +117,17 @@ export default {
 			if (this.selectedTitle !== "" && !this.$v.$invalid && this.currentMessage !== "") {
 				this.msgCounter = this.msgCounter + 1;
 				var msg = {
+					id: undefined,
 					senderId: this.getUser.id,
 					receiverId: this.selectedRoom.senderId,
 					content: this.currentMessage,
 				};
 				console.log(msg);
 
-				this.$store.dispatch("sendMessage", msg);
+				this.$store.dispatch("sendMessage", msg)
+							.then((message) => {
+								msg.id = message.id;
+							})
 
 				this.currentMessages.push(msg);
 				this.currentMessage = "";

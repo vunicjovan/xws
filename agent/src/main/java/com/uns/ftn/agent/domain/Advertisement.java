@@ -54,4 +54,7 @@ public class Advertisement {
    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private Set<Comment> comments;
 
+   @ManyToOne(fetch = FetchType.EAGER)
+   private PriceListItem priceListItem;
+
 }
