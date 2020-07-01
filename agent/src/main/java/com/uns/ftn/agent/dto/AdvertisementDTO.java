@@ -22,6 +22,7 @@ public class AdvertisementDTO {
     private String description;
     private Long ownerId;
     private double rating;
+    private PriceListItemDTO priceListItemDTO;
 
     public AdvertisementDTO(Advertisement advertisement) {
         this.id = advertisement.getId();

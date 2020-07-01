@@ -55,6 +55,7 @@ public class MessageService {
         messageDTO.setSenderId(newMessageResponse.getMessage().getSenderId());
         messageDTO.setReceiverId(newMessageResponse.getMessage().getReceiverId());
         messageDTO.setContent(newMessageResponse.getMessage().getContent());
+        messageDTO.setId(newMessageResponse.getMessage().getId());
 
         return messageDTO;
     }

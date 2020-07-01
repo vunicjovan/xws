@@ -2,6 +2,11 @@ package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.AdvertisementClient;
 import com.uns.ftn.agent.domain.*;
+import com.uns.ftn.agent.domain.Advertisement;
+import com.uns.ftn.agent.domain.Comment;
+import com.uns.ftn.agent.domain.PriceListItem;
+import com.uns.ftn.agent.domain.RentingInterval;
+import com.uns.ftn.agent.domain.Vehicle;
 import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.exceptions.NotFoundException;
@@ -11,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.catalog.CommentResponse;
-import rs.ac.uns.ftn.catalog.NewAdvertisementResponse;
-import rs.ac.uns.ftn.catalog.NewCommentResponse;
-import rs.ac.uns.ftn.catalog.NewRentingIntervalResponse;
+import rs.ac.uns.ftn.catalog.*;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -32,6 +34,7 @@ public class AdvertisementService {
     private AdWrapperRepository adWrapperRepository;
     private CommentRepository commentRepository;
     private final RentingIntervalRepository rentingIntervalRepository;
+    private PriceListItemRepository priceListItemRepository;
 
     @Autowired
     public AdvertisementService(
@@ -41,7 +44,8 @@ public class AdvertisementService {
             AdvertisementClient advertisementClient,
             AdWrapperRepository adWrapperRepository,
             CommentRepository commentRepository,
-            RentingIntervalRepository rentingIntervalRepository) {
+            RentingIntervalRepository rentingIntervalRepository,
+            PriceListItemRepository priceListItemRepository) {
         this.advertisementRepository = advertisementRepository;
         this.vehicleRepository = vehicleRepository;
         this.catalogService = catalogService;
@@ -49,6 +53,7 @@ public class AdvertisementService {
         this.adWrapperRepository = adWrapperRepository;
         this.commentRepository = commentRepository;
         this.rentingIntervalRepository = rentingIntervalRepository;
+        this.priceListItemRepository = priceListItemRepository;
     }
 
     public Advertisement saveAd(Advertisement advertisement) {
@@ -320,6 +325,45 @@ public class AdvertisementService {
 
     public RentingInterval save(RentingInterval rentingInterval) {
         return rentingIntervalRepository.save(rentingInterval);
+    }
+
+    public UpdateAdvertisementDTO updateAdvertisement(UpdateAdvertisementDTO advertisementDTO) {
+
+        validateUpdateData(advertisementDTO);
+
+        AdWrapper adWrapper = findOneAdWrapper(advertisementDTO.getAdvertisementId());
+
+        if (adWrapper == null) {
+            throw new NotFoundException("Requested advertisement doesn't exist");
+        }
+
+        PriceListItem priceListItem = priceListItemRepository.findById(advertisementDTO.getPriceListItemId())
+                            .orElseThrow(() -> new NotFoundException("Requested price list item doesn't exist"));
+
+        Advertisement advertisement = findOne(advertisementDTO.getAdvertisementId());
+        advertisement.setDescription(advertisementDTO.getDescription());
+        advertisement.setPriceListItem(priceListItem);
+        advertisementRepository.save(advertisement);
+
+        advertisementDTO.setAdvertisementId(adWrapper.getRemoteId());
+        advertisementDTO.setPriceListItemId(priceListItem.getServicesId());
+
+        UpdateAdvertisementResponse advertisementResponse = advertisementClient.updateAdvertisement(advertisementDTO);
+
+        return new UpdateAdvertisementDTO(advertisementResponse.getAdvertisementId(),
+                advertisementResponse.getPriceListItemId(), advertisementResponse.getDescription());
+    }
+
+    private void validateUpdateData(UpdateAdvertisementDTO advertisementDTO) {
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
+        Pattern pattern = Pattern.compile(regex);
+
+        if (advertisementDTO.getDescription() == null || advertisementDTO.getDescription().trim().equals("") ||
+                !pattern.matcher(advertisementDTO.getDescription().trim()).matches()) {
+            throw new BadRequestException("Data not well formed!");
+        }
+
+        advertisementDTO.setDescription(Encode.forHtml(advertisementDTO.getDescription()));
     }
 
 }

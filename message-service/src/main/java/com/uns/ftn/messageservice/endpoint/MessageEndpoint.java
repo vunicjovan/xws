@@ -58,6 +58,7 @@ public class MessageEndpoint {
         messageDTO = messageService.saveAgentMessage(messageDTO);
 
         Message message = new Message();
+        message.setId(messageDTO.getId());
         message.setSenderId(messageDTO.getSenderId());
         message.setReceiverId(messageDTO.getReceiverId());
         message.setContent(messageDTO.getContent());

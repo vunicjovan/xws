@@ -22,8 +22,8 @@ public class PriceList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "validFrom")
-    private Date validFrom;
+    @Column(name = "ownerId")
+    private Long ownerId;
 
     @OneToMany(mappedBy = "priceList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PriceListItem> priceListItem;
