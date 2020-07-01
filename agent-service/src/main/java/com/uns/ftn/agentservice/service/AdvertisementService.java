@@ -5,10 +5,9 @@ import com.uns.ftn.agentservice.client.CatalogClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.Vehicle;
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
-import com.uns.ftn.agentservice.dto.CheckResponseDTO;
-import com.uns.ftn.agentservice.dto.StatisticDTO;
-import com.uns.ftn.agentservice.dto.StatisticReportDTO;
+import com.uns.ftn.agentservice.dto.*;
+import com.uns.ftn.agentservice.exceptions.BadRequestException;
+import com.uns.ftn.agentservice.exceptions.NotFoundException;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
 import com.uns.ftn.agentservice.repository.VehicleRepository;
 import org.owasp.encoder.Encode;
@@ -92,11 +91,38 @@ public class AdvertisementService {
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
     }
 
+    public ResponseEntity<?> updateAdvertisement(Long id, AdvertisementUpdateDTO adto) {
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
+        Pattern pattern = Pattern.compile(regex);
+
+        if (adto.getDescription() == null || adto.getDescription().equals("") ||
+                !pattern.matcher(adto.getDescription()).matches() || adto.getPrice() < 0) {
+            throw new BadRequestException("Data is not well formed.");
+        }
+
+        Advertisement ad = findById(id);
+        if (ad == null) {
+            throw new NotFoundException("Requested advertisement does not exist.");
+        }
+
+        ad.setDescription(Encode.forHtml(adto.getDescription()));
+        ad.setPrice(adto.getPrice());
+        ad = adRepo.save(ad);
+
+        try {
+            queueProducer.produce(new AdvertisementDTO(ad));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.OK);
+    }
+
     /*
      * Returns TRUE if data is valid, else returns FALSE.
      */
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
-        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,;\\s?]+)$";
+        String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         String lrx = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(([A-ZČĆŽŠĐ]){1,}[a-zčćšđžA-ZČĆŽŠĐ]+\\s?)+$";
         Pattern pattern = Pattern.compile(regex);
         Pattern lpattern = Pattern.compile(lrx);

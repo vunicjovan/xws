@@ -1,17 +1,14 @@
 package com.uns.ftn.accountservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
-import com.uns.ftn.accountservice.domain.Agent;
-import com.uns.ftn.accountservice.domain.SimpleUser;
-import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.components.QueueProducer;
+import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.*;
 import com.uns.ftn.accountservice.exceptions.BadRequestException;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
-import com.uns.ftn.accountservice.repository.AgentRepository;
-import com.uns.ftn.accountservice.repository.RoleRepository;
-import com.uns.ftn.accountservice.repository.SimpleUserRepository;
-import com.uns.ftn.accountservice.repository.UserRepository;
+import com.uns.ftn.accountservice.repository.*;
 import com.uns.ftn.coreapi.commands.CreateSimpleUserCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.owasp.encoder.Encode;
@@ -27,48 +24,79 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private AgentRepository agentRepository;
-
-    @Autowired
     private SimpleUserRepository simpleUserRepository;
-
-    @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private CustomUserDetailsService userDetailsService;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
     private JWTUtil jwtUtil;
+    private QueueProducer queueProducer;
+    private VerificationTokenRepository tokenRepo;
+    private ResetTokenRepository resetRepo;
 
     @Inject
     private transient CommandGateway commandGateway;
 
+    @Autowired
+    public UserService(
+            UserRepository userRepository,
+            AgentRepository agentRepository,
+            SimpleUserRepository simpleUserRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            CustomUserDetailsService userDetailsService,
+            AuthenticationManager authenticationManager,
+            JWTUtil jwtUtil,
+            QueueProducer queueProducer,
+            VerificationTokenRepository tokenRepo,
+            ResetTokenRepository resetRepo
+    ) {
+        this.userRepository = userRepository;
+        this.agentRepository = agentRepository;
+        this.simpleUserRepository = simpleUserRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.queueProducer = queueProducer;
+        this.tokenRepo = tokenRepo;
+        this.resetRepo = resetRepo;
+    }
+
     public User save(User user) {
         return userRepository.save(user);
     }
-    public void delete(Long id) { userRepository.deleteById(id); }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
 
     public User findOne(Long id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("User with provided id does not exist.")); }
+                .orElseThrow(() -> new NotFoundException("User with provided id does not exist."));
+    }
+
+    public ResetToken findResetTokenByUser(User user) {
+        ResetToken rt = resetRepo.findByUser(user);
+        if (rt == null) {
+            throw new NotFoundException("Reset token for given user does not exist.");
+        }
+
+        return rt;
+    }
 
     public UserDTO registerUser(UserDTO userDTO) {
 
@@ -102,9 +130,22 @@ public class UserService {
             simpleUserRepository.save(simpleUser);
 
             //emit user created event and begin saga
-
             commandGateway.send(new CreateSimpleUserCommand(user.getId()));
 
+            //send registration email to user and store his verification token
+            VerificationToken token = new VerificationToken();
+            token.setToken(UUID.randomUUID().toString());
+            token.setUser(user);
+            token.setExpiryDate(getTomorrowDate());
+            tokenRepo.save(token);
+
+            MessageDTO mdto = new MessageDTO("Confirm your registration to RentaSoul services", "<p>Please click <a href=\"http://localhost:8090/registerUser/" + token.getToken() + "\">here</a> to verify your registration.</p>" +
+                    "<br><br><p>RentaSoul Team</p>", false);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
 
         return userDTO;
@@ -153,6 +194,103 @@ public class UserService {
         userRepository.save(user);
 
         return new ResponseEntity<>("User with username " + stremail + " deleted.", HttpStatus.OK);
+    }
+
+    private Date getTomorrowDate() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+
+        return dt;
+    }
+
+    /*
+     * Creates token used for password reset.
+     */
+    public ResponseEntity<?> createResetToken(EmailDTO edto) {
+        //validate and sanitize
+        sanitizeEmail(edto.getEmail());
+        User user = findByUsername(edto.getEmail());
+        ResetToken rt = new ResetToken();
+
+        rt.setToken(UUID.randomUUID().toString());
+        rt.setExpiryDate(getTenMinuteLimit());
+        rt.setUser(user);
+        resetRepo.save(rt);
+
+        MessageDTO mdto = new MessageDTO("RentaSoul password reset for user " + user.getFirstName() + " " + user.getLastName(),
+                "<p>Please click <a href=\"http://localhost:8090/resetPassword/" + rt.getToken() + "\">here</a> to reset your password.</p><br><br><p>RentaSoul Team</p>", false);
+        try {
+            queueProducer.produce(mdto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>("You will receive email with instructions soon.", HttpStatus.CREATED);
+    }
+
+    /*
+     * Password reset for given user email and new password value.
+     */
+    public ResponseEntity<?> resetPassword(ResetDTO rdto) {
+        Date now = new Date();
+        //validate and sanitize
+        sanitizeEmail(rdto.getEmail());
+        sanitizePasswordDTO(rdto);
+
+        ResetToken token = resetRepo.findByToken(rdto.getToken());
+        if (token == null) {
+            throw new NotFoundException("Requested token does not exist.");
+        } else if (now.after(token.getExpiryDate())) {
+            resetRepo.delete(token);
+            throw new NotFoundException("Your token for password reset has expired. Please make new one.");
+        }
+
+        User user = token.getUser();
+        if (user == null || user.getDeleted()) {
+            throw new NotFoundException("Your account data does not exist.");
+        } else if (!user.getEmail().equals(rdto.getEmail())) {
+            throw new NotFoundException("Given email does not match requested user email.");
+        }
+
+        user.setPassword(passwordEncoder.encode(rdto.getNewPassword()));
+        save(user);
+        resetRepo.delete(token);
+
+        return new ResponseEntity<>("Password successfully renewed.", HttpStatus.OK);
+    }
+
+    private void sanitizeEmail(String email) {
+        if (email == null || email.trim().equals("") || (email.trim().split("@").length <= 1)) {
+            throw new BadRequestException("Invalid email format. Please try again with valid data.");
+        }
+    }
+
+    private void sanitizePasswordDTO(ResetDTO rdto) {
+        String regexPass = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W+)([a-zA-Z0-9!?#\\s?]+)$";
+        Pattern patternPass = Pattern.compile(regexPass);
+
+        if (rdto.getNewPassword() == null || rdto.getNewPassword().trim().equals("") ||
+                rdto.getNewPasswordRetype() == null || rdto.getNewPasswordRetype().trim().equals("")) {
+            throw new BadRequestException("Invalid password format.");
+        } else if (!rdto.getNewPassword().equals(rdto.getNewPasswordRetype())) {
+            throw new BadRequestException("Both passwords must have the same value.");
+        }
+
+        rdto.setNewPassword(Encode.forHtml(rdto.getNewPassword()));
+        rdto.setNewPasswordRetype(Encode.forHtml(rdto.getNewPasswordRetype()));
+    }
+
+    private Date getTenMinuteLimit() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.MINUTE, 1);
+        dt = c.getTime();
+
+        return dt;
     }
 
     private void checkIfBlockedOrDeleted(String email) {
@@ -237,15 +375,65 @@ public class UserService {
         if(agnRegDTO.getAccepted()) {
             user.setEnabled(true);
             save(user);
-            //TODO 1.1 Send confirmation email to the agent.
+            //Send confirmation email to the agent.
+            MessageDTO mdto = new MessageDTO("RentaSoul Registration for " + user.getFirstName() + " " + user.getLastName(),
+                    "Your registration request has been accepted. Please sign in to use our services.\n\nRentaSoul Team", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
         else {
-            //TODO 1.2 Send notification email about rejecting to the agent.
+            //Send notification email about rejecting to the agent.
+            MessageDTO mdto = new MessageDTO("RentaSoul Registration for " + user.getFirstName() + " " + user.getLastName(),
+                    "Your registration request has been rejected. You can send new request at any moment.\n\nRentaSoul Team", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
             delete(agnRegDTO.getId());
             return new ResponseEntity<>("User successfully deleted", HttpStatus.OK);
         }
 
         return new ResponseEntity<>(agnRegDTO, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> activateAccount(String token) {
+        Date now = new Date();
+        if (token == null || token.equals("")) {
+            throw new BadRequestException("Requested registration token does not exist.");
+        }
+
+        VerificationToken vt = tokenRepo.findByToken(token);
+        if (vt == null) {
+            throw new NotFoundException("Requested registration token does not exist.");
+        } else if (now.after(vt.getExpiryDate())) {
+            deleteUser(vt.getUser().getId());
+            MessageDTO mdto = new MessageDTO("RentaSoul Registration", "Your registration token has expired. Please send new registration request.", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            throw new BadRequestException("Registration token expired. Please send new registration request.");
+        }
+
+        vt.getUser().setEnabled(true);
+        save(vt.getUser());
+
+        // if everything is ok, notify user through email also
+        MessageDTO mdto = new MessageDTO("RentaSoul Registration", "Activation successful. Please sign in to use our services.", true);
+        try {
+            queueProducer.produce(mdto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>("Activation successful. Please sign in to use our services.", HttpStatus.OK);
     }
 
     public ResponseEntity<?> getUser(Long id) {

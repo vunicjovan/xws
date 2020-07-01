@@ -11,7 +11,7 @@
                           <label for="oldPassword">Current password</label>
                           <md-input id="oldPassword" name="oldPassword" type="password" v-model="form.oldPassword" />
                           <span class="md-error" v-if="!$v.form.oldPassword.required">Password is required</span>
-                          <span class="md-error" v-else-if="!$v.form.oldPassword.alpha">Invalid password format</span>
+                          <span class="md-error" v-else-if="!$v.form.oldPassword.sqli">At least 1: capital letter, digit and special character (#!?)</span>
                           <span class="md-error" v-else-if="!$v.form.oldPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
@@ -20,7 +20,7 @@
                           <label for="newPassword">New password</label>
                           <md-input id="newPassword" name="newPassword" type="password" v-model="form.newPassword" />
                           <span class="md-error" v-if="!$v.form.newPassword.required">Password is required</span>
-                          <span class="md-error" v-else-if="!$v.form.newPassword.alpha">Invalid password format</span>
+                          <span class="md-error" v-else-if="!$v.form.newPassword.sqli">At least 1: capital letter, digit and special character (#!?)</span>
                           <span class="md-error" v-else-if="!$v.form.newPassword.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
@@ -29,7 +29,7 @@
                           <label for="newPasswordRetype">New password</label>
                           <md-input id="newPasswordRetype" name="newPasswordRetype" type="password" v-model="form.newPasswordRetype" />
                           <span class="md-error" v-if="!$v.form.newPasswordRetype.required">Password is required</span>
-                          <span class="md-error" v-else-if="!$v.form.newPasswordRetype.alpha">Invalid password format</span>
+                          <span class="md-error" v-else-if="!$v.form.newPasswordRetype.sqli">At least 1: capital letter, digit and special character (#!?)</span>
                           <span class="md-error" v-else-if="!$v.form.newPasswordRetype.minLength">Password requires at least 10 characters</span>
                       </md-field>
                   </div>
