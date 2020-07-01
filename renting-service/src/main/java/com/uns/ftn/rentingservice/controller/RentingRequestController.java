@@ -57,9 +57,14 @@ public class RentingRequestController {
         return requestService.updateRequestStatus(id, request);
     }
 
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelRequest(@PathVariable("id") Long id) {
+        return requestService.cancelRequest(id);
+    }
+
     @GetMapping("/comment/{requestId}/{advertisementId}")
     public ResponseEntity<?> checkCommentPostPermission(@PathVariable("requestId") Long requestId,
-                                                      @PathVariable("advertisementId") Long advertisementId) {
+                                                        @PathVariable("advertisementId") Long advertisementId) {
         return new ResponseEntity(commentService.checkCommentPermission(requestId, advertisementId), HttpStatus.OK);
     }
 
