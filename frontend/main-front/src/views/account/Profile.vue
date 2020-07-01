@@ -20,7 +20,7 @@
 					</div>
 				</md-card-content>
 				<md-card-actions>
-					<md-button class="md-primary" @click="sending = false">Update</md-button>
+					<md-button class="md-primary" @click="updateUser">Update</md-button>
 				</md-card-actions>
 			</md-card>
 		</form>
@@ -55,8 +55,22 @@ export default {
             this.form.firstName = this.getUser.firstName;
             this.form.lastName = this.getUser.lastName;
         }
-    }
+    },
+    methods: {
+        ...mapActions(["updateUser"]),
+        updateUser() {
+            this.sending = true;
+            var updateDTO = {
+                "id": this.getUser.id,
+                "firstName": this.form.firstName,
+                "lastName": this.form.lastName
+            };
 
+            console.log(updateDTO);
+            //this.$store.dispatch("updateUser", updateDTO);
+            this.sending = false;
+        }
+    }
 }
 </script>
 
