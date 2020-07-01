@@ -43,6 +43,7 @@
 			<md-card-content>
 				<div>
 					<b>Advanced details:</b><br />
+					<i>Vhicle Rating: {{ getAdvertisement.rating }}</i>
 					<i>This vehicle has traveled {{ getAdvertisement.kmTraveled }} kilometers. </i>
 					<i v-if="getAdvertisement.dailyLimit !== -1">It has a daily kilometer limit of {{ getAdvertisement.dailyLimit }} kilometers for crossing. </i>
 					<i v-else>It does not have a daily kilometer limit. </i>

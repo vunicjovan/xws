@@ -19,6 +19,8 @@ public class SimpleAdvertisementDTO {
     private String location;
     private String brand;
     private String model;
+    private double rating;
+    private int kmTraveled;
     private Set<String> photo;
 
     public SimpleAdvertisementDTO(Advertisement advertisement) {
@@ -27,6 +29,8 @@ public class SimpleAdvertisementDTO {
         this.location = advertisement.getLocation();
         this.brand = advertisement.getVehicle().getModel().getBrand().getName();
         this.model = advertisement.getVehicle().getModel().getName();
+        this.rating = advertisement.getRating();
+        this.kmTraveled = advertisement.getVehicle().getKilometersTraveled();
         this.photo = advertisement.getPhotos().stream().map(Photo::getPath).collect(Collectors.toSet());
     }
 

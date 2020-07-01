@@ -7,6 +7,7 @@ import com.uns.ftn.agent.exceptions.BadRequestException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.catalog.DeleteMessageResponse;
 import rs.ac.uns.ftn.catalog.MessageResponse;
 import rs.ac.uns.ftn.catalog.NewMessageResponse;
 
@@ -37,7 +38,7 @@ public class MessageService {
             chatDTO.setMessages(chat.getMessages()
                     .stream()
                     .map(message ->
-                            new MessageDTO(message.getContent(), message.getSenderId(), message.getReceiverId()))
+                            new MessageDTO(message.getId(), message.getContent(), message.getSenderId(), message.getReceiverId()))
                     .collect(Collectors.toList()));
             messages.add(chatDTO);
         });
@@ -56,6 +57,11 @@ public class MessageService {
         messageDTO.setContent(newMessageResponse.getMessage().getContent());
 
         return messageDTO;
+    }
+
+    public String deleteMessage(Long id) {
+        DeleteMessageResponse deleteMessageResponse = messageClient.deleteMessage(id);
+        return deleteMessageResponse.getMessage();
     }
 
     private void validate(MessageDTO messageDTO) {

@@ -28,4 +28,9 @@ public class MessageController {
         return new ResponseEntity<>(messageService.sendMessage(messageDTO), HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> sendMessage(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(messageService.deleteMessage(id), HttpStatus.OK);
+    }
+
 }

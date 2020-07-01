@@ -9,6 +9,7 @@ import com.uns.ftn.messageservice.repository.MessageRepository;
 import javassist.NotFoundException;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -128,6 +129,16 @@ public class MessageService {
             messageRepository.save(message);
             return true;
         }
+    }
+
+    public String deleteMessage(Long id) {
+        try {
+            messageRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new BadRequestException("Message does not exist!");
+        }
+
+        return "Message successfully deleted";
     }
 
 }

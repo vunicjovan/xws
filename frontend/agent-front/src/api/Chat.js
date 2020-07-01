@@ -12,4 +12,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	deleteMessage(messageId) {
+		return axios.delete(`/message/${messageId}`).then((response) => {
+			return response.data;
+		});
+	},
 };

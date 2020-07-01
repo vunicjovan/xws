@@ -51,7 +51,7 @@ public class MessageController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        return null;
+        return new ResponseEntity<>(messageService.deleteMessage(id), HttpStatus.OK);
     }
 
     @MessageMapping("/send")
