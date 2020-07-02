@@ -1,10 +1,8 @@
 package com.uns.ftn.agent.controller;
 
-import com.uns.ftn.agent.dto.AdvertisementDTO;
-import com.uns.ftn.agent.dto.CommentDTO;
-import com.uns.ftn.agent.dto.PublisherCommentDTO;
-import com.uns.ftn.agent.dto.RentingIntervalDTO;
+import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.service.AdvertisementService;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,11 @@ public class AdvertisementController {
     @PostMapping(value = "/")
     public ResponseEntity<?> postAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) {
         return advertisementService.addNewAdvertisement(advertisementDTO);
+    }
+
+    @PutMapping(value = "/")
+    public ResponseEntity<?> updateAdvertisement(@RequestBody UpdateAdvertisementDTO updateAdvertisementDTO) {
+        return new ResponseEntity<>(advertisementService.updateAdvertisement(updateAdvertisementDTO), HttpStatus.OK);
     }
 
     @GetMapping(value = "/")

@@ -147,6 +147,12 @@ const mutations = {
 	deleteAdvertisement: (state, id) => {
 		state.advertisements = state.advertisements.filter((ad) => ad.id != id);
 	},
+	sortByPriceAsc: (state) => (state.advertisements.sort((a, b) => (a.price > b.price) ? 1 : -1)),
+	sortByPriceDesc: (state) => (state.advertisements.sort((a, b) => (a.price < b.price) ? 1 : -1)),
+	sortByKilometersTraveledAsc: (state) => (state.advertisements.sort((a, b) => (a.kmTraveled > b.kmTraveled) ? 1 : -1)),
+	sortByKilometersTraveledDesc: (state) => (state.advertisements.sort((a, b) => (a.kmTraveled < b.kmTraveled) ? 1 : -1)),
+	sortByRatingAsc: (state) => (state.advertisements.sort((a, b) => (a.rating > b.rating) ? 1 : -1)),
+	sortByRatingDesc: (state) => (state.advertisements.sort((a, b) => (a.rating < b.rating) ? 1 : -1))
 };
 
 export default {

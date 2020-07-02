@@ -1,9 +1,6 @@
 package com.uns.ftn.agent.client;
 
-import com.uns.ftn.agent.dto.AdvertisementDTO;
-import com.uns.ftn.agent.dto.PhotoRequestDTO;
-import com.uns.ftn.agent.dto.PublisherCommentDTO;
-import com.uns.ftn.agent.dto.RentingIntervalDTO;
+import com.uns.ftn.agent.dto.*;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import rs.ac.uns.ftn.catalog.*;
 
@@ -97,9 +94,36 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         newCommentRequest.setTitle(publisherCommentDTO.getTitle());
         newCommentRequest.setUserId(publisherCommentDTO.getUserId());
 
-        NewCommentResponse response = (NewCommentResponse) getWebServiceTemplate().
-                marshalSendAndReceive(newCommentRequest);
+        NewCommentResponse response = (NewCommentResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(newCommentRequest);
 
         return response;
+    }
+
+    public PriceResponse createPriceListItem(PriceListItemDTO priceListItemDTO) {
+        PriceRequest priceRequest  = new PriceRequest();
+        PriceListItem priceListItem = new PriceListItem();
+        priceListItem.setCdwPrice(priceListItemDTO.getCdwPrice());
+        priceListItem.setDailyPrice(priceListItemDTO.getDailyPrice());
+        priceListItem.setDebtPrice(priceListItemDTO.getDebtPrice());
+        priceListItem.setAgentId(priceListItemDTO.getCreatorId());
+        priceRequest.setPriceListItem(priceListItem);
+
+        PriceResponse priceResponse = (PriceResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(priceRequest);
+
+        return priceResponse;
+    }
+
+    public UpdateAdvertisementResponse updateAdvertisement(UpdateAdvertisementDTO updateAdvertisementDTO) {
+        UpdateAdvertisementRequest advertisementRequest = new UpdateAdvertisementRequest();
+        advertisementRequest.setAdvertisementId(updateAdvertisementDTO.getAdvertisementId());
+        advertisementRequest.setPriceListItemId(updateAdvertisementDTO.getPriceListItemId());
+        advertisementRequest.setDescription(updateAdvertisementDTO.getDescription());
+
+        UpdateAdvertisementResponse advertisementResponse = (UpdateAdvertisementResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(advertisementRequest);
+
+        return advertisementResponse;
     }
 }

@@ -25,7 +25,14 @@
 				<div class="msgDiv" v-if="this.selectedRoom != null && this.currentMessages !== null">
 					<div v-for="msg in currentMessages" v-bind:key="getMsgIndex(msg)">
 						<div v-if="msg.senderId === getUser.id" style="text-align: right;">
-							<span class="message-card-mine">{{ msg.content }}</span>
+							<md-menu md-direction="bottom-start" md-size="small" md-close-on-click class="message-card-mine">
+								<span class="s" md-menu-trigger>{{ msg.content }}</span>
+								<md-menu-content>
+									<md-menu-item>
+										<md-button @click="deleteMessage(msg)">Delete</md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
 						</div>
 						<div v-else>
 							<span class="message-card">{{ msg.content }}</span>
@@ -110,18 +117,29 @@ export default {
 			if (this.selectedTitle !== "" && !this.$v.$invalid && this.currentMessage !== "") {
 				this.msgCounter = this.msgCounter + 1;
 				var msg = {
+					id: undefined,
 					senderId: this.getUser.id,
 					receiverId: this.selectedRoom.senderId,
 					content: this.currentMessage,
 				};
 				console.log(msg);
 
-				this.$store.dispatch("sendMessage", msg);
+				this.$store.dispatch("sendMessage", msg)
+							.then((message) => {
+								msg.id = message.id;
+							})
 
 				this.currentMessages.push(msg);
 				this.currentMessage = "";
 			}
 		},
+
+		deleteMessage(message) {
+			this.msgCounter = this.msgCounter - 1;
+			var index = this.getMsgIndex(message)
+			this.currentMessages.splice(index, 1)
+			this.$store.dispatch("deleteMessage", message.id)
+		}
 
 		// send() {
 		//      // send message to server
@@ -194,13 +212,16 @@ export default {
 }
 
 .message-card-mine {
-	padding: 1.5%;
-	border: 2.5px solid #1c6ea4;
-	display: inline-block;
 	margin-bottom: 2.5%;
 	margin-left: 55%;
-	word-break: break-word;
+}
+
+.s {
+	border: 2.5px solid #1c6ea4;
 	border-radius: 15px;
+	padding: 1.5%;
+	display: inline-block;
+	word-break: break-word;
 }
 
 .md-app-content .msgDiv {

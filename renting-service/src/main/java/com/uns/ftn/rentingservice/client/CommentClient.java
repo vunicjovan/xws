@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient("agent-service")
 public interface CommentClient {
+
     @GetMapping("/ad/comment/{id}")
     CommentClientResponseDTO getComment(@PathVariable Long id);
+
+    @GetMapping("/ad/generateDebt/{adId}/{numberOfDays}/{kmTraveled}")
+    double generateDebtPrice(@PathVariable Long adId, @PathVariable int numberOfDays,
+                             @PathVariable int kmTraveled);
 }

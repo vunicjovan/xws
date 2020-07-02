@@ -6,10 +6,13 @@ package com.uns.ftn.agentservice.domain;
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -54,6 +57,9 @@ public class Advertisement {
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Photo> photos;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private PriceListItem priceListItem;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "ratedAds")

@@ -116,6 +116,20 @@ const actions = {
 				});
 		});
 	},
+
+	updateUser({ commit }, updateDTO) {
+		return new Promise((resolve, reject) => {
+			accountApi
+				.updateUser(updateDTO)
+				.then((user) => {
+					commit("setLoggedUser", user);
+					resolve();
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
 };
 
 const mutations = {

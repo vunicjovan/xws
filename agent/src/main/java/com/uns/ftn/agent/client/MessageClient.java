@@ -32,4 +32,14 @@ public class MessageClient extends WebServiceGatewaySupport {
         return newMessageResponse;
     }
 
+    public DeleteMessageResponse deleteMessage(Long id) {
+        DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest();
+        deleteMessageRequest.setId(id);
+
+        DeleteMessageResponse deleteMessageResponse = (DeleteMessageResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(deleteMessageRequest);
+
+        return deleteMessageResponse;
+    }
+
 }

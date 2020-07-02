@@ -46,5 +46,11 @@ export default {
 			return response.data;
 		});
 	},
+
+	updateUser(updateDTO) {
+		return axios.put(`/account/${updateDTO.id}`, updateDTO).then((response) => {
+			return response.data;
+		});
+	},
 	
 };

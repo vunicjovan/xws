@@ -90,6 +90,11 @@ public class AccountController {
         return null;
     }
 
+    @PutMapping("/cancelation/{id}")
+    public ResponseEntity<?> incrementCancelation(@PathVariable("id") Long id) {
+        return userService.incrementCancelation(id);
+    }
+
     //@PreAuthorize("hasAuthority('add')")
     @PutMapping("/block/{id}")
     public ResponseEntity<?> block(@PathVariable("id") Long id) {

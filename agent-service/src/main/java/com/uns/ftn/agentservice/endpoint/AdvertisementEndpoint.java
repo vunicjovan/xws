@@ -1,19 +1,14 @@
 package com.uns.ftn.agentservice.endpoint;
 
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
-import com.uns.ftn.agentservice.dto.CommDTO;
-import com.uns.ftn.agentservice.dto.PublisherCommentDTO;
-import com.uns.ftn.agentservice.dto.RentingIntervalDTO;
+import com.uns.ftn.agentservice.dto.*;
 import com.uns.ftn.agentservice.service.AdvertisementService;
-import com.uns.ftn.agentservice.service.PhotoService;
+import com.uns.ftn.agentservice.service.CommentService;
+import com.uns.ftn.agentservice.service.PriceListService;
 import com.uns.ftn.agentservice.service.RentingIntervalService;
 import com.uns.ftn.agentservice.service.impl.PhotoServiceImpl;
-import com.uns.ftn.agentservice.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -31,13 +26,17 @@ public class AdvertisementEndpoint {
     private PhotoServiceImpl photoService;
     private CommentService commentService;
     private final RentingIntervalService rentingIntervalService;
+    private PriceListService priceListService;
 
     @Autowired
-    public AdvertisementEndpoint(AdvertisementService advertisementService, CommentService commentService, PhotoServiceImpl photoService, RentingIntervalService rentingIntervalService) {
+    public AdvertisementEndpoint(AdvertisementService advertisementService, CommentService commentService,
+                                 PhotoServiceImpl photoService, RentingIntervalService rentingIntervalService,
+                                 PriceListService priceListService) {
         this.advertisementService = advertisementService;
         this.commentService = commentService;
-       this.photoService = photoService;
+        this.photoService = photoService;
         this.rentingIntervalService = rentingIntervalService;
+        this.priceListService = priceListService;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newAdvertisementRequest")
@@ -46,8 +45,7 @@ public class AdvertisementEndpoint {
         NewAdvertisementResponse response = new NewAdvertisementResponse();
         AdvertisementDTO adDTO = new AdvertisementDTO(request.getAdvertisement());
 
-        ResponseEntity<?> resp =  advertisementService.postNewAd(adDTO);
-
+        ResponseEntity<?> resp = advertisementService.postNewAd(adDTO);
 
 
         if (resp.getStatusCode().equals(HttpStatus.CREATED)) {
@@ -96,7 +94,7 @@ public class AdvertisementEndpoint {
 
         return response;
     }
-  
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "commentRequest")
     @ResponsePayload
     public CommentResponse getComments(@RequestPayload CommentRequest commentRequest) {
@@ -131,7 +129,7 @@ public class AdvertisementEndpoint {
         rentingInterval.setEndDate(rentRequest.getRentingInterval().getEndDate());
         rentingIntervalResponse.setRentingInterval(rentingInterval);
 
-        return  rentingIntervalResponse;
+        return rentingIntervalResponse;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newCommentRequest")
@@ -156,6 +154,54 @@ public class AdvertisementEndpoint {
         commentResponse.setComment(comment);
 
         return commentResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "priceRequest")
+    @ResponsePayload
+    public PriceResponse createPriceListItem(@RequestPayload PriceRequest priceRequest) {
+        PriceResponse priceResponse = new PriceResponse();
+
+        PriceListItemDTO priceListItemDTO = new PriceListItemDTO();
+        priceListItemDTO.setCdwPrice(priceRequest.getPriceListItem().getCdwPrice());
+        priceListItemDTO.setDailyPrice(priceRequest.getPriceListItem().getDailyPrice());
+        priceListItemDTO.setDebtPrice(priceRequest.getPriceListItem().getDebtPrice());
+        priceListItemDTO.setCreatorId(priceRequest.getPriceListItem().getAgentId());
+
+        priceListItemDTO = priceListService.createPriceListItem(priceListItemDTO);
+
+        PriceListItem priceListItem = new PriceListItem();
+        priceListItem.setCdwPrice(priceListItemDTO.getCdwPrice());
+        priceListItem.setDailyPrice(priceListItemDTO.getDailyPrice());
+        priceListItem.setDebtPrice(priceListItemDTO.getDebtPrice());
+        priceListItem.setAgentId(priceListItemDTO.getCreatorId());
+        priceListItem.setServiceId(priceListItemDTO.getId());
+
+        priceResponse.setPriceListItem(priceListItem);
+
+        return priceResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateAdvertisementRequest")
+    @ResponsePayload
+    public UpdateAdvertisementResponse updateAdvertisement(@RequestPayload UpdateAdvertisementRequest advertisementRequest) {
+        UpdateAdvertisementResponse advertisementResponse = new UpdateAdvertisementResponse();
+
+        AdvertisementUpdateDTO advertisementDTO = new AdvertisementUpdateDTO();
+        advertisementDTO.setDescription(advertisementRequest.getDescription());
+        advertisementDTO.setPriceListItemId(advertisementRequest.getPriceListItemId());
+
+        ResponseEntity<?> response = advertisementService.updateAdvertisement(advertisementRequest.getAdvertisementId(), advertisementDTO);
+
+
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            AdvertisementDTO adDTO = (AdvertisementDTO) response.getBody();
+            advertisementResponse.setAdvertisementId(adDTO.getId());
+            advertisementResponse.setDescription(adDTO.getDescription());
+            advertisementResponse.setPriceListItemId(adDTO.getPriceListItemId()); // TODO: adDto.getPriceListItem()
+            return advertisementResponse;
+        } else {
+            return null;
+        }
     }
 
 }

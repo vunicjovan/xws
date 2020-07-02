@@ -34,6 +34,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="deleteMessageRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteMessageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="chat">
         <xs:sequence>
             <xs:element name="senderId" type="xs:long"/>
@@ -44,6 +60,7 @@
 
     <xs:complexType name="message">
         <xs:sequence>
+            <xs:element name="id" type="xs:long" nillable="true"/>
             <xs:element name="content" type="xs:string"/>
             <xs:element name="senderId" type="xs:long"/>
             <xs:element name="receiverId" type="xs:long"/>

@@ -16,10 +16,14 @@ import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
 import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
 import StatisticReport from "../views/statistic/StatisticReport.vue";
+import Profile from "../views/account/Profile.vue";
 import AccountActivation from "../views/account/AccountActivation.vue";
 import ResetPassword from "../views/account/ResetPassword.vue";
 import ResetEmail from "../views/account/SendResetEmail.vue";
 import EditView from "../views/advertisement/EditView.vue";
+import Income from "../views/debts/Income.vue";
+import Debts from "../views/debts/Debts.vue";
+
 
 Vue.use(VueRouter);
 
@@ -105,6 +109,11 @@ const routes = [
 		component: StatisticReport
 	},
 	{
+		path: "/profile",
+		name: "Profile",
+		component: Profile
+  },
+  {
 		path: "/registerUser/:token",
 		name: "AccountActivation",
 		component: AccountActivation
@@ -123,6 +132,16 @@ const routes = [
 		path: "/ads/published/edit/:id",
 		name: EditView,
 		component: EditView
+  },
+  {
+		path: "/income",
+		name: "Income",
+		component: Income
+	},
+	{
+		path: "/debts",
+		name: "Debts",
+		component: Debts
 	},
 ];
 

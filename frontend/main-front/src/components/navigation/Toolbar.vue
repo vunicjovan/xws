@@ -70,6 +70,24 @@
 					</md-menu-item>
 
 					<md-menu-item v-if="isLogged">
+						<i class="fas fa-user fa-lg" aria-hidden="true"></i>
+						<md-button @click.native="$router.push('/profile')">Your profile</md-button>
+						<div style="flex: 1;"></div>
+					</md-menu-item>
+
+					<md-menu-item v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))">
+						<i class="fas fa-handshake fa-lg" aria-hidden="true"></i>
+						<md-button @click.native="$router.push('/income')">Income</md-button>
+						<div style="flex: 1;"></div>
+					</md-menu-item>
+
+					<md-menu-item v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')">
+						<i class="fas fa-cash-register fa-lg" aria-hidden="true"></i>
+						<md-button @click.native="$router.push('/debts')">Debts</md-button>
+						<div style="flex: 1;"></div>
+					</md-menu-item>
+
+					<md-menu-item v-if="isLogged">
 						<i class="fas fa-key fa-lg" aria-hidden="true"></i>
 						<md-button @click.native="$router.push('/password')">Change password</md-button>
 					</md-menu-item>
@@ -97,7 +115,8 @@ export default {
 	methods: {
 		...mapActions(["logout"]),
 		logout() {
-			this.$store.dispatch("logout");
+			this.$store.dispatch("logout")
+				.then(() => this.$router.push("/login"));
 		},
 	},
 	components: {

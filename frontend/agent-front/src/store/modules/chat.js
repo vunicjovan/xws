@@ -31,6 +31,17 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	deleteMessage({ commit }, messageId) {
+		return new Promise((resolve, reject) => {
+			chatApi
+				.deleteMessage(messageId)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	}
 };
 
 const mutations = {

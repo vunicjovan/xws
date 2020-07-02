@@ -25,7 +25,7 @@ public class MessageEndpoint {
     public MessageResponse getMessages(@RequestPayload MessageRequest messageRequest) {
         MessageResponse messageResponse = new MessageResponse();
         List<ChatDTO> chatDTOList = messageService.getChat(messageRequest.getUserId());
-        System.out.println(chatDTOList.size());
+
         chatDTOList.forEach(chatDTO -> {
             Chat chat = new Chat();
             chat.setSenderId(chatDTO.getSenderId());
@@ -33,6 +33,7 @@ public class MessageEndpoint {
 
             chatDTO.getMessages().forEach(messageDTO -> {
                 Message message = new Message();
+                message.setId(messageDTO.getId());
                 message.setContent(messageDTO.getContent());
                 message.setReceiverId(messageDTO.getReceiverId());
                 message.setSenderId(messageDTO.getSenderId());
@@ -41,8 +42,6 @@ public class MessageEndpoint {
 
             messageResponse.getChat().add(chat);
         });
-
-        System.out.println(messageResponse.getChat().size());
 
         return messageResponse;
     }
@@ -59,6 +58,7 @@ public class MessageEndpoint {
         messageDTO = messageService.saveAgentMessage(messageDTO);
 
         Message message = new Message();
+        message.setId(messageDTO.getId());
         message.setSenderId(messageDTO.getSenderId());
         message.setReceiverId(messageDTO.getReceiverId());
         message.setContent(messageDTO.getContent());
@@ -66,5 +66,14 @@ public class MessageEndpoint {
         newMessageResponse.setMessage(message);
 
         return newMessageResponse;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteMessageRequest")
+    @ResponsePayload
+    public DeleteMessageResponse deleteMessage(@RequestPayload DeleteMessageRequest deleteMessageRequest) {
+        DeleteMessageResponse deleteMessageResponse = new DeleteMessageResponse();
+        String message = messageService.deleteMessage(deleteMessageRequest.getId());
+        deleteMessageResponse.setMessage(message);
+        return deleteMessageResponse;
     }
 }
