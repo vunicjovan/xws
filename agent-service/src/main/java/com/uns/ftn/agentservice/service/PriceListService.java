@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,8 +54,11 @@ public class PriceListService {
 
     public ResponseEntity<?> getAllItemsForUser(Long id) {
         PriceList priceList = priceListRepository.findByOwnerId(id);
+        if (priceList != null)
+            return new ResponseEntity<>(priceList.getPriceListItem().stream().map(PriceListItemDTO::new)
+                    .collect(Collectors.toList()), HttpStatus.OK);
 
-        return new ResponseEntity(priceList.getPriceListItem().stream().map(PriceListItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(new ArrayList<PriceListItemDTO>(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> createDiscount(Long ownerId, double discount) {
