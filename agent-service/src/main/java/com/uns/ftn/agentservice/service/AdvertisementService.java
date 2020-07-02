@@ -197,6 +197,33 @@ public class AdvertisementService {
     }
     /* END: Methods for checking when deleting catalog item. */
 
+    public ResponseEntity<?> generateDebt(Long adId, int numberOfDays, int kmTraveled) {
+        double retval = 0;
+        Advertisement advertisement = findById(adId);
+
+        if (advertisement == null) {
+            throw new NotFoundException("Requested advertisement does not exist.");
+        }
+
+        if (advertisement.getKilometersPerDayLimit() > 0 && advertisement.getKilometersPerDayLimit() * numberOfDays < kmTraveled) {
+            double debtPrice = advertisement.getPriceListItem().getDebtPrice();
+            int kmLimit = advertisement.getKilometersPerDayLimit() * numberOfDays;
+            int kmDifference = kmTraveled - kmLimit;
+            retval = kmDifference * debtPrice;
+        }
+
+        advertisement.getVehicle().setKilometersTraveled(advertisement.getVehicle().getKilometersTraveled() + kmTraveled);
+        vehicleRepo.save(advertisement.getVehicle());
+
+        try {
+            queueProducer.produce(new AdvertisementDTO(advertisement));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(retval, HttpStatus.OK);
+    }
+
     /*
      * Collecting data used for statistic report.
      */

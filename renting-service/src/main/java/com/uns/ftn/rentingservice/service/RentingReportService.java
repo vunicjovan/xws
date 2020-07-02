@@ -1,13 +1,12 @@
 package com.uns.ftn.rentingservice.service;
 
-import com.uns.ftn.rentingservice.domain.Advertisement;
-import com.uns.ftn.rentingservice.domain.RentingReport;
-import com.uns.ftn.rentingservice.domain.RentingRequest;
-import com.uns.ftn.rentingservice.domain.RequestStatus;
+import com.uns.ftn.rentingservice.client.CommentClient;
+import com.uns.ftn.rentingservice.domain.*;
 import com.uns.ftn.rentingservice.dto.RentingReportDTO;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
+import com.uns.ftn.rentingservice.repository.DebtRepository;
 import com.uns.ftn.rentingservice.repository.RentingReportRepository;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +21,21 @@ public class RentingReportService {
     private RentingRequestService requestService;
     private AdvertisementRepository adRepo;
     private RentingReportRepository reportRepo;
+    private CommentClient commentClient;
+    private DebtRepository debtRepo;
 
     @Autowired
     public RentingReportService(
             RentingRequestService requestService,
             AdvertisementRepository adRepo,
-            RentingReportRepository reportRepo) {
+            RentingReportRepository reportRepo,
+            CommentClient commentClient,
+            DebtRepository debtRepo) {
         this.requestService = requestService;
         this.adRepo = adRepo;
         this.reportRepo = reportRepo;
+        this.commentClient = commentClient;
+        this.debtRepo = debtRepo;
     }
 
     public RentingReport save(RentingReport report) {
@@ -48,14 +53,29 @@ public class RentingReportService {
         report.setKilometersTraveled(rdto.getKilometersTraveled());
         report.setContent(rdto.getContent());
         report.setLimitBroken(false);
-        // TODO: create helper method for daily limit (in kilometers) breaching (Boolean return value)
+
+        double price = commentClient.generateDebtPrice(rdto.getAdvertisementID(),
+                daysBetween(request.getStartDate(), request.getEndDate()), rdto.getKilometersTraveled());
+
+        if (price > 0) {
+            Debt debt = new Debt();
+            debt.setAgentId(advertisement.getOwnerId());
+            debt.setSimpleUserId(request.getSenderId());
+            debt.setValue(price);
+
+            debtRepo.save(debt);
+        }
+
         report.setRentingRequest(request);
         report.setAdvertisement(advertisement);
 
-        // TODO: generate Debt if daily limit is breached
         report = save(report);
 
         return new RentingReportDTO(report);
+    }
+
+    private int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 
     private void checkValidityOfReport(RentingReportDTO rdto) {
