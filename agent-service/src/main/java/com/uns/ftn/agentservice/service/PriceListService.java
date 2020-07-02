@@ -57,4 +57,12 @@ public class PriceListService {
         return new ResponseEntity(priceList.getPriceListItem().stream().map(PriceListItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    public ResponseEntity<?> createDiscount(Long ownerId, double discount) {
+        PriceList priceList = priceListRepository.findByOwnerId(ownerId);
+        priceList.setDiscount(discount);
+        priceListRepository.save(priceList);
+
+        return new ResponseEntity<>("Discount successfully created.", HttpStatus.OK);
+    }
+
 }

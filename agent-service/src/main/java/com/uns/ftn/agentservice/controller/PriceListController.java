@@ -23,14 +23,14 @@ public class PriceListController {
         return priceListService.getAllItemsForUser(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return null;
-    }
-
     @PostMapping("/")
     public ResponseEntity<?> create(@RequestBody PriceListItemDTO pdto) {
         return new ResponseEntity<>(priceListService.createPriceListItem(pdto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{ownerId}/{discount}")
+    public ResponseEntity<?> createDiscount(@PathVariable Long ownerId, @PathVariable double discount) {
+        return priceListService.createDiscount(ownerId, discount);
     }
 
 }

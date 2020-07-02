@@ -84,6 +84,13 @@ public class AdvertisementController {
     }
     /* END: Endpoints for checking when deleting catalog item. */
 
+    /* START: Check advertisement for debt */
+    @GetMapping("/generateDebt/{adId}/{numberOfDays}/{kmTraveled}")
+    public ResponseEntity<?> checkForDebt(@PathVariable Long adId, @PathVariable int numberOfDays, @PathVariable int kmTraveled) {
+        return adService.generateDebt(adId, numberOfDays, kmTraveled);
+    }
+    /* END: Check advertisement for debt */
+
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody AdvertisementDTO adDTO) {
         return adService.postNewAd(adDTO);

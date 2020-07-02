@@ -20,6 +20,8 @@ import Profile from "../views/account/Profile.vue";
 import AccountActivation from "../views/account/AccountActivation.vue";
 import ResetPassword from "../views/account/ResetPassword.vue";
 import ResetEmail from "../views/account/SendResetEmail.vue";
+import Income from "../views/debts/Income.vue";
+import Debts from "../views/debts/Debts.vue";
 
 Vue.use(VueRouter);
 
@@ -123,6 +125,16 @@ const routes = [
 		path: "/sendReset",
 		name: "ResetEmail",
 		component: ResetEmail
+	},
+	{
+		path: "/income",
+		name: "Income",
+		component: Income
+	},
+	{
+		path: "/debts",
+		name: "Debts",
+		component: Debts
 	},
 ];
 
