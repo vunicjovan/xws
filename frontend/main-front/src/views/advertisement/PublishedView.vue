@@ -12,7 +12,7 @@
 								<p class="md-subhead">{{ ad.location }}</p>
 							</div>
 							<div id="right-div">
-								<md-button class="md-icon-button btn">
+								<md-button @click="removeAdvertisement(ad.id)" class="md-icon-button btn">
 									<md-icon class="fas fa-trash"></md-icon>
 								</md-button>
 								<md-button @click.native="$router.push('/ads/published/edit/' + ad.id)" class="md-icon-button btn">
@@ -86,7 +86,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(["getUserPublishedAdvertisements", "getUserRentingRequests"]),
+		...mapActions(["getUserPublishedAdvertisements", "getUserRentingRequests", "removeAdvertisement"]),
 		extractRequestsForAd(adId) {
 			const requests = this.getRentingRequests;
 			let retList = [];
@@ -98,7 +98,7 @@ export default {
 				}
 			}
 			return retList;
-		},
+		}
 	},
 
 	watch: {

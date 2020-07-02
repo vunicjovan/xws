@@ -61,5 +61,11 @@ export default {
 			return response.data;
 		});
 	},
+
+	deleteAdvertisement(adId) {
+		return axios.delete(`agent/ad/${adId}`).then((response) => {
+			return response.data;
+		});
+	}
   
 };

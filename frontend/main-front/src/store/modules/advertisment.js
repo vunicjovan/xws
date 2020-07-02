@@ -126,12 +126,27 @@ const actions = {
 		});
 	},
 
+	removeAdvertisement({ commit }, adId) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.deleteAdvertisement(adId)
+				.then(() => {
+					commit("deleteAdvertisement", id);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	}
+
 };
 
 const mutations = {
 	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
 	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement),
 	setStatistic: (state, report) => (state.statistic = report),
+	deleteAdvertisement: (state, id) => {
+		state.advertisements = state.advertisements.filter((ad) => ad.id != id);
+	},
 };
 
 export default {
