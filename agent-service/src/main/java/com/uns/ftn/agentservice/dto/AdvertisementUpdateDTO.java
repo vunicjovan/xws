@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdvertisementUpdateDTO {
 
-    private double price;
+    private Long priceListItemId;
     private String description;
 
 }

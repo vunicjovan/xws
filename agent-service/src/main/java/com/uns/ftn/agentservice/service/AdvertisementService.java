@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.agentservice.client.CatalogClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
+import com.uns.ftn.agentservice.domain.PriceListItem;
 import com.uns.ftn.agentservice.domain.Vehicle;
 import com.uns.ftn.agentservice.dto.*;
 import com.uns.ftn.agentservice.exceptions.BadRequestException;
@@ -27,17 +28,22 @@ import static java.util.Comparator.comparing;
 @Service
 public class AdvertisementService {
 
-    @Autowired
-    private AdvertisementRepository adRepo;
+    private final AdvertisementRepository adRepo;
+    private final VehicleRepository vehicleRepo;
+    private final QueueProducer queueProducer;
+    private final CatalogClient catalogClient;
+    private final PriceListService priceListService;
 
     @Autowired
-    private VehicleRepository vehicleRepo;
-
-    @Autowired
-    private QueueProducer queueProducer;
-
-    @Autowired
-    private CatalogClient catalogClient;
+    public AdvertisementService(AdvertisementRepository adRepo, VehicleRepository vehicleRepo,
+                                QueueProducer queueProducer, CatalogClient catalogClient,
+                                PriceListService priceListService) {
+        this.adRepo = adRepo;
+        this.vehicleRepo = vehicleRepo;
+        this.queueProducer = queueProducer;
+        this.catalogClient = catalogClient;
+        this.priceListService = priceListService;
+    }
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
 
@@ -51,7 +57,7 @@ public class AdvertisementService {
 
         // check if gearbox, fuel, class and model exist ---> catalog-service
         String checker = adDTO.getVehicle().getModelId() + "-" + adDTO.getVehicle().getFuelTypeId() + "-" +
-                        adDTO.getVehicle().getGearboxTypeId() + "-" + adDTO.getVehicle().getVehicleClassId();
+                adDTO.getVehicle().getGearboxTypeId() + "-" + adDTO.getVehicle().getVehicleClassId();
 
         CheckResponseDTO crd = catalogClient.checkIfResourcesExist(checker);
         if (!crd.getMessage().equals("All good.")) {
@@ -60,7 +66,11 @@ public class AdvertisementService {
 
         // setting advertisement properties
         Advertisement ad = new Advertisement();
-        ad.setPrice(adDTO.getPrice());
+
+        PriceListItem priceItem = priceListService.findOneItem(adDTO.getPriceListItemId());
+        ad.setPrice(priceItem.getDailyPrice());
+        ad.setPriceListItem(priceItem);
+
         ad.setKilometersPerDayLimit(adDTO.getKilometersPerDayLimit());
         ad.setCollisionDamageWaiver(adDTO.getCollisionDamageWaiver());
         ad.setDescription(adDTO.getDescription());
@@ -95,8 +105,10 @@ public class AdvertisementService {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);
 
+        PriceListItem priceItem = priceListService.findOneItem(adto.getPriceListItemId());
+
         if (adto.getDescription() == null || adto.getDescription().equals("") ||
-                !pattern.matcher(adto.getDescription()).matches() || adto.getPrice() < 0) {
+                !pattern.matcher(adto.getDescription()).matches()) {
             throw new BadRequestException("Data is not well formed.");
         }
 
@@ -106,7 +118,8 @@ public class AdvertisementService {
         }
 
         ad.setDescription(Encode.forHtml(adto.getDescription()));
-        ad.setPrice(adto.getPrice());
+        ad.setPrice(priceItem.getDailyPrice());
+        ad.setPriceListItem(priceItem);
         ad = adRepo.save(ad);
 
         try {
@@ -138,7 +151,7 @@ public class AdvertisementService {
         return true;
     }
 
-    public  List<Advertisement> findByOwner(Long id) {
+    public List<Advertisement> findByOwner(Long id) {
         return adRepo.findByOwnerId(id);
     }
 
