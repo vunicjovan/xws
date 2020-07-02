@@ -1,9 +1,13 @@
 package com.uns.ftn.agentservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /***********************************************************************
  * Module:  PriceListItem.java
@@ -35,5 +39,9 @@ public class PriceListItem {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private PriceList priceList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "priceListItem", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    private Set<Advertisement> advertisements;
 
 }

@@ -1,13 +1,14 @@
 package com.uns.ftn.agentservice.endpoint;
 
 import com.uns.ftn.agentservice.dto.*;
-import com.uns.ftn.agentservice.service.*;
+import com.uns.ftn.agentservice.service.AdvertisementService;
+import com.uns.ftn.agentservice.service.CommentService;
+import com.uns.ftn.agentservice.service.PriceListService;
+import com.uns.ftn.agentservice.service.RentingIntervalService;
 import com.uns.ftn.agentservice.service.impl.PhotoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -187,7 +188,7 @@ public class AdvertisementEndpoint {
 
         AdvertisementUpdateDTO advertisementDTO = new AdvertisementUpdateDTO();
         advertisementDTO.setDescription(advertisementRequest.getDescription());
-        advertisementDTO.setPrice(0); // TODO: advertisementRequest.getPriceListItem();
+        advertisementDTO.setPriceListItemId(advertisementRequest.getPriceListItemId());
 
         ResponseEntity<?> response = advertisementService.updateAdvertisement(advertisementRequest.getAdvertisementId(), advertisementDTO);
 
@@ -196,7 +197,7 @@ public class AdvertisementEndpoint {
             AdvertisementDTO adDTO = (AdvertisementDTO) response.getBody();
             advertisementResponse.setAdvertisementId(adDTO.getId());
             advertisementResponse.setDescription(adDTO.getDescription());
-            advertisementResponse.setPriceListItemId((long) 1); // TODO: adDto.getPriceListItem()
+            advertisementResponse.setPriceListItemId(adDTO.getPriceListItemId()); // TODO: adDto.getPriceListItem()
             return advertisementResponse;
         } else {
             return null;

@@ -1,15 +1,12 @@
 package com.uns.ftn.agentservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.uns.ftn.agentservice.domain.*;
+import com.uns.ftn.agentservice.domain.Advertisement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -42,6 +39,8 @@ public class AdvertisementDTO implements Serializable {
     @JsonProperty("rating")
     private double rating = 0;
 
+    private Long priceListItemId;
+
 //    private Set<UserDTO> ratedByUsers;
 
     public AdvertisementDTO(Advertisement ad) {
@@ -54,6 +53,7 @@ public class AdvertisementDTO implements Serializable {
         this.vehicle = new VehicleDTO(ad.getVehicle());
         this.ownerId = ad.getOwnerId();
         this.rating = ad.getRating();
+        this.priceListItemId = ad.getPriceListItem().getId();
 //        this.ratedByUsers = ad.getRatedByUsers().stream().map(UserDTO::new).collect(Collectors.toSet());
     }
 
