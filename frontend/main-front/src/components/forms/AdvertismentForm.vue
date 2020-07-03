@@ -107,17 +107,17 @@
 				<form>
 					<md-field :class="{ 'md-invalid': $v.pricelistForm.dailyPrice.$error }">
 						<label>Daily price</label>
-						<md-input type="number" v-model="pricelistForm.dailyPrice" />
+						<md-input type="number" v-model="pricelistForm.dailyPrice" step="0.01" />
 						<span class="md-error" v-if="!$v.pricelistForm.dailyPrice.required">Daily price is required</span>
 					</md-field>
 					<md-field :class="{ 'md-invalid': $v.pricelistForm.cdwPrice.$error }">
 						<label>Collision damage waiver</label>
-						<md-input type="number" v-model="pricelistForm.cdwPrice" />
+						<md-input type="number" v-model="pricelistForm.cdwPrice" step="0.01" />
 						<span class="md-error" v-if="!$v.pricelistForm.cdwPrice.required">Collision damage waiver price is required</span>
 					</md-field>
 					<md-field :class="{ 'md-invalid': $v.pricelistForm.debtPrice.$error }">
 						<label>Debt price</label>
-						<md-input type="number" v-model="pricelistForm.debtPrice" />
+						<md-input type="number" v-model="pricelistForm.debtPrice" step="0.01" />
 						<span class="md-error" v-if="!$v.pricelistForm.debtPrice.required">Debt price is required</span>
 					</md-field>
 				</form>

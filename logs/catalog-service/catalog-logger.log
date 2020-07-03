@@ -1,0 +1,34 @@
+2020-06-27 08:13:59,273 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2020-06-27 08:14:01,819 INFO com.uns.ftn.catalogservice.conf.WebServiceConfig [restartedMain] ServletRegistrationBean: setting messageDispatcherServlet
+2020-06-27 08:14:02,253 DEBUG org.springframework.web.filter.GenericFilterBean [restartedMain] Filter 'authenticationTokenFilterBean' configured for use
+2020-06-27 08:14:02,900 INFO com.uns.ftn.catalogservice.CatalogServiceApplication [restartedMain] Loading keystore from: /C:/Users/Dusan/Documents/XWS/catalog-service/target/classes/catalog.keystore.p12
+2020-06-27 08:14:02,909 INFO com.uns.ftn.catalogservice.CatalogServiceApplication [restartedMain] Loading truststore from: /C:/Users/Dusan/Documents/XWS/catalog-service/target/classes/catalog.truststore.p12
+2020-06-27 08:14:04,483 INFO com.uns.ftn.catalogservice.conf.WebServiceConfig [restartedMain] DefaultWsdl11Definition: catalog.wsdl available at https://localhost:8083/ws/catalog.wsdl
+2020-06-27 08:14:07,253 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started CatalogServiceApplication in 9.477 seconds (JVM running for 10.592)
+2020-06-27 08:27:20,859 INFO com.uns.ftn.catalogservice.controller.ResourceController [https-jsse-nio-8083-exec-10] User has enter /brand post endpoint
+2020-06-27 08:27:20,869 DEBUG com.uns.ftn.catalogservice.service.BrandService [https-jsse-nio-8083-exec-10] Adding new brand...
+2020-06-27 08:27:21,060 INFO com.uns.ftn.catalogservice.service.BrandService [https-jsse-nio-8083-exec-10] Database entry: created new brand[id=11, name=Lada]
+2020-06-27 08:27:21,355 INFO com.uns.ftn.catalogservice.components.QueueProducer [https-jsse-nio-8083-exec-10] Published brand[id=11, name=Lada] to exchange=fanout-exchange
+2020-06-27 08:27:21,356 DEBUG com.uns.ftn.catalogservice.service.BrandService [https-jsse-nio-8083-exec-10] Finished adding new brand...
+2020-06-27 08:47:29,557 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-1] User has enter /getCatalogRequest SOAP-endpoint.
+2020-06-27 08:47:30,227 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-1] /getCatalogRequest SOAP-endpoint returning response.
+2020-06-27 08:49:58,203 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-3] User has enter /getCatalogRequest SOAP-endpoint.
+2020-06-27 08:49:58,307 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-3] /getCatalogRequest SOAP-endpoint returning response.
+2020-06-27 08:51:49,443 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-1] User has enter /getCatalogRequest SOAP-endpoint.
+2020-06-27 08:51:49,609 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-1] /getCatalogRequest SOAP-endpoint returning response.
+2020-06-27 08:52:06,395 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-10] User has enter /getCatalogRequest SOAP-endpoint.
+2020-06-27 08:52:06,467 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-10] /getCatalogRequest SOAP-endpoint returning response.
+2020-06-27 09:00:59,537 INFO com.uns.ftn.catalogservice.controller.ResourceController [https-jsse-nio-8083-exec-7] User has enter /gearboxType post endpoint
+2020-06-27 09:00:59,540 DEBUG com.uns.ftn.catalogservice.service.GearboxTypeService [https-jsse-nio-8083-exec-7] Adding new gearbox type...
+2020-06-27 09:00:59,612 INFO com.uns.ftn.catalogservice.service.GearboxTypeService [https-jsse-nio-8083-exec-7] Database entry: created new gearboxType[id=7, name=Rukni]
+2020-06-27 09:00:59,629 INFO com.uns.ftn.catalogservice.components.QueueProducer [https-jsse-nio-8083-exec-7] Published gearboxType[id=7, name=Rukni] to exchange=fanout-exchange
+2020-06-27 09:00:59,629 DEBUG com.uns.ftn.catalogservice.service.GearboxTypeService [https-jsse-nio-8083-exec-7] Finished adding new gearbox type...
+2020-06-27 09:01:07,376 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-4] User has enter /getCatalogRequest SOAP-endpoint.
+2020-06-27 09:01:07,414 DEBUG com.uns.ftn.catalogservice.endpoints.CatalogEndpoint [https-jsse-nio-8083-exec-4] /getCatalogRequest SOAP-endpoint returning response.
+2020-06-27 12:24:52,906 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2020-06-27 12:24:56,595 INFO com.uns.ftn.catalogservice.conf.WebServiceConfig [restartedMain] ServletRegistrationBean: setting messageDispatcherServlet
+2020-06-27 12:24:57,462 DEBUG org.springframework.web.filter.GenericFilterBean [restartedMain] Filter 'authenticationTokenFilterBean' configured for use
+2020-06-27 12:24:58,694 INFO com.uns.ftn.catalogservice.CatalogServiceApplication [restartedMain] Loading keystore from: /C:/Users/Dusan/Documents/XWS/catalog-service/target/classes/catalog.keystore.p12
+2020-06-27 12:24:58,710 INFO com.uns.ftn.catalogservice.CatalogServiceApplication [restartedMain] Loading truststore from: /C:/Users/Dusan/Documents/XWS/catalog-service/target/classes/catalog.truststore.p12
+2020-06-27 12:25:02,218 INFO com.uns.ftn.catalogservice.conf.WebServiceConfig [restartedMain] DefaultWsdl11Definition: catalog.wsdl available at https://localhost:8083/ws/catalog.wsdl
+2020-06-27 12:25:07,540 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started CatalogServiceApplication in 18.931 seconds (JVM running for 20.266)

@@ -20,4 +20,14 @@ export default {
 			throw Error(error);
 		}
 	},
+
+	async postDiscount(userId, discount) {
+		try {
+			const response = await axios.put(`/agent/price/list/${userId}/${discount}`);
+
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

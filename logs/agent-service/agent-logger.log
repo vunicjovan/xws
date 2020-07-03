@@ -1,0 +1,96 @@
+2020-06-27 07:58:44,525 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2020-06-27 07:58:46,732 DEBUG org.springframework.web.filter.GenericFilterBean [restartedMain] Filter 'authenticationTokenFilterBean' configured for use
+2020-06-27 07:58:51,429 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started AgentServiceApplication in 8.304 seconds (JVM running for 9.405)
+2020-06-27 08:11:06,738 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2020-06-27 08:11:12,043 DEBUG org.springframework.web.filter.GenericFilterBean [restartedMain] Filter 'authenticationTokenFilterBean' configured for use
+2020-06-27 08:11:19,969 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started AgentServiceApplication in 15.096 seconds (JVM running for 16.519)
+2020-06-27 08:35:30,935 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-10] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:35:30,935 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:35:30,938 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-10] Loading filename logan4.jpg as resource
+2020-06-27 08:35:30,938 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource
+2020-06-27 08:35:31,074 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:35:31,075 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 08:35:31,074 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-10] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:35:31,076 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-10] Loading filename logan4.jpg as resource
+2020-06-27 08:36:06,491 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-8] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:36:06,492 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-8] Loading filename logan4.jpg as resource
+2020-06-27 08:36:06,492 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:36:06,493 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 08:36:06,525 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:36:06,526 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-3] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:36:06,526 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 08:36:06,527 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-3] Loading filename logan4.jpg as resource
+2020-06-27 08:36:22,179 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-8] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:36:22,180 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-8] Loading filename logan4.jpg as resource
+2020-06-27 08:36:22,185 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:36:22,186 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 08:36:22,199 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-10] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:36:22,201 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-10] Loading filename logan4.jpg as resource
+2020-06-27 08:36:22,204 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-2] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:36:22,205 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-2] Loading filename logan4.jpg as resource
+2020-06-27 08:36:51,738 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-3] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:36:51,739 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-3] Loading filename logan4.jpg as resource
+2020-06-27 08:36:51,764 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-5] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:36:51,766 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-5] Loading filename logan4.jpg as resource
+2020-06-27 08:36:51,768 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:36:51,769 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 08:36:51,787 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:36:51,788 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource
+2020-06-27 08:38:41,886 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:38:41,886 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-9] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:38:41,896 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource
+2020-06-27 08:38:41,896 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-9] Loading filename logan4.jpg as resource
+2020-06-27 08:38:41,961 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-2] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:38:41,962 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-2] Loading filename logan4.jpg as resource
+2020-06-27 08:38:41,976 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:38:41,977 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 08:38:42,020 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-9] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:38:42,021 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-9] Loading filename logan4.jpg as resource
+2020-06-27 08:38:42,092 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-8] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:38:42,093 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-8] Loading filename logan4.jpg as resource
+2020-06-27 08:38:42,130 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-2] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:38:42,135 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-2] Loading filename logan4.jpg as resource
+2020-06-27 08:38:42,139 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-8] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:38:42,139 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-8] Loading filename logan4.jpg as resource
+2020-06-27 08:39:57,548 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-5] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:39:57,551 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-5] Loading filename logan4.jpg as resource
+2020-06-27 08:39:57,555 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:39:57,557 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 08:39:57,583 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-5] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:39:57,584 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-5] Loading filename logan4.jpg as resource
+2020-06-27 08:39:57,585 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-1] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:39:57,585 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-1] Loading filename logan4.jpg as resource
+2020-06-27 08:40:14,360 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:40:14,360 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-9] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:40:14,361 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-9] Loading filename logan4.jpg as resource
+2020-06-27 08:40:14,360 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource
+2020-06-27 08:40:14,396 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:40:14,397 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-9] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:40:14,397 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource
+2020-06-27 08:40:14,397 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-9] Loading filename logan4.jpg as resource
+2020-06-27 08:46:56,890 INFO com.uns.ftn.agentservice.endpoint.AdvertisementEndpoint [https-jsse-nio-8081-exec-4] Retrieving comments from microservices
+2020-06-27 08:46:56,896 INFO com.uns.ftn.agentservice.service.CommentService [https-jsse-nio-8081-exec-4] Retrieving comments from advertisements posted by user with id 2
+2020-06-27 08:58:59,783 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-3] Loading photos of advertisement with id 1 as resource
+2020-06-27 08:58:59,783 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-5] Loading photos of advertisement with id 2 as resource
+2020-06-27 08:58:59,809 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-3] Loading filename logan4.jpg as resource
+2020-06-27 08:58:59,809 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-5] Loading filename logan4.jpg as resource
+2020-06-27 08:58:59,870 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 3 as resource
+2020-06-27 08:58:59,870 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-3] Loading photos of advertisement with id 4 as resource
+2020-06-27 08:58:59,871 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 08:58:59,871 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-3] Loading filename logan4.jpg as resource
+2020-06-27 09:00:28,946 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 1 as resource
+2020-06-27 09:00:28,946 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-3] Loading photos of advertisement with id 2 as resource
+2020-06-27 09:00:28,948 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-3] Loading filename logan4.jpg as resource
+2020-06-27 09:00:28,948 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 09:00:28,991 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-10] Loading photos of advertisement with id 4 as resource
+2020-06-27 09:00:28,992 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-10] Loading filename logan4.jpg as resource
+2020-06-27 09:00:28,994 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 3 as resource
+2020-06-27 09:00:28,995 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 09:00:29,032 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-4] Loading photos of advertisement with id 1 as resource
+2020-06-27 09:00:29,032 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-6] Loading photos of advertisement with id 2 as resource
+2020-06-27 09:00:29,034 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-4] Loading filename logan4.jpg as resource
+2020-06-27 09:00:29,034 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-6] Loading filename logan4.jpg as resource
+2020-06-27 09:00:29,075 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-10] Loading photos of advertisement with id 4 as resource
+2020-06-27 09:00:29,075 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-10] Loading filename logan4.jpg as resource
+2020-06-27 09:00:29,075 DEBUG com.uns.ftn.agentservice.controller.PhotoController [https-jsse-nio-8081-exec-7] Loading photos of advertisement with id 3 as resource
+2020-06-27 09:00:29,075 INFO com.uns.ftn.agentservice.service.impl.PhotoServiceImpl [https-jsse-nio-8081-exec-7] Loading filename logan4.jpg as resource

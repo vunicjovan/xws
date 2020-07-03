@@ -10,7 +10,7 @@ import Cart from "../views/Cart.vue";
 import SimpleUsers from "../views/SimpleUsers.vue";
 import Chat from "../views/chat/Chat.vue";
 import UnpublishedComments from "../components/comments/UnpublishedComments.vue";
-import ChangePassword from "../views/account/ChangePassword.vue"
+import ChangePassword from "../views/account/ChangePassword.vue";
 import RegistrationRequests from "../views/account/RegistrationRequests.vue";
 import PublishedView from "../views/advertisement/PublishedView.vue";
 import RentingRequest from "../views/RentingRequest.vue";
@@ -22,6 +22,7 @@ import ResetPassword from "../views/account/ResetPassword.vue";
 import ResetEmail from "../views/account/SendResetEmail.vue";
 import Income from "../views/debts/Income.vue";
 import Debts from "../views/debts/Debts.vue";
+import PriceList from "../views/advertisement/PriceList.vue";
 
 Vue.use(VueRouter);
 
@@ -29,112 +30,117 @@ const routes = [
 	{
 		path: "/",
 		name: "Home",
-		component: Home
+		component: Home,
 	},
 	{
 		path: "/login",
 		name: "Login",
-		component: Login
+		component: Login,
 	},
 	{
 		path: "/register",
 		name: "Register",
-		component: Register
+		component: Register,
 	},
 	{
 		path: "/catalog",
 		name: "Catalog",
-		component: Catalog
+		component: Catalog,
 	},
 	{
 		path: "/post-ad",
 		name: "AdvertismentForm",
-		component: AdvertismentForm
+		component: AdvertismentForm,
 	},
 	{
 		path: "/single-ad/:id",
 		name: "DetailedView",
-		component: DetailedView
+		component: DetailedView,
 	},
 	{
 		path: "/cart",
 		name: "Cart",
-		component: Cart
+		component: Cart,
 	},
 	{
 		path: "/users",
 		name: "SimpleUsers",
-		component: SimpleUsers
+		component: SimpleUsers,
 	},
 	{
 		path: "/chat",
 		name: "Chat",
-		component: Chat
+		component: Chat,
 	},
 	{
 		path: "/unpublishedComments",
 		name: "UnpublishedComments",
-		component: UnpublishedComments
+		component: UnpublishedComments,
 	},
 	{
 		path: "/password",
 		name: "ChangePassword",
-		component: ChangePassword
+		component: ChangePassword,
 	},
 	{
 		path: "/registrationRequests",
 		name: "RegistrationRequests",
-		component: RegistrationRequests
+		component: RegistrationRequests,
 	},
 	{
 		path: "/ads/published",
 		name: "PublishedView",
-		component: PublishedView
+		component: PublishedView,
 	},
 	{
 		path: "/ads/published/request/:id",
 		name: "RentingRequest",
-		component: RentingRequest
+		component: RentingRequest,
 	},
 	{
 		path: "/ads/rented",
 		name: "RentingHistoryView",
-		component: RentingHistoryView
+		component: RentingHistoryView,
 	},
 	{
 		path: "/statistic/:id",
 		name: "StatisticReport",
-		component: StatisticReport
+		component: StatisticReport,
 	},
 	{
 		path: "/profile",
 		name: "Profile",
-		component: Profile
-  },
-  {
+		component: Profile,
+	},
+	{
 		path: "/registerUser/:token",
 		name: "AccountActivation",
-		component: AccountActivation
+		component: AccountActivation,
 	},
 	{
 		path: "/resetPassword/:token",
 		name: "ResetPassword",
-		component: ResetPassword
+		component: ResetPassword,
 	},
 	{
 		path: "/sendReset",
 		name: "ResetEmail",
-		component: ResetEmail
+		component: ResetEmail,
 	},
 	{
 		path: "/income",
 		name: "Income",
-		component: Income
+		component: Income,
 	},
 	{
 		path: "/debts",
 		name: "Debts",
-		component: Debts
+		component: Debts,
+	},
+	{
+		path: "/pricelist",
+		name: "PriceList",
+		component: PriceList,
 	},
 ];
 

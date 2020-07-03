@@ -1,0 +1,9 @@
+2020-06-27 08:01:58,413 INFO org.springframework.boot.SpringApplication [main] No active profile set, falling back to default profiles: default
+2020-06-27 08:02:16,981 INFO org.springframework.boot.StartupInfoLogger [main] Started MailServiceApplication in 20.018 seconds (JVM running for 20.991)
+2020-06-27 08:11:09,592 INFO org.springframework.boot.SpringApplication [main] No active profile set, falling back to default profiles: default
+2020-06-27 08:11:31,017 INFO org.springframework.boot.StartupInfoLogger [main] Started MailServiceApplication in 23.191 seconds (JVM running for 24.276)
+2020-06-27 08:33:11,244 INFO com.uns.ftn.mailservice.service.MessagingService [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] kcentar4@gmail.com is sending mail to kcentar4@gmail.com
+2020-06-27 08:35:24,511 INFO com.uns.ftn.mailservice.service.MessagingService [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] kcentar4@gmail.com is sending mail to kcentar4@gmail.com
+2020-06-27 08:39:01,054 INFO com.uns.ftn.mailservice.service.MessagingService [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] kcentar4@gmail.com is sending mail to kcentar4@gmail.com
+2020-06-27 12:25:27,584 INFO org.springframework.boot.SpringApplication [main] No active profile set, falling back to default profiles: default
+2020-06-27 12:25:33,615 INFO org.springframework.boot.StartupInfoLogger [main] Started MailServiceApplication in 7.332 seconds (JVM running for 11.117)
