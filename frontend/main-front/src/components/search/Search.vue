@@ -207,17 +207,17 @@ export default {
 				parameters.append("address", this.address);
 				parameters.append("startDate", this.startDate);
 				parameters.append("endDate", this.endDate);
-				parameters.append("brand", this.brandId);
-				parameters.append("model", this.modelId);
-				parameters.append("fuel", this.fuelTypeId);
-				parameters.append("gearbox", this.gearboxTypeId);
-				parameters.append("class", this.vehicleClassId);
-				parameters.append("minPrice", this.minPrice);
-				parameters.append("maxPrice", this.maxPrice);
-				parameters.append("kmTraveled", this.kilometersTraveled);
-				parameters.append("kmPlaned", this.kilometersPlaned);
-				parameters.append("cdw", this.collisionDamageWaiver);
-				parameters.append("childrenSeatNum", this.childSeatNumber);
+				if (this.brandId) parameters.append("brand", this.brandId);
+				if (this.modelId) parameters.append("model", this.modelId);
+				if (this.fuelTypeId) parameters.append("fuel", this.fuelTypeId);
+				if (this.gearboxTypeId) parameters.append("gearbox", this.gearboxTypeId);
+				if (this.vehicleClassId) parameters.append("class", this.vehicleClassId);
+				if (this.minPrice) parameters.append("minPrice", this.minPrice);
+				if (this.maxPrice) parameters.append("maxPrice", this.maxPrice);
+				if (this.kilometersTraveled) parameters.append("kmTraveled", this.kilometersTraveled);
+				if (this.kilometersPlaned) parameters.append("kmPlaned", this.kilometersPlaned);
+				if (this.collisionDamageWaiver) parameters.append("cdw", this.collisionDamageWaiver);
+				if (this.childSeatNumber) parameters.append("childrenSeatNum", this.childSeatNumber);
 
 				this.$store
 					.dispatch("advancedSearch", parameters)

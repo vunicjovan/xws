@@ -8,7 +8,7 @@
 				</span>
 			</router-link>
 			<div style="flex: 1;"></div>
-			<searchDialog/>
+			<searchDialog />
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" to="/post-ad">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Post new advertisement</md-tooltip>
@@ -37,7 +37,10 @@
 				<i class="fas fa-shopping-cart fa-2x"></i>
 				<md-tooltip>Your cart</md-tooltip>
 			</md-button>
-			<md-button v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))" @click.native="$router.push('/ads/published')">
+			<md-button
+				v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))"
+				@click.native="$router.push('/ads/published')"
+			>
 				<i class="fas fa-list fa-2x"></i>
 				<md-tooltip>Published Ads</md-tooltip>
 			</md-button>
@@ -48,6 +51,10 @@
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" @click.native="$router.push('/statistic/' + getUser.id)">
 				<i class="fa fa-signal fa-2x"></i>
 				<md-tooltip>Statistic report</md-tooltip>
+			</md-button>
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" @click.native="$router.push('/pricelist')">
+				<i class="fa fa-book fa-2x"></i>
+				<md-tooltip>pricelist</md-tooltip>
 			</md-button>
 			<div style="flex: 1;"></div>
 			<md-menu>
@@ -115,13 +122,12 @@ export default {
 	methods: {
 		...mapActions(["logout"]),
 		logout() {
-			this.$store.dispatch("logout")
-				.then(() => this.$router.push("/login"));
+			this.$store.dispatch("logout").then(() => this.$router.push("/login"));
 		},
 	},
 	components: {
-		searchDialog: () => import("../search/Search.vue")
-	}
+		searchDialog: () => import("../search/Search.vue"),
+	},
 };
 </script>
 

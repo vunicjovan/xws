@@ -2,6 +2,7 @@ package com.uns.ftn.agentservice.service;
 
 import com.uns.ftn.agentservice.domain.PriceList;
 import com.uns.ftn.agentservice.domain.PriceListItem;
+import com.uns.ftn.agentservice.dto.PriceListDTO;
 import com.uns.ftn.agentservice.dto.PriceListItemDTO;
 import com.uns.ftn.agentservice.exceptions.NotFoundException;
 import com.uns.ftn.agentservice.repository.PriceListItemRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,13 +55,23 @@ public class PriceListService {
 
     public ResponseEntity<?> getAllItemsForUser(Long id) {
         PriceList priceList = priceListRepository.findByOwnerId(id);
+        if (priceList != null)
+            return new ResponseEntity<>(new PriceListDTO(priceList), HttpStatus.OK);
 
-        return new ResponseEntity(priceList.getPriceListItem().stream().map(PriceListItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(new PriceListDTO(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> createDiscount(Long ownerId, double discount) {
         PriceList priceList = priceListRepository.findByOwnerId(ownerId);
+        if(priceList != null) {
+            priceList.setDiscount(discount);
+            priceListRepository.save(priceList);
+            return new ResponseEntity<>("Discount successfully created.", HttpStatus.OK);
+        }
+
+        priceList = new PriceList();
         priceList.setDiscount(discount);
+        priceList.setOwnerId(ownerId);
         priceListRepository.save(priceList);
 
         return new ResponseEntity<>("Discount successfully created.", HttpStatus.OK);

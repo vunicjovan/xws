@@ -72,13 +72,18 @@
 							<span class="md-error" v-if="!$v.form.location.required">Location is required</span>
 							<span class="md-error" v-else-if="!$v.form.location.lrx">Location is not in proper format</span>
 						</md-field>
-						<md-field :class="{ 'md-invalid': $v.form.price.$error }">
-							<label for="price">Price</label>
-							<span class="md-prefix">€</span>
-							<md-input v-model="form.price" type="number" step="0.01"></md-input>
-							<span class="md-error" v-if="!$v.form.price.required">Price is required</span>
-							<span class="md-error" v-else-if="!$v.form.price.decimal">Price must be number</span>
-						</md-field>
+						<div class="outer">
+							<md-field :class="{ 'md-invalid': $v.form.priceListItemId.$error }" class="full">
+								<label for="price">Price</label>
+								<md-select name="price" v-model="form.priceListItemId">
+									<md-option v-for="pricelist in getPriceList" :key="pricelist.id" :value="pricelist.id"
+										>Daily={{ pricelist.dailyPrice }}€, CDW={{ pricelist.cdwPrice }}€, Debt={{ pricelist.debtPrice }}€</md-option
+									>
+								</md-select>
+								<span class="md-error" v-if="!$v.form.priceListItemId.required">Price is required field</span>
+							</md-field>
+							<md-button class="md-primary" @click.prevent="active = true">Add</md-button>
+						</div>
 						<md-field :class="{ 'md-invalid': $v.form.description.$error }">
 							<label for="description">Description</label>
 							<md-textarea v-model="form.description"></md-textarea>
@@ -96,6 +101,32 @@
 				</md-card-actions>
 			</md-card>
 		</form>
+		<md-dialog :md-active.sync="active">
+			<md-dialog-title>New Price List Item</md-dialog-title>
+			<md-dialog-content>
+				<form>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.dailyPrice.$error }">
+						<label>Daily price</label>
+						<md-input type="number" v-model="pricelistForm.dailyPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.dailyPrice.required">Daily price is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.cdwPrice.$error }">
+						<label>Collision damage waiver</label>
+						<md-input type="number" v-model="pricelistForm.cdwPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.cdwPrice.required">Collision damage waiver price is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.debtPrice.$error }">
+						<label>Debt price</label>
+						<md-input type="number" v-model="pricelistForm.debtPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.debtPrice.required">Debt price is required</span>
+					</md-field>
+				</form>
+			</md-dialog-content>
+			<md-dialog-actions>
+				<md-button class="md-primary" @click="active = false">Cancel</md-button>
+				<md-button class="md-primary" @click.prevent="validatePriceListItem">Add</md-button>
+			</md-dialog-actions>
+		</md-dialog>
 	</div>
 </template>
 
@@ -113,6 +144,7 @@ export default {
 	mixins: [validationMixin],
 	data() {
 		return {
+			active: false,
 			brandId: undefined,
 			hasKilometersLimit: false,
 			photos: [],
@@ -132,6 +164,13 @@ export default {
 				location: undefined,
 				description: undefined,
 				ownerId: undefined,
+				priceListItemId: undefined,
+			},
+			pricelistForm: {
+				dailyPrice: undefined,
+				cdwPrice: undefined,
+				debtPrice: undefined,
+				creatorId: undefined,
 			},
 			sending: false,
 		};
@@ -141,9 +180,10 @@ export default {
 			.dispatch("getCatalog")
 			.then(() => {})
 			.catch((error) => console.log(error));
-		//this.getCatalog();
+
+		if (this.getUser) this.$store.dispatch("getUsersPriceList", this.getUser.id);
 	},
-	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes", "getUser"]),
+	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes", "getUser", "getPriceList"]),
 	methods: {
 		...mapActions(["addAdvertisment", "addPhotots", "getCatalog"]),
 		clearForm() {
@@ -163,6 +203,7 @@ export default {
 			this.form.vehicle.childSeatNumber = undefined;
 			this.form.vehicle.hasAndroid = false;
 			this.form.location = undefined;
+			this.form.priceListItemId = undefined;
 		},
 
 		submitAd() {
@@ -207,10 +248,39 @@ export default {
 		},
 
 		validateAd() {
-			this.$v.$touch();
+			this.$v.form.$touch();
+			this.$v.brandId.$touch();
 
 			if (!this.$v.$invalid) {
 				this.submitAd();
+			}
+		},
+		validatePriceListItem() {
+			this.$v.pricelistForm.$touch();
+
+			if (!this.$v.pricelistForm.dailyPrice.$invalid && !this.$v.pricelistForm.cdwPrice.$invalid && !this.$v.pricelistForm.debtPrice.$invalid) {
+				this.submitPriceListItem();
+			}
+		},
+		submitPriceListItem() {
+			this.pricelistForm.creatorId = this.getUser.id;
+
+			this.$store
+				.dispatch("addNewPriceListItem", this.pricelistForm)
+				.then((data) => {
+					this.pricelistForm.dailyPrice = undefined;
+					this.pricelistForm.cdwPrice = undefined;
+					this.pricelistForm.debtPrice = undefined;
+					this.active = false;
+				})
+				.catch((error) => console.log(error));
+		},
+	},
+
+	watch: {
+		getUser: function(val) {
+			if (val) {
+				this.$store.dispatch("getUsersPriceList", val.id);
 			}
 		},
 	},
@@ -245,9 +315,8 @@ export default {
 				required,
 				lrx,
 			},
-			price: {
+			priceListItemId: {
 				required,
-				decimal,
 			},
 			kilometersPerDayLimit: {
 				integer,
@@ -255,6 +324,17 @@ export default {
 			description: {
 				required,
 				sqli,
+			},
+		},
+		pricelistForm: {
+			dailyPrice: {
+				required,
+			},
+			cdwPrice: {
+				required,
+			},
+			debtPrice: {
+				required,
 			},
 		},
 	},
@@ -274,5 +354,14 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+.outer {
+	display: flex;
+	align-items: baseline;
+}
+
+.full {
+	flex: 1;
 }
 </style>
