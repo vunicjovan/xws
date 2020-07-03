@@ -60,6 +60,7 @@
 			</md-card-content>
 
 			<md-card-actions>
+				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click.native="$router.push('/ads/published/edit/' + getAdvertisement.id)" class="md-raised md-accent">Edit Details</md-button>
 				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent">Edit availability</md-button>
 				<md-button v-if="getUser.roles.includes('SIMPLE_USER')" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
 			</md-card-actions>

@@ -20,8 +20,10 @@ import Profile from "../views/account/Profile.vue";
 import AccountActivation from "../views/account/AccountActivation.vue";
 import ResetPassword from "../views/account/ResetPassword.vue";
 import ResetEmail from "../views/account/SendResetEmail.vue";
+import EditView from "../views/advertisement/EditView.vue";
 import Income from "../views/debts/Income.vue";
 import Debts from "../views/debts/Debts.vue";
+
 
 Vue.use(VueRouter);
 
@@ -127,6 +129,11 @@ const routes = [
 		component: ResetEmail
 	},
 	{
+		path: "/ads/published/edit/:id",
+		name: EditView,
+		component: EditView
+  },
+  {
 		path: "/income",
 		name: "Income",
 		component: Income
