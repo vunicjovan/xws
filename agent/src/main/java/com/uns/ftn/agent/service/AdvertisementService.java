@@ -92,6 +92,8 @@ public class AdvertisementService {
         vehicle.setKilometersTraveled(adDTO.getVehicle().getKilometersTraveled());
         vehicle = saveVehicle(vehicle);
 
+        PriceListItem priceListItem = priceListItemRepository.findById(adDTO.getPriceListItemDTO().getId())
+                .orElseThrow(() -> new NotFoundException("Requested price list item doesn't exist"));
         Advertisement ad = new Advertisement();
         ad.setVehicle(vehicle);
         ad.setCollisionDamageWaiver(adDTO.getCollisionDamageWaiver());
@@ -100,7 +102,8 @@ public class AdvertisementService {
         ad.setLocation(adDTO.getLocation());
         ad.setOwnerId(2L);
         ad.setRating(0.0);
-        ad.setPrice(adDTO.getPrice());
+        ad.setPrice(priceListItem.getDailyPrice());
+        ad.setPriceListItem(priceListItem);
         ad = saveAd(ad);
 
         vehicle.setAdvertisement(ad);
@@ -263,18 +266,22 @@ public class AdvertisementService {
         return retval;
     }
 
+    public DetailedAdvertisementDTO getOneDetailedAdvertisement(Long id) {
+        return new DetailedAdvertisementDTO(findOne(id));
+    }
+
     public List<DetailedAdvertisementDTO> getDetailedAdvertisements() {
+        updateComments();
+
+        return advertisementRepository.findAll().stream().map(DetailedAdvertisementDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    private void updateComments() {
         CommentResponse commentResponse = advertisementClient.getComments((long) 1);
         List<Advertisement> advertisements = advertisementRepository.findAll();
-        List<DetailedAdvertisementDTO> detailedAdvertisementDTOS = new ArrayList<>();
 
         advertisements.forEach(advertisement -> {
-
-            List<CommentDTO> commentDTOList = advertisement.getComments()
-                    .stream()
-                    .map(comment -> new CommentDTO(comment.getId(), comment.getTitle(), comment.getContent()))
-                    .collect(Collectors.toList());
-
             /*
              * For all comments retrieved from microservices database check if there exist comment,
              * posted on current advertisement, that is not present in agent database and save that comment.
@@ -296,16 +303,11 @@ public class AdvertisementService {
                         comment.setAllowed(servicesComment.isAllowed());
                         comment.setUserId(servicesComment.getUserId());
                         comment.setAdvertisement(advertisement);
-                        comment = commentRepository.save(comment);
-                        commentDTOList.add(new CommentDTO(comment.getId(), comment.getTitle(), comment.getContent()));
+                        commentRepository.save(comment);
                     }
                 }
             });
-
-            detailedAdvertisementDTOS.add(new DetailedAdvertisementDTO(advertisement, commentDTOList));
         });
-
-        return detailedAdvertisementDTOS;
     }
 
     private Boolean findIfRangeOverlaps(Set<RentingInterval> rentingIntervals, Date startDate, Date endDate) {
@@ -343,6 +345,7 @@ public class AdvertisementService {
         Advertisement advertisement = findOne(advertisementDTO.getAdvertisementId());
         advertisement.setDescription(advertisementDTO.getDescription());
         advertisement.setPriceListItem(priceListItem);
+        advertisement.setPrice(priceListItem.getDailyPrice());
         advertisementRepository.save(advertisement);
 
         advertisementDTO.setAdvertisementId(adWrapper.getRemoteId());

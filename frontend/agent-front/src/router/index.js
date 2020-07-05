@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import PostAdvertisement from "../forms/PostAdvertisement.vue";
 import RequestsFinished from "../views/RequestsFinished.vue";
 import Chat from "../views/Chat.vue";
+import EditAdvertisement from "../views/advertisement/EditAdvertisement.vue";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
 		path: "/chat",
 		name: "Chat",
 		component: Chat,
+	},
+	{
+		path: "/edit/:id",
+		name: "EditAdvertisement",
+		component: EditAdvertisement,
 	},
 ];
 

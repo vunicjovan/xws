@@ -74,13 +74,17 @@
 						<span class="md-error" v-if="!$v.form2.location.required">Location is required</span>
 						<span class="md-error" v-else-if="!$v.form2.location.lrx">Location is not in proper format</span>
 					</md-field>
-					<md-field :class="{ 'md-invalid': $v.form2.price.$error }">
+					<md-field :class="{ 'md-invalid': $v.form2.priceListItemDTO.id.$error }">
 						<label for="price">Price</label>
-						<span class="md-prefix">€</span>
-						<md-input v-model="form2.price" type="number" step="0.01"></md-input>
-						<span class="md-error" v-if="!$v.form2.price.required">Price is required</span>
-						<span class="md-error" v-else-if="!$v.form2.price.decimal">Price must be number</span>
+						<md-select name="price" v-model="form2.priceListItemDTO.id">
+							<md-option v-for="pricelist in getPriceList" :key="pricelist.id" :value="pricelist.id"
+								>Daily={{ pricelist.dailyPrice }}€, CDW={{ pricelist.cdwPrice }}€, Debt={{ pricelist.debtPrice }}€</md-option
+							>
+						</md-select>
+						<span class="md-error" v-if="!$v.form2.priceListItemDTO.id.required">Price is required field</span>
+						<md-button class="md-primary" @click.prevent="newPriceList = true">Add</md-button>
 					</md-field>
+
 					<md-button @click="validateAd2" class="md-raised md-primary">Continue</md-button>
 				</form>
 			</md-step>
@@ -101,6 +105,33 @@
 				</form>
 			</md-step>
 		</md-steppers>
+
+		<md-dialog :md-active.sync="newPriceList">
+			<md-dialog-title>New Price List Item</md-dialog-title>
+			<md-dialog-content>
+				<form>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.dailyPrice.$error }">
+						<label>Daily price</label>
+						<md-input type="number" v-model="pricelistForm.dailyPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.dailyPrice.required">Daily price is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.cdwPrice.$error }">
+						<label>Collision damage waiver</label>
+						<md-input type="number" v-model="pricelistForm.cdwPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.cdwPrice.required">Collision damage waiver price is required</span>
+					</md-field>
+					<md-field :class="{ 'md-invalid': $v.pricelistForm.debtPrice.$error }">
+						<label>Debt price</label>
+						<md-input type="number" v-model="pricelistForm.debtPrice" step="0.01" />
+						<span class="md-error" v-if="!$v.pricelistForm.debtPrice.required">Debt price is required</span>
+					</md-field>
+				</form>
+			</md-dialog-content>
+			<md-dialog-actions>
+				<md-button class="md-primary" @click="newPriceList = false">Cancel</md-button>
+				<md-button class="md-primary" @click.prevent="validatePriceListItem">Add</md-button>
+			</md-dialog-actions>
+		</md-dialog>
 	</div>
 </template>
 
@@ -135,7 +166,10 @@ export default {
 					childSeatNumber: undefined,
 					hasAndroid: false,
 				},
-				price: undefined,
+				price: 10,
+				priceListItemDTO: {
+					id: undefined,
+				},
 				kilometersPerDayLimit: undefined,
 				collisionDamageWaiver: false,
 				location: undefined,
@@ -143,17 +177,24 @@ export default {
 			form3: {
 				description: undefined,
 			},
+			pricelistForm: {
+				dailyPrice: undefined,
+				cdwPrice: undefined,
+				debtPrice: undefined,
+				creatorId: 2,
+			},
 			sending: false,
 			active: "first",
 			first: false,
 			second: false,
 			third: false,
+			newPriceList: false,
 		};
 	},
 	created() {
 		this.$store.dispatch("getCatalog");
 	},
-	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes"]),
+	computed: mapGetters(["isLogged", "getBrands", "getModels", "getVehicleClasses", "getGearboxTypes", "getFuelTypes", "getPriceList"]),
 	methods: {
 		...mapActions(["addAdvertisement", "addPhotos", "getCatalog"]),
 
@@ -186,6 +227,7 @@ export default {
 				collisionDamageWaiver: this.form2.collisionDamageWaiver,
 				location: this.form2.location,
 				description: this.form3.description,
+				priceListItemDTO: this.form2.priceListItemDTO,
 			};
 
 			this.$store
@@ -206,7 +248,9 @@ export default {
 
 					this.$store
 						.dispatch("addPhotos", payload)
-						.then(() => console.log("SUCCESS!"))
+						.then(() => {
+							this.$router.push("/");
+						})
 						.catch((error) => console.log(error));
 				})
 				.catch((error) => console.log(error));
@@ -239,6 +283,24 @@ export default {
 			if (!this.$v.form3.$invalid) {
 				this.submitAd();
 			}
+		},
+		validatePriceListItem() {
+			this.$v.pricelistForm.$touch();
+
+			if (!this.$v.pricelistForm.dailyPrice.$invalid && !this.$v.pricelistForm.cdwPrice.$invalid && !this.$v.pricelistForm.debtPrice.$invalid) {
+				this.submitPriceListItem();
+			}
+		},
+		submitPriceListItem() {
+			this.$store
+				.dispatch("newPriceListItem", this.pricelistForm)
+				.then((data) => {
+					this.pricelistForm.dailyPrice = undefined;
+					this.pricelistForm.cdwPrice = undefined;
+					this.pricelistForm.debtPrice = undefined;
+					this.newPriceList = false;
+				})
+				.catch((error) => console.log(error));
 		},
 	},
 	validations: {
@@ -280,6 +342,11 @@ export default {
 				required,
 				decimal,
 			},
+			priceListItemDTO: {
+				id: {
+					required,
+				},
+			},
 			kilometersPerDayLimit: {
 				integer,
 			},
@@ -290,11 +357,22 @@ export default {
 				sqli,
 			},
 		},
+		pricelistForm: {
+			dailyPrice: {
+				required,
+			},
+			cdwPrice: {
+				required,
+			},
+			debtPrice: {
+				required,
+			},
+		},
 	},
 };
 </script>
 
-<style>
+<style scoped>
 .md-steppers {
 	width: 70%;
 	margin: 0 auto;
@@ -302,5 +380,14 @@ export default {
 
 .somespan {
 	width: 70%;
+}
+
+.outer {
+	display: flex;
+	align-items: baseline;
+}
+
+.full {
+	flex: 1;
 }
 </style>

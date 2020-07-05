@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +31,7 @@ public class DetailedAdvertisementDTO {
     private List<CommentDTO> comments;
     private List<String> photos = new ArrayList<>();
 
-    public DetailedAdvertisementDTO(Advertisement advertisement, List<CommentDTO> commentDTOList) {
+    public DetailedAdvertisementDTO(Advertisement advertisement) {
         this.id = advertisement.getId();
         this.brand = advertisement.getVehicle().getModel().getBrand().getName();
         this.model = advertisement.getVehicle().getModel().getName();
@@ -45,7 +46,7 @@ public class DetailedAdvertisementDTO {
         this.childSeatNumber = advertisement.getVehicle().getChildSeatNumber();
         this.android = advertisement.getVehicle().getHasAndroid();
         this.description = advertisement.getDescription();
-        this.comments = commentDTOList;
+        this.comments = advertisement.getComments().stream().map(CommentDTO::new).collect(Collectors.toList());
     }
 
 }

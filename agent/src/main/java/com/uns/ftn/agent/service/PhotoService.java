@@ -39,21 +39,23 @@ public class PhotoService {
         String folder = "images/" + adId + "/";
         Advertisement advertisement = advertisementService.findOne(adId);
         AdWrapper adWrapper = advertisementService.findOneAdWrapper(adId);
-        Long remoteId = adWrapper.getRemoteId();
-        for(MultipartFile file : files) {
-            Photo photo = new Photo();
-            byte[] bytes = file.getBytes();
-            Files.createDirectories(Paths.get(folder));
-            Path path = Paths.get(folder + file.getOriginalFilename());
-            Files.write(path, bytes);
-            photo.setPath(file.getOriginalFilename());
-            photo.setAdvertisement(advertisement);
-            photoRepository.save(photo);
-            PhotoRequestDTO request = new PhotoRequestDTO();
-            request.setBytes(bytes);
-            request.setPath(photo.getPath());
-            request.setId(new Long(remoteId));
-            advertisementClient.newPhoto(request);
+        if(adWrapper != null) {
+            Long remoteId = adWrapper.getRemoteId();
+            for (MultipartFile file : files) {
+                Photo photo = new Photo();
+                byte[] bytes = file.getBytes();
+                Files.createDirectories(Paths.get(folder));
+                Path path = Paths.get(folder + file.getOriginalFilename());
+                Files.write(path, bytes);
+                photo.setPath(file.getOriginalFilename());
+                photo.setAdvertisement(advertisement);
+                photoRepository.save(photo);
+                PhotoRequestDTO request = new PhotoRequestDTO();
+                request.setBytes(bytes);
+                request.setPath(photo.getPath());
+                request.setId(new Long(remoteId));
+                advertisementClient.newPhoto(request);
+            }
         }
     }
 

@@ -36,10 +36,13 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
 
         request.setAdvertisement(ad);
 
-        NewAdvertisementResponse response = (NewAdvertisementResponse) getWebServiceTemplate()
-                .marshalSendAndReceive(request);
-
-        return response;
+        try {
+            return (NewAdvertisementResponse) getWebServiceTemplate()
+                    .marshalSendAndReceive(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -56,9 +59,13 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
     public CommentResponse getComments(Long id) {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setOwnerId(id);
-
-        CommentResponse commentResponse =(CommentResponse) getWebServiceTemplate()
-                .marshalSendAndReceive(commentRequest);
+        CommentResponse commentResponse = new CommentResponse();
+        try {
+           commentResponse = (CommentResponse) getWebServiceTemplate()
+                   .marshalSendAndReceive(commentRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return commentResponse;
     }
@@ -109,10 +116,14 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         priceListItem.setAgentId(priceListItemDTO.getCreatorId());
         priceRequest.setPriceListItem(priceListItem);
 
-        PriceResponse priceResponse = (PriceResponse) getWebServiceTemplate()
-                .marshalSendAndReceive(priceRequest);
+        try {
+            return  (PriceResponse) getWebServiceTemplate()
+                    .marshalSendAndReceive(priceRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return priceResponse;
+        return null;
     }
 
     public UpdateAdvertisementResponse updateAdvertisement(UpdateAdvertisementDTO updateAdvertisementDTO) {
@@ -121,9 +132,12 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         advertisementRequest.setPriceListItemId(updateAdvertisementDTO.getPriceListItemId());
         advertisementRequest.setDescription(updateAdvertisementDTO.getDescription());
 
-        UpdateAdvertisementResponse advertisementResponse = (UpdateAdvertisementResponse) getWebServiceTemplate()
-                .marshalSendAndReceive(advertisementRequest);
-
-        return advertisementResponse;
+        try {
+            return (UpdateAdvertisementResponse) getWebServiceTemplate()
+                    .marshalSendAndReceive(advertisementRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

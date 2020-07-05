@@ -24,7 +24,7 @@ import EditView from "../views/advertisement/EditView.vue";
 import Income from "../views/debts/Income.vue";
 import Debts from "../views/debts/Debts.vue";
 import PriceList from "../views/advertisement/PriceList.vue";
-
+import VehicleTracking from "../views/advertisement/VehicleTracking.vue";
 
 Vue.use(VueRouter);
 
@@ -132,9 +132,9 @@ const routes = [
 	{
 		path: "/ads/published/edit/:id",
 		name: EditView,
-		component: EditView
-  },
-  {
+		component: EditView,
+	},
+	{
 		path: "/income",
 		name: "Income",
 		component: Income,
@@ -148,6 +148,11 @@ const routes = [
 		path: "/pricelist",
 		name: "PriceList",
 		component: PriceList,
+	},
+	{
+		path: "/map",
+		name: "VehicleTracking",
+		component: VehicleTracking,
 	},
 ];
 
