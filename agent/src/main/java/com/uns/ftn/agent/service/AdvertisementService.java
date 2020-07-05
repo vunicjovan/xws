@@ -267,6 +267,7 @@ public class AdvertisementService {
     }
 
     public DetailedAdvertisementDTO getOneDetailedAdvertisement(Long id) {
+        updateComments();
         return new DetailedAdvertisementDTO(findOne(id));
     }
 

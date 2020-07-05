@@ -4,6 +4,7 @@ import searchApi from "@/api/Search.js";
 const state = {
 	advertisements: [],
 	advertisement: null,
+	vehiclePosition: null,
 	statistic: [],
 };
 
@@ -11,6 +12,7 @@ const getters = {
 	getAdvertisements: (state) => state.advertisements,
 	getAdvertisement: (state) => state.advertisement,
 	getStatistic: (state) => state.statistic,
+	getPosition: (state) => state.vehiclePosition,
 };
 
 const actions = {
@@ -137,12 +139,25 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	getLocation({ commit }, vehicleId) {
+		return new Promise((resolve, reject) => {
+			advertismentApi
+				.getLocation(vehicleId)
+				.then((data) => {
+					commit("setPosition", data);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
 	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
 	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement),
 	setStatistic: (state, report) => (state.statistic = report),
+	setPosition: (state, postition) => (state.vehiclePosition = postition),
 	deleteAdvertisement: (state, id) => {
 		state.advertisements = state.advertisements.filter((ad) => ad.id != id);
 	},

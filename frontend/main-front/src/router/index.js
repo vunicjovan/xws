@@ -150,7 +150,7 @@ const routes = [
 		component: PriceList,
 	},
 	{
-		path: "/map",
+		path: "/map/:ids",
 		name: "VehicleTracking",
 		component: VehicleTracking,
 	},
