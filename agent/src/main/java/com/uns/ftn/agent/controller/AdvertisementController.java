@@ -36,7 +36,7 @@ public class AdvertisementController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getAd(@PathVariable Long id) {
-        return null;
+        return new ResponseEntity<>(advertisementService.getOneDetailedAdvertisement(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/statistic")

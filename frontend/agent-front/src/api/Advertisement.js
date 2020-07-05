@@ -25,10 +25,13 @@ export default {
 		});
 	},
 
-	getDetailedAdvertisement(id) {
-		return axios.get(`/view/${id}`).then((response) => {
+	async getDetailedAdvertisement(id) {
+		try {
+			const response = await axios.get(`/ad/${id}`);
 			return response.data;
-		});
+		} catch (error) {
+			throw Error(error);
+		}
 	},
 
 	addRentingInterval(rentingInterval) {

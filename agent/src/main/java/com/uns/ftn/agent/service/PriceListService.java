@@ -44,7 +44,9 @@ public class PriceListService {
         priceListItemDTO.setCreatorId((long) 2);
         PriceResponse priceResponse = advertisementClient.createPriceListItem(priceListItemDTO);
 
-        priceListItem.setServicesId(priceResponse.getPriceListItem().getServiceId());
+        if(priceResponse != null) {
+            priceListItem.setServicesId(priceResponse.getPriceListItem().getServiceId());
+        }
         priceListItem = priceListItemRepository.save(priceListItem);
 
         return new PriceListItemDTO(priceListItem);

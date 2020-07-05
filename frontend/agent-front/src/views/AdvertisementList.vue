@@ -19,197 +19,199 @@
 			</md-card-header>
 
 			<md-card-actions>
-				<md-button @click="showPhotos = true">Photos</md-button>
-				<md-button @click="showDialog(ad)">Details</md-button>
+				<md-button @click.prevent="openPhotos(ad)">Photos</md-button>
+				<md-button @click.prevent="showDialog(ad)">Details</md-button>
 			</md-card-actions>
-
-			<md-dialog v-if="selectedAdvertisement" :md-active.sync="showModal" md-dynamic-height md-dynamic-width>
-				<md-dialog-title>{{ selectedAdvertisement.brand }} {{ selectedAdvertisement.model }} ({{ selectedAdvertisement.vehicleClass }})</md-dialog-title>
-				
-				<md-dialog-content class="md-scrollbar">
-					<md-tabs md-dynamic-height>
-						<md-tab md-label="General">
-							<md-list class="md-triple-line md-dense">
-								<md-list-item>
-									<div class="md-list-item-text">
-										<span>
-											<b>Price:</b> <i>{{ selectedAdvertisement.price }} </i>
-											<i class="fas fa-euro-sign"></i>
-											<br /><br />
-											<i class="fas fa-search-location"></i>
-											<b> Location:</b> <i>{{ selectedAdvertisement.location }}</i> <br /><br />
-											<i class="fas fa-car"></i>
-											<b> Traveled:</b> <i>{{ selectedAdvertisement.kmTraveled }} km</i> <br /><br />
-											<i class="fas fa-ban"></i>
-											<b> Daily travel limit:</b> <i v-if="selectedAdvertisement.dailyLimit !== -1">{{ selectedAdvertisement.dailyLimit }} km</i
-											><i v-else>None</i> <br /><br />
-											<i class="fas fa-baby"></i>
-											<b> Seats for children:</b> <i>{{ selectedAdvertisement.childSeatNumber }}x</i>
-										</span>
-									</div>
-								</md-list-item>
-							</md-list>
-						</md-tab>
-						<md-tab md-label="Technical details">
-							<md-list class="md-triple-line md-dense">
-								<md-list-item>
-									<div class="md-list-item-text">
-										<span>
-											<i class="fas fa-gas-pump"></i>
-											<b> Fuel type:</b> <i>{{ selectedAdvertisement.fuel }} </i> <br /><br />
-											<i class="fas fa-wrench"></i>
-											<b> Gearbox type:</b> <i>{{ selectedAdvertisement.gearbox }}</i> <br /><br />
-											<i class="fas fa-car-crash"></i>
-											<b> Collision damage waiver:</b> <i v-if="selectedAdvertisement.cdw">Supported</i><i v-else>Not supported</i> <br /><br />
-											<i class="fab fa-android"></i>
-											<b> Android:</b> <i v-if="selectedAdvertisement.android">Supported</i><i v-else>Not supported</i> <br /><br />
-											<b>Description:</b><br /><i>{{ selectedAdvertisement.description }}</i>
-										</span>
-									</div>
-								</md-list-item>
-							</md-list>
-						</md-tab>
-						<md-tab md-label="Rent intervals">
-							<form class="md-layout md-alignment-top-center">
-								<md-card class="md-layout-item md-size-40 md-small-size-100">
-									<md-card-header>
-										<div class="md-title">Unavailable intervals</div>
-									</md-card-header>
-									<md-card-content>
-										<md-datepicker :class="{ 'md-invalid': $v.rentingInterval.startDate.$error }" v-model="rentingInterval.startDate">
-											<label>Select start date</label>
-											<span class="md-error" v-if="!$v.rentingInterval.startDate.required">Start date is required</span>
-										</md-datepicker>
-										<md-datepicker :class="{ 'md-invalid': $v.rentingInterval.endDate.$error }" v-model="rentingInterval.endDate">
-											<label>Select end date</label>
-											<span class="md-error" v-if="!$v.rentingInterval.endDate.required">End date is required</span>
-										</md-datepicker>
-									</md-card-content>
-									<md-card-actions>
-										<md-button class="md-primary" @click="resetDates()">Reset</md-button>
-										<md-button class="md-primary" type="submit" @click.prevent="validateDates()">Add</md-button>
-									</md-card-actions>
-								</md-card>
-							</form>
-						</md-tab>
-						<md-tab md-label="Comments">
-							<div v-if="selectedAdvertisement.comments.length != 0">
-								<md-content class="md-scrollbar comments">
-									<div v-for="comment in selectedAdvertisement.comments" :key="comment.id" class="md-layout md-alignment-top-center">
-										<md-card class="md-layout-item md-size-40 md-small-size-100">
-											<md-card-header>
-												<div class="md-title">{{ comment.title }}</div>
-											</md-card-header>
-											<md-card-content>
-												<p>{{ comment.content }}</p>
-											</md-card-content>
-										</md-card>
-									</div>
-								</md-content>
-							</div>
-							<div v-else>
-								<md-empty-state md-label="No comments yet!"></md-empty-state>
-							</div>
-						</md-tab>
-						<md-tab md-label="Add comment">
-							<form class="md-layout md-alignment-top-center">
-								<md-card class="md-layout-item md-size-40 md-small-size-100">
-									<md-card-header>
-										<div class="md-title">Post comment</div>
-									</md-card-header>
-									<md-card-content>
-										<div class="md-layout">
-											<div class="md-layout-item md-small-size-100">
-												<md-field :class="getValidationClass('title')">
-													<label>Title</label>
-													<md-input type="text" v-model="comment.title"></md-input>
-													<span class="md-error" v-if="!$v.comment.title.required">Title is required</span>
-													<span class="md-error" v-if="!$v.comment.title.lrx">Title is not well formed</span>
-												</md-field>
-											</div>
-										</div>
-										<div class="md-layout">
-											<div class="md-layout-item md-small-size-100">
-												<md-field :class="getValidationClass('content')">
-													<label>Content</label>
-													<md-textarea type="text" v-model="comment.content" />
-													<span class="md-error" v-if="!$v.comment.content.required">Content is required</span>
-													<span class="md-error" v-if="!$v.comment.content.lrx">Content is not well formed</span>
-												</md-field>
-											</div>
-										</div>
-									</md-card-content>
-									<md-card-actions>
-										<md-button class="md-primary" @click="resetComment()">Reset</md-button>
-										<md-button class="md-primary" type="submit" @click.prevent="validateComment()">Add</md-button>
-									</md-card-actions>
-								</md-card>
-							</form>
-						</md-tab>
-						<md-tab md-label="Statistics">
-							<div>
-								<div v-if="getStatistic.bestRatedAds.length != 0">
-									<span md-heading>Best rated ads</span>
-									<md-table>
-										<md-table-row>
-											<md-table-cell>Comment count</md-table-cell>
-											<md-table-cell>Kilometers traveled</md-table-cell>
-											<md-table-cell>Rating</md-table-cell>
-										</md-table-row>
-										<md-table-row v-for="ad1 in getStatistic.bestRatedAds" v-bind:key="ad1.id">
-											<md-table-cell>{{ ad1.commentNumber }}</md-table-cell>
-											<md-table-cell>{{ ad1.kmTraveled }}</md-table-cell>
-											<md-table-cell>{{ ad1.rating }}</md-table-cell>
-										</md-table-row>
-									</md-table>
-								</div>
-								<div v-if="getStatistic.mostCommentedAds.length != 0">
-									<span md-heading>Most commented ads</span>
-									<md-table>
-										<md-table-row>
-											<md-table-cell>Comment count</md-table-cell>
-											<md-table-cell>Kilometers traveled</md-table-cell>
-											<md-table-cell>Rating</md-table-cell>
-										</md-table-row>
-										<md-table-row v-for="ad2 in getStatistic.mostCommentedAds" v-bind:key="ad2.id">
-											<md-table-cell>{{ ad2.commentNumber }}</md-table-cell>
-											<md-table-cell>{{ ad2.kmTraveled }}</md-table-cell>
-											<md-table-cell>{{ ad2.rating }}</md-table-cell>
-										</md-table-row>
-									</md-table>
-								</div>
-								<div v-if="getStatistic.mostKmTraveledAds.length != 0">
-									<span md-heading>Most kilometers traveled ads</span>
-									<md-table>
-										<md-table-row>
-											<md-table-cell>Comment count</md-table-cell>
-											<md-table-cell>Kilometers traveled</md-table-cell>
-											<md-table-cell>Rating</md-table-cell>
-										</md-table-row>
-										<md-table-row v-for="ad3 in getStatistic.mostKmTraveledAds" v-bind:key="ad3.id">
-											<md-table-cell>{{ ad3.commentNumber }}</md-table-cell>
-											<md-table-cell>{{ ad3.kmTraveled }}</md-table-cell>
-											<md-table-cell>{{ ad3.rating }}</md-table-cell>
-										</md-table-row>
-									</md-table>
-								</div>
-							</div>
-						</md-tab>
-					</md-tabs>
-				</md-dialog-content>
-			</md-dialog>
-			<md-dialog v-if="ad.photos.length != 0" :md-active.sync="showPhotos">
-				<div class="somediv">
-					<swiper class="swiper" :options="swiperOption">
-						<swiper-slide v-for="photo in ad.photos" :key="photo">
-							<img class="images" :src="getPhotoURL(ad.id, photo)" alt="Vehicle image" />
-						</swiper-slide>
-						<div class="swiper-button-prev" slot="button-prev"></div>
-						<div class="swiper-button-next" slot="button-next"></div>
-					</swiper>
-				</div>
-			</md-dialog>
 		</md-card>
+
+		<md-dialog v-if="selectedAdvertisement" :md-active.sync="showModal" md-dynamic-height md-dynamic-width>
+			<md-dialog-title>{{ selectedAdvertisement.brand }} {{ selectedAdvertisement.model }} ({{ selectedAdvertisement.vehicleClass }})</md-dialog-title>
+			<md-dialog-content class="md-scrollbar">
+				<md-tabs md-dynamic-height>
+					<md-tab md-label="General">
+						<md-list class="md-triple-line md-dense">
+							<md-list-item>
+								<div class="md-list-item-text">
+									<span>
+										<b>Price:</b> <i>{{ selectedAdvertisement.price }} </i>
+										<i class="fas fa-euro-sign"></i>
+										<br /><br />
+										<i class="fas fa-search-location"></i>
+										<b> Location:</b> <i>{{ selectedAdvertisement.location }}</i> <br /><br />
+										<i class="fas fa-car"></i>
+										<b> Traveled:</b> <i>{{ selectedAdvertisement.kmTraveled }} km</i> <br /><br />
+										<i class="fas fa-ban"></i>
+										<b> Daily travel limit:</b> <i v-if="selectedAdvertisement.dailyLimit !== -1">{{ selectedAdvertisement.dailyLimit }} km</i
+										><i v-else>None</i> <br /><br />
+										<i class="fas fa-baby"></i>
+										<b> Seats for children:</b> <i>{{ selectedAdvertisement.childSeatNumber }}x</i>
+									</span>
+								</div>
+							</md-list-item>
+						</md-list>
+					</md-tab>
+					<md-tab md-label="Technical details">
+						<md-list class="md-triple-line md-dense">
+							<md-list-item>
+								<div class="md-list-item-text">
+									<span>
+										<i class="fas fa-gas-pump"></i>
+										<b> Fuel type:</b> <i>{{ selectedAdvertisement.fuel }} </i> <br /><br />
+										<i class="fas fa-wrench"></i>
+										<b> Gearbox type:</b> <i>{{ selectedAdvertisement.gearbox }}</i> <br /><br />
+										<i class="fas fa-car-crash"></i>
+										<b> Collision damage waiver:</b> <i v-if="selectedAdvertisement.cdw">Supported</i><i v-else>Not supported</i> <br /><br />
+										<i class="fab fa-android"></i>
+										<b> Android:</b> <i v-if="selectedAdvertisement.android">Supported</i><i v-else>Not supported</i> <br /><br />
+										<b>Description:</b><br /><i>{{ selectedAdvertisement.description }}</i>
+									</span>
+								</div>
+							</md-list-item>
+						</md-list>
+					</md-tab>
+					<md-tab md-label="Rent intervals">
+						<form class="md-layout md-alignment-top-center">
+							<md-card class="md-layout-item md-size-40 md-small-size-100">
+								<md-card-header>
+									<div class="md-title">Unavailable intervals</div>
+								</md-card-header>
+								<md-card-content>
+									<md-datepicker :class="{ 'md-invalid': $v.rentingInterval.startDate.$error }" v-model="rentingInterval.startDate">
+										<label>Select start date</label>
+										<span class="md-error" v-if="!$v.rentingInterval.startDate.required">Start date is required</span>
+									</md-datepicker>
+									<md-datepicker :class="{ 'md-invalid': $v.rentingInterval.endDate.$error }" v-model="rentingInterval.endDate">
+										<label>Select end date</label>
+										<span class="md-error" v-if="!$v.rentingInterval.endDate.required">End date is required</span>
+									</md-datepicker>
+								</md-card-content>
+								<md-card-actions>
+									<md-button class="md-primary" @click="resetDates()">Reset</md-button>
+									<md-button class="md-primary" type="submit" @click.prevent="validateDates()">Add</md-button>
+								</md-card-actions>
+							</md-card>
+						</form>
+					</md-tab>
+					<md-tab md-label="Comments">
+						<div v-if="selectedAdvertisement.comments.length != 0">
+							<md-content class="md-scrollbar">
+								<div v-for="comment in selectedAdvertisement.comments" :key="comment.id" class="md-layout md-alignment-top-center">
+									<md-card class="md-layout-item md-size-40 md-small-size-100">
+										<md-card-header>
+											<div class="md-title">{{ comment.title }}</div>
+										</md-card-header>
+										<md-card-content>
+											<p>{{ comment.content }}</p>
+										</md-card-content>
+									</md-card>
+								</div>
+							</md-content>
+						</div>
+						<div v-else>
+							<md-empty-state md-label="No comments yet!"></md-empty-state>
+						</div>
+					</md-tab>
+					<md-tab md-label="Add comment">
+						<form class="md-layout md-alignment-top-center">
+							<md-card class="md-layout-item md-size-40 md-small-size-100">
+								<md-card-header>
+									<div class="md-title">Post comment</div>
+								</md-card-header>
+								<md-card-content>
+									<div class="md-layout">
+										<div class="md-layout-item md-small-size-100">
+											<md-field :class="getValidationClass('title')">
+												<label>Title</label>
+												<md-input type="text" v-model="comment.title"></md-input>
+												<span class="md-error" v-if="!$v.comment.title.required">Title is required</span>
+												<span class="md-error" v-if="!$v.comment.title.lrx">Title is not well formed</span>
+											</md-field>
+										</div>
+									</div>
+									<div class="md-layout">
+										<div class="md-layout-item md-small-size-100">
+											<md-field :class="getValidationClass('content')">
+												<label>Content</label>
+												<md-textarea type="text" v-model="comment.content" />
+												<span class="md-error" v-if="!$v.comment.content.required">Content is required</span>
+												<span class="md-error" v-if="!$v.comment.content.lrx">Content is not well formed</span>
+											</md-field>
+										</div>
+									</div>
+								</md-card-content>
+								<md-card-actions>
+									<md-button class="md-primary" @click="resetComment()">Reset</md-button>
+									<md-button class="md-primary" type="submit" @click.prevent="validateComment()">Add</md-button>
+								</md-card-actions>
+							</md-card>
+						</form>
+					</md-tab>
+					<md-tab md-label="Statistics">
+						<div v-if="getStatistic">
+							<div v-if="getStatistic.bestRatedAds && getStatistic.bestRatedAds.length != 0">
+								<span md-heading>Best rated ads</span>
+								<md-table>
+									<md-table-row>
+										<md-table-cell>Comment count</md-table-cell>
+										<md-table-cell>Kilometers traveled</md-table-cell>
+										<md-table-cell>Rating</md-table-cell>
+									</md-table-row>
+									<md-table-row v-for="ad1 in getStatistic.bestRatedAds" v-bind:key="ad1.id">
+										<md-table-cell>{{ ad1.commentNumber }}</md-table-cell>
+										<md-table-cell>{{ ad1.kmTraveled }}</md-table-cell>
+										<md-table-cell>{{ ad1.rating }}</md-table-cell>
+									</md-table-row>
+								</md-table>
+							</div>
+							<div v-if="getStatistic.mostCommentedAds && getStatistic.mostCommentedAds.length != 0">
+								<span md-heading>Most commented ads</span>
+								<md-table>
+									<md-table-row>
+										<md-table-cell>Comment count</md-table-cell>
+										<md-table-cell>Kilometers traveled</md-table-cell>
+										<md-table-cell>Rating</md-table-cell>
+									</md-table-row>
+									<md-table-row v-for="ad2 in getStatistic.mostCommentedAds" v-bind:key="ad2.id">
+										<md-table-cell>{{ ad2.commentNumber }}</md-table-cell>
+										<md-table-cell>{{ ad2.kmTraveled }}</md-table-cell>
+										<md-table-cell>{{ ad2.rating }}</md-table-cell>
+									</md-table-row>
+								</md-table>
+							</div>
+							<div v-if="getStatistic.mostKmTraveledAds && getStatistic.mostKmTraveledAds.length != 0">
+								<span md-heading>Most kilometers traveled ads</span>
+								<md-table>
+									<md-table-row>
+										<md-table-cell>Comment count</md-table-cell>
+										<md-table-cell>Kilometers traveled</md-table-cell>
+										<md-table-cell>Rating</md-table-cell>
+									</md-table-row>
+									<md-table-row v-for="ad3 in getStatistic.mostKmTraveledAds" v-bind:key="ad3.id">
+										<md-table-cell>{{ ad3.commentNumber }}</md-table-cell>
+										<md-table-cell>{{ ad3.kmTraveled }}</md-table-cell>
+										<md-table-cell>{{ ad3.rating }}</md-table-cell>
+									</md-table-row>
+								</md-table>
+							</div>
+						</div>
+					</md-tab>
+				</md-tabs>
+			</md-dialog-content>
+			<md-dialog-actions>
+				<md-button class="md-primary" @click="$router.push(`/edit/${selectedAdvertisement.id}`)">edit</md-button>
+			</md-dialog-actions>
+		</md-dialog>
+		<md-dialog v-if="selectedPhotos && selectedPhotos.length != 0" :md-active.sync="showPhotos">
+			<div class="somediv">
+				<swiper class="swiper" :options="swiperOption">
+					<swiper-slide v-for="photo in selectedPhotos" :key="photo">
+						<img class="images" :src="getPhotoURL(selectedAdvertisement.id, photo)" alt="Vehicle image" />
+					</swiper-slide>
+					<div class="swiper-button-prev" slot="button-prev"></div>
+					<div class="swiper-button-next" slot="button-next"></div>
+				</swiper>
+			</div>
+		</md-dialog>
 	</div>
 </template>
 
@@ -247,6 +249,7 @@ export default {
 			},
 			showModal: false,
 			showPhotos: false,
+			selectedPhotos: undefined,
 			selectedAdvertisement: undefined,
 			rentingInterval: {
 				startDate: undefined,
@@ -254,30 +257,31 @@ export default {
 				advertisementId: undefined,
 			},
 			comment: {
-                title: undefined,
+				title: undefined,
 				content: undefined,
 				userId: 2,
-                advertisementId: undefined,
+				advertisementId: undefined,
 			},
 			statistic: undefined,
 		};
 	},
-	
+
 	mounted: function() {
-        this.$store.dispatch("getAllAdvertisements");
+		this.$store.dispatch("getAllAdvertisements");
+		this.$store.dispatch("pullPriceList");
 		this.show = !this.show;
 	},
-	
-    computed: {
-        ...mapGetters(["getAdvertisements", "getStatistic"]),
-    },
+
+	computed: {
+		...mapGetters(["getAdvertisements", "getStatistic", "getPriceList"]),
+	},
 
 	methods: {
-		...mapActions(["getAllAdvertisements", "getAdvertisementStatistic"]),
+		...mapActions(["getAllAdvertisements", "getAdvertisementStatistic", "pullPriceList"]),
 		getPhotoURL(advertisementId, photoName) {
-            // return photoName;
-            return `http://localhost:8091/image/${advertisementId}/${photoName}/`;
-        },
+			// return photoName;
+			return `http://localhost:8091/image/${advertisementId}/${photoName}/`;
+		},
 		addCartItem(advertisementId) {
 			let payload = {
 				cartId: this.getUser.id,
@@ -334,13 +338,16 @@ export default {
 				};
 			}
 		},
-		showDialog(ad) {		
-			this.$store.dispatch("getAdvertisementStatistic", ad.id).then(
-				(data) => {	
-					this.selectedAdvertisement = ad;
-					this.showModal = true;
-				}
-			);
+		showDialog(ad) {
+			this.$store.dispatch("getAdvertisementStatistic", ad.id).then((data) => {
+				this.selectedAdvertisement = ad;
+				this.showModal = true;
+			});
+		},
+		openPhotos(ad) {
+			this.selectedAdvertisement = ad;
+			this.selectedPhotos = ad.photos;
+			this.showPhotos = true;
 		},
 	},
 

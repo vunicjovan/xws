@@ -6,6 +6,7 @@ import rentingIntervals from "./modules/rentingIntervals.js";
 import renting from "./modules/renting.js";
 import statistic from "./modules/statistic.js";
 import chat from "./modules/chat.js";
+import pricelist from "./modules/pricelist.js";
 
 Vue.use(Vuex);
 
@@ -17,5 +18,6 @@ export default new Vuex.Store({
 		renting,
 		statistic,
 		chat,
+		pricelist,
 	},
 });
