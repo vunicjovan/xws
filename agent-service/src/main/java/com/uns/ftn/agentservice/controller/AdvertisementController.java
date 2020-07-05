@@ -5,6 +5,7 @@ import com.uns.ftn.agentservice.dto.AdvertisementUpdateDTO;
 import com.uns.ftn.agentservice.dto.CommDTO;
 import com.uns.ftn.agentservice.dto.RatingDTO;
 import com.uns.ftn.agentservice.service.AdvertisementService;
+import com.uns.ftn.agentservice.service.AndroidService;
 import com.uns.ftn.agentservice.service.CommentService;
 import com.uns.ftn.agentservice.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,15 @@ public class AdvertisementController {
     private AdvertisementService adService;
     private CommentService commentService;
     private final RatingService ratingService;
+    private AndroidService androidService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService adService,
-                                   CommentService commentService, RatingService ratingService) {
+    public AdvertisementController(AdvertisementService adService, CommentService commentService,
+                                   RatingService ratingService, AndroidService androidService) {
         this.adService = adService;
         this.commentService = commentService;
         this.ratingService = ratingService;
+        this.androidService = androidService;
     }
 
     @GetMapping("/")
@@ -91,6 +94,16 @@ public class AdvertisementController {
     }
     /* END: Check advertisement for debt */
 
+    @GetMapping("comment/{id}")
+    public ResponseEntity<?> getClientComment(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(commentService.getClientComment(id), HttpStatus.OK);
+    }
+
+    @GetMapping("location/{id}")
+    public ResponseEntity<?> getVehicleLocation(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(androidService.getVehicleLocation(id), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/", consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody AdvertisementDTO adDTO) {
         return adService.postNewAd(adDTO);
@@ -132,8 +145,4 @@ public class AdvertisementController {
         return commentService.rejectComment(adId, id);
     }
 
-    @GetMapping("comment/{id}")
-    public  ResponseEntity<?> getClientComment(@PathVariable ("id") Long id) {
-        return new ResponseEntity<>(commentService.getClientComment(id), HttpStatus.OK);
-    }
 }

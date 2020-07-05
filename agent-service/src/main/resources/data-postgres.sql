@@ -66,3 +66,5 @@ insert into comment (title, content, allowed, user_id, advertisement_id) values 
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4);
 
+-- Android location
+insert into android_location (token, latitude, longitude, vehicle_id) values ('789ae3406905658fe37daa6f834842e8', 0.0, 0.0, 1);
