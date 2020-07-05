@@ -1,11 +1,16 @@
 package com.uns.ftn.agentservice.conf;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,18 +23,31 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     @Value("${fanout.exchange}")
     private String fanoutExchangeName;
 
-    @Value("${queue.name}")
-    private String queueName;
+    @Value("${android.exchange}")
+    private String androidExchangeName;
 
-    @Value("${queue.name1}")
-    private String queueName1;
+    @Value("${queue.android}")
+    private String androidQueue;
 
+    @Bean
+    Queue queue() {
+        return new Queue(androidQueue);
+    }
 
     @Bean
     FanoutExchange exchange() {
         return new FanoutExchange(fanoutExchangeName);
     }
 
+    @Bean
+    FanoutExchange androidExchange() {
+        return new FanoutExchange(androidExchangeName);
+    }
+
+    @Bean
+    Binding binding(Queue queue, FanoutExchange androidExchange) {
+        return BindingBuilder.bind(queue).to(androidExchange);
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
@@ -60,5 +78,16 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
     }
 
+    @Autowired
+    public ConnectionFactory connectionFactory;
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setConcurrentConsumers(3);
+        factory.setMaxConcurrentConsumers(10);
+        return factory;
+    }
 
 }
