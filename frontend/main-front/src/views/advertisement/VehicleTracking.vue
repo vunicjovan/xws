@@ -12,6 +12,7 @@
 <script>
 import L from "leaflet";
 import { LMap, LTileLayer, LMarker, LIcon } from "vue2-leaflet";
+import { mapGetters } from "vuex";
 
 export default {
 	name: "VehicleTracking",
@@ -55,6 +56,9 @@ export default {
 			],
 		};
 	},
+	computed: {
+		...mapGetters(["getPosition"]),
+	},
 	methods: {
 		zoomUpdate(zoom) {
 			this.currentZoom = zoom;
@@ -67,11 +71,13 @@ export default {
 		counter: {
 			handler(value) {
 				if (value % 3 == 0) {
-					this.$refs.map.setCenter(this.cord[this.index].markCenter);
-					this.currentMark = this.cord[this.index].markCenter;
-					this.index++;
-					if (this.index > 4) {
-						this.index = 0;
+					this.$store
+						.dispatch("getLocation", 1)
+						.then((data) => {})
+						.catch((error) => console.log(error));
+					if (this.getPosition) {
+						this.$refs.map.setCenter(L.latLng(this.getPosition.body.latitude, this.getPosition.body.longitude));
+						this.currentMark = L.latLng(this.getPosition.body.latitude, this.getPosition.body.longitude);
 					}
 				}
 				setTimeout(() => {

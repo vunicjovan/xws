@@ -4,6 +4,7 @@ import com.uns.ftn.agentservice.domain.PriceList;
 import com.uns.ftn.agentservice.domain.PriceListItem;
 import com.uns.ftn.agentservice.dto.PriceListDTO;
 import com.uns.ftn.agentservice.dto.PriceListItemDTO;
+import com.uns.ftn.agentservice.exceptions.BadRequestException;
 import com.uns.ftn.agentservice.exceptions.NotFoundException;
 import com.uns.ftn.agentservice.repository.PriceListItemRepository;
 import com.uns.ftn.agentservice.repository.PriceListRepository;
@@ -63,7 +64,11 @@ public class PriceListService {
 
     public ResponseEntity<?> createDiscount(Long ownerId, double discount) {
         PriceList priceList = priceListRepository.findByOwnerId(ownerId);
-        if(priceList != null) {
+        if (discount < 0 || discount > 1) {
+            throw new BadRequestException("Discount must be between 0% and 100%");
+        }
+
+        if (priceList != null) {
             priceList.setDiscount(discount);
             priceListRepository.save(priceList);
             return new ResponseEntity<>("Discount successfully created.", HttpStatus.OK);

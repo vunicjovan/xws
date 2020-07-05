@@ -22,19 +22,19 @@ export default {
 	getAllAdvertisements() {
 		return axios.get(`/view/`).then((response) => {
 			return response.data;
-		})
+		});
 	},
 
 	getDetailedAdvertisement(id) {
 		return axios.get(`/view/${id}`).then((response) => {
 			return response.data;
-		})
+		});
 	},
 
 	addRentingInterval(rentingInterval) {
 		return axios.post("/agent/interval/", rentingInterval).then((response) => {
 			return response.data;
-		})
+		});
 	},
 
 	getUserPublishedAdvertisements(ownerId) {
@@ -42,7 +42,6 @@ export default {
 			return response.data;
 		});
 	},
-
 
 	getStatisticReport(ownerId) {
 		return axios.get(`/agent/ad/${ownerId}/statistic`).then((response) => {
@@ -66,6 +65,14 @@ export default {
 		return axios.delete(`agent/ad/${adId}`).then((response) => {
 			return response.data;
 		});
-	}
-  
+	},
+
+	async getLocation(vehicleId) {
+		try {
+			const response = await axios.get(`/agent/ad/location/${vehicleId}`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };
