@@ -16,6 +16,7 @@ public class AdvertisementDTO implements Serializable {
     private String location;
     private double price;
     private int kilometersPerDayLimit = -1;
+    private Boolean deleted = false;
     private Boolean collisionDamageWaiver = false;
     private String description;
     private VehicleDTO vehicle;
@@ -33,6 +34,7 @@ public class AdvertisementDTO implements Serializable {
         this.description = ad.getDescription();
         this.ownerId = ad.getOwnerId();
         this.rating = ad.getRating();
+        this.deleted = ad.getDeleted();
 //        this.ratedByUsers = ad.getRatedByUsers().stream().map(UserDTO::new).collect(Collectors.toSet());
     }
 

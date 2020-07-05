@@ -131,6 +131,25 @@ public class AdvertisementService {
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.OK);
     }
 
+    public ResponseEntity<?> deleteAdvertisement(Long adId) {
+        Advertisement advertisement = findById(adId);
+
+        if (advertisement == null) {
+            throw new NotFoundException("Requested advertisement does not exist.");
+        }
+
+        advertisement.setDeleted(true);
+        advertisement = save(advertisement);
+
+        try {
+            queueProducer.produce(new AdvertisementDTO(advertisement));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(new AdvertisementDTO(advertisement), HttpStatus.OK);
+    }
+
     /*
      * Returns TRUE if data is valid, else returns FALSE.
      */
@@ -157,6 +176,10 @@ public class AdvertisementService {
 
     public Advertisement findById(Long id) {
         return adRepo.findById(id).orElse(null);
+    }
+
+    public Advertisement save(Advertisement advertisement) {
+        return adRepo.save(advertisement);
     }
 
     /* START: Methods for checking when deleting catalog item. */

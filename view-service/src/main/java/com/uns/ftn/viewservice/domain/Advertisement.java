@@ -31,6 +31,9 @@ public class Advertisement {
     @Column(name = "rating")
     private double rating = 0;
 
+    @Column(name = "deleted")
+    private Boolean deleted = false;
+
     @Column(name = "description")
     private String description;
 

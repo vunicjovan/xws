@@ -62,6 +62,7 @@
 			<md-card-actions>
 				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click.native="$router.push('/ads/published/edit/' + getAdvertisement.id)" class="md-raised md-accent">Edit Details</md-button>
 				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click="setupEdit(getAdvertisement.id)" class="md-raised md-accent">Edit availability</md-button>
+				<md-button v-if="getUser.id == getAdvertisement.ownerId" @click="deleteAd(getAdvertisement.id)" class="md-raised md-accent">Delete ad</md-button>
 				<md-button v-if="getUser.roles.includes('SIMPLE_USER')" @click="addCartItem(getAdvertisement.id)" class="md-raised md-accent">Add to cart</md-button>
 			</md-card-actions>
 		</md-card>
@@ -122,7 +123,7 @@ export default {
 		...mapGetters(["getAdvertisement", "getUser", "isLogged"]),
 	},
 	methods: {
-		...mapActions(["getDetailedAdvertisement", "addCartItem", "addRentingInterval"]),
+		...mapActions(["getDetailedAdvertisement", "addCartItem", "addRentingInterval", "removeAdvertisement"]),
 		getPhotoURL(advertisementId, photoName) {
 			return `http://localhost:8089/agent/images/${advertisementId}/${photoName}/`;
 		},
@@ -152,6 +153,14 @@ export default {
 		setupEdit(id) {
 			this.form.advertisementId = id
 			this.active = true;
+		},
+
+		deleteAd(id) {
+			this.$store.dispatch("removeAdvertisement", id)
+				.then((data) => {	
+					this.$router.push("/");
+				})
+				.catch((error) => console.log(error))
 		},
 
 		validateDates() {
