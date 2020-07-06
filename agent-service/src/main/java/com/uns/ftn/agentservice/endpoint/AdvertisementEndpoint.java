@@ -142,6 +142,7 @@ public class AdvertisementEndpoint {
         publisherCommentDTO.setUserId(commentRequest.getUserId());
         publisherCommentDTO.setAdvertisementId(commentRequest.getAdvertisementId());
         publisherCommentDTO.setId(commentRequest.getId());
+        publisherCommentDTO.setAllowed(commentRequest.isAllowed());
 
         PublisherCommentDTO responseDTO = commentService.publisherPostComment(publisherCommentDTO);
 
@@ -151,6 +152,7 @@ public class AdvertisementEndpoint {
         comment.setTitle(responseDTO.getTitle());
         comment.setUserId(responseDTO.getUserId());
         comment.setId(responseDTO.getId());
+        comment.setAllowed(responseDTO.getAllowed());
         commentResponse.setComment(comment);
 
         return commentResponse;

@@ -131,7 +131,14 @@ public class CommentService {
         comment.setContent(commentDTO.getContent());
         comment.setUserId(commentDTO.getUserId());
         comment.setAdvertisement(advertisement);
+        comment.setAllowed(commentDTO.getAllowed());
         commentRepository.save(comment);
+
+        try {
+            queueProducer.produceComment(new CommDTO(comment));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         return new PublisherCommentDTO(comment);
     }

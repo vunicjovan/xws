@@ -261,6 +261,7 @@ export default {
 				content: undefined,
 				userId: 2,
 				advertisementId: undefined,
+				allowed: true
 			},
 			statistic: undefined,
 		};
