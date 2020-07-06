@@ -13,7 +13,7 @@ import UnpublishedComments from "../components/comments/UnpublishedComments.vue"
 import ChangePassword from "../views/account/ChangePassword.vue";
 import RegistrationRequests from "../views/account/RegistrationRequests.vue";
 import PublishedView from "../views/advertisement/PublishedView.vue";
-import RentingRequest from "../views/RentingRequest.vue";
+import RentingRequest from "../views/rentingRequest/RentingRequest.vue";
 import RentingHistoryView from "../views/advertisement/RentingHistoryView.vue";
 import StatisticReport from "../views/statistic/StatisticReport.vue";
 import Profile from "../views/account/Profile.vue";
@@ -25,6 +25,7 @@ import Income from "../views/debts/Income.vue";
 import Debts from "../views/debts/Debts.vue";
 import PriceList from "../views/advertisement/PriceList.vue";
 import VehicleTracking from "../views/advertisement/VehicleTracking.vue";
+import PendingRequests from "../views/rentingRequest/PendingRentingRequest.vue";
 
 Vue.use(VueRouter);
 
@@ -153,6 +154,11 @@ const routes = [
 		path: "/map/:ids",
 		name: "VehicleTracking",
 		component: VehicleTracking,
+	},
+	{
+		path: "/ads/requests/pending",
+		name: "PendingRequests",
+		component: PendingRequests
 	},
 ];
 

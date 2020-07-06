@@ -42,6 +42,18 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	cancelRentingRequest({ commit }, requestId) {
+		return new Promise((resolve, reject) => {
+			rentingRequestApi
+				.deleteRentingRequest(requestId)
+				.then((data) => {
+					commit("deleteRentingRequest", requestId);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
@@ -51,6 +63,9 @@ const mutations = {
 		state.rentingRequests = state.rentingRequests.filter((rentingRequest) => rentingRequest.id !== id);
 		state.rentingRequest = null;
 	},
+	deleteRentingRequest: (state, id) => {
+		state.rentingRequests = state.rentingRequests.filter((rentingRequest) => rentingRequest.id != id);
+	}
 };
 
 export default {

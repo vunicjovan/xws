@@ -48,6 +48,10 @@
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Rented Ads</md-tooltip>
 			</md-button>
+			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/requests/pending')">
+				<i class="fas fa-ad fa-2x"></i>
+				<md-tooltip>Advertisement Requests</md-tooltip>
+			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" @click.native="$router.push('/statistic/' + getUser.id)">
 				<i class="fa fa-signal fa-2x"></i>
 				<md-tooltip>Statistic report</md-tooltip>

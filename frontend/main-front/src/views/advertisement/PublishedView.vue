@@ -82,7 +82,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(["getUser", "isLogged", "getAdvertisements", "getRentingRequests"]), //"getAdvertisements", "getRentingRequests"
+		...mapGetters(["getUser", "isLogged", "getAdvertisements", "getRentingRequests"]),
 	},
 
 	methods: {
