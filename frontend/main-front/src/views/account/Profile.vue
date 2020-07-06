@@ -67,7 +67,7 @@ export default {
             };
 
             console.log(updateDTO);
-            //this.$store.dispatch("updateUser", updateDTO);
+            this.$store.dispatch("updateUser", updateDTO);
             this.sending = false;
         }
     }
