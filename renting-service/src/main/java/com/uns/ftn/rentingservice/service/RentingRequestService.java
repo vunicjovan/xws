@@ -201,7 +201,7 @@ public class RentingRequestService {
             for(Advertisement ad : advertisements) {
                 for(RentingRequest req : ad.getRentingRequests()) {
                     if(req.getStatus() == RequestStatus.pending &&
-                            req.getEndDate().after(new Date(System.currentTimeMillis()))){
+                            req.getStartDate().after(new Date(System.currentTimeMillis()))){
                         response.add(req);
                     }
                 }
@@ -211,8 +211,8 @@ public class RentingRequestService {
         }
 
         for(RentingRequest req : requests) {
-            if(req.getStatus() == RequestStatus.pending &&
-                    req.getEndDate().after(new Date(System.currentTimeMillis()))) {
+            if(req.getStatus() != RequestStatus.canceled &&
+                    req.getStartDate().after(new Date(System.currentTimeMillis() + 86400000))) {
                 response.add(req);
             }
         }

@@ -12,4 +12,10 @@ export default {
             return response.data;
         })
     },
+
+    deleteRentingRequest(requestId) {
+        return axios.delete(`rent/request/${requestId}`).then((response) => {
+            return response.data;
+        });
+    }
 };

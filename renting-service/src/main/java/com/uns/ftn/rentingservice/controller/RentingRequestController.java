@@ -57,7 +57,7 @@ public class RentingRequestController {
         return requestService.updateRequestStatus(id, request);
     }
 
-    @DeleteMapping("/cancel/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelRequest(@PathVariable("id") Long id) {
         return requestService.cancelRequest(id);
     }
