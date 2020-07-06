@@ -196,6 +196,18 @@ public class UserService {
         return new ResponseEntity<>("User with username " + stremail + " deleted.", HttpStatus.OK);
     }
 
+    public ResponseEntity<?> updateUser(UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findById(userUpdateDTO.getId())
+                .orElseThrow(() -> new NotFoundException("User with given id does not exist!"));
+
+        user.setFirstName(userUpdateDTO.getFirstName());
+        user.setLastName(userUpdateDTO.getLastName());
+
+        user = userRepository.save(user);
+
+        return new ResponseEntity<>(new UserResponseDTO(user), HttpStatus.OK);
+    }
+
     private Date getTomorrowDate() {
         Date dt = new Date();
         Calendar c = Calendar.getInstance();

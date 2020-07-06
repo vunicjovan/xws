@@ -100,6 +100,7 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         newCommentRequest.setContent(publisherCommentDTO.getContent());
         newCommentRequest.setTitle(publisherCommentDTO.getTitle());
         newCommentRequest.setUserId(publisherCommentDTO.getUserId());
+        newCommentRequest.setAllowed(publisherCommentDTO.getAllowed());
 
         NewCommentResponse response = (NewCommentResponse) getWebServiceTemplate()
                 .marshalSendAndReceive(newCommentRequest);

@@ -145,3 +145,6 @@ insert into comment (title, content, allowed, user_id, advertisement_id) values 
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
 -- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 7, 2);
 -- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 5, 3);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4);

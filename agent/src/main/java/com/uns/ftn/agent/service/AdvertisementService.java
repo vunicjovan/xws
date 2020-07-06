@@ -159,9 +159,21 @@ public class AdvertisementService {
     }
 
     public PublisherCommentDTO publisherPostComment(PublisherCommentDTO publisherCommentDTO) {
-        NewCommentResponse response = advertisementClient.newPublisherComment(publisherCommentDTO);
+        CommentResponse commentResponse = advertisementClient.getComments((long) 2);
 
-        return new PublisherCommentDTO(response.getComment());
+        Boolean canPost = false;
+        for(rs.ac.uns.ftn.catalog.Comment comment : commentResponse.getComments()) {
+            if (comment.getAdvertisementId() == publisherCommentDTO.getAdvertisementId()) {
+                canPost = true;
+                break;
+            }
+        }
+        if (canPost) {
+            NewCommentResponse response = advertisementClient.newPublisherComment(publisherCommentDTO);
+            return new PublisherCommentDTO(response.getComment());
+        } else {
+            throw new BadRequestException("Agent cannot post comments on his advertisement until someone comments on it.");
+        }
     }
 
     private Boolean validateAdPostingData(AdvertisementDTO adDTO) {
@@ -279,7 +291,7 @@ public class AdvertisementService {
     }
 
     private void updateComments() {
-        CommentResponse commentResponse = advertisementClient.getComments((long) 1);
+        CommentResponse commentResponse = advertisementClient.getComments((long) 2);
         List<Advertisement> advertisements = advertisementRepository.findAll();
 
         advertisements.forEach(advertisement -> {

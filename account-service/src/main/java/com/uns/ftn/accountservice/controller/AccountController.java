@@ -84,10 +84,10 @@ public class AccountController {
         return userService.resetPassword(rdto);
     }
 
-    @PreAuthorize("hasAuthority('create')")
+//    @PreAuthorize("hasAuthority('create')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id) {
-        return null;
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+        return userService.updateUser(userUpdateDTO);
     }
 
     @PutMapping("/cancelation/{id}")
