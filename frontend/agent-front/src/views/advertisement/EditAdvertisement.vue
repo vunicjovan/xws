@@ -77,6 +77,7 @@ export default {
 	neme: "EditAdvertisement",
 	mixins: [validationMixin],
 	mounted() {
+		this.$store.dispatch("pullPriceList");
 		this.$store
 			.dispatch("getDetailedAdvertisement", this.$route.params.id)
 			.then(() => {
@@ -113,7 +114,12 @@ export default {
 			}
 		},
 		submitForm() {
-			this.$store.dispatch();
+			this.$store
+				.dispatch("updateAd", this.form)
+				.then((data) => {
+					this.$router.push("/");
+				})
+				.catch((error) => console.log(error));
 		},
 		validatePriceListItem() {
 			this.$v.pricelistForm.$touch();

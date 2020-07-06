@@ -1,45 +1,56 @@
 import chatApi from "@/api/Chat.js";
 
 const state = {
-    messages: [],
+	messages: [],
 };
 
 const getters = {
-    getChat: (state) => state.messages,
+	getChat: (state) => state.messages,
 };
 
 const actions = {
-    getMessages({ commit }, userId) {
-        return new Promise((resolve, reject) => {
-            chatApi
+	getMessages({ commit }, userId) {
+		return new Promise((resolve, reject) => {
+			chatApi
 				.getMessages(userId)
 				.then((messages) => {
 					commit("setMessages", messages);
 					resolve();
 				})
 				.catch((error) => reject(error));
-        });
-    },
+		});
+	},
 
-    sendMessage({commit}, message) {
-        return new Promise((resolve, reject) => {
-            chatApi
+	sendMessage({ commit }, message) {
+		return new Promise((resolve, reject) => {
+			chatApi
 				.sendMessage(message)
-				.then((message) => {
-					resolve(message);
+				.then((data) => {
+					resolve(data);
 				})
 				.catch((error) => reject(error));
-        })
-    }
+		});
+	},
+
+	deleteMessage({ commit }, message) {
+		return new Promise((resolve, reject) => {
+			chatApi
+				.deleteMessage(message)
+				.then((data) => {
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
-    setMessages: (state, messages) => (state.messages = messages),
-}
+	setMessages: (state, messages) => (state.messages = messages),
+};
 
 export default {
-    state,
-    getters,
-    actions,
-    mutations
-}
+	state,
+	getters,
+	actions,
+	mutations,
+};

@@ -6,13 +6,16 @@ package com.uns.ftn.agent.domain;
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Advertisement {
 
    @Id

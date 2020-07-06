@@ -25,7 +25,7 @@ public class Photo {
    private String path;
 
    @JsonIgnore
-   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+   @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
    private Advertisement advertisement;
 
 }

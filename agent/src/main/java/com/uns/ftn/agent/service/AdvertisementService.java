@@ -336,10 +336,6 @@ public class AdvertisementService {
 
         AdWrapper adWrapper = findOneAdWrapper(advertisementDTO.getAdvertisementId());
 
-        if (adWrapper == null) {
-            throw new NotFoundException("Requested advertisement doesn't exist");
-        }
-
         PriceListItem priceListItem = priceListItemRepository.findById(advertisementDTO.getPriceListItemId())
                             .orElseThrow(() -> new NotFoundException("Requested price list item doesn't exist"));
 
@@ -349,13 +345,15 @@ public class AdvertisementService {
         advertisement.setPrice(priceListItem.getDailyPrice());
         advertisementRepository.save(advertisement);
 
-        advertisementDTO.setAdvertisementId(adWrapper.getRemoteId());
-        advertisementDTO.setPriceListItemId(priceListItem.getServicesId());
 
-        UpdateAdvertisementResponse advertisementResponse = advertisementClient.updateAdvertisement(advertisementDTO);
 
-        return new UpdateAdvertisementDTO(advertisementResponse.getAdvertisementId(),
-                advertisementResponse.getPriceListItemId(), advertisementResponse.getDescription());
+        if(adWrapper != null) {
+            advertisementDTO.setAdvertisementId(adWrapper.getRemoteId());
+            advertisementDTO.setPriceListItemId(priceListItem.getServicesId());
+            UpdateAdvertisementResponse advertisementResponse = advertisementClient.updateAdvertisement(advertisementDTO);
+        }
+        return new UpdateAdvertisementDTO(advertisement.getId(),
+                priceListItem.getId(), advertisement.getDescription());
     }
 
     private void validateUpdateData(UpdateAdvertisementDTO advertisementDTO) {
