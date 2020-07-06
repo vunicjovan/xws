@@ -1,6 +1,10 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.ftn.uns.ac.rs/advertisement" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/advertisement" targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/advertisement"
+                  targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
     <wsdl:types>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/advertisement">
+
             <xs:element name="newAdvertisementRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -8,6 +12,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="newAdvertisementResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -15,6 +20,8 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+
             <xs:element name="newPhotoRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -24,6 +31,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="commentRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -31,6 +39,8 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+
             <xs:element name="newPhotoResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -39,6 +49,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="newRentingIntervalRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -47,6 +58,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="newRentingIntervalResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -54,13 +66,16 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="commentResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="comments" nillable="true" type="tns:comment"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="comments" nillable="true"
+                                    type="tns:comment"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="updateAdvertisementRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -70,6 +85,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="updateAdvertisementResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -79,6 +95,23 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+            <xs:element name="deleteAdvertisementRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="advertisementId" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="deleteAdvertisementResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="advertisementId" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <xs:element name="priceRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -86,6 +119,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="priceResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -93,6 +127,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:complexType name="priceListItem">
                 <xs:sequence>
                     <xs:element name="dailyPrice" type="xs:double"/>
@@ -102,6 +137,7 @@
                     <xs:element name="agentId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
+
             <xs:complexType name="advertisement">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
@@ -115,6 +151,7 @@
                     <xs:element name="ownerId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
+
             <xs:complexType name="vehicle">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
@@ -127,6 +164,7 @@
                     <xs:element name="modelId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
+
             <xs:complexType name="rentingInterval">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
@@ -134,6 +172,7 @@
                     <xs:element name="endDate" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
+
             <xs:complexType name="comment">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
@@ -145,6 +184,7 @@
                     <xs:element name="rentingRequestId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
+
             <xs:element name="newCommentRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -156,6 +196,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
             <xs:element name="newCommentResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -163,78 +204,121 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="newCommentResponse">
-        <wsdl:part element="tns:newCommentResponse" name="newCommentResponse"> </wsdl:part>
+        <wsdl:part element="tns:newCommentResponse" name="newCommentResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="updateAdvertisementRequest">
-        <wsdl:part element="tns:updateAdvertisementRequest" name="updateAdvertisementRequest"> </wsdl:part>
+        <wsdl:part element="tns:updateAdvertisementRequest" name="updateAdvertisementRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="priceRequest">
-        <wsdl:part element="tns:priceRequest" name="priceRequest"> </wsdl:part>
+        <wsdl:part element="tns:priceRequest" name="priceRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="commentResponse">
-        <wsdl:part element="tns:commentResponse" name="commentResponse"> </wsdl:part>
+        <wsdl:part element="tns:commentResponse" name="commentResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newRentingIntervalResponse">
-        <wsdl:part element="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:part>
+        <wsdl:part element="tns:newRentingIntervalResponse" name="newRentingIntervalResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="deleteAdvertisementResponse">
+        <wsdl:part element="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newCommentRequest">
-        <wsdl:part element="tns:newCommentRequest" name="newCommentRequest"> </wsdl:part>
+        <wsdl:part element="tns:newCommentRequest" name="newCommentRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newRentingIntervalRequest">
-        <wsdl:part element="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:part>
+        <wsdl:part element="tns:newRentingIntervalRequest" name="newRentingIntervalRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="deleteAdvertisementRequest">
+        <wsdl:part element="tns:deleteAdvertisementRequest" name="deleteAdvertisementRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newPhotoResponse">
-        <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:part>
+        <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newAdvertisementResponse">
-        <wsdl:part element="tns:newAdvertisementResponse" name="newAdvertisementResponse"> </wsdl:part>
+        <wsdl:part element="tns:newAdvertisementResponse" name="newAdvertisementResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newPhotoRequest">
-        <wsdl:part element="tns:newPhotoRequest" name="newPhotoRequest"> </wsdl:part>
+        <wsdl:part element="tns:newPhotoRequest" name="newPhotoRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newAdvertisementRequest">
-        <wsdl:part element="tns:newAdvertisementRequest" name="newAdvertisementRequest"> </wsdl:part>
+        <wsdl:part element="tns:newAdvertisementRequest" name="newAdvertisementRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="updateAdvertisementResponse">
-        <wsdl:part element="tns:updateAdvertisementResponse" name="updateAdvertisementResponse"> </wsdl:part>
+        <wsdl:part element="tns:updateAdvertisementResponse" name="updateAdvertisementResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="commentRequest">
-        <wsdl:part element="tns:commentRequest" name="commentRequest"> </wsdl:part>
+        <wsdl:part element="tns:commentRequest" name="commentRequest">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:message name="priceResponse">
-        <wsdl:part element="tns:priceResponse" name="priceResponse"> </wsdl:part>
+        <wsdl:part element="tns:priceResponse" name="priceResponse">
+        </wsdl:part>
     </wsdl:message>
     <wsdl:portType name="AdvertisementPort">
         <wsdl:operation name="newComment">
-            <wsdl:input message="tns:newCommentRequest" name="newCommentRequest"> </wsdl:input>
-            <wsdl:output message="tns:newCommentResponse" name="newCommentResponse"> </wsdl:output>
+            <wsdl:input message="tns:newCommentRequest" name="newCommentRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:newCommentResponse" name="newCommentResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="updateAdvertisement">
-            <wsdl:input message="tns:updateAdvertisementRequest" name="updateAdvertisementRequest"> </wsdl:input>
-            <wsdl:output message="tns:updateAdvertisementResponse" name="updateAdvertisementResponse"> </wsdl:output>
+            <wsdl:input message="tns:updateAdvertisementRequest" name="updateAdvertisementRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:updateAdvertisementResponse" name="updateAdvertisementResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="price">
-            <wsdl:input message="tns:priceRequest" name="priceRequest"> </wsdl:input>
-            <wsdl:output message="tns:priceResponse" name="priceResponse"> </wsdl:output>
+            <wsdl:input message="tns:priceRequest" name="priceRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:priceResponse" name="priceResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="comment">
-            <wsdl:input message="tns:commentRequest" name="commentRequest"> </wsdl:input>
-            <wsdl:output message="tns:commentResponse" name="commentResponse"> </wsdl:output>
+            <wsdl:input message="tns:commentRequest" name="commentRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:commentResponse" name="commentResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="newRentingInterval">
-            <wsdl:input message="tns:newRentingIntervalRequest" name="newRentingIntervalRequest"> </wsdl:input>
-            <wsdl:output message="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:output>
+            <wsdl:input message="tns:newRentingIntervalRequest" name="newRentingIntervalRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:newRentingIntervalResponse" name="newRentingIntervalResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteAdvertisement">
+            <wsdl:input message="tns:deleteAdvertisementRequest" name="deleteAdvertisementRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="newPhoto">
-            <wsdl:input message="tns:newPhotoRequest" name="newPhotoRequest"> </wsdl:input>
-            <wsdl:output message="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:output>
+            <wsdl:input message="tns:newPhotoRequest" name="newPhotoRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:newPhotoResponse" name="newPhotoResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="newAdvertisement">
-            <wsdl:input message="tns:newAdvertisementRequest" name="newAdvertisementRequest"> </wsdl:input>
-            <wsdl:output message="tns:newAdvertisementResponse" name="newAdvertisementResponse"> </wsdl:output>
+            <wsdl:input message="tns:newAdvertisementRequest" name="newAdvertisementRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:newAdvertisementResponse" name="newAdvertisementResponse">
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="AdvertisementPortSoap11" type="tns:AdvertisementPort">
@@ -281,6 +365,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="newRentingIntervalResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteAdvertisement">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="deleteAdvertisementRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="deleteAdvertisementResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

@@ -8,60 +8,50 @@
 
 package rs.ac.uns.ftn.advertisement;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="priceListItem" type="{http://www.ftn.uns.ac.rs/advertisement}priceListItem"/>
+ *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "priceListItem"
+        "advertisementId"
 })
-@XmlRootElement(name = "priceResponse")
-public class PriceResponse {
+@XmlRootElement(name = "deleteAdvertisementResponse")
+public class DeleteAdvertisementResponse {
 
-    @XmlElement(required = true)
-    protected PriceListItem priceListItem;
+    protected long advertisementId;
 
     /**
-     * Gets the value of the priceListItem property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PriceListItem }
-     *     
+     * Gets the value of the advertisementId property.
      */
-    public PriceListItem getPriceListItem() {
-        return priceListItem;
+    public long getAdvertisementId() {
+        return advertisementId;
     }
 
     /**
-     * Sets the value of the priceListItem property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PriceListItem }
-     *     
+     * Sets the value of the advertisementId property.
      */
-    public void setPriceListItem(PriceListItem value) {
-        this.priceListItem = value;
+    public void setAdvertisementId(long value) {
+        this.advertisementId = value;
     }
 
 }

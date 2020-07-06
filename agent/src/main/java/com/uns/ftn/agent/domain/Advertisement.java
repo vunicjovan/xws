@@ -6,7 +6,10 @@ package com.uns.ftn.agent.domain;
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,24 +21,27 @@ import java.util.Set;
 @NoArgsConstructor
 public class Advertisement {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @Column(name = "price", nullable = false)
-   private double price;
+    @Column(name = "price", nullable = false)
+    private double price;
 
-   @Column(name = "kilometersPerDayLimit", nullable = false)
-   private int kilometersPerDayLimit = -1;
+    @Column(name = "kilometersPerDayLimit", nullable = false)
+    private int kilometersPerDayLimit = -1;
 
-   @Column(name = "description")
-   private String description;
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
-   @Column(name = "location")
-   private String location;
+    @Column(name = "description")
+    private String description;
 
-   @Column(name = "collisionDamageWaiver", nullable = false)
-   private Boolean collisionDamageWaiver = false;
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "collisionDamageWaiver", nullable = false)
+    private Boolean collisionDamageWaiver = false;
 
    @Column(name = "rating", nullable = false)
    private double rating = 0;

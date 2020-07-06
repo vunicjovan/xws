@@ -140,4 +140,18 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         }
         return null;
     }
+
+    public DeleteAdvertisementResponse deleteAdvertisement(Long id) {
+        DeleteAdvertisementRequest advertisementRequest = new DeleteAdvertisementRequest();
+        advertisementRequest.setAdvertisementId(id);
+
+        try {
+            return (DeleteAdvertisementResponse) getWebServiceTemplate()
+                    .marshalSendAndReceive(advertisementRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
