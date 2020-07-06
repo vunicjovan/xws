@@ -19,6 +19,9 @@ public class AdvertisementDTO implements Serializable {
     @JsonProperty("price")
     private double price;
 
+    @JsonProperty("deleted")
+    private Boolean deleted = false;
+
     @JsonProperty("kilometersPerDayLimit")
     private int kilometersPerDayLimit = -1;
 
@@ -54,6 +57,7 @@ public class AdvertisementDTO implements Serializable {
         this.ownerId = ad.getOwnerId();
         this.rating = ad.getRating();
         this.priceListItemId = ad.getPriceListItem().getId();
+        this.deleted = ad.getDeleted();
 //        this.ratedByUsers = ad.getRatedByUsers().stream().map(UserDTO::new).collect(Collectors.toSet());
     }
 

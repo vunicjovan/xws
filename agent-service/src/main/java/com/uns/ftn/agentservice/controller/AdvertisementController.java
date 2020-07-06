@@ -136,7 +136,7 @@ public class AdvertisementController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable ("id") Long id) {
-        return null;
+        return adService.deleteAdvertisement(id);
     }
 
 

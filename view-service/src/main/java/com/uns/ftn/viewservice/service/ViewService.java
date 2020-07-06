@@ -35,16 +35,20 @@ public class ViewService {
         List<Advertisement> advertisements = advertisementRepository.findAll();
         Set<SimpleAdvertisementDTO> simpleAdvertisementDTOSet = new HashSet<>();
 
-        advertisements.forEach(advertisement -> simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
-                advertisement.getId(),
-                advertisement.getPrice(),
-                advertisement.getLocation(),
-                advertisement.getVehicle().getModel().getBrand().getName(),
-                advertisement.getVehicle().getModel().getName(),
-                advertisement.getRating(),
-                advertisement.getVehicle().getKilometersTraveled(),
-                advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
-        )));
+        advertisements.forEach(advertisement -> {
+            if (!advertisement.getDeleted()) {
+                simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
+                        advertisement.getId(),
+                        advertisement.getPrice(),
+                        advertisement.getLocation(),
+                        advertisement.getVehicle().getModel().getBrand().getName(),
+                        advertisement.getVehicle().getModel().getName(),
+                        advertisement.getRating(),
+                        advertisement.getVehicle().getKilometersTraveled(),
+                        advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                ));
+            }
+        });
 
         return simpleAdvertisementDTOSet;
     }
@@ -97,8 +101,27 @@ public class ViewService {
     }
 
     public Set<SimpleAdvertisementDTO> getAgentsAdvertisements(Long id) {
-        return advertisementRepository.findAllByOwnerId(id).stream()
-                .map(SimpleAdvertisementDTO::new).collect(Collectors.toSet());
+        Set<Advertisement> agentsAds = advertisementRepository.findAllByOwnerId(id);
+        Set<SimpleAdvertisementDTO> agentsAdsDTOSet = new HashSet<>();
+//        return advertisementRepository.findAllByOwnerId(id).stream()
+//                .map(SimpleAdvertisementDTO::new).collect(Collectors.toSet());
+
+        agentsAds.forEach(advertisement -> {
+            if (!advertisement.getDeleted()) {
+                agentsAdsDTOSet.add(new SimpleAdvertisementDTO(
+                        advertisement.getId(),
+                        advertisement.getPrice(),
+                        advertisement.getLocation(),
+                        advertisement.getVehicle().getModel().getBrand().getName(),
+                        advertisement.getVehicle().getModel().getName(),
+                        advertisement.getRating(),
+                        advertisement.getVehicle().getKilometersTraveled(),
+                        advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
+                ));
+            }
+        });
+
+        return agentsAdsDTOSet;
     }
 
 

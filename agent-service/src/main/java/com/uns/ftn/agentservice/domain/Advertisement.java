@@ -34,6 +34,9 @@ public class Advertisement {
     @Column(name = "collisionDamageWaiver")
     private Boolean collisionDamageWaiver = false;
 
+    @Column(name = "deleted")
+    private Boolean deleted = false;
+
     @Column(name = "rating")
     private double rating = 0;
 

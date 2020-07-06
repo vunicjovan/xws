@@ -83,17 +83,17 @@ insert into vehicle_class (vehicle_class_id, name, deleted) values (10, 'Old Tim
 
 -- Advertisements
 insert into advertisement
-(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 2);
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
+values (1, 25.00, 240, false, 0, 'Opis 1', 'Teslic', 2, false);
 insert into advertisement
-(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2);
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
+values (2, 5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2, false);
 insert into advertisement
-(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 2);
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
+values (3, 26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 2, false);
 insert into advertisement
-(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id)
-values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 2);
+(id, price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
+values (4, 21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 2, false);
 
 -- Vehicles
 insert into vehicle
