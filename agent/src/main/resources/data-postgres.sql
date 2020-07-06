@@ -130,8 +130,11 @@ insert into photo (path, advertisement_id) values ('logan4.jpg', 4);
 
 -- Comments
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 1);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Second comment', 'This is second comment.', true, 3, 1);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Second comment', 'This is second comment.', true, 3, 1);
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 3, 2);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 3, 3);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 3, 2);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 3, 3);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4);
 

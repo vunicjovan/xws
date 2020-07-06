@@ -3,8 +3,6 @@
 // See <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2020.07.07 at 12:19:11 AM CEST 
-//
-
 
 package rs.ac.uns.ftn.advertisement;
 

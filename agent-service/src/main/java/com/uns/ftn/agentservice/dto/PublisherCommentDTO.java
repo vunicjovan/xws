@@ -17,6 +17,7 @@ public class PublisherCommentDTO {
     private String content;
     private Long userId;
     private Long advertisementId;
+    private Boolean allowed;
 
     public PublisherCommentDTO(Comment comment) {
         this.id = comment.getId();
@@ -24,6 +25,7 @@ public class PublisherCommentDTO {
         this.content = comment.getContent();
         this.advertisementId = comment.getAdvertisement().getId();
         this.userId = comment.getUserId();
+        this.allowed = comment.getAllowed();
     }
 
     public PublisherCommentDTO(rs.ac.uns.ftn.advertisement.Comment comment) {
@@ -31,6 +33,7 @@ public class PublisherCommentDTO {
         this.title = comment.getTitle();
         this.content = comment.getContent();
         this.userId = comment.getUserId();
+        this.allowed = comment.isAllowed();
     }
 
 }

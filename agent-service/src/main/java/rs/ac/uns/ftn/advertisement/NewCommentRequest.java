@@ -3,7 +3,7 @@
 // See <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2020.07.07 at 12:19:11 AM CEST 
-//
+
 
 
 package rs.ac.uns.ftn.advertisement;
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.*;
  *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="allowed" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -40,7 +41,8 @@ import javax.xml.bind.annotation.*;
     "advertisementId",
     "userId",
     "title",
-    "content"
+    "content",
+    "allowed"
 })
 @XmlRootElement(name = "newCommentRequest")
 public class NewCommentRequest {
@@ -52,6 +54,7 @@ public class NewCommentRequest {
     protected String title;
     @XmlElement(required = true)
     protected String content;
+    protected boolean allowed;
 
     /**
      * Gets the value of the id property.
@@ -147,6 +150,22 @@ public class NewCommentRequest {
      */
     public void setContent(String value) {
         this.content = value;
+    }
+
+    /**
+     * Gets the value of the allowed property.
+     * 
+     */
+    public boolean isAllowed() {
+        return allowed;
+    }
+
+    /**
+     * Sets the value of the allowed property.
+     * 
+     */
+    public void setAllowed(boolean value) {
+        this.allowed = value;
     }
 
 }
