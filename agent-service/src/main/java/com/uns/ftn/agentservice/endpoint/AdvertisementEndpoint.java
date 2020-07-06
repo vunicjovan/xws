@@ -194,12 +194,25 @@ public class AdvertisementEndpoint {
 
         ResponseEntity<?> response = advertisementService.updateAdvertisement(advertisementRequest.getAdvertisementId(), advertisementDTO);
 
-
         if (response.getStatusCode().equals(HttpStatus.OK)) {
             AdvertisementDTO adDTO = (AdvertisementDTO) response.getBody();
             advertisementResponse.setAdvertisementId(adDTO.getId());
             advertisementResponse.setDescription(adDTO.getDescription());
-            advertisementResponse.setPriceListItemId(adDTO.getPriceListItemId()); // TODO: adDto.getPriceListItem()
+            advertisementResponse.setPriceListItemId(adDTO.getPriceListItemId());
+            return advertisementResponse;
+        } else {
+            return null;
+        }
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteAdvertisementRequest")
+    @ResponsePayload
+    public DeleteAdvertisementResponse deleteAdvertisement(@RequestPayload DeleteAdvertisementRequest advertisementRequest) {
+        DeleteAdvertisementResponse advertisementResponse = new DeleteAdvertisementResponse();
+        ResponseEntity<?> response = advertisementService.deleteAdvertisement(advertisementRequest.getAdvertisementId());
+
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            advertisementResponse.setAdvertisementId(advertisementRequest.getAdvertisementId());
             return advertisementResponse;
         } else {
             return null;

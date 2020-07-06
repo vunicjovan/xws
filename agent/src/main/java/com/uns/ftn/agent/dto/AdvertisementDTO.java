@@ -1,7 +1,6 @@
 package com.uns.ftn.agent.dto;
 
 import com.uns.ftn.agent.domain.Advertisement;
-import com.uns.ftn.agent.domain.Vehicle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +22,7 @@ public class AdvertisementDTO {
     private Long ownerId;
     private double rating;
     private PriceListItemDTO priceListItemDTO;
+    private Boolean deleted = false;
 
     public AdvertisementDTO(Advertisement advertisement) {
         this.id = advertisement.getId();
@@ -34,6 +34,7 @@ public class AdvertisementDTO {
         this.description = advertisement.getDescription();
         this.ownerId = advertisement.getOwnerId();
         this.rating = advertisement.getRating();
+        this.deleted = advertisement.getDeleted();
     }
 
 }

@@ -85,9 +85,25 @@
     <xs:element name="updateAdvertisementResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="advertisementId" type="xs:long" />
-                <xs:element name="priceListItemId" type="xs:long" />
-                <xs:element name="description" type="xs:string" />
+                <xs:element name="advertisementId" type="xs:long"/>
+                <xs:element name="priceListItemId" type="xs:long"/>
+                <xs:element name="description" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteAdvertisementRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisementId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteAdvertisementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="advertisementId" type="xs:long"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -95,7 +111,7 @@
     <xs:element name="priceRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="priceListItem" type="tns:priceListItem" />
+                <xs:element name="priceListItem" type="tns:priceListItem"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

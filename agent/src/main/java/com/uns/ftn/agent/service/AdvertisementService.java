@@ -1,12 +1,12 @@
 package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.AdvertisementClient;
-import com.uns.ftn.agent.domain.*;
 import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.domain.Comment;
 import com.uns.ftn.agent.domain.PriceListItem;
 import com.uns.ftn.agent.domain.RentingInterval;
 import com.uns.ftn.agent.domain.Vehicle;
+import com.uns.ftn.agent.domain.*;
 import com.uns.ftn.agent.dto.*;
 import com.uns.ftn.agent.exceptions.BadRequestException;
 import com.uns.ftn.agent.exceptions.NotFoundException;
@@ -357,15 +357,27 @@ public class AdvertisementService {
         advertisement.setPrice(priceListItem.getDailyPrice());
         advertisementRepository.save(advertisement);
 
-
-
-        if(adWrapper != null) {
+        if (adWrapper != null) {
             advertisementDTO.setAdvertisementId(adWrapper.getRemoteId());
             advertisementDTO.setPriceListItemId(priceListItem.getServicesId());
             UpdateAdvertisementResponse advertisementResponse = advertisementClient.updateAdvertisement(advertisementDTO);
         }
         return new UpdateAdvertisementDTO(advertisement.getId(),
                 priceListItem.getId(), advertisement.getDescription());
+    }
+
+    public ResponseEntity<?> deleteAdvertisement(Long id) {
+        Advertisement advertisement = findOne(id);
+        AdWrapper adWrapper = findOneAdWrapper(id);
+
+        advertisement.setDeleted(true);
+        advertisement = saveAd(advertisement);
+
+        if (adWrapper != null) {
+            DeleteAdvertisementResponse advertisementResponse = advertisementClient.deleteAdvertisement(id);
+        }
+
+        return new ResponseEntity<>(new AdvertisementDTO(advertisement), HttpStatus.OK);
     }
 
     private void validateUpdateData(UpdateAdvertisementDTO advertisementDTO) {

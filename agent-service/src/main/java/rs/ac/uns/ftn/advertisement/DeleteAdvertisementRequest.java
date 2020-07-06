@@ -3,6 +3,8 @@
 // See <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2020.07.07 at 12:19:11 AM CEST 
+//
+
 
 package rs.ac.uns.ftn.advertisement;
 
@@ -14,46 +16,42 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "ownerId"
+        "advertisementId"
 })
-@XmlRootElement(name = "commentRequest")
-public class CommentRequest {
+@XmlRootElement(name = "deleteAdvertisementRequest")
+public class DeleteAdvertisementRequest {
 
-    protected long ownerId;
+    protected long advertisementId;
 
     /**
-     * Gets the value of the ownerId property.
-     * 
+     * Gets the value of the advertisementId property.
      */
-    public long getOwnerId() {
-        return ownerId;
+    public long getAdvertisementId() {
+        return advertisementId;
     }
 
     /**
-     * Sets the value of the ownerId property.
-     * 
+     * Sets the value of the advertisementId property.
      */
-    public void setOwnerId(long value) {
-        this.ownerId = value;
+    public void setAdvertisementId(long value) {
+        this.advertisementId = value;
     }
 
 }
