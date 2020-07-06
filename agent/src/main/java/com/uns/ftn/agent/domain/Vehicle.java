@@ -6,12 +6,15 @@ package com.uns.ftn.agent.domain;
  ***********************************************************************/
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vehicle {
 
    @Id

@@ -280,7 +280,7 @@ export default {
 		...mapActions(["getAllAdvertisements", "getAdvertisementStatistic", "pullPriceList"]),
 		getPhotoURL(advertisementId, photoName) {
 			// return photoName;
-			return `http://localhost:8091/image/${advertisementId}/${photoName}/`;
+			return `http://localhost:8091/image/${advertisementId}/${photoName}`;
 		},
 		addCartItem(advertisementId) {
 			let payload = {

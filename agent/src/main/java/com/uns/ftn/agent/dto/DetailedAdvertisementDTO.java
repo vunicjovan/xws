@@ -1,6 +1,7 @@
 package com.uns.ftn.agent.dto;
 
 import com.uns.ftn.agent.domain.Advertisement;
+import com.uns.ftn.agent.domain.Photo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class DetailedAdvertisementDTO {
         this.android = advertisement.getVehicle().getHasAndroid();
         this.description = advertisement.getDescription();
         this.comments = advertisement.getComments().stream().map(CommentDTO::new).collect(Collectors.toList());
+        this.photos = advertisement.getPhotos().stream().map(Photo::getPath).collect(Collectors.toList());
     }
 
 }

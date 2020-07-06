@@ -45,4 +45,13 @@ export default {
 			return response.data;
 		});
 	},
+
+	async updateAdvertisement(updatedAd) {
+		try {
+			const response = await axios.put(`/ad/`, updatedAd);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };
