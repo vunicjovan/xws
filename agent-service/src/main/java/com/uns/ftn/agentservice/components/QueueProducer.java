@@ -3,10 +3,7 @@ package com.uns.ftn.agentservice.components;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uns.ftn.agentservice.conf.RabbitMQConfiguration;
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
-import com.uns.ftn.agentservice.dto.CommDTO;
-import com.uns.ftn.agentservice.dto.PhotoDTO;
-import com.uns.ftn.agentservice.dto.UserDTO;
+import com.uns.ftn.agentservice.dto.*;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -49,4 +46,8 @@ public class QueueProducer {
         rabbitTemplate.convertAndSend(userDTO);
     }
 
+    public void produceRentingInterval(RentingIntervalDTO rentingIntervalDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(rentingIntervalDTO);
+    }
 }

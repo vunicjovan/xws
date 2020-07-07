@@ -2,7 +2,9 @@ package com.uns.ftn.rentingservice.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uns.ftn.rentingservice.domain.RentingInterval;
 import com.uns.ftn.rentingservice.dto.AdvertisementDTO;
+import com.uns.ftn.rentingservice.dto.RentingIntervalDTO;
 import com.uns.ftn.rentingservice.service.DataPumpService;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -30,6 +32,14 @@ public class QueueConsumer {
                 AdvertisementDTO advertisementDTO = new ObjectMapper().readValue(messageBody, AdvertisementDTO.class);
                 dataPumpService.advertisementHandler(advertisementDTO);
                 System.out.println(advertisementDTO.toString());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else if (typeId.contains("RentingIntervalDTO")) {
+            try {
+                RentingIntervalDTO rentingIntervalDTO =
+                        new ObjectMapper().readValue(messageBody, RentingIntervalDTO.class);
+                dataPumpService.rentingIntervalHandler(rentingIntervalDTO);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

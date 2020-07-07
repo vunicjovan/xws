@@ -231,8 +231,8 @@ public class RentingRequestService {
                     AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
                     availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
                     availableCommentDTO.setRentingRequestId(request.getId());
-                    availableCommentDTO.setRentingInterval(new RentingIntervalDTO(request.getStartDate(),
-                            request.getEndDate()));
+                    availableCommentDTO.setRentingInterval(new RentingIntervalDTO(null, request.getStartDate(),
+                            request.getEndDate(), null));
                     Comment comment = commentService.findIfExist(advertisement, request);
                     if(comment == null) {
                         availableCommentDTO.setCommentAvailable(true);

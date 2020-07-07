@@ -1,5 +1,6 @@
 package com.uns.ftn.rentingservice.controller;
 
+import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.RentingRequestDTO;
 import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.service.CommentService;

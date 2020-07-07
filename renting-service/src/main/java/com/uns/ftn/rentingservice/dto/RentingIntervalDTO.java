@@ -12,6 +12,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RentingIntervalDTO {
+
+    private Long id;
     private Date startDate;
     private Date endDate;
+    private Long advertisementId;
 }

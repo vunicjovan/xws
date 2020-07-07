@@ -14,11 +14,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class RentingIntervalDTO {
 
+    private Long id;
     private Date startDate;
     private Date endDate;
     private Long advertisementId;
 
     public RentingIntervalDTO(RentingInterval rentingInterval) {
+        this.id = rentingInterval.getId();
         this.startDate = rentingInterval.getStartDate();
         this.endDate = rentingInterval.getEndDate();
         this.advertisementId = rentingInterval.getAdvertisement().getId();
