@@ -146,55 +146,6 @@
 							</md-card>
 						</form>
 					</md-tab>
-					<md-tab md-label="Statistics">
-						<div v-if="getStatistic">
-							<div v-if="getStatistic.bestRatedAds && getStatistic.bestRatedAds.length != 0">
-								<span md-heading>Best rated ads</span>
-								<md-table>
-									<md-table-row>
-										<md-table-cell>Comment count</md-table-cell>
-										<md-table-cell>Kilometers traveled</md-table-cell>
-										<md-table-cell>Rating</md-table-cell>
-									</md-table-row>
-									<md-table-row v-for="ad1 in getStatistic.bestRatedAds" v-bind:key="ad1.id">
-										<md-table-cell>{{ ad1.commentNumber }}</md-table-cell>
-										<md-table-cell>{{ ad1.kmTraveled }}</md-table-cell>
-										<md-table-cell>{{ ad1.rating }}</md-table-cell>
-									</md-table-row>
-								</md-table>
-							</div>
-							<div v-if="getStatistic.mostCommentedAds && getStatistic.mostCommentedAds.length != 0">
-								<span md-heading>Most commented ads</span>
-								<md-table>
-									<md-table-row>
-										<md-table-cell>Comment count</md-table-cell>
-										<md-table-cell>Kilometers traveled</md-table-cell>
-										<md-table-cell>Rating</md-table-cell>
-									</md-table-row>
-									<md-table-row v-for="ad2 in getStatistic.mostCommentedAds" v-bind:key="ad2.id">
-										<md-table-cell>{{ ad2.commentNumber }}</md-table-cell>
-										<md-table-cell>{{ ad2.kmTraveled }}</md-table-cell>
-										<md-table-cell>{{ ad2.rating }}</md-table-cell>
-									</md-table-row>
-								</md-table>
-							</div>
-							<div v-if="getStatistic.mostKmTraveledAds && getStatistic.mostKmTraveledAds.length != 0">
-								<span md-heading>Most kilometers traveled ads</span>
-								<md-table>
-									<md-table-row>
-										<md-table-cell>Comment count</md-table-cell>
-										<md-table-cell>Kilometers traveled</md-table-cell>
-										<md-table-cell>Rating</md-table-cell>
-									</md-table-row>
-									<md-table-row v-for="ad3 in getStatistic.mostKmTraveledAds" v-bind:key="ad3.id">
-										<md-table-cell>{{ ad3.commentNumber }}</md-table-cell>
-										<md-table-cell>{{ ad3.kmTraveled }}</md-table-cell>
-										<md-table-cell>{{ ad3.rating }}</md-table-cell>
-									</md-table-row>
-								</md-table>
-							</div>
-						</div>
-					</md-tab>
 				</md-tabs>
 			</md-dialog-content>
 			<md-dialog-actions>
@@ -274,11 +225,11 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(["getAdvertisements", "getStatistic", "getPriceList"]),
+		...mapGetters(["getAdvertisements", "getPriceList"]),
 	},
 
 	methods: {
-		...mapActions(["getAllAdvertisements", "getAdvertisementStatistic", "pullPriceList"]),
+		...mapActions(["getAllAdvertisements", "pullPriceList"]),
 		getPhotoURL(advertisementId, photoName) {
 			// return photoName;
 			return `http://localhost:8091/image/${advertisementId}/${photoName}`;

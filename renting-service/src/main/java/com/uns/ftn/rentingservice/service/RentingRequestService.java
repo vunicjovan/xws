@@ -69,6 +69,9 @@ public class RentingRequestService {
 
         // check availability of all requested advertisements for suggested renting interval
         for (Advertisement ad : ads) {
+            if (ad.getDeleted()) {
+                throw new BadRequestException("Selected ad does not exist!");
+            }
             if (findIfRangeOverlaps(ad.getRentingIntervals(), rdto.getStartDate(), rdto.getEndDate())) {
                 throw new BadRequestException("At least one vehicle is not available at the requested time.");
             }
@@ -231,8 +234,8 @@ public class RentingRequestService {
                     AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
                     availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
                     availableCommentDTO.setRentingRequestId(request.getId());
-                    availableCommentDTO.setRentingInterval(new RentingIntervalDTO(request.getStartDate(),
-                            request.getEndDate()));
+                    availableCommentDTO.setRentingInterval(new RentingIntervalDTO(null, request.getStartDate(),
+                            request.getEndDate(), null));
                     Comment comment = commentService.findIfExist(advertisement, request);
                     if(comment == null) {
                         availableCommentDTO.setCommentAvailable(true);

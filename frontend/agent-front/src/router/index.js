@@ -5,6 +5,8 @@ import PostAdvertisement from "../forms/PostAdvertisement.vue";
 import RequestsFinished from "../views/RequestsFinished.vue";
 import Chat from "../views/Chat.vue";
 import EditAdvertisement from "../views/advertisement/EditAdvertisement.vue";
+import PriceList from "../components/PriceList.vue";
+import StatisticReport from "../components/Statistic.vue";
 
 Vue.use(VueRouter);
 
@@ -33,6 +35,16 @@ const routes = [
 		path: "/edit/:id",
 		name: "EditAdvertisement",
 		component: EditAdvertisement,
+	},
+	{
+		path: "/pricelist",
+		name: "PriceList",
+		component: PriceList
+	},
+	{
+		path: "/statistics",
+		name: "StatisticReport",
+		component: StatisticReport
 	},
 ];
 

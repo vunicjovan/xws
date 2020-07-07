@@ -1,7 +1,11 @@
 package com.uns.ftn.agentservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.agentservice.client.RentRequestClient;
+import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.RentingInterval;
+import com.uns.ftn.agentservice.dto.AdvertisementDTO;
 import com.uns.ftn.agentservice.dto.RentingIntervalDTO;
 import com.uns.ftn.agentservice.exceptions.BadRequestException;
 import com.uns.ftn.agentservice.repository.AdvertisementRepository;
@@ -26,10 +30,14 @@ public class RentingIntervalService {
 
     private final AdvertisementRepository advertisementRepository;
 
+    private final QueueProducer queueProducer;
+
     @Autowired
-    public RentingIntervalService(RentingIntervalRepository rentingIntervalRepository, AdvertisementRepository advertisementRepository) {
+    public RentingIntervalService(RentingIntervalRepository rentingIntervalRepository,
+                                  AdvertisementRepository advertisementRepository, QueueProducer queueProducer) {
         this.rentingIntervalRepository = rentingIntervalRepository;
         this.advertisementRepository = advertisementRepository;
+        this.queueProducer = queueProducer;
     }
 
     public RentingInterval save(RentingInterval rentingInterval) {
@@ -40,8 +48,11 @@ public class RentingIntervalService {
         return rentingIntervalRepository.findAll().stream().collect(Collectors.toSet());
     }
 
-//    public ResponseEntity<?> manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
-        public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
+    public Set<RentingInterval> getAllByAdId(Long id) {
+        return rentingIntervalRepository.findAllByAdvertisementId(id);
+    }
+
+    public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
         Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
                     orElse(null);
 
@@ -58,14 +69,21 @@ public class RentingIntervalService {
         rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
         rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
 
-        if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
+        Set<RentingInterval> adsIntervals = getAllByAdId(rentingIntervalDTO.getAdvertisementId());
+
+        if (!findIfRangeOverlaps(adsIntervals, rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
             save(rentingInterval);
-//            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
+
+            try {
+                queueProducer.produceRentingInterval(new RentingIntervalDTO(rentingInterval));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
             return new RentingIntervalDTO(rentingInterval);
         } else {
             throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
         }
-
     }
 
     private Boolean findIfRangeOverlaps(Set<RentingInterval> rentingIntervals, Date startDate, Date endDate) {
@@ -78,5 +96,4 @@ public class RentingIntervalService {
         }
         return overlaps;
     }
-
 }

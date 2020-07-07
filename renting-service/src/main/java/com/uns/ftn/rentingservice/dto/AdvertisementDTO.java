@@ -1,13 +1,12 @@
 package com.uns.ftn.rentingservice.dto;
 
 import com.uns.ftn.rentingservice.domain.Advertisement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdvertisementDTO implements Serializable {
@@ -22,6 +21,7 @@ public class AdvertisementDTO implements Serializable {
     private VehicleDTO vehicle;
     private Long ownerId;
     private double rating = 0;
+    private Long priceListItemId;
 
     public AdvertisementDTO(Advertisement ad) {
         this.id = ad.getId();
