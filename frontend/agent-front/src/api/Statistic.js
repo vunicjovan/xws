@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export default {
-    getAdStatistics(adId) {
-        return axios.get(`/ad/${adId}/statistic`).then((response) => {
+    getAdStatistics(ownerId) {
+        return axios.get(`/ad/${ownerId}/statistic`).then((response) => {
             return response.data;
         });
     }

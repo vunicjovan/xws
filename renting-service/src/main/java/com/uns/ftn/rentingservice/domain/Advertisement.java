@@ -27,6 +27,9 @@ public class Advertisement {
     @Column(name = "ownerId")
     private Long ownerId;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals = new HashSet<>();
 

@@ -42,6 +42,15 @@ public class DataPumpService {
         advertisement.setOwnerId(advertisementDTO.getOwnerId());
 
         advertisementRepository.save(advertisement);
+
+        if (advertisementDTO.getDeleted()) {
+            for (RentingRequest r : advertisement.getRentingRequests()) {
+                if(r.getStatus() == RequestStatus.pending) {
+                    r.setStatus(RequestStatus.canceled);
+                    rentingRequestRepository.save(r);
+                }
+            }
+        }
     }
 
     public void rentingIntervalHandler(RentingIntervalDTO rentingIntervalDTO) {

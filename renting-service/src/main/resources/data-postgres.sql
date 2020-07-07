@@ -8,10 +8,10 @@ insert into cart_item(advertisment_id, cart_id) values (1, 1);
 insert into cart_item(advertisment_id, cart_id) values (2, 1);
 
 -- Advertisements
-insert into advertisement (id, owner_id) values (1, 2);
-insert into advertisement (id, owner_id) values (2, 2);
-insert into advertisement (id, owner_id) values (3, 2);
-insert into advertisement (id, owner_id) values (4, 2);
+insert into advertisement (id, owner_id, deleted) values (1, 2, false);
+insert into advertisement (id, owner_id, deleted) values (2, 2, false);
+insert into advertisement (id, owner_id, deleted) values (3, 2, false);
+insert into advertisement (id, owner_id, deleted) values (4, 2, false);
 
 -- Renting requests
 insert into renting_request (start_date, end_date, sender_id, status) values ('2020-10-21 14:39:06', '2020-10-21 15:38:06', 3, 0);

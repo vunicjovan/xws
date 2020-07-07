@@ -9,10 +9,10 @@ const getters = {
 };
 
 const actions = {
-    getAdvertisementStatistic({ commit }, adId) {
+    getAdvertisementStatistic({ commit }, ownerId) {
         return new Promise((resolve, reject) => {
             statisticApi
-                .getAdStatistics(adId)
+                .getAdStatistics(ownerId)
                 .then((statistic) => {
                     commit("setStatistic", statistic);
                     resolve(statistic);
