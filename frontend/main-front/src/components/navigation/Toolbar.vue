@@ -9,7 +9,7 @@
 			</router-link>
 			<div style="flex: 1;"></div>
 			<searchDialog />
-			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" to="/post-ad">
+			<md-button v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))" to="/post-ad">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Post new advertisement</md-tooltip>
 			</md-button>

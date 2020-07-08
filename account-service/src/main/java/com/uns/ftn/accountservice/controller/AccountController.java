@@ -122,4 +122,10 @@ public class AccountController {
         return userService.deleteUser(id);
     }
 
+    @GetMapping("/{id}/ad/count")
+    public ResponseEntity<?> getAdCount(@PathVariable ("id") Long id) {
+        return userService.getUsersAdCount(id);
+    }
+
+
 }

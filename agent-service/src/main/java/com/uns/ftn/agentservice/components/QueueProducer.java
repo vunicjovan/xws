@@ -50,4 +50,9 @@ public class QueueProducer {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(rentingIntervalDTO);
     }
+
+    public void producePublishedAdCount(AdCountDTO adCountDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(adCountDTO);
+    }
 }

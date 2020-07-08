@@ -10,4 +10,7 @@ public interface AccountClient {
 
     @GetMapping("/{id}")
     UserResponseDTO getUser(@PathVariable Long id);
+
+    @GetMapping("/{id}/ad/count")
+    int getNumberOfPostedAds(@PathVariable Long id);
 }
