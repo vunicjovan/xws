@@ -1,6 +1,7 @@
 package com.uns.ftn.agentservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.agentservice.client.AccountClient;
 import com.uns.ftn.agentservice.client.CatalogClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
@@ -32,17 +33,19 @@ public class AdvertisementService {
     private final VehicleRepository vehicleRepo;
     private final QueueProducer queueProducer;
     private final CatalogClient catalogClient;
+    private final AccountClient accountClient;
     private final PriceListService priceListService;
 
     @Autowired
     public AdvertisementService(AdvertisementRepository adRepo, VehicleRepository vehicleRepo,
                                 QueueProducer queueProducer, CatalogClient catalogClient,
-                                PriceListService priceListService) {
+                                PriceListService priceListService, AccountClient accountClient) {
         this.adRepo = adRepo;
         this.vehicleRepo = vehicleRepo;
         this.queueProducer = queueProducer;
         this.catalogClient = catalogClient;
         this.priceListService = priceListService;
+        this.accountClient = accountClient;
     }
 
     public ResponseEntity<?> postNewAd(AdvertisementDTO adDTO) {
@@ -62,6 +65,13 @@ public class AdvertisementService {
         CheckResponseDTO crd = catalogClient.checkIfResourcesExist(checker);
         if (!crd.getMessage().equals("All good.")) {
             return new ResponseEntity<>(crd.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        int numberOfAds = accountClient.getNumberOfPostedAds(adDTO.getOwnerId());
+
+        if (numberOfAds >= 3) {
+            throw new BadRequestException("You cannot post more than three advertisements as a simple user! " +
+                    "Sign up as agent for unlimited access.");
         }
 
         // setting advertisement properties
@@ -94,6 +104,10 @@ public class AdvertisementService {
         try {
             ad.setVehicle(vehicle);
             queueProducer.produce(new AdvertisementDTO(ad));
+            if (numberOfAds != -1) {
+                numberOfAds++;
+                queueProducer.producePublishedAdCount(new AdCountDTO(ad.getOwnerId(), numberOfAds));
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

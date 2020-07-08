@@ -474,6 +474,16 @@ public class UserService {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> getUsersAdCount(Long userId) {
+        User user = findOne(userId);
+        SimpleUser simpleUser = simpleUserRepository.findByUser(user);
+
+        if (simpleUser != null) {
+            return new ResponseEntity<>(simpleUser.getNumberOfAds(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(-1, HttpStatus.OK);
+    }
+
     private void validateAndSanitizePasswordData(PasswordChangeDTO pcDTO) {
         String regex = "^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Select|From|Where|Script)(?=.*[A-Z])(?=.*[0-9])(?=.*\\W+)([a-zA-Z0-9!?#\\s?]+)$";
         Pattern pattern = Pattern.compile(regex);

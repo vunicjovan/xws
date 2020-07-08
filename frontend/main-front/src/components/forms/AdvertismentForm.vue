@@ -251,7 +251,7 @@ export default {
 			this.$v.form.$touch();
 			this.$v.brandId.$touch();
 
-			if (!this.$v.$invalid) {
+			if (!this.$v.form.$invalid && !this.$v.brandId.$invalid) {
 				this.submitAd();
 			}
 		},

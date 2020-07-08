@@ -22,7 +22,7 @@ public class QueueConsumer {
     public void handleMessage(Message message) throws JsonProcessingException {
         String typeId = message.getMessageProperties().getHeaders().get("__TypeId__").toString();
         String messageBody = new String(message.getBody(), StandardCharsets.UTF_8);
-
+        System.out.println("****" + messageBody + "****");
         if (typeId.contains("AdvertisementDTO")) {
             try {
                 AdvertisementDTO advertisementDTO = new ObjectMapper().readValue(messageBody, AdvertisementDTO.class);

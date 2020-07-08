@@ -97,6 +97,12 @@ public class BrandService {
         brand.setName(brandDTO.getName());
         brand = save(brand);
 
+        try {
+            queueProducer.produceBrand(new BrandDTO(brand));
+        } catch (JsonProcessingException jpe) {
+            jpe.printStackTrace();
+        }
+
         return new ResponseEntity<>(new BrandDTO(brand), HttpStatus.CREATED);
     }
 
@@ -109,6 +115,12 @@ public class BrandService {
 
         brand.setDeleted(true);
         brand = save(brand);
+
+        try {
+            queueProducer.produceBrand(new BrandDTO(brand));
+        } catch (JsonProcessingException jpe) {
+            jpe.printStackTrace();
+        }
 
         return new ResponseEntity<>(new BrandDTO(brand), HttpStatus.OK);
     }
