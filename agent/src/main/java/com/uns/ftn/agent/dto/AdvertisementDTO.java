@@ -35,6 +35,7 @@ public class AdvertisementDTO {
         this.ownerId = advertisement.getOwnerId();
         this.rating = advertisement.getRating();
         this.deleted = advertisement.getDeleted();
+        this.priceListItemDTO = new PriceListItemDTO(advertisement.getPriceListItem());
     }
 
 }

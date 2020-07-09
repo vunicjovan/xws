@@ -286,7 +286,7 @@ public class AdvertisementService {
     public List<DetailedAdvertisementDTO> getDetailedAdvertisements() {
         updateComments();
 
-        return advertisementRepository.findAll().stream().map(DetailedAdvertisementDTO::new)
+        return advertisementRepository.findAllByDeleted(false).stream().map(DetailedAdvertisementDTO::new)
                 .collect(Collectors.toList());
     }
 

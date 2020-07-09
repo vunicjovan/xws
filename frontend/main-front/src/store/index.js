@@ -12,6 +12,7 @@ import rentingRequest from "./modules/rentingRequest.js";
 import rentingHistory from "./modules/rentingHistory.js";
 import chat from "./modules/chat.js";
 import pricelist from "./modules/pricelist.js";
+import debt from "./modules/debt.js";
 
 Vue.use(Vuex);
 
@@ -29,5 +30,6 @@ export default new Vuex.Store({
 		rentingHistory,
 		chat,
 		pricelist,
+		debt,
 	},
 });

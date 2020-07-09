@@ -54,4 +54,13 @@ export default {
 			throw Error(error);
 		}
 	},
+
+	async deleteAdvertisement(id) {
+		try {
+			const response = await axios.delete(`/ad/${id}`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

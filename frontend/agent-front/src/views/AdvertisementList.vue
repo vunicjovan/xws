@@ -150,6 +150,7 @@
 			</md-dialog-content>
 			<md-dialog-actions>
 				<md-button class="md-primary" @click="$router.push(`/edit/${selectedAdvertisement.id}`)">edit</md-button>
+				<md-button class="md-primary" @click="deleteAd(selectedAdvertisement.id)">delete</md-button>
 			</md-dialog-actions>
 		</md-dialog>
 		<md-dialog v-if="selectedPhotos && selectedPhotos.length != 0" :md-active.sync="showPhotos">
@@ -212,7 +213,7 @@ export default {
 				content: undefined,
 				userId: 2,
 				advertisementId: undefined,
-				allowed: true
+				allowed: true,
 			},
 			statistic: undefined,
 		};
@@ -300,6 +301,15 @@ export default {
 			this.selectedAdvertisement = ad;
 			this.selectedPhotos = ad.photos;
 			this.showPhotos = true;
+		},
+		deleteAd(id) {
+			this.$store
+				.dispatch("deleteAd", id)
+				.then((data) => {
+					this.selectedAdvertisement = null;
+					this.showModal = false;
+				})
+				.catch((error) => console.log(error));
 		},
 	},
 

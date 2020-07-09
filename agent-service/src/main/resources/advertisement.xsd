@@ -138,6 +138,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="price" type="xs:double"/>
+            <xs:element name="priceListItemId" type="xs:long"/>
             <xs:element name="kilometersPerDayLimit" type="xs:int"/>
             <xs:element name="collisionDamageWaiver" type="xs:boolean"/>
             <xs:element name="rating" type="xs:double"/>

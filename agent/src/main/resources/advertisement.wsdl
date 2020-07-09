@@ -215,7 +215,7 @@
         <wsdl:part element="tns:newRentingIntervalResponse" name="newRentingIntervalResponse"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="deleteAdvertisementResponse">
-        <wsdl:part element="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse"> </wsdl:part>
+        <wsdl:part element="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse"></wsdl:part>
     </wsdl:message>
     <wsdl:message name="newDiscountRequest">
         <wsdl:part element="tns:newDiscountRequest" name="newDiscountRequest"> </wsdl:part>
@@ -230,7 +230,7 @@
         <wsdl:part element="tns:deleteAdvertisementRequest" name="deleteAdvertisementRequest"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="newPhotoResponse">
-        <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse"> </wsdl:part>
+        <wsdl:part element="tns:newPhotoResponse" name="newPhotoResponse"></wsdl:part>
     </wsdl:message>
     <wsdl:message name="newDiscountResponse">
         <wsdl:part element="tns:newDiscountResponse" name="newDiscountResponse"> </wsdl:part>
@@ -276,7 +276,7 @@
         </wsdl:operation>
         <wsdl:operation name="deleteAdvertisement">
             <wsdl:input message="tns:deleteAdvertisementRequest" name="deleteAdvertisementRequest"> </wsdl:input>
-            <wsdl:output message="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse"> </wsdl:output>
+            <wsdl:output message="tns:deleteAdvertisementResponse" name="deleteAdvertisementResponse"></wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="newDiscount">
             <wsdl:input message="tns:newDiscountRequest" name="newDiscountRequest"> </wsdl:input>
