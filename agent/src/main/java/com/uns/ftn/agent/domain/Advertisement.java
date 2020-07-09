@@ -60,7 +60,7 @@ public class Advertisement {
    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Photo> photos;
 
-   @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
    private Set<Comment> comments;
 
    @ManyToOne(fetch = FetchType.EAGER)

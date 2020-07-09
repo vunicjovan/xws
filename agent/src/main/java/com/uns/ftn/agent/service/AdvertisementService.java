@@ -305,12 +305,13 @@ public class AdvertisementService {
 
                     Comment comment = advertisement.getComments()
                             .stream()
-                            .filter(comm -> comm.getId() == servicesComment.getId())
+                            .filter(comm -> comm.getRemoteId() == servicesComment.getId())
                             .findFirst()
                             .orElse(null);
 
                     if (comment == null) {
                         comment = new Comment();
+                        comment.setRemoteId(servicesComment.getId());
                         comment.setTitle(servicesComment.getTitle());
                         comment.setContent(servicesComment.getContent());
                         comment.setAllowed(servicesComment.isAllowed());

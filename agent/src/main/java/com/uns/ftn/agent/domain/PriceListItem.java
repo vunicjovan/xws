@@ -34,6 +34,10 @@ public class PriceListItem {
     private Long servicesId;
 
     @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PriceList priceList;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "priceListItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Advertisement> advertisements;
 

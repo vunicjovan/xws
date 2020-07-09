@@ -129,12 +129,18 @@ insert into photo (path, advertisement_id) values ('logan3.jpeg', 4);
 insert into photo (path, advertisement_id) values ('logan4.jpg', 4);
 
 -- Comments
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 1);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('First comment', 'This is first comment.', true, 3, 1, 1);
 -- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Second comment', 'This is second comment.', true, 3, 1);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Third comment', 'This is third comment.', true, 3, 2, 2);
 -- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 3, 2);
 -- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 3, 3);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4, 3);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4, 4);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4, 5);
 
+-- Price List
+insert into price_list(discount, owner_id) values ( 69, 2);
+
+-- Price List Items
+insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id)
+values (69, 69, 69, 1);

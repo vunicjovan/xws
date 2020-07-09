@@ -155,4 +155,19 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         return null;
     }
 
+    public NewDiscountResponse createDiscount(Long id, double discount) {
+        NewDiscountRequest discountRequest = new NewDiscountRequest();
+        discountRequest.setOwnerId(id);
+        discountRequest.setDiscount(discount);
+
+        try {
+            return (NewDiscountResponse) getWebServiceTemplate()
+                    .marshalSendAndReceive(discountRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 }

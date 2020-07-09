@@ -36,8 +36,11 @@ public class Comment {
     @Column(name = "userId")
     private Long userId;
 
+    @Column(name = "remoteId")
+    private Long remoteId;
+
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Advertisement advertisement;
 
 }

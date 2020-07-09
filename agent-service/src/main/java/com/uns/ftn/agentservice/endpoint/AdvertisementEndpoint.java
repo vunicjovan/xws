@@ -219,4 +219,21 @@ public class AdvertisementEndpoint {
         }
     }
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "newDiscountRequest")
+    @ResponsePayload
+    public NewDiscountResponse addDiscount(@RequestPayload NewDiscountRequest discountRequest) {
+        NewDiscountResponse discountResponse = new NewDiscountResponse();
+
+        ResponseEntity<?> response =
+                priceListService.createDiscount(discountRequest.getOwnerId(), discountRequest.getDiscount());
+
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            discountResponse.setOwnerId(discountRequest.getOwnerId());
+            discountResponse.setDiscount(discountRequest.getDiscount());
+            return discountResponse;
+        } else {
+            return null;
+        }
+    }
+
 }
