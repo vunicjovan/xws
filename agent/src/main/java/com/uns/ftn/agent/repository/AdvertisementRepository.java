@@ -8,5 +8,6 @@ import java.util.List;
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
 
     List<Advertisement> findByOwnerId(Long ownerId);
+    List<Advertisement> findAllByDeleted(boolean deleted);
 
 }

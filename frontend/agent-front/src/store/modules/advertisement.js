@@ -65,11 +65,29 @@ const actions = {
 				.catch((error) => reject(error));
 		});
 	},
+
+	deleteAd({ commit }, id) {
+		return new Promise((resolve, reject) => {
+			advertisementApi
+				.deleteAdvertisement(id)
+				.then((data) => {
+					commit("deleteAdvertisement", id);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
+	},
 };
 
 const mutations = {
 	setAdvertisements: (state, advertisements) => (state.advertisements = advertisements),
 	setAdvertisement: (state, advertisement) => (state.advertisement = advertisement),
+	deleteAdvertisement: (state, adId) => {
+		const index = state.advertisements.findIndex((ad) => ad.id === adId);
+		if (index != -1) {
+			state.advertisements.splice(index, 1);
+		}
+	},
 };
 
 export default {

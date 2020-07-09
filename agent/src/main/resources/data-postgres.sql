@@ -96,6 +96,12 @@ insert into advertisement
 (price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
 values (21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 1, false);
 
+-- AdWrapers
+insert into ad_wrapper (remote_id, advertisement_id) values (1, 1);
+insert into ad_wrapper (remote_id, advertisement_id) values (2, 2);
+insert into ad_wrapper (remote_id, advertisement_id) values (3, 3);
+insert into ad_wrapper (remote_id, advertisement_id) values (4, 4);
+
 -- Vehicles
 insert into vehicle
 (kilometers_traveled, child_seat_number, has_android, fuel_type_id, gearbox_type_id, vehicle_class_id, model_id, advertisement_id)

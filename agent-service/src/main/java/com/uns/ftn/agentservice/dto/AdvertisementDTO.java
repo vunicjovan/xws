@@ -71,6 +71,7 @@ public class AdvertisementDTO implements Serializable {
         this.vehicle = new VehicleDTO(ad.getVehicle());
         this.ownerId = ad.getOwnerId();
         this.rating = ad.getRating();
+        this.priceListItemId = ad.getPriceListItemId();
     }
 
 }

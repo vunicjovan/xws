@@ -254,28 +254,11 @@ public class RentingRequestService {
             }
         }
 
-       /* advertisements.forEach(advertisement -> {
-            AvailableCommentDTO availableCommentDTO = new AvailableCommentDTO();
-            availableCommentDTO.setAdvertisement(advertisementClient.getAd(advertisement.getId()));
-            availableCommentDTO.setCommentAvailable(false);
-            availableCommentDTO.setRentingRequestId(null);
-            advertisement.getRentingRequests().forEach(request -> {
-                if(request.getSenderId().equals(id) && checkIfRequestIsFinished(request)) {
-                    availableCommentDTO.getRentingIntervals().add(new RentingIntervalDTO(request.getStartDate(),
-                            request.getEndDate()));
-                    Comment comment = commentService.findIfExist(advertisement, request);
-                    if(comment == null) {
-                        availableCommentDTO.setCommentAvailable(true);
-                        availableCommentDTO.setRentingRequestId(request.getId());
-                    } else {
-                        availableCommentDTO.getComments().add(commentClient.getComment(comment.getId()));
-                    }
-                }
-            });
-            response.add(availableCommentDTO);
-        });*/
-
         return response;
+    }
+
+    public RentingRequestDTO getRequestById(Long id) {
+        return new RentingRequestDTO(findOne(id));
     }
 
     private boolean checkIfRequestIsFinished(RentingRequest rentingRequest)  {

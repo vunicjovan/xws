@@ -24,4 +24,7 @@ public class Debt {
    @Column(name = "value", nullable = false)
    private double value;
 
+   @Column(name = "deleted")
+   private boolean deleted = false;
+
 }

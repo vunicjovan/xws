@@ -30,7 +30,8 @@ public class RentingRequestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return null;
+
+        return new ResponseEntity<>(requestService.getRequestById(id), HttpStatus.OK);
     }
 
     @GetMapping("/{agentId}/finished")
