@@ -55,7 +55,18 @@ const actions = {
                 })
                 .catch((error) => reject(error));
         });
-    }
+    },
+
+    postAgentComment({ commit }, comment) {
+        return new Promise((resolve, reject) => {
+            commentApi
+                .postAgentComment(comment)
+                .then((comment) => {
+                    resolve(comment);
+                })
+                .catch((error) => reject(error));
+        });
+    },
 
 };
 

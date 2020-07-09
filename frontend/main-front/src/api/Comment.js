@@ -24,4 +24,10 @@ export default {
 			return response.data;
 		});
 	},
+
+	postAgentComment(comment) {
+		return axios.post(`/agent/ad/agent/comment`, comment).then((response) => {
+			return response.data;
+		});
+	},
 }

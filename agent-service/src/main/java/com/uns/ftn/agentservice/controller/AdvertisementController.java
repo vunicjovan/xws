@@ -1,9 +1,6 @@
 package com.uns.ftn.agentservice.controller;
 
-import com.uns.ftn.agentservice.dto.AdvertisementDTO;
-import com.uns.ftn.agentservice.dto.AdvertisementUpdateDTO;
-import com.uns.ftn.agentservice.dto.CommDTO;
-import com.uns.ftn.agentservice.dto.RatingDTO;
+import com.uns.ftn.agentservice.dto.*;
 import com.uns.ftn.agentservice.service.AdvertisementService;
 import com.uns.ftn.agentservice.service.AndroidService;
 import com.uns.ftn.agentservice.service.CommentService;
@@ -112,6 +109,11 @@ public class AdvertisementController {
     @PostMapping("/comment")
     public ResponseEntity<?> postComment(@RequestBody CommDTO commDTO) {
         return new ResponseEntity<>(commentService.postComment(commDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/agent/comment")
+    public ResponseEntity<?> postAgentComment(@RequestBody PublisherCommentDTO publisherCommentDTO) {
+        return new ResponseEntity<>(commentService.publisherPostComment(publisherCommentDTO), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/vehicle/rate")

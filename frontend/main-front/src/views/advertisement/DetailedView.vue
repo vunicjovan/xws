@@ -18,6 +18,36 @@
 			</md-dialog-actions>
 		</md-dialog>
 
+		<md-dialog :md-active.sync="commentDialog">
+			<md-dialog-title>Post comment</md-dialog-title>
+			<md-dialog-content>
+				<div class="md-layout">
+					<div class="md-layout-item md-small-size-100">
+						<md-field :class="{ 'md-invalid': $v.comment.title.$error }">
+							<label>Title</label>
+							<md-input type="text" v-model="comment.title"></md-input>
+							<span class="md-error" v-if="!$v.comment.title.required">Title is required</span>
+							<span class="md-error" v-if="!$v.comment.title.sqli">Title is not well formed</span>
+						</md-field>
+					</div>
+				</div>
+				<div class="md-layout">
+					<div class="md-layout-item md-small-size-100">
+						<md-field :class="{ 'md-invalid': $v.comment.content.$error }">
+							<label>Content</label>
+							<md-textarea type="text" v-model="comment.content" />
+							<span class="md-error" v-if="!$v.comment.content.required">Content is required</span>
+							<span class="md-error" v-if="!$v.comment.content.sqli">Content is not well formed</span>
+						</md-field>
+					</div>
+				</div>
+			</md-dialog-content>
+			<md-dialog-actions>
+				<md-button class="md-primary" @click="cancelCommentDialog()">Cancel</md-button>
+				<md-button class="md-primary" @click.prevent="validateComment">Add</md-button>
+			</md-dialog-actions>
+		</md-dialog>
+
 		<md-card>
 			<md-card-media>
 				<hooper :centerMode="true" :itemsToShow="1" :infiniteScroll="true" :progress="true" :autoPlay="true" :playSpeed="2000">
@@ -80,6 +110,11 @@
           @click="deleteAd(getAdvertisement.id)" 
           class="md-raised md-accent">Delete ad
         </md-button>
+
+		<md-button v-if="getUser.id == getAdvertisement.ownerId && getAdvertisement.comments.length !== 0" 
+          @click="setupCommentPosting(getAdvertisement.id)" 
+          class="md-raised md-accent">Post comment
+        </md-button>
 				
         <md-button 
           v-if="getUser.roles.includes('SIMPLE_USER') && getUser.id != getAdvertisement.ownerId" 
@@ -116,6 +151,10 @@ import { Hooper, Slide, Pagination as HooperPagination, Navigation as HooperNavi
 import "hooper/dist/hooper.css";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import { helpers } from "vuelidate/lib/validators";
+
+const sqli = helpers.regex("alpha", /^(?!script|select|from|where|SCRIPT|SELECT|FROM|WHERE|Script|Select|From|Where)([a-zA-Z0-9!?#.,:;\s?]+)$/);
+
 
 import { mapGetters, mapActions } from "vuex";
 export default {
@@ -131,11 +170,19 @@ export default {
 		return {
 			ad: null,
 			active: false,
+			commentDialog: false,
 			form: {
 				startDate: undefined,
 				endDate: undefined,
 				advertisementId: undefined,
 			},
+			comment: {
+				title: undefined,
+				content: undefined,
+				userId: undefined,
+				advertisementId: undefined,
+				allowed: undefined,
+			}
 		};
 	},
 	mounted: function() {
@@ -166,7 +213,7 @@ export default {
 
 		cancelDialog() {
 			this.active = false;
-			this.$v.$reset();
+			this.$v.form.$reset();
 			this.form.startDate = undefined;
 			this.form.endDate = undefined;
 			this.form.advertisementId = undefined;
@@ -186,11 +233,56 @@ export default {
 		},
 
 		validateDates() {
-			this.$v.$touch();
+			this.$v.form.$touch();
 
-			if (!this.$v.$invalid) {
+			if (!this.$v.form.$invalid) {
 				this.showSearchDialog = false;
 				this.addUnabailableTerm();
+			}
+		},
+
+		setupCommentPosting(advertisementId) {
+			this.comment.advertisementId = advertisementId;
+			this.comment.userId = this.getUser.id;
+			this.comment.allowed = true;
+			this.commentDialog = true;
+		},
+
+		cancelCommentDialog() {
+			this.commentDialog = false;
+			this.$v.comment.$reset();
+			this.comment.advertisementId = undefined;
+			this.comment.title = undefined;
+			this.comment.content = undefined;
+		},
+
+		addComment() {
+			this.$store.dispatch("postAgentComment", this.comment)
+				.then((data) => {	
+					let comm = {
+						id: data.id,
+						title: data.title,
+						content: data.content
+					}
+
+					this.$store.commit("addCommentToAdvertisementList", comm);
+
+					this.$v.comment.$reset();
+					this.comment.advertisementId = undefined;
+					this.comment.title = undefined;
+					this.comment.content = undefined;
+					this.comment.allowed = undefined;
+					this.comment.userId = undefined;
+				})
+				.catch((error) => console.log(error))
+			this.commentDialog = false;
+		},
+
+		validateComment() {
+			this.$v.comment.$touch();
+
+			if (!this.$v.comment.$invalid) {
+				this.addComment();
 			}
 		},
 	},
@@ -204,6 +296,17 @@ export default {
 				required,
 			},
 		},
+		
+		comment: {
+			title: {
+				required,
+				sqli
+			},
+			content: {
+				required,
+				sqli
+			},
+		}
 	},
 };
 </script>

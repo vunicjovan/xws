@@ -167,6 +167,7 @@ const mutations = {
 	sortByKilometersTraveledDesc: (state) => state.advertisements.sort((a, b) => (a.kmTraveled < b.kmTraveled ? 1 : -1)),
 	sortByRatingAsc: (state) => state.advertisements.sort((a, b) => (a.rating > b.rating ? 1 : -1)),
 	sortByRatingDesc: (state) => state.advertisements.sort((a, b) => (a.rating < b.rating ? 1 : -1)),
+	addCommentToAdvertisementList: (state, comment) => state.advertisement.comments.unshift(comment),
 };
 
 export default {

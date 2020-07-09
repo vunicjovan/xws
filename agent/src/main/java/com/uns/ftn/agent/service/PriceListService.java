@@ -1,12 +1,19 @@
 package com.uns.ftn.agent.service;
 
 import com.uns.ftn.agent.client.AdvertisementClient;
+import com.uns.ftn.agent.domain.PriceList;
 import com.uns.ftn.agent.domain.PriceListItem;
+import com.uns.ftn.agent.dto.PriceListDTO;
 import com.uns.ftn.agent.dto.PriceListItemDTO;
 import com.uns.ftn.agent.exceptions.BadRequestException;
+import com.uns.ftn.agent.exceptions.NotFoundException;
 import com.uns.ftn.agent.repository.PriceListItemRepository;
+import com.uns.ftn.agent.repository.PriceListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.catalog.NewDiscountResponse;
 import rs.ac.uns.ftn.catalog.PriceResponse;
 
 import java.util.List;
@@ -17,18 +24,19 @@ public class PriceListService {
 
     private PriceListItemRepository priceListItemRepository;
     private AdvertisementClient advertisementClient;
+    private PriceListRepository priceListRepository;
 
     @Autowired
-    public PriceListService(PriceListItemRepository priceListItemRepository, AdvertisementClient advertisementClient) {
+    public PriceListService(PriceListItemRepository priceListItemRepository,
+                            AdvertisementClient advertisementClient,
+                            PriceListRepository priceListRepository) {
         this.priceListItemRepository = priceListItemRepository;
         this.advertisementClient = advertisementClient;
+        this.priceListRepository = priceListRepository;
     }
 
-    public List<PriceListItemDTO> getPriceList() {
-        return priceListItemRepository.findAll()
-                .stream()
-                .map(priceListItem -> new PriceListItemDTO(priceListItem))
-                .collect(Collectors.toList());
+    public PriceListDTO getPriceList() {
+        return new PriceListDTO(findOne());
     }
 
     public PriceListItemDTO createPriceListItem(PriceListItemDTO priceListItemDTO) {
@@ -40,6 +48,7 @@ public class PriceListService {
         priceListItem.setCdwPrice(priceListItemDTO.getCdwPrice());
         priceListItem.setDailyPrice(priceListItemDTO.getDailyPrice());
         priceListItem.setDebtPrice(priceListItemDTO.getDebtPrice());
+        priceListItem.setPriceList(findOne());
 
         priceListItemDTO.setCreatorId((long) 2);
         PriceResponse priceResponse = advertisementClient.createPriceListItem(priceListItemDTO);
@@ -50,6 +59,30 @@ public class PriceListService {
         priceListItem = priceListItemRepository.save(priceListItem);
 
         return new PriceListItemDTO(priceListItem);
+    }
+
+    public PriceList findOne() {
+        return priceListRepository.findById((long) 1)
+                .orElseThrow(() -> new BadRequestException("Could not retrieve price list!"));
+    }
+
+    public String createDiscount(double discount) {
+        PriceList priceList = findOne();
+
+        if (discount < 0 || discount > 1) {
+            throw new BadRequestException("Discount must be between 0% and 100%");
+        }
+
+        NewDiscountResponse discountResponse = advertisementClient.createDiscount((long) 2, discount);
+
+        if (discountResponse == null) {
+            throw new BadRequestException("Could not create discount!");
+        }
+
+        priceList.setDiscount(discount);
+        priceListRepository.save(priceList);
+
+        return "Discount successfully created.";
     }
 
 }

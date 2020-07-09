@@ -28,4 +28,10 @@ public class PriceListController {
         return new ResponseEntity<>(priceListService.createPriceListItem(priceListItemDTO), HttpStatus.OK);
     }
 
+    @PutMapping("/{discount}/")
+    public ResponseEntity<?> createDiscount(@PathVariable("discount") Double discount) {
+        System.out.println(discount);
+        return new ResponseEntity<>(priceListService.createDiscount(discount), HttpStatus.OK);
+    }
+
 }
