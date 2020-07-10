@@ -66,11 +66,12 @@ public class VehicleClassService {
 
         vehicleClassDTO.setName(Encode.forHtml(vehicleClassDTO.getName()));
 
-        if (findByName(vehicleClassDTO.getName()) != null) {
-            if (findByName(vehicleClassDTO.getName()).getDeleted()) {
-                findByName(vehicleClassDTO.getName()).setDeleted(false);
-                save(findByName(vehicleClassDTO.getName()));
-                return new ResponseEntity<>(new VehicleClassDTO(findByName(vehicleClassDTO.getName())), HttpStatus.CREATED);
+        VehicleClass myClass = findByName(vehicleClassDTO.getName());
+        if (myClass != null) {
+            if (myClass.getDeleted()) {
+                myClass.setDeleted(false);
+                save(myClass);
+                return new ResponseEntity<>(new VehicleClassDTO(myClass), HttpStatus.CREATED);
             }
         }
 
@@ -106,6 +107,14 @@ public class VehicleClassService {
             throw new BadRequestException("Vehicle class with requested name already exist.");
         }
 
+        try {
+            queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new BadRequestException("Vehicle class with requested name already exist.");
+        }
+
         return new ResponseEntity<>(new VehicleClassDTO(vehicleClass.getId(), vehicleClass.getName()),
                 HttpStatus.OK);
     }
@@ -117,6 +126,14 @@ public class VehicleClassService {
         }
         vehicleClass.setDeleted(true);
         vehicleClass = save(vehicleClass);
+
+        try {
+            queueProducer.produceVehicleClass(new VehicleClassDTO(vehicleClass));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new BadRequestException("Vehicle class with requested name already exist.");
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

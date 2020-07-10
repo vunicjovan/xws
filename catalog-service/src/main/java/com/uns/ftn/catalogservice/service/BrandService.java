@@ -59,11 +59,12 @@ public class BrandService {
 
         brandDTO.setName(Encode.forHtml(brandDTO.getName()));
 
-        if (findByName(brandDTO.getName()) != null) {
-            if (findByName(brandDTO.getName()).getDeleted()) {
-                findByName(brandDTO.getName()).setDeleted(false);
-                save(findByName(brandDTO.getName()));
-                return new ResponseEntity<>(new BrandDTO(findByName(brandDTO.getName())), HttpStatus.CREATED);
+        Brand myBrand = findByName(brandDTO.getName());
+        if (myBrand != null) {
+            if (myBrand.getDeleted()) {
+                myBrand.setDeleted(false);
+                save(myBrand);
+                return new ResponseEntity<>(new BrandDTO(myBrand), HttpStatus.CREATED);
             }
         }
 

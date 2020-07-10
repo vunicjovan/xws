@@ -53,11 +53,12 @@ public class FuelTypeService {
 
         fuelTypeDTO.setName(validateAndSanitize(fuelTypeDTO.getName()));
 
-        if (findByName(fuelTypeDTO.getName()) != null) {
-            if (findByName(fuelTypeDTO.getName()).getDeleted()) {
-                findByName(fuelTypeDTO.getName()).setDeleted(false);
-                fuelTypeRepository.save(findByName(fuelTypeDTO.getName()));
-                return new FuelTypeDTO(findByName(fuelTypeDTO.getName()));
+        FuelType myFuel = findByName(fuelTypeDTO.getName());
+        if (myFuel != null) {
+            if (myFuel.getDeleted()) {
+                myFuel.setDeleted(false);
+                fuelTypeRepository.save(myFuel);
+                return new FuelTypeDTO(myFuel);
             }
         }
 
