@@ -44,6 +44,13 @@
 				<i class="fas fa-list fa-2x"></i>
 				<md-tooltip>Published Ads</md-tooltip>
 			</md-button>
+			<md-button
+				v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))"
+				@click.native="$router.push('/requests/finished')"
+			>
+				<i class="fas fa-check-square fa-2x"></i>
+				<md-tooltip>Finished Requests</md-tooltip>
+			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/rented')">
 				<i class="fas fa-ad fa-2x"></i>
 				<md-tooltip>Rented Ads</md-tooltip>

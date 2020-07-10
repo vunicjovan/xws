@@ -19,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -243,6 +246,22 @@ public class RentingRequestService {
         return retval;
     }
 
+    public Set<FinishedRequestDTO> getResponseFinished(Long id) {
+        Set<GetRentingRequestDTO> finished = getAllFinished(id);
+        Set<FinishedRequestDTO> retval = finished.stream().map((req) -> {
+            FinishedRequestDTO finishedRequestDTO = new FinishedRequestDTO();
+            finishedRequestDTO.setRequestId(req.getRequestId());
+            finishedRequestDTO.setAdvertisementID(req.getAdvertisementID());
+            finishedRequestDTO.setStartDate(formatToString(req.getStartDate()));
+            finishedRequestDTO.setEndDate(formatToString(req.getEndDate()));
+            AdvertClientResponseDTO ad = advertisementClient.getAd(req.getAdvertisementID());
+            finishedRequestDTO.setVehicle(ad.getBrand() + " " + ad.getModel() );
+            return finishedRequestDTO;
+        }).collect(Collectors.toSet());
+
+        return retval;
+    }
+
     public Set<ReqResponseDTO> getRequestForUser(Long id) {
         List<RentingRequest> requests = requestRepo.findAllBySenderId(id);
         Set<RentingRequest> response = new HashSet<>();
@@ -368,6 +387,13 @@ public class RentingRequestService {
         if (rdto.getStartDate().after(rdto.getEndDate())) {
             throw new BadRequestException("Start of renting interval cannot be after the end of it.");
         }
+    }
+
+    public String formatToString(Date date) {
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+        String formattedDate = formatter.format(date);
+
+        return formattedDate;
     }
 
 }

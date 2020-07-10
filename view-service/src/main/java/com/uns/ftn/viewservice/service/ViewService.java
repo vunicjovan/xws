@@ -37,16 +37,7 @@ public class ViewService {
 
         advertisements.forEach(advertisement -> {
             if (!advertisement.getDeleted()) {
-                simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(
-                        advertisement.getId(),
-                        advertisement.getPrice(),
-                        advertisement.getLocation(),
-                        advertisement.getVehicle().getModel().getBrand().getName(),
-                        advertisement.getVehicle().getModel().getName(),
-                        advertisement.getRating(),
-                        advertisement.getVehicle().getKilometersTraveled(),
-                        advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
-                ));
+                simpleAdvertisementDTOSet.add(new SimpleAdvertisementDTO(advertisement));
             }
         });
 
@@ -108,16 +99,7 @@ public class ViewService {
 
         agentsAds.forEach(advertisement -> {
             if (!advertisement.getDeleted()) {
-                agentsAdsDTOSet.add(new SimpleAdvertisementDTO(
-                        advertisement.getId(),
-                        advertisement.getPrice(),
-                        advertisement.getLocation(),
-                        advertisement.getVehicle().getModel().getBrand().getName(),
-                        advertisement.getVehicle().getModel().getName(),
-                        advertisement.getRating(),
-                        advertisement.getVehicle().getKilometersTraveled(),
-                        advertisement.getPhotos().stream().map(photo -> photo.getPath()).collect(Collectors.toSet())
-                ));
+                agentsAdsDTOSet.add(new SimpleAdvertisementDTO(advertisement));
             }
         });
 

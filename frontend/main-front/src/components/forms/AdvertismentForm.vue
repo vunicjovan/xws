@@ -237,7 +237,9 @@ export default {
 
 					this.$store
 						.dispatch("addPhotots", payload)
-						.then(() => console.log("SUCCESS!"))
+						.then(() => {
+							this.$router.push("/");
+						})
 						.catch((error) => console.log(error));
 				})
 				.catch((error) => console.log(error));
