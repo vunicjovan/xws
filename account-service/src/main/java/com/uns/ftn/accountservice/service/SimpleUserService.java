@@ -1,7 +1,10 @@
 package com.uns.ftn.accountservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.uns.ftn.accountservice.components.QueueProducer;
 import com.uns.ftn.accountservice.domain.SimpleUser;
 import com.uns.ftn.accountservice.domain.User;
+import com.uns.ftn.accountservice.dto.MessageDTO;
 import com.uns.ftn.accountservice.dto.SimpleUserDTO;
 import com.uns.ftn.accountservice.exceptions.NotFoundException;
 import com.uns.ftn.accountservice.repository.RoleRepository;
@@ -22,11 +25,13 @@ public class SimpleUserService {
     private SimpleUserRepository simpleRepo;
     private UserRepository userRepo;
     private RoleRepository roleRepository;
+    private QueueProducer queueProducer;
 
     @Autowired
-    public SimpleUserService(SimpleUserRepository simpleRepo, UserRepository userRepo) {
+    public SimpleUserService(SimpleUserRepository simpleRepo, UserRepository userRepo, QueueProducer queueProducer) {
         this.simpleRepo = simpleRepo;
         this.userRepo = userRepo;
+        this.queueProducer = queueProducer;
     }
 
     public Set<SimpleUserDTO> getSimpleUsers() {
@@ -66,6 +71,24 @@ public class SimpleUserService {
                     simpleUser.getNumberOfCancelations(),
                     simpleUser.getBlocked()
             );
+
+            if (simpleUser.getBlocked()) {
+                MessageDTO mdto = new MessageDTO("RentaSoul Platform",
+                        "Your account has been blocked. You will be unable to sign in until administrator allows you to.", true);
+                try {
+                    queueProducer.produce(mdto);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                MessageDTO mdto = new MessageDTO("RentaSoul Platform",
+                        "Your account has been unblocked. You can sign in to system again.", true);
+                try {
+                    queueProducer.produce(mdto);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
 
             return new ResponseEntity<>(simpleUserDTO, HttpStatus.OK);
         } else {

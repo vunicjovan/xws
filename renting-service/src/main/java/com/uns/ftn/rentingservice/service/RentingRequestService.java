@@ -88,6 +88,14 @@ public class RentingRequestService {
 
         req = this.requestRepo.save(req);
 
+        MessageDTO mdto = new MessageDTO("RentaSoul Platform",
+                "You have a new renting request.", true);
+        try {
+            queueProducer.produce(mdto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         RentingRequest finalReq = req;
         Runnable myRunnable = new Runnable() {
 
@@ -115,6 +123,14 @@ public class RentingRequestService {
         if(request.getStatus() == RequestStatus.paid) {
             RentingRequest finalRentingRequest = rentingRequest;
 
+            MessageDTO mdto = new MessageDTO("RentaSoul Platform",
+                    "Your renting request has been accepted.", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
             try {
                 messageClient.createChat(finalRentingRequest.getAdvertisements().iterator().next().getOwnerId(),
                         rentingRequest.getSenderId());
@@ -129,10 +145,26 @@ public class RentingRequestService {
                                 req.getStartDate().after(finalRentingRequest.getEndDate()))) {
                             req.setStatus(RequestStatus.canceled);
                             save(req);
+
+                            MessageDTO message = new MessageDTO("RentaSoul Platform",
+                                    "Your renting request has been rejected.", true);
+                            try {
+                                queueProducer.produce(message);
+                            } catch (JsonProcessingException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
             });
+        } else if (request.getStatus() == RequestStatus.canceled) {
+            MessageDTO mdto = new MessageDTO("RentaSoul Platform",
+                    "Your renting request has been rejected.", true);
+            try {
+                queueProducer.produce(mdto);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
 
         return new ResponseEntity<>(
