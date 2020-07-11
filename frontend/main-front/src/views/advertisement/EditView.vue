@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && getAdvertisement !== null" class="md-layout md-alignment-center-center">
+		<flash-message class="myFlash"></flash-message>
 		<form class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 			<md-card class="md-layout-item md-size-30 md-small-size-100">
 				<md-card-header>
@@ -196,7 +197,7 @@ export default {
 				.then((data) => {
 					this.$router.push("/single-ad/" + this.getAdvertisement.id);
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		cancelDialog() {
 			this.active = false;
@@ -230,7 +231,7 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.active = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 

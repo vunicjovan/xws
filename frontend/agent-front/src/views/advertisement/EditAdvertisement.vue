@@ -1,5 +1,6 @@
 <template>
 	<div v-if="getAdvertisement" class="md-layout md-alignment-center">
+		<flash-message class="myFlash"></flash-message>
 		<md-card class="md-layout-item md-size-60">
 			<md-card-header>
 				<md-card-header-text>
@@ -119,7 +120,7 @@ export default {
 				.then((data) => {
 					this.$router.push("/");
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		validatePriceListItem() {
 			this.$v.pricelistForm.$touch();
@@ -137,7 +138,7 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.active = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 	validations: {

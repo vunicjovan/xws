@@ -145,7 +145,7 @@ insert into comment (title, content, allowed, user_id, advertisement_id, remote_
 insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4, 5);
 
 -- Price List
-insert into price_list(discount, owner_id) values ( 69, 2);
+insert into price_list(discount, owner_id) values ( 0.69, 2);
 
 -- Price List Items
 insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id)

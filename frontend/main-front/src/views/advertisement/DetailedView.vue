@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && getAdvertisement !== null" class="md-layout md-alignment-center-center">
+		<flash-message class="myFlash"></flash-message>
 		<md-dialog :md-active.sync="active">
 			<md-dialog-title>Unavailable term</md-dialog-title>
 			<md-dialog-content>
@@ -229,7 +230,7 @@ export default {
 				.then((data) => {	
 					this.$router.push("/");
 				})
-				.catch((error) => console.log(error))
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}))
 		},
 
 		validateDates() {
@@ -274,7 +275,7 @@ export default {
 					this.comment.allowed = undefined;
 					this.comment.userId = undefined;
 				})
-				.catch((error) => console.log(error))
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}))
 			this.commentDialog = false;
 		},
 

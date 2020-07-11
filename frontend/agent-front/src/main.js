@@ -11,10 +11,29 @@ import store from "./store";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 
+import VueFlashMessage from 'vue-flash-message';
+require('vue-flash-message/dist/vue-flash-message.min.css');
+
+Vue.use(VueFlashMessage);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
 
 axios.defaults.baseURL = "http://localhost:8091";
+
+axios.interceptors.response.use(
+	(response) => {
+		return response;
+	},
+	(error) => {
+
+		const {
+			config,
+			response: { status, data },
+		} = error;
+
+		return Promise.reject(data);
+	}
+);
 
 Vue.config.productionTip = false;
 

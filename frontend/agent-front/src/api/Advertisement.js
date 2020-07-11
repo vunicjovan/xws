@@ -14,7 +14,7 @@ export default {
 			},
 		};
 
-		return axios.post(`/image/${id}/`, photos, config).then((response) => {
+		return axios.post(`/image/${id}`, photos, config).then((response) => {
 			return response.data;
 		});
 	},

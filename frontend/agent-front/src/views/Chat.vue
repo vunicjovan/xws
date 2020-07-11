@@ -82,24 +82,9 @@ export default {
 	computed: mapGetters(["getChat"]),
 	mounted() {
 		this.$store.dispatch("getMessages");
-
-		//this.connect();
 	},
 	methods: {
 		...mapActions(["getMessages", "sendMessage"]),
-
-		// initializeWebSocketConnection() {
-		//     // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
-		//     let ws = new SockJS(this.serverUrl);
-		//     this.stompClient = Stomp.over(ws);
-		//     let that = this;
-
-		//     this.stompClient.connect({}, function () {
-		//     that.isLoaded = true;
-		//     that.openGlobalSocket()
-		//     });
-
-		// },
 
 		setRoom(room) {
 			this.selectedRoom = room;
@@ -140,33 +125,6 @@ export default {
 			this.currentMessages.splice(index, 1)
 			this.$store.dispatch("deleteMessage", message.id)
 		}
-
-		// send() {
-		//      // send message to server
-		//         if (this.stompClient && this.stompClient.connected) {
-		//             this.stompClient.send("/socket-subscriber/send", JSON.stringify(msg), {});
-		//         }
-		// },
-
-		// connect() {
-		//     this.socket = new SockJS("http://localhost:8089/message/socket");
-		//     this.stompClient = Stomp.over(this.socket);
-		//     this.stompClient.connect(
-		//         {},
-		//         frame => {
-		//             //this.connected = true;
-		//             console.log(frame);
-		//             this.stompClient.subscribe("/socket-publisher", tick => {
-		//                 console.log(tick);
-		//                 //this.received_messages.push(JSON.parse(tick.body).content);
-		//             });
-		//         },
-		//         error => {
-		//             console.log(error);
-		//             //this.connected = false;
-		//         }
-		//     );
-		// },
 	},
 	validations: {
 		currentMessage: {

@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER')) && rentingRequest" class="md-layout md-alignment-top-center">
+		<flash-message class="myFlash"></flash-message>
 		<md-card>
 			<md-card-header>
 				<md-card-header-text>
@@ -81,7 +82,7 @@ export default {
 				.then((data) => {
 					this.$router.push("/ads/published");
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		declineRequest: function(request) {
 			let ret = {
@@ -94,7 +95,7 @@ export default {
 				.then((data) => {
 					this.$router.push("/ads/published");
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 };

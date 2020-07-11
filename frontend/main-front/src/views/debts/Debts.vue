@@ -1,6 +1,7 @@
 <template>
 	<div class="somediv">
 		<div class="md-headline">My debts</div>
+		<flash-message class="myFlash"></flash-message>
 		<md-list class="md-triple-line md-dense" v-for="debt in getDebts" v-bind:key="debt.id">
 			<md-list-item>
 				<md-avatar>
@@ -42,7 +43,7 @@ export default {
 			this.$store
 				.dispatch("payDebt", id)
 				.then((data) => {})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 	watch: {

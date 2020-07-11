@@ -1,5 +1,6 @@
 <template>
   <div v-if="isLogged && getUser !== null">
+      <flash-message class="myFlash"></flash-message>
       <form novalidate class="md-layout md-alignment-top-center" @submit.prevent="validateData">
           <md-card class="md-layout-item md-size-30 md-small-size-100">
               <md-card-header>
@@ -83,7 +84,7 @@ export default {
 				.then(() => {
                     this.$router.push("/")
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 			}
 		},
     },

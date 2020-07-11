@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<flash-message class="myFlash"></flash-message>
 		<md-steppers :md-active-step.sync="active" md-linear>
 			<md-step id="first" md-label="First Step" :md-done.sync="first">
 				<form class="md-layout md-alignment-top-center" autocomplete="off">
@@ -253,7 +254,7 @@ export default {
 						})
 						.catch((error) => console.log(error));
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 
 		handleFileChange() {
@@ -300,7 +301,7 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.newPriceList = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 	validations: {

@@ -89,33 +89,15 @@ export default {
 		if (this.getUser) {
 			this.$store.dispatch("getMessages", this.getUser.id);
 		}
-		//this.connect();
 	},
 	methods: {
 		...mapActions(["getMessages", "sendMessage"]),
-
-		// initializeWebSocketConnection() {
-		//     // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
-		//     let ws = new SockJS(this.serverUrl);
-		//     this.stompClient = Stomp.over(ws);
-		//     let that = this;
-
-		//     this.stompClient.connect({}, function () {
-		//     that.isLoaded = true;
-		//     that.openGlobalSocket()
-		//     });
-
-		// },
 
 		setRoom(room) {
 			this.selectedRoom = room;
 			this.selectedTitle = "Conversation with " + this.selectedRoom.senderUsername;
 			this.currentMessages = this.selectedRoom.messages;
 			this.msgCounter = this.currentMessages.length;
-
-			/*if (this.$refs.msgd !== undefined) {
-                this.$refs.msgd.scrollTop = this.$refs.msgd.lastElementChild.offsetTop;
-            }*/
 		},
 
 		getMsgIndex(msg) {
@@ -153,33 +135,6 @@ export default {
 				})
 				.catch((error) => console.log(error));
 		},
-
-		// send() {
-		//      // send message to server
-		//         if (this.stompClient && this.stompClient.connected) {
-		//             this.stompClient.send("/socket-subscriber/send", JSON.stringify(msg), {});
-		//         }
-		// },
-
-		// connect() {
-		//     this.socket = new SockJS("http://localhost:8089/message/socket");
-		//     this.stompClient = Stomp.over(this.socket);
-		//     this.stompClient.connect(
-		//         {},
-		//         frame => {
-		//             //this.connected = true;
-		//             console.log(frame);
-		//             this.stompClient.subscribe("/socket-publisher", tick => {
-		//                 console.log(tick);
-		//                 //this.received_messages.push(JSON.parse(tick.body).content);
-		//             });
-		//         },
-		//         error => {
-		//             console.log(error);
-		//             //this.connected = false;
-		//         }
-		//     );
-		// },
 	},
 	watch: {
 		getUser: {

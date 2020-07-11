@@ -1,5 +1,6 @@
 <template>
 	<div id="component">
+		<flash-message class="myFlash"></flash-message>
 		<div class="md-layout md-gutter md-alignment-center">
 			<md-dialog :md-active.sync="active">
 				<md-dialog-title>Report</md-dialog-title>
@@ -100,7 +101,7 @@ export default {
 					this.$store.dispatch("getFinishedRentingRequests", this.getUser.id);
 					this.$store.dispatch("getRentingReports", this.getUser.id);
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		validateForm() {
 			this.$v.$touch();
