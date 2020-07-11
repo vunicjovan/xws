@@ -31,7 +31,7 @@ public class PriceList {
     @Column(name = "discount")
     private double discount = 0;
 
-    @OneToMany(mappedBy = "priceList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "priceList", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<PriceListItem> priceListItem;
 
 }

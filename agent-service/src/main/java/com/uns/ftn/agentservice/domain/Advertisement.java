@@ -61,7 +61,7 @@ public class Advertisement {
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Photo> photos;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private PriceListItem priceListItem;
 
     @JsonIgnore
