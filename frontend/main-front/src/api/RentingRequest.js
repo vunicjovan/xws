@@ -19,6 +19,15 @@ export default {
 		});
 	},
 
+	async getRentingRequest(requestId) {
+		try {
+			const response = await axios.get(`rent/request/${requestId}`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
+
 	async getFinishedRentingRequests(id) {
 		try {
 			const response = await axios.get(`/rent/request/finished/${id}`);

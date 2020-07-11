@@ -3,6 +3,8 @@
 // See <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2020.07.11 at 02:58:30 PM CEST 
+//
+
 
 package rs.ac.uns.ftn.catalog;
 
@@ -25,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="comments" type="{http://www.ftn.uns.ac.rs/advertisement}comment" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="pendingRequests" type="{http://www.ftn.uns.ac.rs/renting}pendingRequest" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,41 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "comments"
+    "pendingRequests"
 })
-@XmlRootElement(name = "commentResponse")
-public class CommentResponse {
+@XmlRootElement(name = "pendingRentingRequestResponse", namespace = "http://www.ftn.uns.ac.rs/renting")
+public class PendingRentingRequestResponse {
 
     @XmlElement(nillable = true)
-    protected List<Comment> comments;
+    protected List<PendingRequest> pendingRequests;
 
     /**
-     * Gets the value of the comments property.
+     * Gets the value of the pendingRequests property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the comments property.
+     * This is why there is not a <CODE>set</CODE> method for the pendingRequests property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getComments().add(newItem);
+     *    getPendingRequests().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Comment }
+     * {@link PendingRequest }
      * 
      * 
      */
-    public List<Comment> getComments() {
-        if (comments == null) {
-            comments = new ArrayList<Comment>();
+    public List<PendingRequest> getPendingRequests() {
+        if (pendingRequests == null) {
+            pendingRequests = new ArrayList<PendingRequest>();
         }
-        return this.comments;
+        return this.pendingRequests;
     }
 
 }

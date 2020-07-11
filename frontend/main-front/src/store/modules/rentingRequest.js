@@ -27,12 +27,16 @@ const actions = {
 		});
 	},
 
-	getUserRentingRequest({ commit }, id) {
-		for (let i = 0; i < state.rentingRequests.length; i++) {
-			if (id == state.rentingRequests[i].id) {
-				commit("setRentingRequest", state.rentingRequests[i]);
-			}
-		}
+	getUserRentingRequest({ commit }, requestId) {
+		return new Promise((resolve, reject) => {
+			rentingRequestApi
+				.getRentingRequest(requestId)
+				.then((data) => {
+					commit("setRentingRequest", data);
+					resolve();
+				})
+				.catch((error) => reject(error));
+		});
 	},
 
 	getFinishedRentingRequests({ commit }, id) {

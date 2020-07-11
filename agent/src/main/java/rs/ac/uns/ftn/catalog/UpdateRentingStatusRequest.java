@@ -3,6 +3,8 @@
 // See <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2020.07.11 at 02:58:30 PM CEST 
+//
+
 
 package rs.ac.uns.ftn.catalog;
 
@@ -22,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="discount" type="{http://www.w3.org/2001/XMLSchema}double"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -34,45 +36,45 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "ownerId",
-    "discount"
+    "id",
+    "status"
 })
-@XmlRootElement(name = "newDiscountRequest")
-public class NewDiscountRequest {
+@XmlRootElement(name = "updateRentingStatusRequest", namespace = "http://www.ftn.uns.ac.rs/renting")
+public class UpdateRentingStatusRequest {
 
-    protected long ownerId;
-    protected double discount;
+    protected long id;
+    protected int status;
 
     /**
-     * Gets the value of the ownerId property.
+     * Gets the value of the id property.
      * 
      */
-    public long getOwnerId() {
-        return ownerId;
+    public long getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the ownerId property.
+     * Sets the value of the id property.
      * 
      */
-    public void setOwnerId(long value) {
-        this.ownerId = value;
+    public void setId(long value) {
+        this.id = value;
     }
 
     /**
-     * Gets the value of the discount property.
+     * Gets the value of the status property.
      * 
      */
-    public double getDiscount() {
-        return discount;
+    public int getStatus() {
+        return status;
     }
 
     /**
-     * Sets the value of the discount property.
+     * Sets the value of the status property.
      * 
      */
-    public void setDiscount(double value) {
-        this.discount = value;
+    public void setStatus(int value) {
+        this.status = value;
     }
 
 }

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="finishedRequests" type="{http://www.ftn.uns.ac.rs/renting}finishedRequest" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="pendingRequests" type="{http://www.ftn.uns.ac.rs/renting}pendingRequest" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -38,41 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "finishedRequests"
+    "pendingRequests"
 })
-@XmlRootElement(name = "getFinishedResponse")
-public class GetFinishedResponse {
+@XmlRootElement(name = "pendingRentingRequestResponse")
+public class PendingRentingRequestResponse {
 
     @XmlElement(nillable = true)
-    protected List<FinishedRequest> finishedRequests;
+    protected List<PendingRequest> pendingRequests;
 
     /**
-     * Gets the value of the finishedRequests property.
+     * Gets the value of the pendingRequests property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the finishedRequests property.
+     * This is why there is not a <CODE>set</CODE> method for the pendingRequests property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getFinishedRequests().add(newItem);
+     *    getPendingRequests().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link FinishedRequest }
+     * {@link PendingRequest }
      * 
      * 
      */
-    public List<FinishedRequest> getFinishedRequests() {
-        if (finishedRequests == null) {
-            finishedRequests = new ArrayList<FinishedRequest>();
+    public List<PendingRequest> getPendingRequests() {
+        if (pendingRequests == null) {
+            pendingRequests = new ArrayList<PendingRequest>();
         }
-        return this.finishedRequests;
+        return this.pendingRequests;
     }
 
 }

@@ -324,8 +324,20 @@ public class RentingRequestService {
         return response;
     }
 
-    public RentingRequestDTO getRequestById(Long id) {
-        return new RentingRequestDTO(findOne(id));
+    public ReqResponseDTO getRequestById(Long id) {
+            RentingRequest request = findOne(id);
+
+            ReqResponseDTO responseDTO = new ReqResponseDTO();
+            responseDTO.setId(request.getId());
+            responseDTO.setStartDate(request.getStartDate());
+            responseDTO.setEndDate(request.getEndDate());
+            responseDTO.setStartDate(request.getStartDate());
+            responseDTO.setAdvertisements(request.getAdvertisements().stream().map(advertisement -> {
+                AdvertClientResponseDTO ad = advertisementClient.getAd(advertisement.getId());
+                return ad;
+            }).collect(Collectors.toSet()));
+
+            return responseDTO;
     }
 
     private boolean checkIfRequestIsFinished(RentingRequest rentingRequest)  {

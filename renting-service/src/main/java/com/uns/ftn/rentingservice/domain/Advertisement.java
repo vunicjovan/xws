@@ -30,16 +30,16 @@ public class Advertisement {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals = new HashSet<>();
 
-    @ManyToMany(mappedBy = "advertisements", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "advertisements", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<RentingRequest> rentingRequests;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private  Set<Comment> comments;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private  Set<RentingReport> rentingReports;
 
 }

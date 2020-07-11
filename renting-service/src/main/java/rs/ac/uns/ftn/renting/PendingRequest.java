@@ -8,6 +8,8 @@
 
 package rs.ac.uns.ftn.renting;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -17,19 +19,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for finishedRequest complex type.
+ * <p>Java class for pendingRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="finishedRequest">
+ * &lt;complexType name="pendingRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="requestId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="startDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="endDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="advertisementId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="senderId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="advertisementIds" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,37 +42,40 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "finishedRequest", propOrder = {
-    "requestId",
+@XmlType(name = "pendingRequest", propOrder = {
+    "id",
     "startDate",
     "endDate",
-    "advertisementId"
+    "senderId",
+    "advertisementIds"
 })
-public class FinishedRequest {
+public class PendingRequest {
 
-    protected long requestId;
+    protected long id;
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar startDate;
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar endDate;
-    protected long advertisementId;
+    protected long senderId;
+    @XmlElement(nillable = true)
+    protected List<Long> advertisementIds;
 
     /**
-     * Gets the value of the requestId property.
+     * Gets the value of the id property.
      * 
      */
-    public long getRequestId() {
-        return requestId;
+    public long getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the requestId property.
+     * Sets the value of the id property.
      * 
      */
-    public void setRequestId(long value) {
-        this.requestId = value;
+    public void setId(long value) {
+        this.id = value;
     }
 
     /**
@@ -121,19 +127,48 @@ public class FinishedRequest {
     }
 
     /**
-     * Gets the value of the advertisementId property.
+     * Gets the value of the senderId property.
      * 
      */
-    public long getAdvertisementId() {
-        return advertisementId;
+    public long getSenderId() {
+        return senderId;
     }
 
     /**
-     * Sets the value of the advertisementId property.
+     * Sets the value of the senderId property.
      * 
      */
-    public void setAdvertisementId(long value) {
-        this.advertisementId = value;
+    public void setSenderId(long value) {
+        this.senderId = value;
+    }
+
+    /**
+     * Gets the value of the advertisementIds property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the advertisementIds property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getAdvertisementIds().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Long }
+     * 
+     * 
+     */
+    public List<Long> getAdvertisementIds() {
+        if (advertisementIds == null) {
+            advertisementIds = new ArrayList<Long>();
+        }
+        return this.advertisementIds;
     }
 
 }

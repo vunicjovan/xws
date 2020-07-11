@@ -1,6 +1,7 @@
 package com.uns.ftn.agent.controller;
 
 import com.uns.ftn.agent.dto.RentingReportDTO;
+import com.uns.ftn.agent.dto.RequestStatusDTO;
 import com.uns.ftn.agent.service.RentingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,4 +29,13 @@ public class RentingController {
         return new ResponseEntity<>(rentingService.compileRentingReport(rdto), HttpStatus.CREATED);
     }
 
+    @GetMapping(value = "/pending/requests")
+    public ResponseEntity<?> getPendingRequests() {
+        return new ResponseEntity<>(rentingService.getPendingRentingRequests(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/request")
+    public ResponseEntity<?> updateRequestStatus(@RequestBody RequestStatusDTO reqDto) {
+        return new ResponseEntity<>(rentingService.updateRequestStatus(reqDto), HttpStatus.OK);
+    }
 }

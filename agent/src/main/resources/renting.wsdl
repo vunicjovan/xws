@@ -1,11 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/renting"
-                  targetNamespace="http://www.ftn.uns.ac.rs/renting">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.ftn.uns.ac.rs/renting" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ftn.uns.ac.rs/renting" targetNamespace="http://www.ftn.uns.ac.rs/renting">
     <wsdl:types>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ftn.uns.ac.rs/renting">
-
-            <!-- Getter for finished renting requests on agent-app -->
+            <!--  Getter for finished renting requests on agent-app  -->
             <xs:element name="getFinishedRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -13,16 +9,13 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
             <xs:element name="getFinishedResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="finishedRequests" nillable="true"
-                                    type="tns:finishedRequest"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="finishedRequests" nillable="true" type="tns:finishedRequest"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
             <xs:complexType name="finishedRequest">
                 <xs:sequence>
                     <xs:element name="requestId" type="xs:long"/>
@@ -31,8 +24,7 @@
                     <xs:element name="advertisementId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
-
-            <!-- Renting report creation -->
+            <!--  Renting report creation  -->
             <xs:element name="compileReportRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -43,7 +35,6 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
             <xs:element name="compileReportResponse">
                 <xs:complexType>
                     <xs:sequence>
@@ -54,36 +45,86 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="pendingRentingRequestResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="pendingRequests" nillable="true" type="tns:pendingRequest"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="pendingRequest">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="startDate" type="xs:dateTime"/>
+                    <xs:element name="endDate" type="xs:dateTime"/>
+                    <xs:element name="senderId" type="xs:long"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="advertisementIds" nillable="true" type="xs:long"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="pendingRentingRequestRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateRentingStatusRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="status" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateRentingStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="compileReportResponse">
-        <wsdl:part element="tns:compileReportResponse" name="compileReportResponse">
-        </wsdl:part>
+        <wsdl:part element="tns:compileReportResponse" name="compileReportResponse"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="updateRentingStatusRequest">
+        <wsdl:part element="tns:updateRentingStatusRequest" name="updateRentingStatusRequest"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="updateRentingStatusResponse">
+        <wsdl:part element="tns:updateRentingStatusResponse" name="updateRentingStatusResponse"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="getFinishedResponse">
-        <wsdl:part element="tns:getFinishedResponse" name="getFinishedResponse">
-        </wsdl:part>
+        <wsdl:part element="tns:getFinishedResponse" name="getFinishedResponse"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="pendingRentingRequestResponse">
+        <wsdl:part element="tns:pendingRentingRequestResponse" name="pendingRentingRequestResponse"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="compileReportRequest">
-        <wsdl:part element="tns:compileReportRequest" name="compileReportRequest">
-        </wsdl:part>
+        <wsdl:part element="tns:compileReportRequest" name="compileReportRequest"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="pendingRentingRequestRequest">
+        <wsdl:part element="tns:pendingRentingRequestRequest" name="pendingRentingRequestRequest"> </wsdl:part>
     </wsdl:message>
     <wsdl:message name="getFinishedRequest">
-        <wsdl:part element="tns:getFinishedRequest" name="getFinishedRequest">
-        </wsdl:part>
+        <wsdl:part element="tns:getFinishedRequest" name="getFinishedRequest"> </wsdl:part>
     </wsdl:message>
     <wsdl:portType name="RentingPort">
         <wsdl:operation name="compileReport">
-            <wsdl:input message="tns:compileReportRequest" name="compileReportRequest">
-            </wsdl:input>
-            <wsdl:output message="tns:compileReportResponse" name="compileReportResponse">
-            </wsdl:output>
+            <wsdl:input message="tns:compileReportRequest" name="compileReportRequest"> </wsdl:input>
+            <wsdl:output message="tns:compileReportResponse" name="compileReportResponse"> </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="updateRentingStatus">
+            <wsdl:input message="tns:updateRentingStatusRequest" name="updateRentingStatusRequest"> </wsdl:input>
+            <wsdl:output message="tns:updateRentingStatusResponse" name="updateRentingStatusResponse"> </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="getFinished">
-            <wsdl:input message="tns:getFinishedRequest" name="getFinishedRequest">
-            </wsdl:input>
-            <wsdl:output message="tns:getFinishedResponse" name="getFinishedResponse">
-            </wsdl:output>
+            <wsdl:input message="tns:getFinishedRequest" name="getFinishedRequest"> </wsdl:input>
+            <wsdl:output message="tns:getFinishedResponse" name="getFinishedResponse"> </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="pendingRentingRequest">
+            <wsdl:input message="tns:pendingRentingRequestRequest" name="pendingRentingRequestRequest"> </wsdl:input>
+            <wsdl:output message="tns:pendingRentingRequestResponse" name="pendingRentingRequestResponse"> </wsdl:output>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="RentingPortSoap11" type="tns:RentingPort">
@@ -97,6 +138,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="updateRentingStatus">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="updateRentingStatusRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="updateRentingStatusResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getFinished">
             <soap:operation soapAction=""/>
             <wsdl:input name="getFinishedRequest">
@@ -106,10 +156,19 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="pendingRentingRequest">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="pendingRentingRequestRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="pendingRentingRequestResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="RentingPortService">
         <wsdl:port binding="tns:RentingPortSoap11" name="RentingPortSoap11">
-            <soap:address location="http://localhost:8086/ws"/>
+            <soap:address location="http://192.168.1.249:8086/ws"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

@@ -51,4 +51,48 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="pendingRentingRequestResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="pendingRequests" type="tns:pendingRequest" minOccurs="0" maxOccurs="unbounded"
+                            nillable="true"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pendingRequest">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="startDate" type="xs:dateTime"/>
+            <xs:element name="endDate" type="xs:dateTime"/>
+            <xs:element name="senderId" type="xs:long"/>
+            <xs:element name="advertisementIds" type="xs:long" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="pendingRentingRequestRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateRentingStatusRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="status" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateRentingStatusResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>
