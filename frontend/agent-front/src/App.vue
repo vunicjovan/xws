@@ -7,6 +7,7 @@
 			<router-link to="/requestsFinished">Finished requests</router-link>
 			<router-link to="/statistics">Statistics</router-link>
 			<router-link to="/pricelist">Price List</router-link>
+			<router-link to="/requests/pending">Pending reuqests</router-link>
 		</div>
 		<div id="body">
 			<router-view />

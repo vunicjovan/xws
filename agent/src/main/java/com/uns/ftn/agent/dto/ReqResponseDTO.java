@@ -16,9 +16,9 @@ import java.util.Set;
 public class ReqResponseDTO {
 
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private Long senderId;
-    private Set<Long> advertisements = new HashSet<>();
+    private Set<String> advertisements = new HashSet<>();
 
 }

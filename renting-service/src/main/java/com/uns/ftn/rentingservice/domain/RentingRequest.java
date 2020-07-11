@@ -34,15 +34,15 @@ public class RentingRequest {
    @Column(name = "senderId", nullable = false)
    private Long senderId;
 
-   @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
    private Set<RentingReport> rentingReports;
 
-   @ManyToMany
+   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
    @JoinTable(name = "renting_request_advertisements", joinColumns = @JoinColumn(name = "renting_request_id",
            referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id"))
    private Set<Advertisement> advertisements;
 
-   @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "rentingRequest", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
    private  Set<Comment> comments;
 
 }

@@ -7,6 +7,7 @@ import Chat from "../views/Chat.vue";
 import EditAdvertisement from "../views/advertisement/EditAdvertisement.vue";
 import PriceList from "../components/PriceList.vue";
 import StatisticReport from "../components/Statistic.vue";
+import PendingRequests from "../views/renting/PendingRequests.vue";
 
 Vue.use(VueRouter);
 
@@ -39,12 +40,17 @@ const routes = [
 	{
 		path: "/pricelist",
 		name: "PriceList",
-		component: PriceList
+		component: PriceList,
 	},
 	{
 		path: "/statistics",
 		name: "StatisticReport",
-		component: StatisticReport
+		component: StatisticReport,
+	},
+	{
+		path: "/requests/pending",
+		name: "PendingRequests",
+		component: PendingRequests,
 	},
 ];
 

@@ -1,9 +1,13 @@
 package com.uns.ftn.rentingservice.endpoints;
 
+import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.GetRentingRequestDTO;
 import com.uns.ftn.rentingservice.dto.ReqResponseDTO;
+import com.uns.ftn.rentingservice.dto.RequestStatusDTO;
 import com.uns.ftn.rentingservice.service.RentingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -59,6 +63,8 @@ public class RentingRequestEndpoint {
         return response;
     }
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "pendingRentingRequestRequest")
+    @ResponsePayload
     public PendingRentingRequestResponse getPendingRentingRequest(@RequestPayload PendingRentingRequestRequest request) {
         PendingRentingRequestResponse response = new PendingRentingRequestResponse();
         Set<ReqResponseDTO> requests = requestService.getRequestForUser(request.getId());
@@ -80,9 +86,31 @@ public class RentingRequestEndpoint {
             } catch (DatatypeConfigurationException e) {
                 e.printStackTrace();
             }
+            req.getAdvertisements().forEach(ad -> {
+                pendingRequest.getAdvertisementIds().add(ad.getId());
+            });
 
             response.getPendingRequests().add(pendingRequest);
         });
+
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateRentingStatusRequest")
+    @ResponsePayload
+    public UpdateRentingStatusResponse updateRentingStatus(@RequestPayload UpdateRentingStatusRequest request) {
+        UpdateRentingStatusResponse response = new UpdateRentingStatusResponse();
+        RequestStatusDTO requestStatusDTO = new RequestStatusDTO();
+        requestStatusDTO.setId(request.getId());
+        if(request.getStatus() == 2) {
+            requestStatusDTO.setStatus(RequestStatus.paid);
+        } else if(request.getStatus() == 3) {
+            requestStatusDTO.setStatus(RequestStatus.canceled);
+        }
+        ResponseEntity<?> status = requestService.updateRequestStatus(request.getId(), requestStatusDTO);
+        if(status.getStatusCode().equals(HttpStatus.OK)) {
+            response.setId(request.getId());
+        }
 
         return response;
     }

@@ -7,14 +7,13 @@ import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.dto.GetRentingRequestDTO;
 import com.uns.ftn.agent.dto.RentingReportDTO;
 import com.uns.ftn.agent.dto.ReqResponseDTO;
+import com.uns.ftn.agent.dto.RequestStatusDTO;
+import com.uns.ftn.agent.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.catalog.CompileReportResponse;
-import rs.ac.uns.ftn.catalog.FinishedRequest;
-import rs.ac.uns.ftn.catalog.GetFinishedResponse;
-import rs.ac.uns.ftn.catalog.PendingRentingRequestResponse;
+import rs.ac.uns.ftn.catalog.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.DateFormat;
@@ -65,20 +64,40 @@ public class RentingService {
         return new ResponseEntity<>(retval, HttpStatus.OK);
     }
 
-    public Set<ReqResponseDTO> getPendingRentingRequests(Long ownerId) {
-        PendingRentingRequestResponse response = requestClient.getPendingRentingRequest(ownerId);
+    public Set<ReqResponseDTO> getPendingRentingRequests() {
+        PendingRentingRequestResponse response = requestClient.getPendingRentingRequest((long) 2);
         Set<ReqResponseDTO> ret = new HashSet<>();
 
         response.getPendingRequests().forEach(pendingRequest -> {
             ReqResponseDTO r = new ReqResponseDTO();
             r.setId(pendingRequest.getId());
             r.setSenderId(pendingRequest.getSenderId());
-            r.setStartDate(calendarToDate(pendingRequest.getStartDate()));
-            r.setEndDate(calendarToDate(pendingRequest.getEndDate()));
-            r.setAdvertisements(pendingRequest.getAdvertisementIds().stream().collect(Collectors.toSet()));
+            r.setStartDate(calendarToString(pendingRequest.getStartDate()));
+            r.setEndDate(calendarToString(pendingRequest.getEndDate()));
+            r.setAdvertisements(pendingRequest.getAdvertisementIds().stream().map(ad -> {
+                AdWrapper wrapper = advertisementService.findOneAdWrapper(ad);
+                Advertisement advertisement = advertisementService.findOne(wrapper.getAdvertisementId());
+                return advertisement.getVehicle().getModel().getBrand().getName() + " " + advertisement.getVehicle().getModel().getName();
+            }).collect(Collectors.toSet()));
+            ret.add(r);
         });
 
         return ret;
+    }
+
+    public RequestStatusDTO updateRequestStatus(RequestStatusDTO reqDto) {
+        UpdateRentingStatusResponse response = requestClient.updateRentingStatus(reqDto);
+
+        if(response == null) {
+            throw new BadRequestException("Couldn't finish updating request.");
+        }
+
+        RequestStatusDTO requestStatusDTO = new RequestStatusDTO();
+
+        requestStatusDTO.setId(response.getId());
+        requestStatusDTO.setStatus(reqDto.getStatus());
+
+        return requestStatusDTO;
     }
 
     public ResponseEntity<?> compileRentingReport(RentingReportDTO rdto) {
