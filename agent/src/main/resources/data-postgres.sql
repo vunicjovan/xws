@@ -81,20 +81,26 @@ insert into vehicle_class (id, name, deleted) values (8, 'Sports Car', false);
 insert into vehicle_class (id, name, deleted) values (9, 'SUV', false);
 insert into vehicle_class (id, name, deleted) values (10, 'Old Timer', false);
 
+-- Price List
+insert into price_list(discount, owner_id) values ( 0.69, 2);
+
+-- Price List Items
+insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id)
+values (69, 69, 69, 1);
 
 -- Advertisements
 insert into advertisement
-(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
-values (25.00, 240, false, 0, 'Opis 1', 'Teslic', 1, false);
+(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted, price_list_item_id)
+values (69.00, 240, false, 0, 'Opis 1', 'Teslic', 2, false, 1);
 insert into advertisement
-(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
-values (5.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 1, false);
+(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted, price_list_item_id)
+values (69.00, 220, true, 3.0, 'Opis 2', 'Kovilj', 2, false, 1);
 insert into advertisement
-(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
-values (26.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 1, false);
+(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted, price_list_item_id)
+values (69.00, 10, true, 4.2, 'Opis 3', 'Sremska Kamenica', 2, false, 1);
 insert into advertisement
-(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted)
-values (21.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 1, false);
+(price, kilometers_per_day_limit, collision_damage_waiver, rating, description, location, owner_id, deleted, price_list_item_id)
+values (69.00, -1, false, 5.0, 'Opis 4', 'Mala Mostanica', 2, false, 1);
 
 -- AdWrapers
 insert into ad_wrapper (remote_id, advertisement_id) values (1, 1);
@@ -136,17 +142,7 @@ insert into photo (path, advertisement_id) values ('logan4.jpg', 4);
 
 -- Comments
 insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('First comment', 'This is first comment.', true, 3, 1, 1);
--- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Second comment', 'This is second comment.', true, 3, 1);
 insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Third comment', 'This is third comment.', true, 3, 2, 2);
--- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fourth comment', 'This is fourth comment.', true, 3, 2);
--- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Fifth comment', 'This is fifth comment.', true, 3, 3);
 insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4, 3);
 insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Eighth comment', 'This is eighth comment.', false, 7, 4, 5);
-
--- Price List
-insert into price_list(discount, owner_id) values ( 69, 2);
-
--- Price List Items
-insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id)
-values (69, 69, 69, 1);
+insert into comment (title, content, allowed, user_id, advertisement_id, remote_id) values ('Eight comment', 'This is eighth comment.', false, 7, 4, 5);

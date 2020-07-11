@@ -71,5 +71,6 @@ public class  PhotoServiceImpl implements PhotoService {
         photo.setPath(request.getPath());
         photo.setAdvertisement(advertisement);
         photoRepository.save(photo);
+        queueProducer.producePhoto(new PhotoDTO(photo));
     }
 }

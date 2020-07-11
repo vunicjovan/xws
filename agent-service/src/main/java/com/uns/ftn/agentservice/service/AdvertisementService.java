@@ -127,7 +127,7 @@ public class AdvertisementService {
         }
 
         Advertisement ad = findById(id);
-        if (ad == null) {
+        if (ad == null || ad.getDeleted()) {
             throw new NotFoundException("Requested advertisement does not exist.");
         }
 

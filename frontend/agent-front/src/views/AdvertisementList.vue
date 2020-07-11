@@ -1,5 +1,6 @@
 <template>
 	<div class="md-layout md-gutter md-alignment-center">
+		<flash-message class="myFlash"></flash-message>
 		<md-card
 			v-for="ad in getAdvertisements"
 			v-bind:key="ad.id"
@@ -309,7 +310,7 @@ export default {
 					this.selectedAdvertisement = null;
 					this.showModal = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 

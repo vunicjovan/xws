@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div class="md-headline">Renting History</div>
+		<flash-message class="myFlash"></flash-message>
 		<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" class="md-layout md-gutter md-alignment-center">
 			<div class="card-expansion">
 				<md-card v-for="(ad, index) in getRentingHistory" v-bind:key="index" class="md-layout-item md-size-90">
@@ -186,7 +187,7 @@ export default {
                     this.showCommentDialog = false;
 					this.$store.dispatch("getUserRentingHistory", this.getUser.id);
                 })
-                .catch((error) => console.log(error));
+                .catch((error) => this.flashWarning(error.message, {timeout: 2000}));
         },
         rateAd: function() {
 			let ad = this.sendingAd;
@@ -203,7 +204,7 @@ export default {
 					this.showRateDialog = false;
 					this.$store.dispatch("getUserRentingHistory", this.getUser.id);
                 }) 
-                .catch((error) => console.log(error));
+                .catch((error) => this.flashWarning(error.message, {timeout: 2000}));
         },
         validateComment: function() {
             this.$v.$touch();

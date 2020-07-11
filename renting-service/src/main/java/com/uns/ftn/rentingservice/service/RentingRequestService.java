@@ -19,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,7 @@ public class RentingRequestService {
     private MessageClient messageClient;
     private QueueProducer queueProducer;
     private AccountClient accountClient;
+    private DebtService debtService;
 
     @Autowired
     public RentingRequestService(AdvertisementRepository adRepo, RentingRequestRepository requestRepo,
@@ -42,7 +46,7 @@ public class RentingRequestService {
                                  CommentService commentService, CommentClient commentClient,
                                  RentingReportRepository rentingReportRepository,
                                  MessageClient messageClient, QueueProducer queueProducer,
-                                 AccountClient accountClient) {
+                                 AccountClient accountClient, DebtService debtService) {
         this.adRepo = adRepo;
         this.requestRepo = requestRepo;
         this.taskScheduler = taskScheduler;
@@ -53,6 +57,7 @@ public class RentingRequestService {
         this.messageClient = messageClient;
         this.queueProducer = queueProducer;
         this.accountClient = accountClient;
+        this.debtService = debtService;
     }
 
     public RentingRequest findOne(Long id) { return requestRepo.findById(id)
@@ -61,6 +66,9 @@ public class RentingRequestService {
     public RentingRequest save(RentingRequest rentingRequest) { return requestRepo.save(rentingRequest); }
 
     public ResponseEntity<?> createRequest(RentingRequestDTO rdto) {
+        if (!debtService.getDebt(rdto.getSenderId()).isEmpty()) {
+            throw new BadRequestException("You have to pay all your debts in order to rent a new vehicle.");
+        }
 
         checkDateValidityForRequest(rdto);
 
@@ -139,9 +147,20 @@ public class RentingRequestService {
             }
 
             finalRentingRequest.getAdvertisements().forEach(advertisement -> {
+                RentingInterval rentingInterval = new RentingInterval();
+                rentingInterval.setStartDate(finalRentingRequest.getStartDate());
+                rentingInterval.setEndDate(finalRentingRequest.getEndDate());
+                rentingInterval.setAdvertisement(advertisement);
+
+                try {
+                    queueProducer.produceInterval(new RentingIntervalDTO(rentingInterval));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
                 advertisement.getRentingRequests().forEach(req -> {
-                    if(req.getId() != finalRentingRequest.getId() && req.getStatus() == RequestStatus.pending ) {
-                        if(!(req.getEndDate().before(finalRentingRequest.getStartDate()) ||
+                    if (req.getId() != finalRentingRequest.getId() && req.getStatus() == RequestStatus.pending) {
+                        if (!(req.getEndDate().before(finalRentingRequest.getStartDate()) ||
                                 req.getStartDate().after(finalRentingRequest.getEndDate()))) {
                             req.setStatus(RequestStatus.canceled);
                             save(req);
@@ -223,6 +242,22 @@ public class RentingRequestService {
                 }
             }
         }
+
+        return retval;
+    }
+
+    public Set<FinishedRequestDTO> getResponseFinished(Long id) {
+        Set<GetRentingRequestDTO> finished = getAllFinished(id);
+        Set<FinishedRequestDTO> retval = finished.stream().map((req) -> {
+            FinishedRequestDTO finishedRequestDTO = new FinishedRequestDTO();
+            finishedRequestDTO.setRequestId(req.getRequestId());
+            finishedRequestDTO.setAdvertisementID(req.getAdvertisementID());
+            finishedRequestDTO.setStartDate(formatToString(req.getStartDate()));
+            finishedRequestDTO.setEndDate(formatToString(req.getEndDate()));
+            AdvertClientResponseDTO ad = advertisementClient.getAd(req.getAdvertisementID());
+            finishedRequestDTO.setVehicle(ad.getBrand() + " " + ad.getModel() );
+            return finishedRequestDTO;
+        }).collect(Collectors.toSet());
 
         return retval;
     }
@@ -364,6 +399,13 @@ public class RentingRequestService {
         if (rdto.getStartDate().after(rdto.getEndDate())) {
             throw new BadRequestException("Start of renting interval cannot be after the end of it.");
         }
+    }
+
+    public String formatToString(Date date) {
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+        String formattedDate = formatter.format(date);
+
+        return formattedDate;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.uns.ftn.rentingservice.dto;
 
+import com.uns.ftn.rentingservice.domain.RentingInterval;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,12 @@ public class RentingIntervalDTO {
     private Date startDate;
     private Date endDate;
     private Long advertisementId;
+
+    public RentingIntervalDTO(RentingInterval rentingInterval) {
+        this.id = rentingInterval.getId();
+        this.startDate = rentingInterval.getStartDate();
+        this.endDate = rentingInterval.getEndDate();
+        this.advertisementId = rentingInterval.getAdvertisement().getId();
+    }
+
 }

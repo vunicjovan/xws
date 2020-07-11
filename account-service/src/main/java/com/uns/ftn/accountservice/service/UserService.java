@@ -353,7 +353,6 @@ public class UserService {
         }
 
         simpleUser.setNumberOfCancelations(simpleUser.getNumberOfCancelations() + 1);
-        //TODO: ban user if number of cancelations is more than 3 and notify him by email
         simpleUserRepository.save(simpleUser);
 
         return new ResponseEntity<>("Increment update successful.", HttpStatus.OK);

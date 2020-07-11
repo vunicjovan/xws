@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && (getUser.roles.includes('AGENT') || getUser.roles.includes('SIMPLE_USER'))">
+		<flash-message class="myFlash"></flash-message>
 		<form class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateAd">
 			<md-card class="md-layout-item md-size-30 md-small-size-100">
 				<md-card-header>
@@ -237,10 +238,12 @@ export default {
 
 					this.$store
 						.dispatch("addPhotots", payload)
-						.then(() => console.log("SUCCESS!"))
-						.catch((error) => console.log(error));
+						.then(() => {
+							this.$router.push("/");
+						})
+						.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 
 		handleFileChange() {
@@ -273,7 +276,7 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.active = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 

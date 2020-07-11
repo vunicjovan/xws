@@ -1,10 +1,7 @@
 package com.uns.ftn.catalogservice.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.uns.ftn.catalogservice.dto.BrandDTO;
-import com.uns.ftn.catalogservice.dto.FuelTypeDTO;
-import com.uns.ftn.catalogservice.dto.GearboxTypeDTO;
-import com.uns.ftn.catalogservice.dto.VehicleClassDTO;
+import com.uns.ftn.catalogservice.dto.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +30,7 @@ public class QueueProducer {
         rabbitTemplate.convertAndSend(brandDTO);
     }
 
-    public void produceGearboxType(GearboxTypeDTO gearboxTypeDTO) throws  JsonProcessingException {
+    public void produceGearboxType(GearboxTypeDTO gearboxTypeDTO) throws JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(gearboxTypeDTO);
     }
@@ -41,5 +38,10 @@ public class QueueProducer {
     public void produceVehicleClass(VehicleClassDTO vehicleClassDTO) throws JsonProcessingException {
         rabbitTemplate.setExchange(fanoutExchangeName);
         rabbitTemplate.convertAndSend(vehicleClassDTO);
+    }
+
+    public void produceVehicleModel(ModelDTO modelDTO) throws JsonProcessingException {
+        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.convertAndSend(modelDTO);
     }
 }

@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')">
+		<flash-message class="myFlash"></flash-message>
 		<md-card>
 			<md-card-header>
 				<h2>Renting requests</h2>
@@ -103,7 +104,7 @@ export default {
 					this.$store
 						.dispatch("sendRequest", form)
 						.then((data) => console.log(data))
-						.catch((error) => console.log(error));
+						.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 				});
 			} else {
 				for (let key in this.groups) {
@@ -124,7 +125,7 @@ export default {
 					this.$store
 						.dispatch("sendRequest", form)
 						.then((data) => console.log(data))
-						.catch((error) => console.log(error));
+						.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 				}
 			}
 		},

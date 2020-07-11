@@ -26,6 +26,7 @@ import Debts from "../views/debts/Debts.vue";
 import PriceList from "../views/advertisement/PriceList.vue";
 import VehicleTracking from "../views/advertisement/VehicleTracking.vue";
 import PendingRequests from "../views/rentingRequest/PendingRentingRequest.vue";
+import FinishedRequests from "../views/rentingRequest/FinishedRequests.vue";
 
 Vue.use(VueRouter);
 
@@ -158,7 +159,12 @@ const routes = [
 	{
 		path: "/ads/requests/pending",
 		name: "PendingRequests",
-		component: PendingRequests
+		component: PendingRequests,
+	},
+	{
+		path: "/requests/finished",
+		name: "FinishedRequests",
+		component: FinishedRequests,
 	},
 ];
 

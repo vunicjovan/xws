@@ -22,6 +22,7 @@ public class SimpleAdvertisementDTO {
     private double rating;
     private int kmTraveled;
     private Set<String> photo;
+    private Long ownerId;
 
     public SimpleAdvertisementDTO(Advertisement advertisement) {
         this.id = advertisement.getId();
@@ -32,6 +33,7 @@ public class SimpleAdvertisementDTO {
         this.rating = advertisement.getRating();
         this.kmTraveled = advertisement.getVehicle().getKilometersTraveled();
         this.photo = advertisement.getPhotos().stream().map(Photo::getPath).collect(Collectors.toSet());
+        this.ownerId = advertisement.getOwnerId();
     }
 
 }
