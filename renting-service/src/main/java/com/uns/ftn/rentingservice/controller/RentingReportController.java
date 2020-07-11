@@ -23,9 +23,10 @@ public class RentingReportController {
         return null;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return null;
+
+        return new ResponseEntity<>(reportService.getAllByUser(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/", consumes = "application/json")

@@ -13,6 +13,9 @@ import "leaflet/dist/leaflet.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 
+import VueFlashMessage from 'vue-flash-message';
+require('vue-flash-message/dist/vue-flash-message.min.css');
+
 import { Icon } from "leaflet";
 
 delete Icon.Default.prototype._getIconUrl;
@@ -22,6 +25,7 @@ Icon.Default.mergeOptions({
 	shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
+Vue.use(VueFlashMessage);
 Vue.use(VueMaterial);
 Vue.use(VueResource);
 Vue.use(VueChatScroll);

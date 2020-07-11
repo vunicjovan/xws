@@ -10,22 +10,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ResourceController {
 
-    @Autowired
     private GearboxTypeService gbtService;
-  
-    @Autowired
     private FuelTypeService fuelTypeService;
-
-    @Autowired
     private BrandService brandService;
-
     private VehicleClassService vehicleClassService;
     private ModelService modelService;
 
     @Autowired
-    public ResourceController(VehicleClassService vehicleClassService, ModelService modelService) {
+    public ResourceController(VehicleClassService vehicleClassService, ModelService modelService, GearboxTypeService gbtService, FuelTypeService fuelTypeService, BrandService brandService) {
         this.vehicleClassService = vehicleClassService;
-        this. modelService = modelService;
+        this.modelService = modelService;
+        this.gbtService = gbtService;
+        this.fuelTypeService = fuelTypeService;
+        this.brandService = brandService;
     }
 
     @PostMapping(value = "/gearboxType", consumes = "application/json")

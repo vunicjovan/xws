@@ -1,8 +1,9 @@
 <template>
     <div class="md-layout md-alignment-top-center">
+		<flash-message class="myFlash"></flash-message>
 		<div class="md-layout-item md-size-80">
-			<!-- <div class="outer">
-				<h2>Global discount: {{ getDiscount * 100 }}%</h2>
+			<div class="outer">
+				<h2>Global discount: {{ calculateDiscount() }}%</h2>
 				<md-button class="md-primary" @click="change = true" v-if="!change">Change</md-button>
 			</div>
 			<div class="outer md-layout-item md-size-30" v-if="change">
@@ -12,7 +13,7 @@
 				</md-field>
 				<md-button class="md-primary" @click="validateDiscount">send</md-button>
 				<md-button class="md-primary" @click="change = false">cancel</md-button>
-			</div> -->
+			</div>
 		</div>
 		<md-table v-model="pricelistItems" md-sort="name" md-sort-order="asc" md-card class="md-layout-item md-size-80 md-small-size-150">
 			<md-table-toolbar>
@@ -73,11 +74,6 @@ import { required, integer, decimal } from "vuelidate/lib/validators";
 export default {
 	name: "PriceList",
 	mixins: [validationMixin],
-	mounted() {
-		if (this.getUser) {
-			this.$store.dispatch("pullPriceList");
-		}
-	},
 	data() {
 		return {
 			active: false,
@@ -91,18 +87,24 @@ export default {
 			},
 		};
 	},
+	mounted() {
+		this.$store.dispatch("pullPriceList");
+	},
 	computed: {
-		...mapGetters(["getPriceList",]),
+		...mapGetters(["getPriceList", "getDiscount"]),
 		pricelistItems: {
 			get() {
 				return this.getPriceList;
 			},
 			set(pricelist) {
-				this.$store.commit("setPriceList", pricelist);
+				this.$store.commit("setPriceListItems", pricelist);
 			},
 		},
 	},
 	methods: {
+		calculateDiscount() {
+			return Math.round(this.getDiscount * 100);
+		},
 		validatePriceListItem() {
 			this.$v.pricelistForm.$touch();
 
@@ -111,7 +113,7 @@ export default {
 			}
 		},
 		submitPriceListItem() {
-			this.pricelistForm.creatorId = this.getUser.id;
+			this.pricelistForm.creatorId = 2;
 
 			this.$store
 				.dispatch("newPriceListItem", this.pricelistForm)
@@ -122,30 +124,28 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.active = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => {
+					this.active = false;
+					this.flashWarning(error.message, {timeout: 3000})
+				});
 		},
-		// validateDiscount() {
-		// 	this.$v.discount.$touch();
+		validateDiscount() {
+			this.$v.discount.$touch();
 
-		// 	if (!this.$v.discount.$invalid && this.getUser) {
-		// 		this.submitDiscount();
-		// 	}
-		// },
-		// submitDiscount() {
-		// 	const payload = {
-		// 		userId: this.getUser.id,
-		// 		discount: this.discount / 100,
-		// 	};
-
-		// 	this.$store
-		// 		.dispatch("addDiscount", payload)
-		// 		.then((data) => {
-		// 			this.$v.$reset();
-		// 			this.change = false;
-		// 			this.discount = undefined;
-		// 		})
-		// 		.catch((error) => console.log(error));
-		// },
+			if (!this.$v.discount.$invalid) {
+				this.submitDiscount();
+			}
+		},
+		submitDiscount() {
+			this.$store
+				.dispatch("createDiscount", (this.discount / 100).toFixed(2))
+				.then((data) => {
+					this.$v.$reset();
+					this.change = false;
+					this.discount = undefined;
+				})
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
+		},
 	},
 	validations: {
 		discount: {
@@ -167,12 +167,12 @@ export default {
 </script>
 
 <style scoped>
-.outer {
-	display: flex;
-	align-items: baseline;
-}
+	.outer {
+		display: flex;
+		align-items: baseline;
+	}
 
-.full {
-	flex: 1;
-}
+	.full {
+		flex: 1;
+	}
 </style>

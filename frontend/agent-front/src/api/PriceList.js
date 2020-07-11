@@ -18,4 +18,13 @@ export default {
 			throw Error(error);
 		}
 	},
+
+	async createDiscount(discount) {
+		try {
+			const response = await axios.put(`/priceList/${discount}/`);
+			return response.data;
+		} catch (error) {
+			throw Error(error);
+		}
+	},
 };

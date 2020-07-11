@@ -66,11 +66,12 @@ public class GearboxTypeService {
         // data sanitization
         gbtDTO.setName(Encode.forHtml(gbtDTO.getName()));
 
-        if (findByName(gbtDTO.getName()) != null) {
-            if (findByName(gbtDTO.getName()).getDeleted()) {
-                findByName(gbtDTO.getName()).setDeleted(false);
-                save(findByName(gbtDTO.getName()));
-                return new ResponseEntity<>(new GearboxTypeDTO(findByName(gbtDTO.getName())), HttpStatus.CREATED);
+        GearboxType myGearbox = findByName(gbtDTO.getName());
+        if (myGearbox != null) {
+            if (myGearbox.getDeleted()) {
+                myGearbox.setDeleted(false);
+                save(myGearbox);
+                return new ResponseEntity<>(new GearboxTypeDTO(myGearbox), HttpStatus.CREATED);
             }
         }
 
@@ -104,6 +105,12 @@ public class GearboxTypeService {
         gbt.setName(gbtDTO.getName());
         gbt = save(gbt);
 
+        try {
+            queueProducer.produceGearboxType(new GearboxTypeDTO(gbt.getId(), gbt.getName(), gbt.getDeleted()));
+        } catch (Exception e) {
+            throw new BadRequestException("Gearbox type with requested name already exists.");
+        }
+
         return new ResponseEntity<>(new GearboxTypeDTO(gbt), HttpStatus.OK);
     }
 
@@ -117,6 +124,12 @@ public class GearboxTypeService {
         }
         gbt.setDeleted(true);
         gbt = save(gbt);
+
+        try {
+            queueProducer.produceGearboxType(new GearboxTypeDTO(gbt.getId(), gbt.getName(), gbt.getDeleted()));
+        } catch (Exception e) {
+            throw new BadRequestException("Gearbox type with requested name already exists.");
+        }
 
         return new ResponseEntity<>(new GearboxTypeDTO(gbt), HttpStatus.OK);
     }

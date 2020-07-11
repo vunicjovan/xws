@@ -1,6 +1,8 @@
 package com.uns.ftn.catalogservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.catalogservice.client.VehicleClient;
+import com.uns.ftn.catalogservice.components.QueueProducer;
 import com.uns.ftn.catalogservice.domain.Brand;
 import com.uns.ftn.catalogservice.domain.Model;
 import com.uns.ftn.catalogservice.dto.ModelDTO;
@@ -24,12 +26,15 @@ public class ModelService {
     private ModelRepository modelRepository;
     private BrandService brandService;
     private VehicleClient vehicleClient;
+    private QueueProducer queueProducer;
 
     @Autowired
-    public ModelService(ModelRepository modelRepository, BrandService brandService, VehicleClient vehicleClient) {
+    public ModelService(ModelRepository modelRepository, BrandService brandService, VehicleClient vehicleClient,
+                        QueueProducer queueProducer) {
         this.modelRepository = modelRepository;
         this.brandService = brandService;
         this.vehicleClient = vehicleClient;
+        this.queueProducer = queueProducer;
     }
 
     public Model save(Model model) {
@@ -67,11 +72,12 @@ public class ModelService {
         modelDTO.setName(Encode.forHtml(modelDTO.getName()));
         Brand brand = brandService.findOne(brandId);
 
-        if (findByName(modelDTO.getName()) != null) {
-            if (findByName(modelDTO.getName()).getDeleted()) {
-                findByName(modelDTO.getName()).setDeleted(false);
-                save(findByName(modelDTO.getName()));
-                return new ResponseEntity<>(new ModelDTO(findByName(modelDTO.getName())), HttpStatus.CREATED);
+        Model myModel = findByName(modelDTO.getName());
+        if (myModel != null) {
+            if (myModel.getDeleted()) {
+                myModel.setDeleted(false);
+                save(myModel);
+                return new ResponseEntity<>(new ModelDTO(myModel), HttpStatus.CREATED);
             }
         }
 
@@ -83,6 +89,13 @@ public class ModelService {
         model.setName(modelDTO.getName());
         model.setBrand(brand);
         model = save(model);
+
+        try {
+            queueProducer.produceVehicleModel(new ModelDTO(model));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new ResponseEntity<>(new ModelDTO(model), HttpStatus.CREATED);
     }
 
@@ -107,6 +120,12 @@ public class ModelService {
         model.setName(modelDTO.getName());
         model = save(model);
 
+        try {
+            queueProducer.produceVehicleModel(new ModelDTO(model));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new ResponseEntity<>(new ModelDTO(model), HttpStatus.OK);
     }
 
@@ -121,6 +140,12 @@ public class ModelService {
         }
         model.setDeleted(true);
         model = save(model);
+
+        try {
+            queueProducer.produceVehicleModel(new ModelDTO(model));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

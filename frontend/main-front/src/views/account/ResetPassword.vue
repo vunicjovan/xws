@@ -1,5 +1,6 @@
 <template>
     <div v-if="!isLogged">
+        <flash-message class="myFlash"></flash-message>
         <form novalidate class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateData">
             <md-card class="md-layout-item md-size-30 md-small-size-100">
                 <md-card-header>
@@ -93,11 +94,11 @@ export default {
 				this.$store
 				.dispatch("resetPassword", tokenDTO)
 				.then((data) => {
-                    alert(data);
+                    this.flashSuccess(data, {timeout: 2000})
                     this.$router.push("/");
 				})
                 .catch((error) => {
-                    alert(error.response.data)
+                    this.flashWarning(error.message, {timeout: 2000})
                     this.sending = false;
                 });
 			}

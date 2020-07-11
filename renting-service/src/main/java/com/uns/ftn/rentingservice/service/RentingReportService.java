@@ -1,8 +1,11 @@
 package com.uns.ftn.rentingservice.service;
 
+import com.uns.ftn.rentingservice.client.AdvertisementClient;
 import com.uns.ftn.rentingservice.client.CommentClient;
 import com.uns.ftn.rentingservice.domain.*;
+import com.uns.ftn.rentingservice.dto.AdvertClientResponseDTO;
 import com.uns.ftn.rentingservice.dto.RentingReportDTO;
+import com.uns.ftn.rentingservice.dto.RentingReportRespDTO;
 import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.exceptions.NotFoundException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
@@ -13,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
@@ -23,6 +28,7 @@ public class RentingReportService {
     private RentingReportRepository reportRepo;
     private CommentClient commentClient;
     private DebtRepository debtRepo;
+    private AdvertisementClient advertisementClient;
 
     @Autowired
     public RentingReportService(
@@ -30,12 +36,14 @@ public class RentingReportService {
             AdvertisementRepository adRepo,
             RentingReportRepository reportRepo,
             CommentClient commentClient,
-            DebtRepository debtRepo) {
+            DebtRepository debtRepo,
+            AdvertisementClient advertisementClient) {
         this.requestService = requestService;
         this.adRepo = adRepo;
         this.reportRepo = reportRepo;
         this.commentClient = commentClient;
         this.debtRepo = debtRepo;
+        this.advertisementClient = advertisementClient;
     }
 
     public RentingReport save(RentingReport report) {
@@ -72,6 +80,26 @@ public class RentingReportService {
         report = save(report);
 
         return new RentingReportDTO(report);
+    }
+
+    public Set<RentingReportRespDTO> getAllByUser(Long id) {
+        Set<Advertisement> advertisements = adRepo.findAllByOwnerId(id);
+        Set<RentingReportRespDTO> retval = new HashSet<>();
+        advertisements.forEach(advertisement -> {
+            AdvertClientResponseDTO ad = advertisementClient.getAd(advertisement.getId());
+            advertisement.getRentingReports().forEach((report) -> {
+                RentingReportRespDTO rep = new RentingReportRespDTO();
+                rep.setId(report.getId());
+                rep.setContent(report.getContent());
+                rep.setKilometers(report.getKilometersTraveled());
+                rep.setVehicle(ad.getBrand() + " " + ad.getModel());
+                rep.setStartDate(requestService.formatToString(report.getRentingRequest().getStartDate()));
+                rep.setEndDate(requestService.formatToString(report.getRentingRequest().getEndDate()));
+                retval.add(rep);
+            });
+        });
+
+        return retval;
     }
 
     private int daysBetween(Date d1, Date d2) {

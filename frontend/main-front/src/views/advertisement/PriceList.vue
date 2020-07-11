@@ -1,5 +1,6 @@
 <template>
 	<div v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" class="md-layout md-alignment-top-center">
+		<flash-message class="myFlash"></flash-message>
 		<div class="md-layout-item md-size-80">
 			<div class="outer">
 				<h2>Global discount: {{ getDiscount * 100 }}%</h2>
@@ -122,7 +123,7 @@ export default {
 					this.pricelistForm.debtPrice = undefined;
 					this.active = false;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		validateDiscount() {
 			this.$v.discount.$touch();
@@ -144,7 +145,7 @@ export default {
 					this.change = false;
 					this.discount = undefined;
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 	},
 	watch: {

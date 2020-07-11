@@ -96,7 +96,7 @@ export default {
 			this.$store
 				.dispatch("deleteModel", payload)
 				.then(() => {})
-				.catch((error) => console.lgo(error));
+				.catch((error) => console.log(error));
 		},
 		postModel() {
 			const payload = {

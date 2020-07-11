@@ -1,5 +1,6 @@
 <template>
 	<div v-if="!isLogged">
+		<flash-message class="myFlash"></flash-message>
 		<form novalidate class="md-layout md-alignment-top-center" autocomplete="off" @submit.prevent="validateUser">
 			<md-card class="md-layout-item md-size-30 md-small-size-100">
 				<md-card-header>
@@ -110,7 +111,7 @@ export default {
 			this.$store
 				.dispatch("register", this.form)
 				.then(() => this.$router.push("/login"))
-				.catch((error) => console.log(error));
+				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
 		},
 		getValidationClass(fieldName) {
 			const field = this.$v.form[fieldName];
