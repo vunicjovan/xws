@@ -24,8 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="discount" type="{http://www.w3.org/2001/XMLSchema}double"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,45 +35,27 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "ownerId",
-    "discount"
+    "id"
 })
-@XmlRootElement(name = "newDiscountRequest")
-public class NewDiscountRequest {
+@XmlRootElement(name = "pendingRentingRequestRequest", namespace = "http://www.ftn.uns.ac.rs/renting")
+public class PendingRentingRequestRequest {
 
-    protected long ownerId;
-    protected double discount;
+    protected long id;
 
     /**
-     * Gets the value of the ownerId property.
+     * Gets the value of the id property.
      * 
      */
-    public long getOwnerId() {
-        return ownerId;
+    public long getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the ownerId property.
+     * Sets the value of the id property.
      * 
      */
-    public void setOwnerId(long value) {
-        this.ownerId = value;
-    }
-
-    /**
-     * Gets the value of the discount property.
-     * 
-     */
-    public double getDiscount() {
-        return discount;
-    }
-
-    /**
-     * Sets the value of the discount property.
-     * 
-     */
-    public void setDiscount(double value) {
-        this.discount = value;
+    public void setId(long value) {
+        this.id = value;
     }
 
 }

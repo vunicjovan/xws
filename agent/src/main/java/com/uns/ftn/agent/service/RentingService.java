@@ -6,6 +6,7 @@ import com.uns.ftn.agent.domain.AdWrapper;
 import com.uns.ftn.agent.domain.Advertisement;
 import com.uns.ftn.agent.dto.GetRentingRequestDTO;
 import com.uns.ftn.agent.dto.RentingReportDTO;
+import com.uns.ftn.agent.dto.ReqResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.catalog.CompileReportResponse;
 import rs.ac.uns.ftn.catalog.FinishedRequest;
 import rs.ac.uns.ftn.catalog.GetFinishedResponse;
+import rs.ac.uns.ftn.catalog.PendingRentingRequestResponse;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.DateFormat;
@@ -20,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RentingService {
@@ -60,6 +63,22 @@ public class RentingService {
         }
 
         return new ResponseEntity<>(retval, HttpStatus.OK);
+    }
+
+    public Set<ReqResponseDTO> getPendingRentingRequests(Long ownerId) {
+        PendingRentingRequestResponse response = requestClient.getPendingRentingRequest(ownerId);
+        Set<ReqResponseDTO> ret = new HashSet<>();
+
+        response.getPendingRequests().forEach(pendingRequest -> {
+            ReqResponseDTO r = new ReqResponseDTO();
+            r.setId(pendingRequest.getId());
+            r.setSenderId(pendingRequest.getSenderId());
+            r.setStartDate(calendarToDate(pendingRequest.getStartDate()));
+            r.setEndDate(calendarToDate(pendingRequest.getEndDate()));
+            r.setAdvertisements(pendingRequest.getAdvertisementIds().stream().collect(Collectors.toSet()));
+        });
+
+        return ret;
     }
 
     public ResponseEntity<?> compileRentingReport(RentingReportDTO rdto) {

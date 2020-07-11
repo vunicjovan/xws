@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,12 +36,14 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "id"
+    "id",
+    "status"
 })
-@XmlRootElement(name = "getFinishedRequest")
-public class GetFinishedRequest {
+@XmlRootElement(name = "updateRentingStatusRequest")
+public class UpdateRentingStatusRequest {
 
     protected long id;
+    protected int status;
 
     /**
      * Gets the value of the id property.
@@ -56,6 +59,22 @@ public class GetFinishedRequest {
      */
     public void setId(long value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the status property.
+     * 
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the value of the status property.
+     * 
+     */
+    public void setStatus(int value) {
+        this.status = value;
     }
 
 }

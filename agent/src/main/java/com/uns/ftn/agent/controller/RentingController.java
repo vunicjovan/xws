@@ -28,4 +28,8 @@ public class RentingController {
         return new ResponseEntity<>(rentingService.compileRentingReport(rdto), HttpStatus.CREATED);
     }
 
+    @GetMapping(value = "/pending/requests/{id}")
+    public ResponseEntity<?> getPendingRequests(@PathVariable ("id") Long id) {
+        return new ResponseEntity<>(rentingService.getPendingRentingRequests(id), HttpStatus.OK);
+    }
 }
