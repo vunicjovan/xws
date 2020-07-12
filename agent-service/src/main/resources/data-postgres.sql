@@ -66,11 +66,11 @@ insert into renting_interval (start_date, end_date, advertisement_id)
 values ('2020-06-13 14:39:06', '2020-07-07 15:38:06', 4);
 
 -- Comments
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 1);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eight comment', 'This is eighth comment.', false, 7, 4);
+insert into comment (title, content, allowed, user_id, renting_request_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 2, 1);
+insert into comment (title, content, allowed, user_id, renting_request_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2, 2);
+insert into comment (title, content, allowed, user_id, renting_request_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4, 4);
+insert into comment (title, content, allowed, user_id, renting_request_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 3, 4);
+insert into comment (title, content, allowed, user_id, renting_request_id, advertisement_id) values ('Eight comment', 'This is eighth comment.', false, 7, 2, 4);
 
 -- Android location
 insert into android_location (token, latitude, longitude, vehicle_id) values ('789ae3406905658fe37daa6f834842e8', 0.0, 0.0, 1);

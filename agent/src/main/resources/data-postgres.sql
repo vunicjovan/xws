@@ -85,8 +85,8 @@ insert into vehicle_class (id, name, deleted) values (10, 'Old Timer', false);
 insert into price_list(discount, owner_id) values ( 0.69, 2);
 
 -- Price List Items
-insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id)
-values (69, 69, 69, 1);
+insert into price_list_item(cdw_price, daily_price, debt_price, price_list_id, services_id)
+values (69, 69, 69, 1, 1);
 
 -- Advertisements
 insert into advertisement

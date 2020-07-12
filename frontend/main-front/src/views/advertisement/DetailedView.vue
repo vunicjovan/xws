@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isLogged && getUser !== null && getAdvertisement !== null" class="md-layout md-alignment-center-center">
+	<div v-if="getAdvertisement !== null" class="md-layout md-alignment-center-center">
 		<flash-message class="myFlash"></flash-message>
 		<md-dialog :md-active.sync="active">
 			<md-dialog-title>Unavailable term</md-dialog-title>
@@ -91,34 +91,34 @@
 
 			<md-card-actions>
 				<md-button
-					v-if="getUser.id == getAdvertisement.ownerId"
+					v-if="getUser && getUser.id == getAdvertisement.ownerId"
 					@click.native="$router.push('/ads/published/edit/' + getAdvertisement.id)"
 					class="md-raised md-accent">Edit Details
         </md-button>
 				
         <md-button
-					v-if="getUser.id == getAdvertisement.ownerId && getAdvertisement.id == 1"
+					v-if="getUser && getUser.id == getAdvertisement.ownerId && getAdvertisement.id == 1"
 					@click.native="$router.push('/map/' + getAdvertisement.id)"
 					class="md-raised md-accent">Show map
         </md-button>
 				
-        <md-button v-if="getUser.id == getAdvertisement.ownerId" 
+        <md-button v-if="getUser && getUser.id == getAdvertisement.ownerId" 
           @click="setupEdit(getAdvertisement.id)" 
           class="md-raised md-accent">Edit availability
         </md-button>
         
-        <md-button v-if="getUser.id == getAdvertisement.ownerId" 
+        <md-button v-if="getUser && getUser.id == getAdvertisement.ownerId" 
           @click="deleteAd(getAdvertisement.id)" 
           class="md-raised md-accent">Delete ad
         </md-button>
 
-		<md-button v-if="getUser.id == getAdvertisement.ownerId && getAdvertisement.comments.length !== 0" 
+		<md-button v-if="getUser && getUser.id == getAdvertisement.ownerId && getAdvertisement.comments.length !== 0" 
           @click="setupCommentPosting(getAdvertisement.id)" 
           class="md-raised md-accent">Post comment
         </md-button>
 				
         <md-button 
-          v-if="getUser.roles.includes('SIMPLE_USER') && getUser.id != getAdvertisement.ownerId" 
+          v-if="getUser && getUser.roles.includes('SIMPLE_USER') && getUser.id != getAdvertisement.ownerId" 
           @click="addCartItem(getAdvertisement.id)" 
           class="md-raised md-accent">Add to cart
         </md-button>
@@ -190,7 +190,7 @@ export default {
 		this.$store.dispatch("getDetailedAdvertisement", this.$route.params.id);
 	},
 	computed: {
-		...mapGetters(["getAdvertisement", "getUser", "isLogged"]),
+		...mapGetters(["getAdvertisement", "getUser"]),
 	},
 	methods: {
 		...mapActions(["getDetailedAdvertisement", "addCartItem", "addRentingInterval", "removeAdvertisement"]),

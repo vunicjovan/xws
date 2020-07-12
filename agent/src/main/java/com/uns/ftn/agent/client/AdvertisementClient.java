@@ -31,7 +31,7 @@ public class AdvertisementClient extends WebServiceGatewaySupport {
         ad.setLocation(adDTO.getLocation());
         ad.setOwnerId(adDTO.getOwnerId());
         ad.setPrice(adDTO.getPrice());
-//        ad.setPriceListItemId(adDTO.getPriceListItemDTO().getId());
+        ad.setPriceListItemId(adDTO.getPriceListItemDTO().getId());
         ad.setRating(adDTO.getRating());
         ad.setVehicle(vehicle);
 

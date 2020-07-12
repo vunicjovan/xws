@@ -33,7 +33,6 @@
 				<br>
 				<md-button class="pasbut md-primary" @click.native="$router.push('/sendReset')">Forgot your password?</md-button>
 			</md-card>
-			<md-snackbar :md-active.sync="userLogged">Welcome, {{ lastUser }}!</md-snackbar>
 		</form>
 	</div>
 </template>
@@ -78,9 +77,9 @@ export default {
 					this.$store
 						.dispatch("logged")
 						.then(() => this.$router.push("/"))
-						.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
+						.catch((error) => this.flashWarning(error, {timeout: 2000}));
 				})
-				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
+				.catch((error) => this.flashWarning(error, {timeout: 2000}));
 		},
 		getValidationClass(fieldName) {
 			const field = this.$v.form[fieldName];

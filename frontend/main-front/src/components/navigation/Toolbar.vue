@@ -52,12 +52,12 @@
 				<md-tooltip>Finished Requests</md-tooltip>
 			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/rented')">
-				<i class="fas fa-ad fa-2x"></i>
+				<i class="fa fa-history fa-2x"></i>
 				<md-tooltip>Rented Ads</md-tooltip>
 			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('SIMPLE_USER')" @click.native="$router.push('/ads/requests/pending')">
-				<i class="fas fa-ad fa-2x"></i>
-				<md-tooltip>Advertisement Requests</md-tooltip>
+				<i class="fa fa-bell fa-2x"></i>
+				<md-tooltip>Pending Requests</md-tooltip>
 			</md-button>
 			<md-button v-if="isLogged && getUser !== null && getUser.roles.includes('AGENT')" @click.native="$router.push('/statistic/' + getUser.id)">
 				<i class="fa fa-signal fa-2x"></i>

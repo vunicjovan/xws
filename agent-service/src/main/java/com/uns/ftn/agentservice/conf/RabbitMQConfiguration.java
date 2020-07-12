@@ -32,6 +32,9 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     @Value("${queue.renting}")
     private String rentingServiceQueue;
 
+    @Value("renting-exchange")
+    private String rentingExchange;
+
     @Bean
     Queue queue() {
         return new Queue(androidQueue);
@@ -53,13 +56,18 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     }
 
     @Bean
+    FanoutExchange rentingExchange() {
+        return new FanoutExchange(rentingExchange);
+    }
+
+    @Bean
     Binding binding(Queue queue, FanoutExchange androidExchange) {
         return BindingBuilder.bind(queue).to(androidExchange);
     }
 
     @Bean
-    Binding rentingBinding(Queue rentingQueue, FanoutExchange exchange) {
-        return BindingBuilder.bind(rentingQueue).to(exchange);
+    Binding rentingBinding(Queue rentingQueue, FanoutExchange rentingExchange) {
+        return BindingBuilder.bind(rentingQueue).to(rentingExchange);
     }
 
     @Bean

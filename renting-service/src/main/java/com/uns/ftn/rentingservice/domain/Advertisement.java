@@ -28,7 +28,7 @@ public class Advertisement {
     private Long ownerId;
 
     @Column(name = "deleted")
-    private Boolean deleted;
+    private Boolean deleted = false;
 
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<RentingInterval> rentingIntervals = new HashSet<>();

@@ -144,6 +144,6 @@ values (6, '2020-06-13 14:39:06', '2020-07-07 15:38:06', 4);
 -- Comments
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('First comment', 'This is first comment.', true, 3, 1);
 insert into comment (title, content, allowed, user_id, advertisement_id) values ('Third comment', 'This is third comment.', true, 3, 2);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
-insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eight comment', 'This is eighth comment.', false, 7, 4);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Sixth comment', 'This is sixth comment.', false, 3, 4);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Seventh comment', 'This is seventh comment.', false, 5, 4);
+-- insert into comment (title, content, allowed, user_id, advertisement_id) values ('Eight comment', 'This is eighth comment.', false, 7, 4);
