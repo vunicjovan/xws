@@ -6,6 +6,7 @@ import com.uns.ftn.rentingservice.domain.RentingRequest;
 import com.uns.ftn.rentingservice.domain.RequestStatus;
 import com.uns.ftn.rentingservice.dto.AdvertisementDTO;
 import com.uns.ftn.rentingservice.dto.RentingIntervalDTO;
+import com.uns.ftn.rentingservice.exceptions.BadRequestException;
 import com.uns.ftn.rentingservice.repository.AdvertisementRepository;
 import com.uns.ftn.rentingservice.repository.RentingIntervalRepository;
 import com.uns.ftn.rentingservice.repository.RentingRequestRepository;
@@ -56,13 +57,20 @@ public class DataPumpService {
     public void rentingIntervalHandler(RentingIntervalDTO rentingIntervalDTO) {
         RentingInterval rentingInterval = findRentingIntervalById(rentingIntervalDTO.getId());
 
+        Advertisement advertisement1 = findAdvertisementById(rentingIntervalDTO.getAdvertisementId());
+
+        if (advertisement1 == null) {
+            throw new BadRequestException("Advertisement does not exist.");
+        }
+
         if (rentingInterval == null) {
             rentingInterval = new RentingInterval();
             rentingInterval.setId(rentingIntervalDTO.getId());
-            rentingInterval.setAdvertisement(findAdvertisementById(rentingIntervalDTO.getAdvertisementId()));
+            rentingInterval.setAdvertisement(advertisement1);
             rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
             rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
         }
+
 
         Advertisement advertisement = findAdvertisementById(rentingInterval.getAdvertisement().getId());
 

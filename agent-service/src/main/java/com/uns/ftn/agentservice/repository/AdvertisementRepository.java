@@ -9,4 +9,6 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
 
     List<Advertisement> findByOwnerId(Long ownerId);
 
+    List<Advertisement> findByOwnerIdAndAndDeleted(Long ownerId, Boolean deleted);
+
 }

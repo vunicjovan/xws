@@ -121,29 +121,6 @@ public class AdvertisementService {
     }
 
     public RentingIntervalDTO manuallyAddInterval(RentingIntervalDTO rentingIntervalDTO) {
-//        Advertisement advertisement = advertisementRepository.findById(rentingIntervalDTO.getAdvertisementId()).
-//                orElse(null);
-//
-//        if (advertisement == null) {
-//            throw new BadRequestException("Renting interval does not exist.");
-//        }
-//
-//        if (rentingIntervalDTO.getStartDate().after(rentingIntervalDTO.getEndDate())) {
-//            throw new BadRequestException("Starting date cannot be after ending date.");
-//        }
-//
-//        RentingInterval rentingInterval = new RentingInterval();
-//        rentingInterval.setAdvertisement(advertisement);
-//        rentingInterval.setStartDate(rentingIntervalDTO.getStartDate());
-//        rentingInterval.setEndDate(rentingIntervalDTO.getEndDate());
-//
-//        if (!findIfRangeOverlaps(getAll(), rentingIntervalDTO.getStartDate(), rentingIntervalDTO.getEndDate())) {
-//            save(rentingInterval);
-////            return new ResponseEntity<> (new RentingIntervalDTO(rentingInterval), HttpStatus.CREATED);
-//            return new RentingIntervalDTO(rentingInterval);
-//        } else {
-//            throw new BadRequestException("It is not possible to fit in desired renting interval. Please choose another.");
-//        }
         NewRentingIntervalResponse response = advertisementClient.newRentingInterval(rentingIntervalDTO);
 
         RentingIntervalDTO responseDTO = new RentingIntervalDTO();

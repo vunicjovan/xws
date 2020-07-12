@@ -20,8 +20,6 @@ public class QueueConsumer {
     @Autowired
     private DataPumpService dataPumpService;
 
-
-
     @RabbitListener(queues = "queue-renting")
     public void handleMessage(Message message) throws JsonProcessingException {
         String typeId = message.getMessageProperties().getHeaders().get("__TypeId__").toString();

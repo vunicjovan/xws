@@ -38,6 +38,10 @@ public class AdvertisementDTO {
     @JsonProperty("rating")
     private double rating = 0;
 
+    private Long priceListItemId;
+
+    private Boolean deleted = false;
+
     public AdvertisementDTO(Advertisement ad) {
         this.id = ad.getId();
         this.price = ad.getPrice();

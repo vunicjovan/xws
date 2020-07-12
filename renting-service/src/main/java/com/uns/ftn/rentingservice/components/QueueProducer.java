@@ -31,7 +31,7 @@ public class QueueProducer {
     }
 
     public void produceInterval(RentingIntervalDTO intervalDTO) throws JsonProcessingException {
-        rabbitTemplate.setExchange(fanoutExchangeName);
+        rabbitTemplate.setExchange("renting-exchange");
         rabbitTemplate.convertAndSend(intervalDTO);
     }
 

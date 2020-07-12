@@ -3,6 +3,7 @@ package com.uns.ftn.accountservice.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uns.ftn.accountservice.auth.AuthenticationRequest;
 import com.uns.ftn.accountservice.auth.AuthenticationResponse;
+import com.uns.ftn.accountservice.client.AgentClient;
 import com.uns.ftn.accountservice.components.QueueProducer;
 import com.uns.ftn.accountservice.domain.*;
 import com.uns.ftn.accountservice.dto.*;
@@ -45,6 +46,7 @@ public class UserService {
     private QueueProducer queueProducer;
     private VerificationTokenRepository tokenRepo;
     private ResetTokenRepository resetRepo;
+    private AgentClient agentClient;
 
     @Inject
     private transient CommandGateway commandGateway;
@@ -61,7 +63,8 @@ public class UserService {
             JWTUtil jwtUtil,
             QueueProducer queueProducer,
             VerificationTokenRepository tokenRepo,
-            ResetTokenRepository resetRepo
+            ResetTokenRepository resetRepo,
+            AgentClient agentClient
     ) {
         this.userRepository = userRepository;
         this.agentRepository = agentRepository;
@@ -74,6 +77,7 @@ public class UserService {
         this.queueProducer = queueProducer;
         this.tokenRepo = tokenRepo;
         this.resetRepo = resetRepo;
+        this.agentClient = agentClient;
     }
 
     public User save(User user) {
@@ -186,6 +190,10 @@ public class UserService {
 
         if (user.getDeleted()) {
             throw new BadRequestException("User is already deleted.");
+        }
+
+        if (agentClient.userHasAds(user.getId())) {
+            throw new BadRequestException("User has active advertisements.");
         }
 
         user.setDeleted(true);

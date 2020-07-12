@@ -147,4 +147,9 @@ public class AdvertisementController {
         return commentService.rejectComment(adId, id);
     }
 
+    @GetMapping("/check/{id}")
+    public ResponseEntity<?> checkUserHasAds(@PathVariable("id") Long userId) {
+        return new ResponseEntity<>(adService.getUserHasAds(userId), HttpStatus.OK);
+    }
+
 }

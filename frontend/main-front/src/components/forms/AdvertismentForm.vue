@@ -47,13 +47,13 @@
 						</md-field>
 						<md-field :class="{ 'md-invalid': $v.form.vehicle.kilometersTraveled.$error }">
 							<label for="kilometersTraveled">Kilometers Traveled</label>
-							<md-input v-model="form.vehicle.kilometersTraveled" type="number" />
+							<md-input v-model="form.vehicle.kilometersTraveled" type="number" min=0 />
 							<span class="md-error" v-if="!$v.form.vehicle.kilometersTraveled.required">Kilometers Traveled is required</span>
 							<span class="md-error" v-else-if="!$v.form.vehicle.kilometersTraveled.integer">Fuel Type must be integer</span>
 						</md-field>
 						<md-field :class="{ 'md-invalid': $v.form.vehicle.childSeatNumber.$error }">
 							<label for="childSeatNumber">Childseat Number</label>
-							<md-input v-model="form.vehicle.childSeatNumber" type="number" />
+							<md-input v-model="form.vehicle.childSeatNumber" type="number" min=0 />
 							<span class="md-error" v-if="!$v.form.vehicle.childSeatNumber.required">Childseat Number is required</span>
 							<span class="md-error" v-else-if="!$v.form.vehicle.childSeatNumber.integer">Childseat Number must be integer</span>
 						</md-field>
@@ -241,9 +241,9 @@ export default {
 						.then(() => {
 							this.$router.push("/");
 						})
-						.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
+						.catch((error) => this.flashWarning(error, {timeout: 2000}));
 				})
-				.catch((error) => this.flashWarning(error.message, {timeout: 2000}));
+				.catch((error) => this.flashWarning(error, {timeout: 2000}));
 		},
 
 		handleFileChange() {

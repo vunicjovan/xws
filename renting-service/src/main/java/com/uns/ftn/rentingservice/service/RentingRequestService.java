@@ -328,6 +328,7 @@ public class RentingRequestService {
             RentingRequest request = findOne(id);
 
             ReqResponseDTO responseDTO = new ReqResponseDTO();
+            responseDTO.setSenderId(request.getSenderId());
             responseDTO.setId(request.getId());
             responseDTO.setStartDate(request.getStartDate());
             responseDTO.setEndDate(request.getEndDate());

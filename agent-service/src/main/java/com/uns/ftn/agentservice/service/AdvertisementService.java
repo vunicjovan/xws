@@ -6,6 +6,7 @@ import com.uns.ftn.agentservice.client.CatalogClient;
 import com.uns.ftn.agentservice.components.QueueProducer;
 import com.uns.ftn.agentservice.domain.Advertisement;
 import com.uns.ftn.agentservice.domain.PriceListItem;
+import com.uns.ftn.agentservice.domain.User;
 import com.uns.ftn.agentservice.domain.Vehicle;
 import com.uns.ftn.agentservice.dto.*;
 import com.uns.ftn.agentservice.exceptions.BadRequestException;
@@ -113,6 +114,13 @@ public class AdvertisementService {
         }
 
         return new ResponseEntity<>(new AdvertisementDTO(ad), HttpStatus.CREATED);
+    }
+
+    public Boolean getUserHasAds(Long id) {
+        if (adRepo.findByOwnerIdAndAndDeleted(id, false).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     public ResponseEntity<?> updateAdvertisement(Long id, AdvertisementUpdateDTO adto) {

@@ -38,7 +38,7 @@ public class QueueConsumer {
         }
     }
 
-    @RabbitListener(queues = "queue-renting")
+    @RabbitListener(queues = "queue-renting1")
     public void handleRentingMessage(Message message) {
         String typeId = message.getMessageProperties().getHeaders().get("__TypeId__").toString();
         String messageBody = new String(message.getBody(), StandardCharsets.UTF_8);
@@ -47,7 +47,7 @@ public class QueueConsumer {
             try {
                 RentingIntervalDTO rdto = new ObjectMapper().readValue(messageBody, RentingIntervalDTO.class);
                 rentingIntervalService.manuallyAddInterval(rdto);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
