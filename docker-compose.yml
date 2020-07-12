@@ -4,6 +4,8 @@ services:
     image: postgres
     build: ./database
     restart: always
+    networks:
+      - dragon-level
     ports:
       - "5431:5432"
     environment:
@@ -17,14 +19,17 @@ services:
     build: ./service-discovery
     ports:
       - "8761:8761"
+    networks:
+      - dragon-level
     tty: true
     depends_on:
       - db
-      - rabbitmq-broker
       - axon-server
 
   axon-server:
     image: axoniq/axonserver:4.3.2
+    networks:
+      - dragon-level
     ports:
       - 8024:8024
       - 8124:8124
@@ -33,6 +38,8 @@ services:
     build: ./agent
     ports:
       - "8091:8091"
+    networks:
+      - dragon-level
     environment:
       - POSTGRES_DB=agent
       - POSTGRES_DOMAIN=db
@@ -47,6 +54,8 @@ services:
     build: ./account-service
     ports:
       - "8080:8080"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -60,13 +69,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   agent-service:
     build: ./agent-service
     ports:
       - "8081:8081"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -81,13 +91,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   catalog-service:
     build: ./catalog-service
     ports:
       - "8083:8083"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -102,13 +113,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   renting-service:
     build: ./renting-service
     ports:
       - "8086:8086"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -124,13 +136,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   view-service:
     build: ./view-service
     ports:
       - "8087:8087"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -145,13 +158,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   search-service:
     build: ./search-service
     ports:
       - "8088:8088"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -166,13 +180,24 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
+
+  android-service:
+    build: ./android-service
+    ports:
+      - "8082:8082"
+    networks:
+      - dragon-level
+    tty: true
+    depends_on:
+      - eureka-serviceregistry
 
   message-service:
     build: ./message-service
     ports:
       - "8085:8085"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - POSTGRES_DB=service-db
@@ -187,13 +212,14 @@ services:
     depends_on:
       - db
       - eureka-serviceregistry
-      - rabbitmq-broker
       - axon-server
 
   zuul:
     build: ./gateway
     ports:
       - "8089:8089"
+    networks:
+      - dragon-level
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
     tty: true
@@ -206,7 +232,6 @@ services:
       - renting-service
       - search-service
       - view-service
-      - rabbitmq-broker
       - axon-server
 
   rabbitmq-broker:
@@ -216,3 +241,7 @@ services:
       - 5672:5672
       - 5671:5671
       - 15671:15671
+
+networks:
+  dragon-level:
+    driver: bridge
