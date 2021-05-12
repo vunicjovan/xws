@@ -11,7 +11,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.4",
-    "swiper": "^5.4.3",
+    "swiper": "^6.5.1",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-flash-message": "^0.7.2",
